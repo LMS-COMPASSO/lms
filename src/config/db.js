@@ -2,11 +2,11 @@ const mysql = require('mysql2/promise');
 require('dotenv').config();
 
 const pool = mysql.createPool({
-  host: process.env.DB_HOST || 'sql10.freesqldatabase.com',
-  port: process.env.DB_PORT || 3306,
-  user: process.env.DB_USER || 'sql10837023',
-  password: process.env.DB_PASSWORD || 'pl3vDSlnts',
-  database: process.env.DB_NAME || 'sql10837023',
+  host: process.env.DB_HOST || 'mysql-f45033b-dellsalsicha-fd08.e.aivencloud.com',
+  port: process.env.DB_PORT || 18343,
+  user: process.env.DB_USER || 'avnadmin',
+  password: process.env.DB_PASSWORD || 'AVNS_15ryqoyvUyta7Yj3GcL',
+  database: process.env.DB_NAME || 'defaultdb',
   waitForConnections: true,
   connectionLimit: 100,
   queueLimit: 0,
