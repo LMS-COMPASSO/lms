@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dashboard — LMS BNCC Computação</title>
+<link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <div id="sidebar-container"></div>
+    <main class="conteudo">
+      <div id="topbar-container"></div>
+
+      <div class="grid-indicadores" id="grid-indicadores"></div>
+
+      <div class="grid-2col">
+        <div class="cartao">
+          <h3>Cursos por Eixo BNCC</h3>
+          <div id="lista-eixos"></div>
+        </div>
+        <div class="cartao">
+          <h3>Linha do Tempo</h3>
+          <ul class="timeline" id="timeline"></ul>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/layout.js"></script>
+  <script>
+    const usuario = exigirAutenticacao(['administrador', 'instrutor']);
+    montarLayout('dashboard');
+    document.getElementById('titulo-pagina').textContent = 'Dashboard';
+
+    const rotulosEventos = {
+      matricula: (e) => `<strong>${e.usuario_nome}</strong> se matriculou em <strong>${e.curso_titulo}</strong>`,
+      conclusao: (e) => `<strong>${e.usuario_nome}</strong> concluiu o curso <strong>${e.curso_titulo}</strong> 🎉`,
+      curso_publicado: (e) => `Curso <strong>${e.curso_titulo}</strong> foi publicado por ${e.usuario_nome}`,
+      certificado: (e) => `Certificado emitido para <strong>${e.usuario_nome}</strong> (${e.curso_titulo})`,
+    };
+
+    async function carregarIndicadores() {
+      const dados = await api('/dashboard/indicadores');
+      const grid = document.getElementById('grid-indicadores');
+
+      const cartoes = [];
+      if (dados.usuarios) {
+        cartoes.push(['Total de Usuários', dados.usuarios.total]);
+        cartoes.push(['Alunos', dados.usuarios.alunos]);
+        cartoes.push(['Instrutores', dados.usuarios.instrutores]);
+      }
+      cartoes.push(['Cursos Publicados', dados.cursos.publicados || 0]);
+      cartoes.push(['Cursos em Rascunho', dados.cursos.rascunhos || 0]);
+      cartoes.push(['Matrículas Ativas', dados.matriculas.ativas || 0]);
+      cartoes.push(['Matrículas Concluídas', dados.matriculas.concluidas || 0]);
+      cartoes.push(['Taxa de Conclusão', `${dados.taxaConclusao}%`]);
+      cartoes.push(['Certificados Emitidos', dados.certificadosEmitidos]);
+
+      grid.innerHTML = cartoes.map(([rotulo, valor]) => `
+        <div class="indicador">
+          <div class="valor">${valor ?? 0}</div>
+          <div class="rotulo">${rotulo}</div>
+        </div>
+      `).join('');
+
+      const listaEixos = document.getElementById('lista-eixos');
+      if (dados.cursosPorEixoBNCC.length === 0) {
+        listaEixos.innerHTML = '<p style="color:#718096;">Nenhum curso cadastrado ainda.</p>';
+      } else {
+        listaEixos.innerHTML = dados.cursosPorEixoBNCC.map((e) => `
+          <div style="margin-bottom:10px;">
+            <div style="display:flex; justify-content:space-between; font-size:.85rem; margin-bottom:4px;">
+              <span>${e.eixo_bncc}</span><strong>${e.total}</strong>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+
+    async function carregarTimeline() {
+      const eventos = await api('/dashboard/linha-do-tempo?limite=15');
+      const ul = document.getElementById('timeline');
+      if (eventos.length === 0) {
+        ul.innerHTML = '<li>Nenhuma atividade registrada ainda.</li>';
+        return;
+      }
+      ul.innerHTML = eventos.map((e) => `
+        <li>
+          <div>${(rotulosEventos[e.tipo] || (() => 'Evento'))(e)}</div>
+          <div class="data">${formatarData(e.data)}</div>
+        </li>
+      `).join('');
+    }
+
+    carregarIndicadores().catch((e) => alert(e.message));
+    carregarTimeline().catch((e) => alert(e.message));
+  </script>
+</body>
+</html>

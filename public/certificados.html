@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Certificados — LMS BNCC Computação</title>
+<link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <div id="sidebar-container"></div>
+    <main class="conteudo">
+      <div id="topbar-container"></div>
+      <div class="cartao tabela-scroll">
+        <table>
+          <thead><tr><th>Aluno</th><th>Curso</th><th>Código</th><th>Emitido em</th><th></th></tr></thead>
+          <tbody id="corpo-tabela"></tbody>
+        </table>
+      </div>
+
+      <div class="cartao">
+        <h3>Validar Certificado</h3>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <input type="text" id="codigo-validar" placeholder="Código de validação" style="flex:1; min-width:200px;" />
+          <button class="btn btn-primario" onclick="validar()">Validar</button>
+        </div>
+        <div id="resultado-validacao" style="margin-top:12px;"></div>
+      </div>
+    </main>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/layout.js"></script>
+  <script>
+    const usuario = exigirAutenticacao();
+    montarLayout('certificados');
+    document.getElementById('titulo-pagina').textContent = 'Certificados';
+
+    async function carregar() {
+      const certificados = await api('/certificados');
+      const corpo = document.getElementById('corpo-tabela');
+      if (certificados.length === 0) {
+        corpo.innerHTML = '<tr><td colspan="5" style="color:#a0aec0;">Nenhum certificado emitido ainda.</td></tr>';
+        return;
+      }
+      corpo.innerHTML = certificados.map((c) => `
+        <tr>
+          <td>${c.aluno_nome}</td>
+          <td>${c.curso_titulo}</td>
+          <td><code>${c.codigo_validacao}</code></td>
+          <td>${formatarData(c.data_emissao)}</td>
+          <td><a href="${c.url_arquivo}" target="_blank" class="btn btn-neutro" style="font-size:.75rem;">Baixar PDF</a></td>
+        </tr>
+      `).join('');
+    }
+
+    async function validar() {
+      const codigo = document.getElementById('codigo-validar').value.trim();
+      const resultado = document.getElementById('resultado-validacao');
+      if (!codigo) return;
+      try {
+        const dados = await api(`/certificados/validar/${codigo}`);
+        resultado.innerHTML = `
+          <div class="alerta alerta-sucesso">
+            ✅ Certificado válido — ${dados.certificado.aluno_nome} concluiu "${dados.certificado.curso_titulo}"
+            (${dados.certificado.carga_horaria}h) em ${formatarData(dados.certificado.data_emissao)}.
+          </div>`;
+      } catch (err) {
+        resultado.innerHTML = `<div class="alerta alerta-erro">❌ ${err.message}</div>`;
+      }
+    }
+
+    carregar().catch((e) => alert(e.message));
+  </script>
+</body>
+</html>

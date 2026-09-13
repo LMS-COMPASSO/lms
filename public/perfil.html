@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Meu Perfil — LMS BNCC Computação</title>
+<link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <div id="sidebar-container"></div>
+    <main class="conteudo">
+      <div id="topbar-container"></div>
+
+      <div class="cartao" style="max-width:480px;">
+        <h3>Meus Dados</h3>
+        <div id="dados-usuario"></div>
+      </div>
+
+      <div class="cartao" style="max-width:480px;">
+        <h3>Alterar Senha</h3>
+        <div id="alerta" class="alerta oculto"></div>
+        <form id="form-senha">
+          <div class="form-grupo"><label>Senha atual</label><input type="password" id="senha-atual" required /></div>
+          <div class="form-grupo"><label>Nova senha</label><input type="password" id="nova-senha" required minlength="6" /></div>
+          <button type="submit" class="btn btn-primario">Salvar nova senha</button>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/layout.js"></script>
+  <script>
+    const usuario = exigirAutenticacao();
+    montarLayout('perfil');
+    document.getElementById('titulo-pagina').textContent = 'Meu Perfil';
+
+    document.getElementById('dados-usuario').innerHTML = `
+      <p><strong>Nome:</strong> ${usuario.nome}</p>
+      <p><strong>Email:</strong> ${usuario.email}</p>
+      <p><strong>Perfil:</strong> <span class="badge badge-${usuario.perfil}">${usuario.perfil}</span></p>
+    `;
+
+    document.getElementById('form-senha').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const alertaEl = document.getElementById('alerta');
+      alertaEl.classList.add('oculto');
+      try {
+        await api('/auth/alterar-senha', {
+          method: 'POST',
+          body: JSON.stringify({
+            senhaAtual: document.getElementById('senha-atual').value,
+            novaSenha: document.getElementById('nova-senha').value,
+          }),
+        });
+        alertaEl.textContent = 'Senha alterada com sucesso!';
+        alertaEl.className = 'alerta alerta-sucesso';
+        document.getElementById('form-senha').reset();
+      } catch (err) {
+        alertaEl.textContent = err.message;
+        alertaEl.className = 'alerta alerta-erro';
+      }
+    });
+  </script>
+</body>
+</html>

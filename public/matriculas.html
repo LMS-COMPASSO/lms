@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Matrículas — LMS BNCC Computação</title>
+<link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <div id="sidebar-container"></div>
+    <main class="conteudo">
+      <div id="topbar-container"></div>
+      <div class="cartao tabela-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Aluno</th><th>Curso</th><th>Status</th><th>Progresso</th><th>Data</th><th></th>
+            </tr>
+          </thead>
+          <tbody id="corpo-tabela"></tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/layout.js"></script>
+  <script>
+    const usuario = exigirAutenticacao();
+    montarLayout('matriculas');
+    document.getElementById('titulo-pagina').textContent = 'Matrículas';
+
+    async function carregar() {
+      const matriculas = await api('/matriculas');
+      const corpo = document.getElementById('corpo-tabela');
+
+      if (matriculas.length === 0) {
+        corpo.innerHTML = '<tr><td colspan="6" style="color:#a0aec0;">Nenhuma matrícula encontrada.</td></tr>';
+        return;
+      }
+
+      corpo.innerHTML = matriculas.map((m) => `
+        <tr>
+          <td>${m.aluno_nome}<br/><small style="color:#718096;">${m.aluno_email}</small></td>
+          <td>${m.curso_titulo}</td>
+          <td><span class="badge badge-${m.status}">${m.status}</span></td>
+          <td style="min-width:120px;">
+            <div class="progress-bar"><div class="progress-bar-fill" style="width:${m.progresso_percentual}%"></div></div>
+            <small>${m.progresso_percentual}%</small>
+          </td>
+          <td>${formatarData(m.data_matricula)}</td>
+          <td>
+            ${m.status !== 'cancelada' ? `<button class="btn btn-perigo" style="font-size:.75rem;" onclick="cancelar(${m.id})">Cancelar</button>` : ''}
+            ${m.status === 'concluida' ? `<button class="btn btn-secundario" style="font-size:.75rem;" onclick="emitirCertificado(${m.id})">Certificado</button>` : ''}
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    async function cancelar(id) {
+      if (!confirm('Cancelar esta matrícula?')) return;
+      try {
+        await api(`/matriculas/${id}/cancelar`, { method: 'PATCH' });
+        carregar();
+      } catch (err) { alert(err.message); }
+    }
+
+    async function emitirCertificado(matriculaId) {
+      try {
+        const cert = await api('/certificados/emitir', { method: 'POST', body: JSON.stringify({ matricula_id: matriculaId }) });
+        window.open(cert.url_arquivo, '_blank');
+      } catch (err) { alert(err.message); }
+    }
+
+    carregar().catch((e) => alert(e.message));
+  </script>
+</body>
+</html>

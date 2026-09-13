@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Criar conta — LMS BNCC Computação</title>
+<link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div class="pagina-login">
+    <div class="caixa-login">
+      <h1>Criar Conta</h1>
+      <p class="subtitulo">Cadastro de novo aluno na plataforma</p>
+
+      <div id="alerta" class="alerta alerta-erro oculto"></div>
+
+      <form id="form-registro">
+        <div class="form-grupo">
+          <label for="nome">Nome completo</label>
+          <input type="text" id="nome" required />
+        </div>
+        <div class="form-grupo">
+          <label for="email">Email</label>
+          <input type="email" id="email" required />
+        </div>
+        <div class="form-grupo">
+          <label for="senha">Senha (mín. 6 caracteres)</label>
+          <input type="password" id="senha" required minlength="6" />
+        </div>
+        <button type="submit" class="btn btn-secundario btn-bloco">Criar conta</button>
+      </form>
+
+      <p style="text-align:center; margin-top:18px; font-size:.85rem; color:#718096;">
+        Já tem conta? <a href="/index.html" style="color:#2c5282; font-weight:600;">Fazer login</a>
+      </p>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script>
+    document.getElementById('form-registro').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const alertaEl = document.getElementById('alerta');
+      alertaEl.classList.add('oculto');
+
+      const nome = document.getElementById('nome').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const senha = document.getElementById('senha').value;
+
+      try {
+        const resposta = await api('/auth/registrar', {
+          method: 'POST',
+          body: JSON.stringify({ nome, email, senha }),
+        });
+        salvarSessao(resposta.token, resposta.usuario);
+        window.location.href = '/cursos.html';
+      } catch (err) {
+        alertaEl.textContent = err.message;
+        alertaEl.classList.remove('oculto');
+      }
+    });
+  </script>
+</body>
+</html>

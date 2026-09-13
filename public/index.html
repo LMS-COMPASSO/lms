@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Entrar — LMS BNCC Computação</title>
+<link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div class="pagina-login">
+    <div class="caixa-login">
+      <h1>LMS BNCC Computação</h1>
+      <p class="subtitulo">Plataforma de ensino alinhada à BNCC Computação</p>
+
+      <div id="alerta" class="alerta alerta-erro oculto"></div>
+
+      <form id="form-login">
+        <div class="form-grupo">
+          <label for="email">Email</label>
+          <input type="email" id="email" required placeholder="seuemail@escola.edu.br" />
+        </div>
+        <div class="form-grupo">
+          <label for="senha">Senha</label>
+          <input type="password" id="senha" required placeholder="••••••••" />
+        </div>
+        <button type="submit" class="btn btn-primario btn-bloco">Entrar</button>
+      </form>
+
+      <p style="text-align:center; margin-top:18px; font-size:.85rem; color:#718096;">
+        Não tem conta? <a href="/registrar.html" style="color:#2c5282; font-weight:600;">Cadastre-se como aluno</a>
+      </p>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script>
+    if (obterToken()) window.location.href = '/dashboard.html';
+
+    document.getElementById('form-login').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const alertaEl = document.getElementById('alerta');
+      alertaEl.classList.add('oculto');
+
+      const email = document.getElementById('email').value.trim();
+      const senha = document.getElementById('senha').value;
+
+      try {
+        const resposta = await api('/auth/login', {
+          method: 'POST',
+          body: JSON.stringify({ email, senha }),
+        });
+        salvarSessao(resposta.token, resposta.usuario);
+        window.location.href = resposta.usuario.perfil === 'aluno' ? '/cursos.html' : '/dashboard.html';
+      } catch (err) {
+        alertaEl.textContent = err.message;
+        alertaEl.classList.remove('oculto');
+      }
+    });
+  </script>
+</body>
+</html>

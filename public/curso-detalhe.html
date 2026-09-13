@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Detalhe do Curso — LMS BNCC Computação</title>
+<link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <div id="sidebar-container"></div>
+    <main class="conteudo">
+      <div id="topbar-container"></div>
+
+      <div class="cartao" id="cabecalho-curso"></div>
+
+      <div class="cartao oculto-aluno" id="area-novo-modulo">
+        <h3>Adicionar Módulo</h3>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <input type="text" id="novo-modulo-titulo" placeholder="Título do módulo" style="flex:1; min-width:200px;" />
+          <button class="btn btn-primario" onclick="criarModulo()">Adicionar</button>
+        </div>
+      </div>
+
+      <div id="lista-modulos"></div>
+    </main>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/layout.js"></script>
+  <script>
+    const usuario = exigirAutenticacao();
+    montarLayout('cursos');
+    document.getElementById('titulo-pagina').textContent = 'Detalhe do Curso';
+    if (usuario.perfil === 'aluno') {
+      document.querySelectorAll('.oculto-aluno').forEach((el) => el.classList.add('oculto'));
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const cursoId = params.get('id');
+
+    async function carregarCurso() {
+      const curso = await api(`/cursos/${cursoId}`);
+
+      document.getElementById('cabecalho-curso').innerHTML = `
+        <span class="badge badge-${curso.status}">${curso.status}</span>
+        <h2 style="margin:8px 0;">${curso.titulo}</h2>
+        <p style="color:#718096;">${curso.descricao || ''}</p>
+        <p style="font-size:.85rem;">📘 ${curso.eixo_bncc} · 🏫 ${curso.ano_escolar} · ⏱️ ${curso.carga_horaria}h · 👨‍🏫 ${curso.instrutor_nome}</p>
+      `;
+
+      const container = document.getElementById('lista-modulos');
+      if (curso.modulos.length === 0) {
+        container.innerHTML = '<div class="cartao">Nenhum módulo cadastrado ainda.</div>';
+        return;
+      }
+
+      container.innerHTML = curso.modulos.map((m) => `
+        <div class="cartao">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h3>${m.titulo}</h3>
+            <button class="btn btn-perigo oculto-aluno" style="font-size:.75rem;" onclick="excluirModulo(${m.id})">Excluir módulo</button>
+          </div>
+          <p style="color:#718096; font-size:.85rem;">${m.descricao || ''}</p>
+
+          <table>
+            <thead><tr><th>Aula</th><th>Tipo</th><th>Duração</th><th></th></tr></thead>
+            <tbody>
+              ${m.aulas.map((a) => `
+                <tr>
+                  <td>${a.titulo}</td>
+                  <td>${a.tipo}</td>
+                  <td>${a.duracao_min || 0} min</td>
+                  <td>
+                    ${usuario.perfil === 'aluno'
+                      ? `<label style="display:flex; align-items:center; gap:6px; font-weight:400;">
+                          <input type="checkbox" onchange="marcarProgresso(${a.id}, this.checked)" /> Concluída
+                         </label>`
+                      : `<button class="btn btn-perigo" style="font-size:.75rem;" onclick="excluirAula(${a.id})">Excluir</button>`}
+                  </td>
+                </tr>
+              `).join('') || '<tr><td colspan="4" style="color:#a0aec0;">Nenhuma aula cadastrada.</td></tr>'}
+            </tbody>
+          </table>
+
+          <div class="oculto-aluno" style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;">
+            <input type="text" id="nova-aula-${m.id}" placeholder="Título da nova aula" style="flex:1; min-width:160px;" />
+            <select id="tipo-aula-${m.id}">
+              <option value="texto">Texto</option>
+              <option value="video">Vídeo</option>
+              <option value="pdf">PDF</option>
+              <option value="link">Link</option>
+            </select>
+            <button class="btn btn-neutro" onclick="criarAula(${m.id})">+ Aula</button>
+          </div>
+
+          ${m.avaliacoes.length > 0 ? `
+            <p style="margin-top:10px; font-size:.85rem;"><strong>Avaliações:</strong> ${m.avaliacoes.map((av) => av.titulo).join(', ')}</p>
+          ` : ''}
+        </div>
+      `).join('');
+    }
+
+    if (usuario.perfil !== 'aluno') {
+      document.querySelectorAll('.oculto-aluno').forEach((el) => el.classList.remove('oculto'));
+    }
+
+    async function criarModulo() {
+      const titulo = document.getElementById('novo-modulo-titulo').value.trim();
+      if (!titulo) return;
+      try {
+        await api(`/modulos/curso/${cursoId}`, { method: 'POST', body: JSON.stringify({ titulo }) });
+        document.getElementById('novo-modulo-titulo').value = '';
+        carregarCurso();
+      } catch (err) { alert(err.message); }
+    }
+
+    async function excluirModulo(id) {
+      if (!confirm('Excluir este módulo e todo seu conteúdo?')) return;
+      try {
+        await api(`/modulos/${id}`, { method: 'DELETE' });
+        carregarCurso();
+      } catch (err) { alert(err.message); }
+    }
+
+    async function criarAula(moduloId) {
+      const titulo = document.getElementById(`nova-aula-${moduloId}`).value.trim();
+      const tipo = document.getElementById(`tipo-aula-${moduloId}`).value;
+      if (!titulo) return;
+      try {
+        await api(`/aulas/modulo/${moduloId}`, { method: 'POST', body: JSON.stringify({ titulo, tipo }) });
+        carregarCurso();
+      } catch (err) { alert(err.message); }
+    }
+
+    async function excluirAula(id) {
+      if (!confirm('Excluir esta aula?')) return;
+      try {
+        await api(`/aulas/${id}`, { method: 'DELETE' });
+        carregarCurso();
+      } catch (err) { alert(err.message); }
+    }
+
+    async function marcarProgresso(aulaId, concluida) {
+      try {
+        await api(`/aulas/${aulaId}/progresso`, { method: 'POST', body: JSON.stringify({ concluida }) });
+      } catch (err) { alert(err.message); }
+    }
+
+    carregarCurso().catch((e) => alert(e.message));
+  </script>
+</body>
+</html>
