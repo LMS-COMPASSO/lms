@@ -268,11 +268,14 @@ O frontend é composto exclusivamente de arquivos estáticos puros (`HTML`, `CSS
 
 ---
 
-## 🤝 Dicas de Colaboração no GitHub para Iniciantes
+## 🤝 Comunidade e Como Colaborar
 
-- **Issues:** Use a aba *Issues* do GitHub para relatar sugestões de novas aulas de robótica, sugestões de atividades desplugadas ou reportar erros de digitação.
-- **Pull Requests:** Professores e desenvolvedores podem sugerir novos planos de aula criando uma branch secundária e abrindo um *Pull Request* para revisão.
-- **README e Documentação:** Mantenha este documento atualizado sempre que um novo módulo da BNCC for adicionado.
+Para garantir um ambiente organizado, acolhedor e seguro para escolas, professores e desenvolvedores, disponibilizamos guias separados e detalhados:
+
+- 📘 **[Guia de Contribuição (CONTRIBUTING.md)](CONTRIBUTING.md):** Instruções passo a passo de como sugerir conteúdos da BNCC ou melhorias de código.
+- 📜 **[Código de Conduta (CODE_OF_CONDUCT.md)](CODE_OF_CONDUCT.md):** Nossos padrões de convivência empática e respeito para o ambiente escolar e open-source.
+- 🛡️ **[Política de Segurança (SECURITY.md)](SECURITY.md):** Como relatar falhas e vulnerabilidades de maneira responsável.
+- 📋 **Templates de Issues:** Modelos pré-formatados para relatar bugs ou propor novos cursos da BNCC na aba [Issues](../../issues).
 
 ---
 
