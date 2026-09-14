@@ -48,6 +48,7 @@ Dividimos a documentação em guias específicos e detalhados para facilitar o e
 | ☁️ **[Guia do Backend (Cloudflare)](docs/backend-cloudflare.md)** | Configuração do Worker, banco D1, comandos do Wrangler CLI e gerenciamento visual no painel da Cloudflare. | Desenvolvedores e Técnicos de TI |
 | 💻 **[Guia do Frontend & GitHub Pages](docs/frontend-guia.md)** | Arquitetura das páginas web, controle de autenticação JWT e como publicar o site gratuitamente no GitHub Pages. | Desenvolvedores Web e Iniciantes |
 | 📡 **[Catálogo da API REST](docs/api-endpoints.md)** | Lista completa de endpoints, métodos HTTP, parâmetros de busca e modelos de requisição. | Desenvolvedores e Integradores |
+| 📋 **[Quadro Kanban & Roadmap](PROJECT_KANBAN.md)** | Visão completa de etapas, evolução do projeto, roadmap pedagógico e problemas mitigados. | Gestores de Projeto e Colaboradores |
 | ❓ **[Perguntas Frequentes & Solução de Problemas](docs/faq-troubleshooting.md)** | Como resolver erros comuns de CORS, token expirado, portas ocupadas e migrações do banco. | Todos os colaboradores |
 
 ---
@@ -78,6 +79,7 @@ Ao executar a carga de dados modelo (`npm run cf:seed:local` ou `cf:seed:remote`
 │   └── config/                 # Configurações do ambiente legado
 ├── package.json                # Scripts de automação (cf:dev, cf:deploy, cf:db, cf:seed)
 ├── wrangler.jsonc              # Configuração oficial do Cloudflare Workers & D1
+├── PROJECT_KANBAN.md           # Quadro Kanban completo, roadmap e matriz de problemas
 ├── CONTRIBUTING.md             # Como colaborar com código ou planos de aula
 ├── CODE_OF_CONDUCT.md          # Diretrizes de respeito e convivência acolhedora
 ├── SECURITY.md                 # Política de reporte responsável de vulnerabilidades
@@ -89,6 +91,7 @@ Ao executar a carga de dados modelo (`npm run cf:seed:local` ou `cf:seed:remote`
 ## 🤝 Comunidade e Como Colaborar
 
 O projeto é aberto a contribuições tanto técnicas quanto pedagógicas:
+- 📋 **[Quadro Kanban do Projeto (PROJECT_KANBAN.md)](PROJECT_KANBAN.md):** Acompanhe as próximas tarefas a fazer, itens em andamento e evoluções.
 - 📘 **[Guia de Contribuição (CONTRIBUTING.md)](CONTRIBUTING.md):** Saiba como sugerir novos planos de aula ou abrir um Pull Request.
 - 📜 **[Código de Conduta (CODE_OF_CONDUCT.md)](CODE_OF_CONDUCT.md):** Conheça nossos princípios de convivência inclusiva e empática.
 - 🛡️ **[Política de Segurança (SECURITY.md)](SECURITY.md):** Procedimentos para reporte responsável de vulnerabilidades.
