@@ -1,26 +1,40 @@
-# 🏫 LMS BNCC Computação
+# LMS BNCC Computação
 
-Plataforma aberta de Gestão de Aprendizagem (LMS) orientada à implementação das diretrizes da **Base Nacional Comum Curricular (BNCC) para a Computação** na Educação Básica e Redes Municipais de Ensino.
+[![Cloudflare Workers](https://img.shields.io/badge/Cloudflare-Workers-F38020?logo=cloudflare&logoColor=white)](https://workers.cloudflare.com/)
+[![Cloudflare D1](https://img.shields.io/badge/Database-Cloudflare%20D1-orange?logo=sqlite&logoColor=white)](https://developers.cloudflare.com/d1/)
+[![BNCC Computação](https://img.shields.io/badge/BNCC-Computação%20Escolar-2563eb)](docs/bncc-computacao.md)
+[![Status Produção](https://img.shields.io/badge/Status-Online%20em%20Produção-22c55e)](https://lms.thedelacosta.workers.dev/)
+[![Licença MIT](https://img.shields.io/badge/Licen%C3%A7a-MIT-blue.svg)](LICENSE)
 
-O sistema opera sobre uma arquitetura moderna **Edge Serverless** com **Cloudflare Workers** e banco relacional **Cloudflare D1**, proporcionando alta velocidade, custo zero para pequenas redes escolares e facilidade de manutenção para iniciantes em programação.
+Plataforma aberta de Gestão de Aprendizagem (LMS) orientada à implementação das diretrizes da **Base Nacional Comum Curricular (BNCC) para a Computação** (Resolução CNE/CP nº 1/2022) na Educação Básica e Redes Municipais de Ensino.
+
+O sistema opera sobre uma arquitetura moderna **Edge Fullstack Serverless** na **Cloudflare** (Workers + D1 + Workers Static Assets), proporcionando alta velocidade, custo zero para pequenas redes escolares e facilidade de manutenção para equipes pedagógicas e técnicas.
+
+---
+
+## 🌐 Demonstração Online
+
+Acesse o ambiente oficial em produção na Cloudflare:
+
+👉 **[https://lms.thedelacosta.workers.dev/](https://lms.thedelacosta.workers.dev/)**
 
 ---
 
 ## ✨ Principais Recursos
 
-- 🎯 **Alinhamento Integral à BNCC Computação:** Cursos organizados nos 3 eixos fundamentais (*Pensamento Computacional*, *Mundo Digital* e *Cultura Digital*).
-- 🔐 **Controle de Acesso por Perfil (RBAC):** Níveis diferenciados para Administradores da Secretaria, Instrutores/Professores e Alunos.
-- 📊 **Dashboard Administrativo:** Indicadores escolares em tempo real e linha do tempo de eventos pedagógicos.
+- 🎯 **Alinhamento Integral à BNCC Computação:** Cursos organizados nos 3 eixos fundamentais (*Pensamento Computacional*, *Mundo Digital* e *Cultura Digital*), com segmentação para o Ensino Fundamental I (1º ao 5º ano) e Ensino Fundamental II (6º ao 9º ano).
+- 🔐 **Controle de Acesso por Perfil (RBAC):** Níveis diferenciados para Administradores da Secretaria Municipal, Instrutores/Professores e Alunos.
+- 📊 **Dashboard Administrativo:** Indicadores de engajamento escolar em tempo real, matrículas ativas, taxa de conclusão e linha do tempo de atividades pedagógicas.
 - 🎓 **Sala de Aula Interativa:** Módulos sequenciais, aulas multimídia (texto, vídeo, links) e cálculo de progresso por aula.
 - 📝 **Avaliações com Correção Automática:** Questionários de múltipla escolha com cálculo imediato de notas e controle de tentativas.
-- 📜 **Certificados Digitais com Validação Pública:** Emissão instantânea e visualização pronta para impressão e PDF em folha A4 com código autenticável.
-- ⚡ **Frontend Leve e Puro:** Construído em HTML5, CSS Vanilla e JS nativo — sem dependências pesadas, ideal para hospedar de graça no GitHub Pages.
+- 📜 **Certificados Digitais com Validação Pública:** Emissão instantânea com indicação de carga horária e eixo BNCC, layout pronto para impressão A4 e código verificador consultável pela Secretaria.
+- ⚡ **Frontend Leve e Nativo:** Construído em HTML5, CSS Vanilla e JS nativo — entregue com máxima velocidade diretamente pelo CDN Edge da Cloudflare.
 
 ---
 
-## ⚡ Início Rápido (Quick Start)
+## ⚡ Início Rápido (Quick Start Local)
 
-Para rodar a plataforma no seu computador em menos de 2 minutos:
+Para rodar a plataforma completa (frontend + backend + banco local) no seu computador:
 
 ```bash
 # 1. Clone o repositório
@@ -30,26 +44,15 @@ cd lms
 # 2. Instale as dependências
 npm install
 
-# 3. Inicie o backend localmente na porta 8787
+# 3. Crie e popule o banco local D1 (apenas na primeira vez)
+npm run cf:db:local
+npm run cf:seed:local
+
+# 4. Inicie o ambiente local completo
 npm run cf:dev
 ```
 
-Abra qualquer arquivo `.html` da pasta `public/` no seu navegador ou utilize a extensão *Live Server* do VS Code para navegar no sistema.
-
----
-
-## 📚 Central de Documentação
-
-Dividimos a documentação em guias específicos e detalhados para facilitar o estudo e a manutenção do projeto:
-
-| Guia | Descrição | Público Alvo |
-|---|---|---|
-| 📘 **[Diretrizes da BNCC Computação](docs/bncc-computacao.md)** | Explicação detalhada dos 3 eixos, anos escolares, habilidades pedagógicas e atividades sugeridas. | Professores, Coordenadores e Educadores |
-| ☁️ **[Guia do Backend (Cloudflare)](docs/backend-cloudflare.md)** | Configuração do Worker, banco D1, comandos do Wrangler CLI e gerenciamento visual no painel da Cloudflare. | Desenvolvedores e Técnicos de TI |
-| 💻 **[Guia do Frontend & GitHub Pages](docs/frontend-guia.md)** | Arquitetura das páginas web, controle de autenticação JWT e como publicar o site gratuitamente no GitHub Pages. | Desenvolvedores Web e Iniciantes |
-| 📡 **[Catálogo da API REST](docs/api-endpoints.md)** | Lista completa de endpoints, métodos HTTP, parâmetros de busca e modelos de requisição. | Desenvolvedores e Integradores |
-| 📋 **[Quadro Kanban & Roadmap](PROJECT_KANBAN.md)** | Visão completa de etapas, evolução do projeto, roadmap pedagógico e problemas mitigados. | Gestores de Projeto e Colaboradores |
-| ❓ **[Perguntas Frequentes & Solução de Problemas](docs/faq-troubleshooting.md)** | Como resolver erros comuns de CORS, token expirado, portas ocupadas e migrações do banco. | Todos os colaboradores |
+Acesse **`http://localhost:8787`** no seu navegador para utilizar o sistema.
 
 ---
 
@@ -59,9 +62,36 @@ Ao executar a carga de dados modelo (`npm run cf:seed:local` ou `cf:seed:remote`
 
 | Perfil | Email | O que pode fazer? |
 |---|---|---|
-| **Administrador** | `admin@lms-bncc.edu.br` | Acesso completo a métricas, gestão de todos os usuários, aprovação de cursos e turmas |
-| **Instrutora (Professora)** | `prof.marina@escola.gov.br` | Criação e gestão de cursos próprios, adição de aulas e elaboração de questionários |
+| **Administrador** | `admin@lms-bncc.edu.br` | Acesso completo a métricas escolares, gestão de usuários e visão global do sistema |
+| **Instrutora (Professora)** | `prof.marina@escola.gov.br` | Criação e gestão de cursos próprios, adição de aulas e questionários |
 | **Aluno** | `aluno.pedro@escola.gov.br` | Matrícula em cursos, estudo das aulas, realização de testes e emissão de certificados |
+
+---
+
+## 📚 Central de Documentação
+
+Dividimos a documentação técnica e pedagógica em guias detalhados na pasta `docs/`:
+
+| Guia | Descrição | Público Alvo |
+|---|---|---|
+| 📘 **[Diretrizes da BNCC Computação](docs/bncc-computacao.md)** | Os 3 eixos curriculares, anos escolares, competências pedagógicas e sugestões de atividades. | Professores e Coordenadores |
+| ☁️ **[Guia do Backend Cloudflare](docs/backend-cloudflare.md)** | Configuração do Worker, banco relacional D1, Wrangler CLI e deploy em produção. | Desenvolvedores e TI |
+| 💻 **[Guia do Frontend](docs/frontend-guia.md)** | Arquitetura das páginas web, autenticação JWT e componentes visuais. | Desenvolvedores Web |
+| 📡 **[Catálogo da API REST](docs/api-endpoints.md)** | Relação completa de endpoints, métodos HTTP, parâmetros e modelos de resposta. | Integradores de Sistemas |
+| ❓ **[Perguntas Frequentes & Troubleshooting](docs/faq-troubleshooting.md)** | Solução de dúvidas comuns sobre portas, tokens, permissões e banco de dados. | Todos os colaboradores |
+
+---
+
+## 🛠️ Scripts NPM Disponíveis
+
+| Comando | Descrição |
+|---|---|
+| `npm run cf:dev` | Inicia o servidor local completo (Frontend + API Worker) em `http://localhost:8787` |
+| `npm run cf:deploy` | Faz o deploy em produção na Cloudflare (upload de páginas estáticas e Worker) |
+| `npm run cf:db:local` | Executa a criação de tabelas (`schema.sql`) no banco local |
+| `npm run cf:seed:local` | Carrega os cursos modelo da BNCC e usuários no banco local |
+| `npm run cf:db:remote` | Executa as tabelas e índices no banco de produção Cloudflare D1 |
+| `npm run cf:seed:remote` | Popula os cursos modelo da BNCC no banco oficial de produção |
 
 ---
 
@@ -69,20 +99,23 @@ Ao executar a carga de dados modelo (`npm run cf:seed:local` ou `cf:seed:remote`
 
 ```text
 ├── .github/                    # Templates de Issues e Pull Requests
-├── d1/                         # Arquivos SQL do banco Cloudflare D1 (schema e seed da BNCC)
+├── d1/                         # Arquivos SQL do banco Cloudflare D1 (schema e seed BNCC)
+│   ├── schema.sql              # Estrutura de tabelas e índices
+│   └── seed.sql                # Dados modelo da BNCC Computação
 ├── docs/                       # Documentação modular detalhada (BNCC, Backend, Frontend, API)
-├── public/                     # Frontend estático leve (HTML, CSS e JavaScript nativo)
-│   ├── css/                    # Estilos visuais modernos e responsivos
-│   └── js/                     # Conexão com a API (config.js e api.js)
+├── public/                     # Frontend estático entregue pelo Edge da Cloudflare
+│   ├── css/                    # Estilos CSS modernos e responsivos (mobile-first)
+│   └── js/                     # Integração com a API (config.js, api.js, layout.js)
 ├── src/
 │   ├── worker/                 # Backend Serverless para Cloudflare Workers
+│   │   └── index.mjs           # Roteador unificado da API e delegação de Assets
 │   └── config/                 # Configurações do ambiente legado
-├── package.json                # Scripts de automação (cf:dev, cf:deploy, cf:db, cf:seed)
-├── wrangler.jsonc              # Configuração oficial do Cloudflare Workers & D1
-├── PROJECT_KANBAN.md           # Quadro Kanban completo, roadmap e matriz de problemas
+├── package.json                # Dependências e scripts de automação do projeto
+├── wrangler.jsonc              # Configuração oficial do Cloudflare Workers, Assets & D1
 ├── CONTRIBUTING.md             # Como colaborar com código ou planos de aula
 ├── CODE_OF_CONDUCT.md          # Diretrizes de respeito e convivência acolhedora
 ├── SECURITY.md                 # Política de reporte responsável de vulnerabilidades
+├── LICENSE                     # Licença de código aberto (MIT)
 └── README.md                   # Este sumário principal
 ```
 
@@ -90,14 +123,15 @@ Ao executar a carga de dados modelo (`npm run cf:seed:local` ou `cf:seed:remote`
 
 ## 🤝 Comunidade e Como Colaborar
 
-O projeto é aberto a contribuições tanto técnicas quanto pedagógicas:
-- 📋 **[Quadro Kanban do Projeto (PROJECT_KANBAN.md)](PROJECT_KANBAN.md):** Acompanhe as próximas tarefas a fazer, itens em andamento e evoluções.
-- 📘 **[Guia de Contribuição (CONTRIBUTING.md)](CONTRIBUTING.md):** Saiba como sugerir novos planos de aula ou abrir um Pull Request.
-- 📜 **[Código de Conduta (CODE_OF_CONDUCT.md)](CODE_OF_CONDUCT.md):** Conheça nossos princípios de convivência inclusiva e empática.
-- 🛡️ **[Política de Segurança (SECURITY.md)](SECURITY.md):** Procedimentos para reporte responsável de vulnerabilidades.
+O projeto é aberto a contribuições de educadores, secretarias municipais e desenvolvedores:
+
+- 📘 **[Guia de Contribuição (CONTRIBUTING.md)](CONTRIBUTING.md):** Como sugerir planos de aula, melhorias ou submeter Pull Requests.
+- 📜 **[Código de Conduta (CODE_OF_CONDUCT.md)](CODE_OF_CONDUCT.md):** Princípios de convivência inclusiva e respeitosa.
+- 🛡️ **[Política de Segurança (SECURITY.md)](SECURITY.md):** Instruções para reporte seguro de vulnerabilidades.
 
 ---
 
 ## ⚖️ Licença
 
-Este software é distribuído sob a licença **MIT**, livre para uso, adaptação e expansão por escolas, secretarias de educação e projetos educacionais.
+Este software é distribuído sob a licença **MIT**, livre para uso, adaptação e implantação por escolas públicas, secretarias de educação e projetos pedagógicos sem custos de licenciamento.
+
