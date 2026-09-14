@@ -419,6 +419,17 @@ export default {
       return new Response(null, { status: 204, headers: CORS_HEADERS });
     }
 
+    // Se não for rota da API (/api/*), serve os arquivos estáticos do frontend (public/)
+    if (!url.pathname.startsWith('/api')) {
+      if (env.ASSETS) {
+        return env.ASSETS.fetch(request);
+      }
+      return new Response('Frontend não configurado. Binding ASSETS ausente no worker.', {
+        status: 404,
+        headers: { 'Content-Type': 'text/plain; charset=utf-8', ...CORS_HEADERS },
+      });
+    }
+
     const db = env.DB || env.lms_prod;
     if (!db) {
       return jsonResponse({
@@ -1544,9 +1555,6 @@ export default {
       }
     }
 
-    return new Response('Endpoint não encontrado', {
-      status: 404,
-      headers: { 'Content-Type': 'text/plain; charset=utf-8', ...CORS_HEADERS },
-    });
+    return jsonResponse({ erro: 'Endpoint não encontrado.' }, 404);
   },
 };

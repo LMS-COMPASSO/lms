@@ -6,16 +6,23 @@
 -- ====================================================================
 
 -- 1. Usuários de Demonstração
-INSERT OR IGNORE INTO usuarios (id, nome, email, senha_hash, perfil, ativo) VALUES
-(1, 'Administrador do Sistema', 'admin@lms-bncc.edu.br', '6f2cb9dd8f4b65e24e1c3f3fa5bc57982349237f11abceacd45bbcb74d621c25', 'administrador', 1),
-(2, 'Profa. Marina Silva', 'prof.marina@escola.gov.br', '6f2cb9dd8f4b65e24e1c3f3fa5bc57982349237f11abceacd45bbcb74d621c25', 'instrutor', 1),
-(3, 'Pedro Santos (Aluno)', 'aluno.pedro@escola.gov.br', '6f2cb9dd8f4b65e24e1c3f3fa5bc57982349237f11abceacd45bbcb74d621c25', 'aluno', 1);
+INSERT INTO usuarios (nome, email, senha_hash, perfil, ativo) VALUES
+('Administrador do Sistema', 'admin@lms-bncc.edu.br', '6f2cb9dd8f4b65e24e1c3f3fa5bc57982349237f11abceacd45bbcb74d621c25', 'administrador', 1)
+ON CONFLICT(email) DO NOTHING;
+
+INSERT INTO usuarios (nome, email, senha_hash, perfil, ativo) VALUES
+('Profa. Marina Silva', 'prof.marina@escola.gov.br', '6f2cb9dd8f4b65e24e1c3f3fa5bc57982349237f11abceacd45bbcb74d621c25', 'instrutor', 1)
+ON CONFLICT(email) DO NOTHING;
+
+INSERT INTO usuarios (nome, email, senha_hash, perfil, ativo) VALUES
+('Pedro Santos (Aluno)', 'aluno.pedro@escola.gov.br', '6f2cb9dd8f4b65e24e1c3f3fa5bc57982349237f11abceacd45bbcb74d621c25', 'aluno', 1)
+ON CONFLICT(email) DO NOTHING;
 
 -- 2. Cursos Alinhados aos 3 Eixos da BNCC Computação
 INSERT OR IGNORE INTO cursos (id, titulo, descricao, eixo_bncc, ano_escolar, carga_horaria, status, capa_url, instrutor_id) VALUES
-(1, 'Pensamento Computacional: Algoritmos e Padrões no Cotidiano', 'Desenvolvimento da capacidade de decompor problemas complexos, reconhecer padrões e criar algoritmos passo a passo para o Ensino Fundamental I.', 'Pensamento Computacional', '1º ao 3º Ano', 20, 'publicado', 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800', 2),
-(2, 'Mundo Digital: Como Funcionam os Computadores e a Internet', 'Compreensão do funcionamento físico e lógico dos dispositivos digitais, transmissão de dados em redes e codificação binária.', 'Mundo Digital', '4º e 5º Ano', 30, 'publicado', 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800', 2),
-(3, 'Cultura Digital: Cidadania, Segurança e Ética na Rede', 'Uso consciente, crítico e responsável das tecnologias digitais, combate à desinformação, ciberbullying e proteção de dados pessoais.', 'Cultura Digital', '6º ao 9º Ano', 25, 'publicado', 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800', 2);
+(1, 'Pensamento Computacional: Algoritmos e Padrões no Cotidiano', 'Desenvolvimento da capacidade de decompor problemas complexos, reconhecer padrões e criar algoritmos passo a passo para o Ensino Fundamental I.', 'Pensamento Computacional', '1º ao 3º Ano', 20, 'publicado', 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800', (SELECT id FROM usuarios WHERE email = 'prof.marina@escola.gov.br')),
+(2, 'Mundo Digital: Como Funcionam os Computadores e a Internet', 'Compreensão do funcionamento físico e lógico dos dispositivos digitais, transmissão de dados em redes e codificação binária.', 'Mundo Digital', '4º e 5º Ano', 30, 'publicado', 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800', (SELECT id FROM usuarios WHERE email = 'prof.marina@escola.gov.br')),
+(3, 'Cultura Digital: Cidadania, Segurança e Ética na Rede', 'Uso consciente, crítico e responsável das tecnologias digitais, combate à desinformação, ciberbullying e proteção de dados pessoais.', 'Cultura Digital', '6º ao 9º Ano', 25, 'publicado', 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800', (SELECT id FROM usuarios WHERE email = 'prof.marina@escola.gov.br'));
 
 -- 3. Módulos dos Cursos
 INSERT OR IGNORE INTO modulos (id, curso_id, titulo, descricao, ordem) VALUES
@@ -52,4 +59,4 @@ INSERT OR IGNORE INTO alternativas (id, questao_id, texto, correta) VALUES
 
 -- 8. Matrícula de Exemplo para Teste
 INSERT OR IGNORE INTO matriculas (id, usuario_id, curso_id, status, progresso_percentual) VALUES
-(1, 3, 1, 'ativa', 0.0);
+(1, (SELECT id FROM usuarios WHERE email = 'aluno.pedro@escola.gov.br'), 1, 'ativa', 0.0);
