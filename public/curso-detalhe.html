@@ -26,6 +26,7 @@
     </main>
   </div>
 
+  <script src="/js/config.js"></script>
   <script src="/js/api.js"></script>
   <script src="/js/layout.js"></script>
   <script>
@@ -74,7 +75,7 @@
                   <td>
                     ${usuario.perfil === 'aluno'
                       ? `<label style="display:flex; align-items:center; gap:6px; font-weight:400;">
-                          <input type="checkbox" onchange="marcarProgresso(${a.id}, this.checked)" /> Concluída
+                          <input type="checkbox" ${a.concluida ? 'checked' : ''} onchange="marcarProgresso(${a.id}, this.checked)" /> Concluída
                          </label>`
                       : `<button class="btn btn-perigo" style="font-size:.75rem;" onclick="excluirAula(${a.id})">Excluir</button>`}
                   </td>

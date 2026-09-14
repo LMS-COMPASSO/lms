@@ -1,0 +1,22 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "lms-api",
+	"main": "src/worker/index.mjs",
+	"compatibility_date": "2026-09-12",
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	"observability": {
+		"enabled": true
+	},
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "lms_prod",
+			"database_id": "a2f40e86-ab85-4672-8891-5eefbdad4656"
+		}
+	],
+	"vars": {
+		"JWT_SECRET": "mude-esta-chave-para-uma-aleatoria"
+	}
+}

@@ -1,5 +1,5 @@
 // Wrapper simples para chamadas à API REST do LMS, com token JWT em localStorage
-const API_BASE = '/api';
+const API_BASE = (window.LMS_API_BASE || 'https://lms-api.thedelacosta.workers.dev/api').replace(/\/$/, '');
 
 function obterToken() {
   return localStorage.getItem('lms_token');
@@ -26,14 +26,27 @@ async function api(caminho, opcoes = {}) {
   const headers = { 'Content-Type': 'application/json', ...(opcoes.headers || {}) };
   if (token) headers.Authorization = `Bearer ${token}`;
 
-  const resposta = await fetch(`${API_BASE}${caminho}`, { ...opcoes, headers });
+  let resposta;
+  try {
+    resposta = await fetch(`${API_BASE}${caminho}`, { ...opcoes, headers });
+  } catch (error) {
+    throw new Error('Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.');
+  }
 
   if (resposta.status === 401) {
     encerrarSessao();
     throw new Error('Sessão expirada. Faça login novamente.');
   }
 
-  const dados = await resposta.json().catch(() => ({}));
+  const texto = await resposta.text();
+  let dados = {};
+  if (texto) {
+    try {
+      dados = JSON.parse(texto);
+    } catch {
+      dados = { erro: texto.slice(0, 200) };
+    }
+  }
 
   if (!resposta.ok) {
     throw new Error(dados.erro || 'Erro ao processar a solicitação.');

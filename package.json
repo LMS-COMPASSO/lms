@@ -6,7 +6,13 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "seed": "node src/database/seed.js"
+    "seed": "node src/database/seed.js",
+    "cf:dev": "wrangler dev",
+    "cf:deploy": "wrangler deploy",
+    "cf:db:local": "wrangler d1 execute lms_prod --local --file=./d1/schema.sql",
+    "cf:db:remote": "wrangler d1 execute lms_prod --remote --file=./d1/schema.sql",
+    "cf:seed:local": "wrangler d1 execute lms_prod --local --file=./d1/seed.sql",
+    "cf:seed:remote": "wrangler d1 execute lms_prod --remote --file=./d1/seed.sql"
   },
   "license": "MIT",
   "dependencies": {
@@ -22,7 +28,8 @@
     "pdfkit": "^0.15.0"
   },
   "devDependencies": {
-    "nodemon": "^3.1.4"
+    "nodemon": "^3.1.4",
+    "wrangler": "^4.19.0"
   },
   "overrides": {
     "qs": "6.16.0"
