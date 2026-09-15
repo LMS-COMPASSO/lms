@@ -1,13 +1,13 @@
 /**
  * ============================================================================
- * LMS BNCC COMPUTAÇÃO - MÓDULO DE CRIPTOGRAFIA E TOKENS JWT
+ * LMS BNCC COMPUTAÇÃO - MÓDULO DE CRIPTOGRAFIA E SEGURANÇA (CRYPTO)
  * ============================================================================
  * Este arquivo reúne as funções de segurança utilizadas na plataforma:
- * 1. Hashing de senhas com SHA-256.
+ * 1. Hashing de senhas com SHA-256 (protege as senhas dos alunos no banco).
  * 2. Criação e validação de tokens de autenticação (JWT - JSON Web Token).
  *
- * Ele utiliza exclusivamente a "Web Crypto API" nativa, padrão dos navegadores
- * modernos e do Cloudflare Workers, sem a necessidade de bibliotecas externas.
+ * Utiliza exclusivamente a "Web Crypto API" nativa, padrão moderno dos
+ * navegadores e do Cloudflare Workers, sem a necessidade de bibliotecas externas.
  * ============================================================================
  */
 

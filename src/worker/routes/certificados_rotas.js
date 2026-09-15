@@ -1,6 +1,6 @@
 /**
  * ============================================================================
- * LMS BNCC COMPUTAÇÃO - ROTAS DE CERTIFICADOS DIGITAIS
+ * LMS BNCC COMPUTAÇÃO - ROTAS DE CERTIFICADOS DIGITAIS (CERTIFICATES)
  * ============================================================================
  * Gerencia a emissão, validação pública e visualização para impressão A4:
  * - Visualizar certificado em HTML pronto para impressão (/api/certificados/visualizar/:codigo)
@@ -18,7 +18,7 @@ import {
   queryOne,
   authorizeUser,
   CORS_HEADERS,
-} from '../helpers.mjs';
+} from '../helpers_utilitarios.js';
 
 /**
  * Renderiza o certificado diretamente em HTML/CSS para impressão no formato A4 paisagem.
@@ -74,84 +74,79 @@ export async function validarCertificadoPublico(request, env, db, codigo) {
  * - Administrador: vê todos os certificados emitidos na rede municipal.
  */
 export async function listarCertificados(request, env, db) {
-  try {
-    const { payload } = await authorizeUser(request, env, db);
+  const { payload } = await authorizeUser(request, env, db);
 
-    let sql = `
-      SELECT cert.id, cert.codigo_validacao, cert.data_emissao, cert.url_arquivo,
-        u.nome AS aluno_nome, c.titulo AS curso_titulo
-      FROM certificados cert
-      JOIN matriculas m ON m.id = cert.matricula_id
-      JOIN usuarios u ON u.id = m.usuario_id
-      JOIN cursos c ON c.id = m.curso_id
-    `;
-    const params = [];
+  let sql = `
+    SELECT cert.id, cert.codigo_validacao, cert.data_emissao, cert.url_arquivo,
+      u.nome AS aluno_nome, c.titulo AS curso_titulo
+    FROM certificados cert
+    JOIN matriculas m ON m.id = cert.matricula_id
+    JOIN usuarios u ON u.id = m.usuario_id
+    JOIN cursos c ON c.id = m.curso_id
+  `;
+  const params = [];
 
-    if (payload.perfil === 'aluno') {
-      sql += ' WHERE m.usuario_id = ?';
-      params.push(payload.id);
-    } else if (payload.perfil === 'instrutor') {
-      sql += ' WHERE c.instrutor_id = ?';
-      params.push(payload.id);
-    }
-
-    sql += ' ORDER BY cert.data_emissao DESC';
-
-    const certificados = await queryAll(db, sql, params);
-    return jsonResponse(certificados);
-  } catch (error) {
-    return jsonErro(error.message || 'Token inválido ou expirado.', 401);
+  if (payload.perfil === 'aluno') {
+    sql += ' WHERE m.usuario_id = ?';
+    params.push(payload.id);
+  } else if (payload.perfil === 'instrutor') {
+    sql += ' WHERE c.instrutor_id = ?';
+    params.push(payload.id);
   }
+
+  sql += ' ORDER BY cert.data_emissao DESC';
+
+  const certificados = await queryAll(db, sql, params);
+  return jsonResponse(certificados);
 }
 
 /**
  * Emite o certificado digital para uma matrícula que esteja com status "concluida".
  */
 export async function emitirCertificado(request, env, db, url) {
-  try {
-    const { payload } = await authorizeUser(request, env, db);
-    const body = await readJsonBody(request);
-    const matriculaId = Number(body.matricula_id);
+  const { payload } = await authorizeUser(request, env, db);
+  const body = await readJsonBody(request);
+  const matriculaId = Number(body.matricula_id);
 
-    if (!matriculaId) {
-      return jsonErro('matricula_id é obrigatório.', 400);
-    }
-
-    const matricula = await queryOne(db, 'SELECT * FROM matriculas WHERE id = ?', [matriculaId]);
-    if (!matricula) {
-      return jsonErro('Matrícula não encontrada.', 404);
-    }
-
-    if (payload.perfil === 'aluno' && matricula.usuario_id !== payload.id) {
-      return jsonErro('Acesso negado. Esta matrícula não pertence a você.', 403);
-    }
-
-    if (matricula.status !== 'concluida') {
-      return jsonErro('O curso ainda não foi concluído. Complete todas as aulas antes de emitir o certificado.', 400);
-    }
-
-    // Se já foi emitido anteriormente, retorna o certificado existente
-    const existente = await queryOne(db, 'SELECT * FROM certificados WHERE matricula_id = ?', [matriculaId]);
-    if (existente) {
-      return jsonResponse(existente);
-    }
-
-    const codigo = `CERT-${Date.now()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
-    const urlArquivo = `${url.origin}/api/certificados/visualizar/${codigo}`;
-
-    const insert = await db.prepare(
-      'INSERT INTO certificados (matricula_id, codigo_validacao, url_arquivo) VALUES (?, ?, ?)',
-    ).bind(matriculaId, codigo, urlArquivo).run();
-
-    return jsonResponse({
-      id: insert.meta.last_row_id,
-      matricula_id: matriculaId,
-      codigo_validacao: codigo,
-      url_arquivo: urlArquivo,
-    }, 201);
-  } catch (error) {
-    return jsonErro(error.message || 'Token inválido ou expirado.', 401);
+  if (!matriculaId) {
+    return jsonErro('matricula_id é obrigatório.', 400);
   }
+
+  const matricula = await queryOne(db, 'SELECT * FROM matriculas WHERE id = ?', [matriculaId]);
+  if (!matricula) {
+    return jsonErro('Matrícula não encontrada.', 404);
+  }
+
+  if (payload.perfil === 'aluno' && matricula.usuario_id !== payload.id) {
+    return jsonErro('Acesso negado. Esta matrícula não pertence a você.', 403);
+  }
+
+  if (matricula.status !== 'concluida') {
+    return jsonErro('O curso ainda não foi concluído. Complete todas as aulas antes de emitir o certificado.', 400);
+  }
+
+  // Se já foi emitido anteriormente, retorna o certificado existente
+  const existente = await queryOne(db, 'SELECT * FROM certificados WHERE matricula_id = ?', [matriculaId]);
+  if (existente) {
+    return jsonResponse(existente);
+  }
+
+  const bufferAleatorio = new Uint8Array(4);
+  crypto.getRandomValues(bufferAleatorio);
+  const randomPart = Array.from(bufferAleatorio, (byte) => byte.toString(16).padStart(2, '0')).join('').toUpperCase();
+  const codigo = `CERT-${Date.now()}-${randomPart}`;
+  const urlArquivo = `${url.origin}/api/certificados/visualizar/${codigo}`;
+
+  const insert = await db.prepare(
+    'INSERT INTO certificados (matricula_id, codigo_validacao, url_arquivo) VALUES (?, ?, ?)',
+  ).bind(matriculaId, codigo, urlArquivo).run();
+
+  return jsonResponse({
+    id: insert.meta.last_row_id,
+    matricula_id: matriculaId,
+    codigo_validacao: codigo,
+    url_arquivo: urlArquivo,
+  }, 201);
 }
 
 /**
@@ -165,8 +160,8 @@ export function gerarHtmlCertificado(cert) {
   return `<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Certificado - ${cert.aluno_nome} - LMS BNCC Computação</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Inter:wght@400;500;600;700&display=swap');
@@ -394,7 +389,7 @@ export function gerarHtmlCertificado(cert) {
           <div class="student-name">${cert.aluno_nome}</div>
           <p class="description">
             concluiu com êxito os estudos na área de Computação Escolar no curso
-            <br/><span class="course-title">"${cert.curso_titulo}"</span>,
+            <br><span class="course-title">"${cert.curso_titulo}"</span>,
             desenvolvendo competências orientadas pelas diretrizes da
             <strong>Base Nacional Comum Curricular (BNCC Computação)</strong>
             no eixo <strong>${cert.eixo_bncc || 'Computação Escolar'}</strong>,
@@ -411,11 +406,11 @@ export function gerarHtmlCertificado(cert) {
 
           <div class="signatures">
             <div class="sign-line">
-              <strong>Coordenação Pedagógica</strong><br/>
+              <strong>Coordenação Pedagógica</strong><br>
               Ensino Fundamental & BNCC
             </div>
             <div class="sign-line">
-              <strong>Diretoria de Tecnologia</strong><br/>
+              <strong>Diretoria de Tecnologia</strong><br>
               Educação Digital Municipal
             </div>
           </div>

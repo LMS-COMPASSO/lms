@@ -75,7 +75,7 @@ async function api(caminho, opcoes = {}) {
   let resposta;
   try {
     resposta = await fetch(`${API_BASE}${caminho}`, { ...opcoes, headers });
-  } catch (error) {
+  } catch {
     throw new Error('Não foi possível conectar ao servidor. Verifique sua conexão à internet.');
   }
 

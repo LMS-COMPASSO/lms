@@ -108,19 +108,19 @@ Guias técnicos e pedagógicos detalhados na pasta `docs/`:
 │   └── js/                     # Integração com a API (config.js, api.js, layout.js)
 ├── src/
 │   └── worker/                 # Backend Serverless modular (Cloudflare Workers)
-│       ├── index.mjs           # Roteador principal e orquestrador de requisições
-│       ├── helpers.mjs         # Utilitários de resposta, banco D1 e autenticação
-│       ├── crypto.mjs          # Hashing de senhas e geração de tokens JWT
+│       ├── index.js            # Roteador principal e orquestrador de requisições
+│       ├── helpers_utilitarios.js # Utilitários de resposta, banco D1 e autenticação
+│       ├── crypto_seguranca.js # Hashing de senhas e geração de tokens JWT
 │       └── routes/             # Módulos de regras de negócio por domínio
-│           ├── authRoutes.mjs
-│           ├── courseRoutes.mjs
-│           ├── moduleRoutes.mjs
-│           ├── lessonRoutes.mjs
-│           ├── assessmentRoutes.mjs
-│           ├── enrollmentRoutes.mjs
-│           ├── certificateRoutes.mjs
-│           ├── userRoutes.mjs
-│           └── dashboardRoutes.mjs
+│           ├── auth_rotas.js
+│           ├── cursos_rotas.js
+│           ├── modulos_rotas.js
+│           ├── aulas_rotas.js
+│           ├── avaliacoes_rotas.js
+│           ├── matriculas_rotas.js
+│           ├── certificados_rotas.js
+│           ├── usuarios_rotas.js
+│           └── dashboard_rotas.js
 ├── package.json                # Dependências de desenvolvimento e scripts
 ├── wrangler.jsonc              # Configuração oficial do Cloudflare Workers, Assets & D1
 ├── CONTRIBUTING.md             # Como colaborar com código ou planos de aula

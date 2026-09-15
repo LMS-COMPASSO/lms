@@ -67,7 +67,7 @@ No arquivo `wrangler.jsonc` na raiz do projeto, insira o seu `database_id`:
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "lms",
-  "main": "src/worker/index.mjs",
+  "main": "src/worker/index.js",
   "compatibility_date": "2026-09-12",
   "compatibility_flags": [
     "nodejs_compat"

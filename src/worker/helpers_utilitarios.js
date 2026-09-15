@@ -1,6 +1,6 @@
 /**
  * ============================================================================
- * LMS BNCC COMPUTAÇÃO - MÓDULO DE FUNÇÕES AUXILIARES (HELPERS)
+ * LMS BNCC COMPUTAÇÃO - MÓDULO DE FUNÇÕES AUXILIARES (HELPERS / UTILITÁRIOS)
  * ============================================================================
  * Este arquivo centraliza funções utilitárias que são reutilizadas em várias
  * rotas da aplicação, incluindo:
@@ -11,7 +11,7 @@
  * ============================================================================
  */
 
-import { sha256Hex, verifyJwt } from './crypto.mjs';
+import { sha256Hex, verifyJwt } from './crypto_seguranca.js';
 
 /**
  * Cabeçalhos padrão para permitir que qualquer navegador acesse a API (CORS).
@@ -131,8 +131,33 @@ export async function getUserProfile(db, id) {
 }
 
 /**
+ * Classe customizada para lançar erros com código de status HTTP correspondente.
+ * Facilita o controle de fluxo e centraliza as respostas de erro no servidor.
+ */
+export class ErroHttp extends Error {
+  constructor(mensagem, status = 400) {
+    super(mensagem);
+    this.status = status;
+    this.name = 'ErroHttp';
+  }
+}
+
+/**
+ * Verifica se o usuário autenticado possui um dos perfis necessários para a operação.
+ * Lança ErroHttp com status 403 (Acesso Proibido) caso não possua.
+ *
+ * @param {object} payload - Dados do usuário extraídos do token JWT.
+ * @param {Array<string>} perfisPermitidos - Lista de papéis autorizados (ex: ['administrador', 'instrutor']).
+ */
+export function exigirPerfil(payload, perfisPermitidos = []) {
+  if (!perfisPermitidos.includes(payload.perfil)) {
+    throw new ErroHttp('Acesso negado. Perfil não autorizado para esta operação.', 403);
+  }
+}
+
+/**
  * Valida o token JWT da requisição e carrega os dados do usuário autenticado no banco.
- * Lança um erro caso o token seja inválido, esteja expirado ou o usuário não exista.
+ * Lança ErroHttp caso o token seja inválido, esteja expirado ou o usuário não exista.
  *
  * @param {Request} request - Requisição recebida.
  * @param {object} env - Variáveis de ambiente do Cloudflare Worker (onde fica JWT_SECRET).
@@ -142,17 +167,22 @@ export async function getUserProfile(db, id) {
 export async function authorizeUser(request, env, db) {
   const token = getAuthToken(request);
   if (!token) {
-    throw new Error('Token de acesso não fornecido.');
+    throw new ErroHttp('Token de acesso não fornecido.', 401);
   }
 
-  const payload = await verifyJwt(token, env.JWT_SECRET || 'dev-secret-change-me');
-  const user = await getUserById(db, payload.id);
+  let payload;
+  try {
+    payload = await verifyJwt(token, env.JWT_SECRET || 'dev-secret-change-me');
+  } catch {
+    throw new ErroHttp('Token inválido ou expirado.', 401);
+  }
 
+  const user = await getUserById(db, payload.id);
   if (!user) {
-    throw new Error('Usuário associado a este token não foi encontrado.');
+    throw new ErroHttp('Usuário associado a este token não foi encontrado.', 401);
   }
   if (!user.ativo) {
-    throw new Error('Este usuário foi desativado pelo administrador.');
+    throw new ErroHttp('Este usuário foi desativado pelo administrador.', 403);
   }
 
   return { payload, user };

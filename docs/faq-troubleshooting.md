@@ -17,7 +17,7 @@ O navegador bloqueia requisições quando o frontend e o backend rodam em domín
 
 **Como Solucionar:**
 
-O backend em `src/worker/index.mjs` já inclui os cabeçalhos universais de CORS:
+O backend em `src/worker/index.js` já inclui os cabeçalhos universais de CORS:
 
 ```javascript
 const CORS_HEADERS = {

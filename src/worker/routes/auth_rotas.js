@@ -1,6 +1,6 @@
 /**
  * ============================================================================
- * LMS BNCC COMPUTAÇÃO - ROTAS DE AUTENTICAÇÃO E PERFIL
+ * LMS BNCC COMPUTAÇÃO - ROTAS DE AUTENTICAÇÃO E PERFIL (AUTH)
  * ============================================================================
  * Gerencia o ciclo de vida da conta do usuário:
  * - Cadastro inicial de alunos (/api/auth/registrar)
@@ -10,7 +10,7 @@
  * ============================================================================
  */
 
-import { sha256Hex, signJwt } from '../crypto.mjs';
+import { sha256Hex, signJwt } from '../crypto_seguranca.js';
 import {
   jsonResponse,
   jsonErro,
@@ -18,7 +18,7 @@ import {
   getUserByEmail,
   getUserProfile,
   authorizeUser,
-} from '../helpers.mjs';
+} from '../helpers_utilitarios.js';
 
 /**
  * Cadastra um novo aluno no sistema.
@@ -100,49 +100,41 @@ export async function login(request, env, db) {
  * Retorna o perfil completo do usuário atualmente conectado.
  */
 export async function obterMeuPerfil(request, env, db) {
-  try {
-    const { user } = await authorizeUser(request, env, db);
-    const perfil = await getUserProfile(db, user.id);
-    return jsonResponse(perfil);
-  } catch (error) {
-    return jsonErro(error.message || 'Token inválido ou expirado.', 401);
-  }
+  const { user } = await authorizeUser(request, env, db);
+  const perfil = await getUserProfile(db, user.id);
+  return jsonResponse(perfil);
 }
 
 /**
  * Permite ao usuário alterar sua própria senha, validando a senha atual antes de salvar a nova.
  */
 export async function alterarSenha(request, env, db) {
-  try {
-    const { user } = await authorizeUser(request, env, db);
-    const body = await readJsonBody(request);
-    const senhaAtual = String(body.senhaAtual || '');
-    const novaSenha = String(body.novaSenha || '');
+  const { user } = await authorizeUser(request, env, db);
+  const body = await readJsonBody(request);
+  const senhaAtual = String(body.senhaAtual || '');
+  const novaSenha = String(body.novaSenha || '');
 
-    if (!senhaAtual || !novaSenha) {
-      return jsonErro('Informe a senha atual e a nova senha.', 400);
-    }
-    if (novaSenha.length < 6) {
-      return jsonErro('A nova senha deve ter ao menos 6 caracteres.', 400);
-    }
-
-    const usuarioBanco = await db.prepare('SELECT id, senha_hash FROM usuarios WHERE id = ?').bind(user.id).first();
-    if (!usuarioBanco) {
-      return jsonErro('Usuário não encontrado.', 404);
-    }
-
-    const atualHash = await sha256Hex(senhaAtual);
-    if (usuarioBanco.senha_hash !== atualHash) {
-      return jsonErro('Senha atual incorreta.', 401);
-    }
-
-    const novaHash = await sha256Hex(novaSenha);
-    await db.prepare(
-      'UPDATE usuarios SET senha_hash = ?, atualizado_em = CURRENT_TIMESTAMP WHERE id = ?',
-    ).bind(novaHash, user.id).run();
-
-    return jsonResponse({ mensagem: 'Senha alterada com sucesso.' });
-  } catch (error) {
-    return jsonErro(error.message || 'Token inválido ou expirado.', 401);
+  if (!senhaAtual || !novaSenha) {
+    return jsonErro('Informe a senha atual e a nova senha.', 400);
   }
+  if (novaSenha.length < 6) {
+    return jsonErro('A nova senha deve ter ao menos 6 caracteres.', 400);
+  }
+
+  const usuarioBanco = await db.prepare('SELECT id, senha_hash FROM usuarios WHERE id = ?').bind(user.id).first();
+  if (!usuarioBanco) {
+    return jsonErro('Usuário não encontrado.', 404);
+  }
+
+  const atualHash = await sha256Hex(senhaAtual);
+  if (usuarioBanco.senha_hash !== atualHash) {
+    return jsonErro('Senha atual incorreta.', 401);
+  }
+
+  const novaHash = await sha256Hex(novaSenha);
+  await db.prepare(
+    'UPDATE usuarios SET senha_hash = ?, atualizado_em = CURRENT_TIMESTAMP WHERE id = ?',
+  ).bind(novaHash, user.id).run();
+
+  return jsonResponse({ mensagem: 'Senha alterada com sucesso.' });
 }

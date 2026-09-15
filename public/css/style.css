@@ -59,8 +59,8 @@ a { text-decoration: none; color: inherit; }
   cursor: pointer;
 }
 .sidebar nav a:hover, .sidebar nav a.ativo {
-  background: rgba(255,255,255,0.08);
-  color: #fff;
+  background: #234778;
+  color: #ffffff;
   border-left: 3px solid var(--cor-secundaria);
 }
 
@@ -298,4 +298,6 @@ tbody tr:hover { background: #f9fbfd; }
 .mt-16 { margin-top: 16px; }
 .mt-18 { margin-top: 18px; }
 .mb-10 { margin-bottom: 10px; }
+.texto-direita { text-align: right; }
+.cursor-pointer { cursor: pointer; }
 

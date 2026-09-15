@@ -79,7 +79,7 @@ function montarLayout(paginaAtiva) {
             <span>${item.icone}</span> ${item.label}
           </a>
         `).join('')}
-        <a onclick="encerrarSessao()" style="cursor: pointer;">
+        <a onclick="encerrarSessao()" class="cursor-pointer">
           <span>🚪</span> Sair
         </a>
       </nav>
@@ -89,11 +89,11 @@ function montarLayout(paginaAtiva) {
   // Monta a estrutura HTML da barra superior (Topbar)
   const topbarHtml = `
     <div class="topbar">
-      <div style="display:flex; align-items:center; gap:12px;">
+      <div class="flex-linha">
         <button class="menu-toggle" onclick="document.getElementById('sidebar').classList.toggle('aberta')">☰</button>
         <h1 id="titulo-pagina"></h1>
       </div>
-      <div style="text-align:right;">
+      <div class="texto-direita">
         <strong>${usuario.nome}</strong>
         <div><span class="badge badge-${usuario.perfil}">${usuario.perfil}</span></div>
       </div>
