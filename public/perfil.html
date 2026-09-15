@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Meu Perfil — LMS BNCC Computação</title>
-<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
   <div class="app-shell">
@@ -12,17 +12,23 @@
     <main class="conteudo">
       <div id="topbar-container"></div>
 
-      <div class="cartao" style="max-width:480px;">
+      <div class="cartao max-w-480">
         <h3>Meus Dados</h3>
         <div id="dados-usuario"></div>
       </div>
 
-      <div class="cartao" style="max-width:480px;">
+      <div class="cartao max-w-480">
         <h3>Alterar Senha</h3>
         <div id="alerta" class="alerta oculto"></div>
         <form id="form-senha">
-          <div class="form-grupo"><label>Senha atual</label><input type="password" id="senha-atual" required /></div>
-          <div class="form-grupo"><label>Nova senha</label><input type="password" id="nova-senha" required minlength="6" /></div>
+          <div class="form-grupo">
+            <label for="senha-atual">Senha atual</label>
+            <input type="password" id="senha-atual" autocomplete="current-password" placeholder="••••••••" required>
+          </div>
+          <div class="form-grupo">
+            <label for="nova-senha">Nova senha</label>
+            <input type="password" id="nova-senha" autocomplete="new-password" placeholder="••••••••" required minlength="6">
+          </div>
           <button type="submit" class="btn btn-primario">Salvar nova senha</button>
         </form>
       </div>

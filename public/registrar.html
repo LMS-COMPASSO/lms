@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Criar conta — LMS BNCC Computação</title>
-<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
   <div class="pagina-login">
@@ -17,21 +17,21 @@
       <form id="form-registro">
         <div class="form-grupo">
           <label for="nome">Nome completo</label>
-          <input type="text" id="nome" required />
+          <input type="text" id="nome" placeholder="Seu nome completo" required>
         </div>
         <div class="form-grupo">
           <label for="email">Email</label>
-          <input type="email" id="email" required />
+          <input type="email" id="email" placeholder="seuemail@escola.edu.br" required>
         </div>
         <div class="form-grupo">
           <label for="senha">Senha (mín. 6 caracteres)</label>
-          <input type="password" id="senha" required minlength="6" />
+          <input type="password" id="senha" autocomplete="new-password" placeholder="••••••••" required minlength="6">
         </div>
         <button type="submit" class="btn btn-secundario btn-bloco">Criar conta</button>
       </form>
 
-      <p style="text-align:center; margin-top:18px; font-size:.85rem; color:#718096;">
-        Já tem conta? <a href="/index.html" style="color:#2c5282; font-weight:600;">Fazer login</a>
+      <p class="texto-centro mt-18 texto-suave">
+        Já tem conta? <a href="/index.html" class="link-destaque">Fazer login</a>
       </p>
     </div>
   </div>

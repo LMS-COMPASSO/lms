@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dashboard — LMS BNCC Computação</title>
-<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
   <div class="app-shell">
@@ -46,18 +46,19 @@
       const dados = await api('/dashboard/indicadores');
       const grid = document.getElementById('grid-indicadores');
 
-      const cartoes = [];
-      if (dados.usuarios) {
-        cartoes.push(['Total de Usuários', dados.usuarios.total]);
-        cartoes.push(['Alunos', dados.usuarios.alunos]);
-        cartoes.push(['Instrutores', dados.usuarios.instrutores]);
-      }
-      cartoes.push(['Cursos Publicados', dados.cursos.publicados || 0]);
-      cartoes.push(['Cursos em Rascunho', dados.cursos.rascunhos || 0]);
-      cartoes.push(['Matrículas Ativas', dados.matriculas.ativas || 0]);
-      cartoes.push(['Matrículas Concluídas', dados.matriculas.concluidas || 0]);
-      cartoes.push(['Taxa de Conclusão', `${dados.taxaConclusao}%`]);
-      cartoes.push(['Certificados Emitidos', dados.certificadosEmitidos]);
+      const cartoes = [
+        ...(dados.usuarios ? [
+          ['Total de Usuários', dados.usuarios.total],
+          ['Alunos', dados.usuarios.alunos],
+          ['Instrutores', dados.usuarios.instrutores],
+        ] : []),
+        ['Cursos Publicados', dados.cursos.publicados || 0],
+        ['Cursos em Rascunho', dados.cursos.rascunhos || 0],
+        ['Matrículas Ativas', dados.matriculas.ativas || 0],
+        ['Matrículas Concluídas', dados.matriculas.concluidas || 0],
+        ['Taxa de Conclusão', `${dados.taxaConclusao}%`],
+        ['Certificados Emitidos', dados.certificadosEmitidos],
+      ];
 
       grid.innerHTML = cartoes.map(([rotulo, valor]) => `
         <div class="indicador">
@@ -68,11 +69,11 @@
 
       const listaEixos = document.getElementById('lista-eixos');
       if (dados.cursosPorEixoBNCC.length === 0) {
-        listaEixos.innerHTML = '<p style="color:#718096;">Nenhum curso cadastrado ainda.</p>';
+        listaEixos.innerHTML = '<p class="texto-suave">Nenhum curso cadastrado ainda.</p>';
       } else {
         listaEixos.innerHTML = dados.cursosPorEixoBNCC.map((e) => `
-          <div style="margin-bottom:10px;">
-            <div style="display:flex; justify-content:space-between; font-size:.85rem; margin-bottom:4px;">
+          <div class="mb-10">
+            <div class="flex-entre texto-suave">
               <span>${e.eixo_bncc}</span><strong>${e.total}</strong>
             </div>
           </div>

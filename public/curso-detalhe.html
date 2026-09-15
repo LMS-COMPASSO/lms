@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Detalhe do Curso — LMS BNCC Computação</title>
-<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
   <div class="app-shell">
@@ -16,9 +16,9 @@
 
       <div class="cartao oculto-aluno" id="area-novo-modulo">
         <h3>Adicionar Módulo</h3>
-        <div style="display:flex; gap:10px; flex-wrap:wrap;">
-          <input type="text" id="novo-modulo-titulo" placeholder="Título do módulo" style="flex:1; min-width:200px;" />
-          <button class="btn btn-primario" onclick="criarModulo()">Adicionar</button>
+        <div class="flex-linha flex-wrap">
+          <input type="text" id="novo-modulo-titulo" placeholder="Título do módulo" title="Título do novo módulo" aria-label="Título do novo módulo" class="flex-1 min-w-200">
+          <button type="button" class="btn btn-primario" onclick="criarModulo()">Adicionar</button>
         </div>
       </div>
 
@@ -40,14 +40,24 @@
     const params = new URLSearchParams(window.location.search);
     const cursoId = params.get('id');
 
+    function renderizarAcaoAula(aula, perfil) {
+      if (perfil === 'aluno') {
+        const marcado = aula.concluida ? 'checked' : '';
+        return `<label class="flex-linha">
+          <input type="checkbox" ${marcado} onchange="marcarProgresso(${aula.id}, this.checked)"> Concluída
+        </label>`;
+      }
+      return `<button type="button" class="btn btn-perigo btn-xs" onclick="excluirAula(${aula.id})">Excluir</button>`;
+    }
+
     async function carregarCurso() {
       const curso = await api(`/cursos/${cursoId}`);
 
       document.getElementById('cabecalho-curso').innerHTML = `
         <span class="badge badge-${curso.status}">${curso.status}</span>
-        <h2 style="margin:8px 0;">${curso.titulo}</h2>
-        <p style="color:#718096;">${curso.descricao || ''}</p>
-        <p style="font-size:.85rem;">📘 ${curso.eixo_bncc} · 🏫 ${curso.ano_escolar} · ⏱️ ${curso.carga_horaria}h · 👨‍🏫 ${curso.instrutor_nome}</p>
+        <h2 class="mt-8 mb-10">${curso.titulo}</h2>
+        <p class="texto-suave">${curso.descricao || ''}</p>
+        <p class="texto-suave">📘 ${curso.eixo_bncc} · 🏫 ${curso.ano_escolar} · ⏱️ ${curso.carga_horaria}h · 👨‍🏫 ${curso.instrutor_nome}</p>
       `;
 
       const container = document.getElementById('lista-modulos');
@@ -58,11 +68,11 @@
 
       container.innerHTML = curso.modulos.map((m) => `
         <div class="cartao">
-          <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div class="flex-entre">
             <h3>${m.titulo}</h3>
-            <button class="btn btn-perigo oculto-aluno" style="font-size:.75rem;" onclick="excluirModulo(${m.id})">Excluir módulo</button>
+            <button type="button" class="btn btn-perigo btn-xs oculto-aluno" onclick="excluirModulo(${m.id})">Excluir módulo</button>
           </div>
-          <p style="color:#718096; font-size:.85rem;">${m.descricao || ''}</p>
+          <p class="texto-suave">${m.descricao || ''}</p>
 
           <table>
             <thead><tr><th>Aula</th><th>Tipo</th><th>Duração</th><th></th></tr></thead>
@@ -73,30 +83,26 @@
                   <td>${a.tipo}</td>
                   <td>${a.duracao_min || 0} min</td>
                   <td>
-                    ${usuario.perfil === 'aluno'
-                      ? `<label style="display:flex; align-items:center; gap:6px; font-weight:400;">
-                          <input type="checkbox" ${a.concluida ? 'checked' : ''} onchange="marcarProgresso(${a.id}, this.checked)" /> Concluída
-                         </label>`
-                      : `<button class="btn btn-perigo" style="font-size:.75rem;" onclick="excluirAula(${a.id})">Excluir</button>`}
+                    ${renderizarAcaoAula(a, usuario.perfil)}
                   </td>
                 </tr>
-              `).join('') || '<tr><td colspan="4" style="color:#a0aec0;">Nenhuma aula cadastrada.</td></tr>'}
+              `).join('') || '<tr><td colspan="4" class="texto-suave">Nenhuma aula cadastrada.</td></tr>'}
             </tbody>
           </table>
 
-          <div class="oculto-aluno" style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;">
-            <input type="text" id="nova-aula-${m.id}" placeholder="Título da nova aula" style="flex:1; min-width:160px;" />
-            <select id="tipo-aula-${m.id}">
+          <div class="oculto-aluno flex-linha flex-wrap mt-12">
+            <input type="text" id="nova-aula-${m.id}" placeholder="Título da nova aula" title="Título da nova aula" aria-label="Título da nova aula" class="flex-1 min-w-160">
+            <select id="tipo-aula-${m.id}" title="Tipo de aula" aria-label="Tipo de aula">
               <option value="texto">Texto</option>
               <option value="video">Vídeo</option>
               <option value="pdf">PDF</option>
               <option value="link">Link</option>
             </select>
-            <button class="btn btn-neutro" onclick="criarAula(${m.id})">+ Aula</button>
+            <button type="button" class="btn btn-neutro btn-sm" onclick="criarAula(${m.id})">+ Aula</button>
           </div>
 
           ${m.avaliacoes.length > 0 ? `
-            <p style="margin-top:10px; font-size:.85rem;"><strong>Avaliações:</strong> ${m.avaliacoes.map((av) => av.titulo).join(', ')}</p>
+            <p class="mt-10 texto-suave"><strong>Avaliações:</strong> ${m.avaliacoes.map((av) => av.titulo).join(', ')}</p>
           ` : ''}
         </div>
       `).join('');

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cursos — LMS BNCC Computação</title>
-<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
   <div class="app-shell">
@@ -13,62 +13,62 @@
       <div id="topbar-container"></div>
 
       <div class="cartao">
-        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-          <div style="display:flex; gap:10px; flex-wrap:wrap;">
-            <select id="filtro-eixo">
+        <div class="flex-entre flex-wrap">
+          <div class="flex-linha flex-wrap">
+            <select id="filtro-eixo" title="Filtrar por eixo BNCC" aria-label="Filtrar por eixo BNCC">
               <option value="">Todos os eixos BNCC</option>
               <option>Pensamento Computacional</option>
               <option>Mundo Digital</option>
               <option>Cultura Digital</option>
             </select>
-            <select id="filtro-status" class="oculto-aluno">
+            <select id="filtro-status" class="oculto-aluno" title="Filtrar por status do curso" aria-label="Filtrar por status do curso">
               <option value="">Todos os status</option>
               <option value="publicado">Publicado</option>
               <option value="rascunho">Rascunho</option>
             </select>
-            <input type="text" id="busca" placeholder="Buscar curso..." style="max-width:220px;" />
+            <input type="text" id="busca" class="max-w-220" title="Buscar curso por título ou palavra-chave" aria-label="Buscar curso" placeholder="Buscar curso...">
           </div>
-          <button class="btn btn-primario oculto-aluno" onclick="abrirModalCurso()">+ Novo Curso</button>
+          <button type="button" class="btn btn-primario oculto-aluno" onclick="abrirModalCurso()">+ Novo Curso</button>
         </div>
       </div>
 
-      <div id="lista-cursos" class="grid-indicadores" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr));"></div>
+      <div id="lista-cursos" class="grid-cursos"></div>
     </main>
   </div>
 
   <!-- Modal de curso -->
-  <div id="modal-curso" class="oculto" style="position:fixed; inset:0; background:rgba(0,0,0,.5); display:flex; align-items:center; justify-content:center; padding:20px; z-index:100;">
-    <div class="cartao" style="max-width:520px; width:100%; max-height:90vh; overflow:auto;">
+  <div id="modal-curso" class="modal-overlay oculto">
+    <div class="modal-conteudo">
       <h3 id="titulo-modal">Novo Curso</h3>
       <form id="form-curso">
-        <input type="hidden" id="curso-id" />
+        <input type="hidden" id="curso-id">
         <div class="form-grupo">
-          <label>Título</label>
-          <input type="text" id="curso-titulo" required />
+          <label for="curso-titulo">Título</label>
+          <input type="text" id="curso-titulo" placeholder="Ex.: Pensamento Computacional no EF" required>
         </div>
         <div class="form-grupo">
-          <label>Descrição</label>
-          <textarea id="curso-descricao" rows="3"></textarea>
+          <label for="curso-descricao">Descrição</label>
+          <textarea id="curso-descricao" rows="3" placeholder="Descrição dos objetivos do curso"></textarea>
         </div>
         <div class="grid-2col">
           <div class="form-grupo">
-            <label>Eixo BNCC</label>
-            <select id="curso-eixo" required>
+            <label for="curso-eixo">Eixo BNCC</label>
+            <select id="curso-eixo" title="Eixo BNCC" required>
               <option value="Pensamento Computacional">Pensamento Computacional</option>
               <option value="Mundo Digital">Mundo Digital</option>
               <option value="Cultura Digital">Cultura Digital</option>
             </select>
           </div>
           <div class="form-grupo">
-            <label>Ano Escolar</label>
-            <input type="text" id="curso-ano" placeholder="Ex.: 6º ano EF" required />
+            <label for="curso-ano">Ano Escolar</label>
+            <input type="text" id="curso-ano" placeholder="Ex.: 6º ano EF" required>
           </div>
         </div>
         <div class="form-grupo">
-          <label>Carga Horária (horas)</label>
-          <input type="number" id="curso-carga" min="0" value="0" />
+          <label for="curso-carga">Carga Horária (horas)</label>
+          <input type="number" id="curso-carga" min="0" value="0" placeholder="0">
         </div>
-        <div style="display:flex; gap:10px; margin-top:16px;">
+        <div class="flex-linha mt-16">
           <button type="submit" class="btn btn-primario">Salvar</button>
           <button type="button" class="btn btn-neutro" onclick="fecharModalCurso()">Cancelar</button>
         </div>
@@ -104,37 +104,40 @@
       const container = document.getElementById('lista-cursos');
 
       if (cursos.length === 0) {
-        container.innerHTML = '<p style="color:#718096;">Nenhum curso encontrado.</p>';
+        container.innerHTML = '<p class="texto-suave">Nenhum curso encontrado.</p>';
         return;
       }
 
-      container.innerHTML = cursos.map((c) => `
-        <div class="cartao">
-          <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-            <span class="badge badge-${c.status}">${c.status}</span>
-            <span style="font-size:.75rem; color:#718096;">${c.carga_horaria}h</span>
+      container.innerHTML = cursos.map((c) => {
+        const textoBotaoStatus = c.status === 'publicado' ? 'Voltar p/ rascunho' : 'Publicar';
+        return `
+          <div class="cartao">
+            <div class="flex-topo">
+              <span class="badge badge-${c.status}">${c.status}</span>
+              <span class="texto-suave">${c.carga_horaria}h</span>
+            </div>
+            <h3 class="mt-8 mb-10">${c.titulo}</h3>
+            <p class="texto-suave">${c.descricao || 'Sem descrição.'}</p>
+            <p class="texto-suave">
+              📘 ${c.eixo_bncc}<br>
+              🏫 ${c.ano_escolar} · 👨‍🏫 ${c.instrutor_nome}<br>
+              👥 ${c.total_matriculados || 0} matriculado(s)
+            </p>
+            <div class="flex-linha flex-wrap mt-10">
+              <a href="/curso-detalhe.html?id=${c.id}" class="btn btn-neutro btn-sm">Abrir</a>
+              ${usuario.perfil !== 'aluno' ? `
+                <button type="button" class="btn btn-neutro btn-sm" onclick='editarCurso(${JSON.stringify(c)})'>Editar</button>
+                <button type="button" class="btn btn-secundario btn-sm" onclick="alternarStatus(${c.id}, '${c.status}')">
+                  ${textoBotaoStatus}
+                </button>
+                <button type="button" class="btn btn-perigo btn-sm" onclick="excluirCurso(${c.id})">Excluir</button>
+              ` : `
+                <button type="button" class="btn btn-primario btn-sm" onclick="matricular(${c.id})">Matricular-se</button>
+              `}
+            </div>
           </div>
-          <h3 style="margin:10px 0 4px;">${c.titulo}</h3>
-          <p style="font-size:.85rem; color:#718096; min-height:40px;">${c.descricao || 'Sem descrição.'}</p>
-          <p style="font-size:.78rem; color:#4a5568;">
-            📘 ${c.eixo_bncc}<br/>
-            🏫 ${c.ano_escolar} · 👨‍🏫 ${c.instrutor_nome}<br/>
-            👥 ${c.total_matriculados || 0} matriculado(s)
-          </p>
-          <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;">
-            <a href="/curso-detalhe.html?id=${c.id}" class="btn btn-neutro" style="font-size:.8rem;">Abrir</a>
-            ${usuario.perfil !== 'aluno' ? `
-              <button class="btn btn-neutro" style="font-size:.8rem;" onclick='editarCurso(${JSON.stringify(c)})'>Editar</button>
-              <button class="btn btn-secundario" style="font-size:.8rem;" onclick="alternarStatus(${c.id}, '${c.status}')">
-                ${c.status === 'publicado' ? 'Voltar p/ rascunho' : 'Publicar'}
-              </button>
-              <button class="btn btn-perigo" style="font-size:.8rem;" onclick="excluirCurso(${c.id})">Excluir</button>
-            ` : `
-              <button class="btn btn-primario" style="font-size:.8rem;" onclick="matricular(${c.id})">Matricular-se</button>
-            `}
-          </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
     function abrirModalCurso() {

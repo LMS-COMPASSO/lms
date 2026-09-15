@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Usuários — LMS BNCC Computação</title>
-<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
   <div class="app-shell">
@@ -13,17 +13,17 @@
       <div id="topbar-container"></div>
 
       <div class="cartao">
-        <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;">
-          <div style="display:flex; gap:10px; flex-wrap:wrap;">
-            <select id="filtro-perfil">
+        <div class="flex-entre flex-wrap">
+          <div class="flex-linha flex-wrap">
+            <select id="filtro-perfil" title="Filtrar por perfil" aria-label="Filtrar por perfil">
               <option value="">Todos os perfis</option>
               <option value="administrador">Administrador</option>
               <option value="instrutor">Instrutor</option>
               <option value="aluno">Aluno</option>
             </select>
-            <input type="text" id="busca" placeholder="Buscar por nome/email" />
+            <input type="text" id="busca" placeholder="Buscar por nome/email" title="Buscar por nome ou email" aria-label="Buscar por nome ou email">
           </div>
-          <button class="btn btn-primario" onclick="abrirModalUsuario()">+ Novo Usuário</button>
+          <button type="button" class="btn btn-primario" onclick="abrirModalUsuario()">+ Novo Usuário</button>
         </div>
       </div>
 
@@ -36,23 +36,32 @@
     </main>
   </div>
 
-  <div id="modal-usuario" class="oculto" style="position:fixed; inset:0; background:rgba(0,0,0,.5); display:flex; align-items:center; justify-content:center; padding:20px; z-index:100;">
-    <div class="cartao" style="max-width:420px; width:100%;">
+  <div id="modal-usuario" class="modal-overlay oculto">
+    <div class="modal-conteudo max-w-420">
       <h3 id="titulo-modal">Novo Usuário</h3>
       <form id="form-usuario">
-        <input type="hidden" id="usuario-id" />
-        <div class="form-grupo"><label>Nome</label><input type="text" id="usuario-nome" required /></div>
-        <div class="form-grupo"><label>Email</label><input type="email" id="usuario-email" required /></div>
-        <div class="form-grupo" id="grupo-senha"><label>Senha</label><input type="password" id="usuario-senha" minlength="6" /></div>
+        <input type="hidden" id="usuario-id">
         <div class="form-grupo">
-          <label>Perfil</label>
-          <select id="usuario-perfil">
+          <label for="usuario-nome">Nome</label>
+          <input type="text" id="usuario-nome" placeholder="Nome completo" required>
+        </div>
+        <div class="form-grupo">
+          <label for="usuario-email">Email</label>
+          <input type="email" id="usuario-email" placeholder="usuario@escola.edu.br" required>
+        </div>
+        <div class="form-grupo" id="grupo-senha">
+          <label for="usuario-senha">Senha</label>
+          <input type="password" id="usuario-senha" autocomplete="new-password" placeholder="••••••••" minlength="6">
+        </div>
+        <div class="form-grupo">
+          <label for="usuario-perfil">Perfil</label>
+          <select id="usuario-perfil" title="Perfil de acesso">
             <option value="aluno">Aluno</option>
             <option value="instrutor">Instrutor</option>
             <option value="administrador">Administrador</option>
           </select>
         </div>
-        <div style="display:flex; gap:10px; margin-top:16px;">
+        <div class="flex-linha mt-16">
           <button type="submit" class="btn btn-primario">Salvar</button>
           <button type="button" class="btn btn-neutro" onclick="fecharModalUsuario()">Cancelar</button>
         </div>
@@ -81,7 +90,7 @@
       const usuarios = await api(`/usuarios?${montarQuery()}`);
       const corpo = document.getElementById('corpo-tabela');
       if (usuarios.length === 0) {
-        corpo.innerHTML = '<tr><td colspan="6" style="color:#a0aec0;">Nenhum usuário encontrado.</td></tr>';
+        corpo.innerHTML = '<tr><td colspan="6" class="texto-suave">Nenhum usuário encontrado.</td></tr>';
         return;
       }
       corpo.innerHTML = usuarios.map((u) => `
@@ -92,8 +101,8 @@
           <td>${u.ativo ? '✅ Ativo' : '⛔ Inativo'}</td>
           <td>${formatarData(u.criado_em)}</td>
           <td>
-            <button class="btn btn-neutro" style="font-size:.75rem;" onclick='editarUsuario(${JSON.stringify(u)})'>Editar</button>
-            ${u.ativo ? `<button class="btn btn-perigo" style="font-size:.75rem;" onclick="desativar(${u.id})">Desativar</button>` : ''}
+            <button type="button" class="btn btn-neutro btn-xs" onclick='editarUsuario(${JSON.stringify(u)})'>Editar</button>
+            ${u.ativo ? `<button type="button" class="btn btn-perigo btn-xs" onclick="desativar(${u.id})">Desativar</button>` : ''}
           </td>
         </tr>
       `).join('');

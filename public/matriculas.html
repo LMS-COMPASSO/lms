@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Matrículas — LMS BNCC Computação</title>
-<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
   <div class="app-shell">
@@ -37,23 +37,23 @@
       const corpo = document.getElementById('corpo-tabela');
 
       if (matriculas.length === 0) {
-        corpo.innerHTML = '<tr><td colspan="6" style="color:#a0aec0;">Nenhuma matrícula encontrada.</td></tr>';
+        corpo.innerHTML = '<tr><td colspan="6" class="texto-suave">Nenhuma matrícula encontrada.</td></tr>';
         return;
       }
 
       corpo.innerHTML = matriculas.map((m) => `
         <tr>
-          <td>${m.aluno_nome}<br/><small style="color:#718096;">${m.aluno_email}</small></td>
+          <td>${m.aluno_nome}<br><small class="texto-suave">${m.aluno_email}</small></td>
           <td>${m.curso_titulo}</td>
           <td><span class="badge badge-${m.status}">${m.status}</span></td>
-          <td style="min-width:120px;">
-            <div class="progress-bar"><div class="progress-bar-fill" style="width:${m.progresso_percentual}%"></div></div>
+          <td class="min-w-160">
+            <div class="progress-bar"><div class="progress-bar-fill" style="width:${m.progresso_percentual}%;"></div></div>
             <small>${m.progresso_percentual}%</small>
           </td>
           <td>${formatarData(m.data_matricula)}</td>
           <td>
-            ${m.status !== 'cancelada' ? `<button class="btn btn-perigo" style="font-size:.75rem;" onclick="cancelar(${m.id})">Cancelar</button>` : ''}
-            ${m.status === 'concluida' ? `<button class="btn btn-secundario" style="font-size:.75rem;" onclick="emitirCertificado(${m.id})">Certificado</button>` : ''}
+            ${m.status !== 'cancelada' ? `<button type="button" class="btn btn-perigo btn-xs" onclick="cancelar(${m.id})">Cancelar</button>` : ''}
+            ${m.status === 'concluida' ? `<button type="button" class="btn btn-secundario btn-xs" onclick="emitirCertificado(${m.id})">Certificado</button>` : ''}
           </td>
         </tr>
       `).join('');

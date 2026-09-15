@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Certificados — LMS BNCC Computação</title>
-<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
   <div class="app-shell">
@@ -20,11 +20,11 @@
 
       <div class="cartao">
         <h3>Validar Certificado</h3>
-        <div style="display:flex; gap:10px; flex-wrap:wrap;">
-          <input type="text" id="codigo-validar" placeholder="Código de validação" style="flex:1; min-width:200px;" />
-          <button class="btn btn-primario" onclick="validar()">Validar</button>
+        <div class="flex-linha flex-wrap">
+          <input type="text" id="codigo-validar" placeholder="Código de validação" title="Código de validação do certificado" aria-label="Código de validação do certificado" class="flex-1 min-w-200">
+          <button type="button" class="btn btn-primario" onclick="validar()">Validar</button>
         </div>
-        <div id="resultado-validacao" style="margin-top:12px;"></div>
+        <div id="resultado-validacao" class="mt-12"></div>
       </div>
     </main>
   </div>
@@ -41,7 +41,7 @@
       const certificados = await api('/certificados');
       const corpo = document.getElementById('corpo-tabela');
       if (certificados.length === 0) {
-        corpo.innerHTML = '<tr><td colspan="5" style="color:#a0aec0;">Nenhum certificado emitido ainda.</td></tr>';
+        corpo.innerHTML = '<tr><td colspan="5" class="texto-suave">Nenhum certificado emitido ainda.</td></tr>';
         return;
       }
       corpo.innerHTML = certificados.map((c) => `
@@ -50,7 +50,7 @@
           <td>${c.curso_titulo}</td>
           <td><code>${c.codigo_validacao}</code></td>
           <td>${formatarData(c.data_emissao)}</td>
-          <td><a href="${c.url_arquivo}" target="_blank" class="btn btn-neutro" style="font-size:.75rem;">Baixar PDF</a></td>
+          <td><a href="${c.url_arquivo}" target="_blank" class="btn btn-neutro btn-xs">Baixar PDF</a></td>
         </tr>
       `).join('');
     }
