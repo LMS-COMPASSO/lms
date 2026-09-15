@@ -1,0 +1,2 @@
+# Chave secreta para assinatura dos tokens JWT em ambiente de desenvolvimento local (Wrangler)
+JWT_SECRET=coloque-uma-chave-secreta-longa-e-aleatoria-para-testes-locais
