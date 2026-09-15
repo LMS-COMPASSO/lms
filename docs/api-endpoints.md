@@ -1,6 +1,7 @@
-# 📡 Catálogo de Endpoints da API REST
+# Catálogo de Endpoints da API REST
 
 Todas as requisições autenticadas devem enviar o cabeçalho HTTP:
+
 ```http
 Authorization: Bearer <SEU_TOKEN_JWT>
 Content-Type: application/json
@@ -8,10 +9,10 @@ Content-Type: application/json
 
 ---
 
-## 🔐 1. Autenticação e Perfil
+## 1. Autenticação e Perfil
 
 | Método | Endpoint | Acesso | Descrição |
-|---|---|:---:|---|
+| --- | --- | :---: | --- |
 | `GET` | `/api/health` | Público | Verifica o estado da API e conexão com o D1 |
 | `POST` | `/api/auth/registrar` | Público | Cadastro de novo aluno (`nome`, `email`, `senha`) |
 | `POST` | `/api/auth/login` | Público | Login com `email` e `senha`, retorna token JWT |
@@ -20,10 +21,10 @@ Content-Type: application/json
 
 ---
 
-## 👥 2. Gestão de Usuários (Exclusivo Administrador)
+## 2. Gestão de Usuários (Exclusivo Administrador)
 
 | Método | Endpoint | Acesso | Descrição |
-|---|---|:---:|---|
+| --- | --- | :---: | --- |
 | `GET` | `/api/usuarios?perfil=&busca=&ativo=` | Admin | Lista usuários com suporte a filtros e busca |
 | `POST` | `/api/usuarios` | Admin | Cadastra novo usuário com perfil específico |
 | `GET` | `/api/usuarios/:id` | Admin / Próprio | Consulta os dados de um usuário pelo ID |
@@ -33,10 +34,10 @@ Content-Type: application/json
 
 ---
 
-## 📚 3. Cursos (Alinhados à BNCC)
+## 3. Cursos (Alinhados à BNCC)
 
 | Método | Endpoint | Acesso | Descrição |
-|---|---|:---:|---|
+| --- | --- | :---: | --- |
 | `GET` | `/api/cursos?busca=&eixo_bncc=&ano_escolar=` | Autenticado | Lista cursos (alunos veem apenas publicados) |
 | `POST` | `/api/cursos` | Admin, Instrutor | Cria um curso novo em modo `rascunho` |
 | `GET` | `/api/cursos/:id` | Autenticado | Detalha curso, módulos, aulas e progresso |
@@ -46,10 +47,10 @@ Content-Type: application/json
 
 ---
 
-## 📖 4. Módulos e Aulas
+## 4. Módulos e Aulas
 
 | Método | Endpoint | Acesso | Descrição |
-|---|---|:---:|---|
+| --- | --- | :---: | --- |
 | `GET` | `/api/modulos/curso/:cursoId` | Autenticado | Lista módulos pertencentes a um curso |
 | `POST` | `/api/modulos/curso/:cursoId` | Admin, Instrutor | Adiciona módulo (`titulo`, `descricao`, `ordem`) |
 | `PUT` | `/api/modulos/:id` | Admin, Instrutor | Atualiza os dados de um módulo |
@@ -63,10 +64,10 @@ Content-Type: application/json
 
 ---
 
-## 📝 5. Avaliações e Questionários
+## 5. Avaliações e Questionários
 
 | Método | Endpoint | Acesso | Descrição |
-|---|---|:---:|---|
+| --- | --- | :---: | --- |
 | `GET` | `/api/avaliacoes/modulo/:moduloId` | Autenticado | Lista avaliações de um módulo |
 | `POST` | `/api/avaliacoes/modulo/:moduloId` | Admin, Instrutor | Cria avaliação com questões e alternativas |
 | `GET` | `/api/avaliacoes/:id` | Autenticado | Obtém questionário (aluno não vê o gabarito) |
@@ -75,10 +76,10 @@ Content-Type: application/json
 
 ---
 
-## 🎓 6. Matrículas e Certificados
+## 6. Matrículas e Certificados
 
 | Método | Endpoint | Acesso | Descrição |
-|---|---|:---:|---|
+| --- | --- | :---: | --- |
 | `GET` | `/api/matriculas?curso_id=&status=` | Autenticado | Lista matrículas do aluno ou da escola |
 | `POST` | `/api/matriculas` | Autenticado | Realiza matrícula em curso ou reativa cancelada |
 | `PATCH` | `/api/matriculas/:id/cancelar` | Autenticado | Cancela a matrícula especificada |

@@ -1,4 +1,4 @@
-# 🤝 Guia de Contribuição — LMS BNCC Computação
+# Guia de Contribuição — LMS BNCC Computação
 
 Ficamos muito felizes pelo seu interesse em contribuir com o **LMS BNCC Computação**! Este projeto é de código aberto e tem como missão apoiar redes públicas municipais e escolas no ensino de tecnologia e computação para crianças e jovens.
 
@@ -6,7 +6,7 @@ Você não precisa ser um programador experiente para contribuir: aceitamos desd
 
 ---
 
-## 🎯 Como Você Pode Contribuir?
+## Como Você Pode Contribuir?
 
 ### 1. Educadores e Professores (Contribuições Pedagógicas)
 
@@ -24,7 +24,7 @@ Você não precisa ser um programador experiente para contribuir: aceitamos desd
 
 ---
 
-## 🛠️ Passo a Passo para Contribuir com Código
+## Passo a Passo para Contribuir com Código
 
 ### Passo 1: Fazer um Fork do Repositório
 
@@ -62,7 +62,7 @@ git checkout -b fix/correcao-bug-login
 2. Inicie o backend localmente com o Wrangler:
 
    ```bash
-   npm run cf:dev
+   npm run dev
    ```
 
 3. Abra as páginas da pasta `public/` no navegador para verificar suas alterações.
@@ -98,14 +98,14 @@ git commit -m "feat: adiciona novo curso de pensamento computacional para o 3o a
 
 ---
 
-## 📋 Boas Práticas
+## Boas Práticas
 
 - **Mantenha a Simplicidade:** O projeto preza por código fácil de entender para professores e iniciantes em programação. Evite bibliotecas pesadas e desnecessárias no frontend.
-- **Respeito aos Dados:** Nunca suba senhas, tokens ou certificados privados em commits públicos.
+- **Respeito aos Dados:** Nunca suba senhas, chaves de API ou dados confidenciais em commits públicos.
 - **Respeite o Código de Conduta:** Todos os participantes devem seguir as diretrizes do [Código de Conduta](CODE_OF_CONDUCT.md).
 
 ---
 
-## 💬 Dúvidas ou Dificuldades?
+## Dúvidas ou Dificuldades?
 
 Abra uma **[Discussão](https://github.com/LMS-COMPASSO/lms/discussions)** ou uma **Issue** no GitHub. Toda dúvida é válida e estamos aqui para ajudar!

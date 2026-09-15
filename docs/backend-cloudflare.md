@@ -1,27 +1,28 @@
-# ☁️ Guia do Backend: Cloudflare Workers & Cloudflare D1
+# Guia do Backend: Cloudflare Workers & Cloudflare D1
 
 Este guia fornece instruções completas de configuração, manutenção e operação do backend serverless da plataforma LMS utilizando **Cloudflare Workers** e o banco de dados relacional **Cloudflare D1**.
 
 ---
 
-## 🏗️ Como Funciona a Arquitetura Serverless Edge?
+## Como Funciona a Arquitetura Serverless Edge?
 
 Diferente de um servidor tradicional que roda em uma máquina virtual fixa:
+
 1. **Cloudflare Workers:** Seu código JavaScript roda nos mais de 300 data centers da Cloudflare no mundo todo. Quando um aluno acessa a plataforma em qualquer cidade, o código responde a partir do data center mais próximo geograficamente (menor latência possível).
-2. **Cloudflare D1:** É um banco de dados relacional SQL (baseado em SQLite) nativo da nuvem da Cloudflare. Não há portas para abrir, pools de conexões para monitorar ou servidores MySQL para reiniciar.
+2. **Cloudflare D1:** É um banco de dados relacional SQL (baseado em SQLite) nativo da nuvem da Cloudflare. Não há portas para abrir, pools de conexões para monitorar ou servidores de banco de dados tradicionais para reiniciar.
 
 ---
 
-## 📋 Comandos NPM Pré-configurados
+## Comandos NPM Pré-configurados
 
 No arquivo `package.json`, estão disponíveis atalhos prontos para facilitar a rotina:
 
 ```bash
 # Iniciar o Worker localmente em modo desenvolvimento (http://localhost:8787)
-npm run cf:dev
+npm run dev
 
 # Fazer o deploy do Worker na nuvem da Cloudflare
-npm run cf:deploy
+npm run deploy
 
 # Criar tabelas e índices no banco local de desenvolvimento
 npm run cf:db:local
@@ -38,28 +39,34 @@ npm run cf:seed:remote
 
 ---
 
-## 🚀 Configuração do Zero Passo a Passo
+## Configuração do Zero Passo a Passo
 
 Se você estiver configurando o projeto para a sua própria conta Cloudflare:
 
 ### 1. Fazer Login no Wrangler CLI
+
 ```bash
 npx wrangler login
 ```
+
 *O navegador abrirá uma tela para autorizar o acesso à sua conta Cloudflare.*
 
 ### 2. Criar o Banco D1
+
 ```bash
 npx wrangler d1 create lms_prod
 ```
+
 O terminal retornará o identificador único do banco (`database_id`).
 
 ### 3. Atualizar o `wrangler.jsonc`
+
 No arquivo `wrangler.jsonc` na raiz do projeto, insira o seu `database_id`:
+
 ```jsonc
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "lms-api",
+  "name": "lms",
   "main": "src/worker/index.mjs",
   "compatibility_date": "2026-09-12",
   "compatibility_flags": [
@@ -79,6 +86,7 @@ No arquivo `wrangler.jsonc` na raiz do projeto, insira o seu `database_id`:
 ```
 
 ### 4. Executar Migrações e Dados Iniciais
+
 ```bash
 # Cria as tabelas e índices
 npm run cf:db:remote
@@ -88,14 +96,16 @@ npm run cf:seed:remote
 ```
 
 ### 5. Publicar o Worker
+
 ```bash
-npm run cf:deploy
+npm run deploy
 ```
-Ao término, você receberá a URL pública do seu backend (ex: `https://lms-api.sua-conta.workers.dev`).
+
+Ao término, você receberá a URL pública do seu backend (ex: `https://lms.sua-conta.workers.dev`).
 
 ---
 
-## 🖥️ Gerenciamento Visual pelo Painel da Cloudflare (Sem Terminal)
+## Gerenciamento Visual pelo Painel da Cloudflare (Sem Terminal)
 
 Para quem prefere uma interface gráfica no navegador:
 
@@ -110,12 +120,12 @@ Para quem prefere uma interface gráfica no navegador:
    - Acesse a aba **Console**.
    - Digite sua instrução (ex: `SELECT * FROM cursos WHERE status = 'publicado';`) e clique em **Execute**.
 6. **Acompanhar métricas e logs ao vivo:**
-   - No menu lateral, clique em **Workers & Pages** ➔ selecione **`lms-api`**.
+   - No menu lateral, clique em **Workers & Pages** ➔ selecione **`lms`**.
    - Acesse a aba **Observability** ➔ clique em **Begin Log Stream** para ver cada requisição em tempo real.
 
 ---
 
-## 🧰 Dicas Úteis do Wrangler CLI
+## Dicas Úteis do Wrangler CLI
 
 ```bash
 # Listar todos os bancos D1 da sua conta

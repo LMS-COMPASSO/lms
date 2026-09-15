@@ -1,4 +1,4 @@
-# 📜 Código de Conduta — LMS BNCC Computação
+# Código de Conduta — LMS BNCC Computação
 
 ## Nosso Compromisso
 

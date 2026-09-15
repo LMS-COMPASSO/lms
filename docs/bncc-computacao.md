@@ -1,10 +1,10 @@
-# 📘 Diretrizes Pedagógicas: BNCC da Computação Escolar
+# Diretrizes Pedagógicas: BNCC da Computação Escolar
 
 Este documento detalha o embasamento pedagógico do **LMS BNCC Computação**, orientado às normas homologadas pelo Conselho Nacional de Educação (CNE) e Ministério da Educação (MEC) para a Educação Básica.
 
 ---
 
-## 🎯 O que é a BNCC da Computação?
+## O que é a BNCC da Computação?
 
 A Base Nacional Comum Curricular (BNCC) estabelece que o ensino da computação não se restringe a aprender a "usar aplicativos" ou navegar na internet como consumidor passivo. O objetivo é formar cidadãos capazes de:
 
@@ -14,11 +14,11 @@ A Base Nacional Comum Curricular (BNCC) estabelece que o ensino da computação 
 
 ---
 
-## 🧭 Os 3 Eixos Estruturantes
+## Os 3 Eixos Estruturantes
 
 A plataforma categoriza cursos e trilhas formativas através de três eixos fundamentais:
 
-```
+```text
                               ┌─────────────────────────────────────────┐
                               │       BNCC DA COMPUTAÇÃO ESCOLAR        │
                               └────────────────────┬────────────────────┘
@@ -35,7 +35,8 @@ A plataforma categoriza cursos e trilhas formativas através de três eixos fund
 └─────────────────────────┘             └─────────────────────────┘              └─────────────────────────┘
 ```
 
-### 1. 🧩 Pensamento Computacional
+### 1. Pensamento Computacional
+
 - **Foco:** Habilidade de formular e resolver problemas utilizando conceitos fundamentais da ciência da computação.
 - **Conceitos centrais:**
   - **Algoritmos:** Instruções ordenadas e finitas para cumprir uma tarefa.
@@ -44,7 +45,8 @@ A plataforma categoriza cursos e trilhas formativas através de três eixos fund
   - **Abstração:** Focar nas informações essenciais e descartar detalhes irrelevantes.
 - **Atividades sugeridas:** Atividades desplugadas (jogos corporais, tabuleiros, receitas) e atividades plugadas (blocos visuais tipo Scratch).
 
-### 2. 🌐 Mundo Digital
+### 2. Mundo Digital
+
 - **Foco:** Entendimento dos artefatos computacionais físicos e lógicos e da infraestrutura de comunicação.
 - **Conceitos centrais:**
   - **Hardware vs Software:** O corpo (processadores, memórias, circuitos) e a mente lógica da máquina.
@@ -52,7 +54,8 @@ A plataforma categoriza cursos e trilhas formativas através de três eixos fund
   - **Representação Digital:** Como textos, imagens e sons são codificados em formato binário (zeros e uns).
 - **Atividades sugeridas:** Análise de componentes de computadores, simulações de envio de dados e montagem de redes simples.
 
-### 3. 🛡️ Cultura Digital
+### 3. Cultura Digital
+
 - **Foco:** Reflexão sobre o impacto das tecnologias digitais nas relações humanas, na sociedade e na cidadania.
 - **Conceitos centrais:**
   - **Pegada Digital e Privacidade:** Proteção de dados pessoais e gestão da identidade online.
@@ -62,10 +65,10 @@ A plataforma categoriza cursos e trilhas formativas através de três eixos fund
 
 ---
 
-## 🏫 Organização por Etapas de Ensino
+## Organização por Etapas de Ensino
 
 | Etapa | Anos Escolares | Foco Pedagógico Principal |
-|---|---|---|
+| --- | --- | --- |
 | **Ensino Fundamental I (Inicial)** | 1º ao 3º Ano | Atividades predominantemente desplugadas, raciocínio sequencial, lateralidade e comandos orais/visuais. |
 | **Ensino Fundamental I (Final)** | 4º e 5º Ano | Primeiros contatos com algoritmos visuais em blocos, noções básicas de como funciona a internet e segurança inicial. |
 | **Ensino Fundamental II** | 6º ao 9º Ano | Programação aplicada, projetos colaborativos, cidadania digital avançada, redes e impacto social da inteligência artificial. |
@@ -73,9 +76,10 @@ A plataforma categoriza cursos e trilhas formativas através de três eixos fund
 
 ---
 
-## 📜 Certificação com Reconhecimento BNCC
+## Certificação com Reconhecimento BNCC
 
 Todo curso concluído na plataforma permite a emissão de um certificado que referencia formalmente:
+
 - A carga horária cumprida.
 - O eixo temático correspondente.
 - O ano escolar contemplado.
