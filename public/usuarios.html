@@ -72,7 +72,7 @@
   <script src="/js/config.js"></script>
   <script src="/js/api.js"></script>
   <script src="/js/layout.js"></script>
-  <script>
+  <script type="module">
     exigirAutenticacao(['administrador']);
     montarLayout('usuarios');
     document.getElementById('titulo-pagina').textContent = 'Usuários';
@@ -87,25 +87,29 @@
     }
 
     async function carregar() {
-      const usuarios = await api(`/usuarios?${montarQuery()}`);
-      const corpo = document.getElementById('corpo-tabela');
-      if (usuarios.length === 0) {
-        corpo.innerHTML = '<tr><td colspan="6" class="texto-suave">Nenhum usuário encontrado.</td></tr>';
-        return;
+      try {
+        const usuarios = await api(`/usuarios?${montarQuery()}`);
+        const corpo = document.getElementById('corpo-tabela');
+        if (usuarios.length === 0) {
+          corpo.innerHTML = '<tr><td colspan="6" class="texto-suave">Nenhum usuário encontrado.</td></tr>';
+          return;
+        }
+        corpo.innerHTML = usuarios.map((u) => `
+          <tr>
+            <td>${u.nome}</td>
+            <td>${u.email}</td>
+            <td><span class="badge badge-${u.perfil}">${u.perfil}</span></td>
+            <td>${u.ativo ? '✅ Ativo' : '⛔ Inativo'}</td>
+            <td>${formatarData(u.criado_em)}</td>
+            <td>
+              <button type="button" class="btn btn-neutro btn-xs" onclick='editarUsuario(${JSON.stringify(u)})'>Editar</button>
+              ${u.ativo ? `<button type="button" class="btn btn-perigo btn-xs" onclick="desativar(${u.id})">Desativar</button>` : ''}
+            </td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        alert(err.message);
       }
-      corpo.innerHTML = usuarios.map((u) => `
-        <tr>
-          <td>${u.nome}</td>
-          <td>${u.email}</td>
-          <td><span class="badge badge-${u.perfil}">${u.perfil}</span></td>
-          <td>${u.ativo ? '✅ Ativo' : '⛔ Inativo'}</td>
-          <td>${formatarData(u.criado_em)}</td>
-          <td>
-            <button type="button" class="btn btn-neutro btn-xs" onclick='editarUsuario(${JSON.stringify(u)})'>Editar</button>
-            ${u.ativo ? `<button type="button" class="btn btn-perigo btn-xs" onclick="desativar(${u.id})">Desativar</button>` : ''}
-          </td>
-        </tr>
-      `).join('');
     }
 
     function abrirModalUsuario() {
@@ -162,7 +166,14 @@
       window._t = setTimeout(carregar, 350);
     });
 
-    carregar().catch((e) => alert(e.message));
+    Object.assign(window, {
+      abrirModalUsuario,
+      fecharModalUsuario,
+      editarUsuario,
+      desativar,
+    });
+
+    await carregar();
   </script>
 </body>
 </html>

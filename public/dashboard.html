@@ -30,8 +30,8 @@
   <script src="/js/config.js"></script>
   <script src="/js/api.js"></script>
   <script src="/js/layout.js"></script>
-  <script>
-    const usuario = exigirAutenticacao(['administrador', 'instrutor']);
+  <script type="module">
+    exigirAutenticacao(['administrador', 'instrutor']);
     montarLayout('dashboard');
     document.getElementById('titulo-pagina').textContent = 'Dashboard';
 
@@ -43,61 +43,68 @@
     };
 
     async function carregarIndicadores() {
-      const dados = await api('/dashboard/indicadores');
-      const grid = document.getElementById('grid-indicadores');
+      try {
+        const dados = await api('/dashboard/indicadores');
+        const grid = document.getElementById('grid-indicadores');
 
-      const cartoes = [
-        ...(dados.usuarios ? [
-          ['Total de Usuários', dados.usuarios.total],
-          ['Alunos', dados.usuarios.alunos],
-          ['Instrutores', dados.usuarios.instrutores],
-        ] : []),
-        ['Cursos Publicados', dados.cursos.publicados || 0],
-        ['Cursos em Rascunho', dados.cursos.rascunhos || 0],
-        ['Matrículas Ativas', dados.matriculas.ativas || 0],
-        ['Matrículas Concluídas', dados.matriculas.concluidas || 0],
-        ['Taxa de Conclusão', `${dados.taxaConclusao}%`],
-        ['Certificados Emitidos', dados.certificadosEmitidos],
-      ];
+        const cartoes = [
+          ...(dados.usuarios ? [
+            ['Total de Usuários', dados.usuarios.total],
+            ['Alunos', dados.usuarios.alunos],
+            ['Instrutores', dados.usuarios.instrutores],
+          ] : []),
+          ['Cursos Publicados', dados.cursos.publicados || 0],
+          ['Cursos em Rascunho', dados.cursos.rascunhos || 0],
+          ['Matrículas Ativas', dados.matriculas.ativas || 0],
+          ['Matrículas Concluídas', dados.matriculas.concluidas || 0],
+          ['Taxa de Conclusão', `${dados.taxaConclusao}%`],
+          ['Certificados Emitidos', dados.certificadosEmitidos],
+        ];
 
-      grid.innerHTML = cartoes.map(([rotulo, valor]) => `
-        <div class="indicador">
-          <div class="valor">${valor ?? 0}</div>
-          <div class="rotulo">${rotulo}</div>
-        </div>
-      `).join('');
-
-      const listaEixos = document.getElementById('lista-eixos');
-      if (dados.cursosPorEixoBNCC.length === 0) {
-        listaEixos.innerHTML = '<p class="texto-suave">Nenhum curso cadastrado ainda.</p>';
-      } else {
-        listaEixos.innerHTML = dados.cursosPorEixoBNCC.map((e) => `
-          <div class="mb-10">
-            <div class="flex-entre texto-suave">
-              <span>${e.eixo_bncc}</span><strong>${e.total}</strong>
-            </div>
+        grid.innerHTML = cartoes.map(([rotulo, valor]) => `
+          <div class="indicador">
+            <div class="valor">${valor ?? 0}</div>
+            <div class="rotulo">${rotulo}</div>
           </div>
         `).join('');
+
+        const listaEixos = document.getElementById('lista-eixos');
+        if (dados.cursosPorEixoBNCC.length === 0) {
+          listaEixos.innerHTML = '<p class="texto-suave">Nenhum curso cadastrado ainda.</p>';
+        } else {
+          listaEixos.innerHTML = dados.cursosPorEixoBNCC.map((e) => `
+            <div class="mb-10">
+              <div class="flex-entre texto-suave">
+                <span>${e.eixo_bncc}</span><strong>${e.total}</strong>
+              </div>
+            </div>
+          `).join('');
+        }
+      } catch (err) {
+        alert(err.message);
       }
     }
 
     async function carregarTimeline() {
-      const eventos = await api('/dashboard/linha-do-tempo?limite=15');
-      const ul = document.getElementById('timeline');
-      if (eventos.length === 0) {
-        ul.innerHTML = '<li>Nenhuma atividade registrada ainda.</li>';
-        return;
+      try {
+        const eventos = await api('/dashboard/linha-do-tempo?limite=15');
+        const ul = document.getElementById('timeline');
+        if (eventos.length === 0) {
+          ul.innerHTML = '<li>Nenhuma atividade registrada ainda.</li>';
+          return;
+        }
+        ul.innerHTML = eventos.map((e) => `
+          <li>
+            <div>${(rotulosEventos[e.tipo] || (() => 'Evento'))(e)}</div>
+            <div class="data">${formatarData(e.data)}</div>
+          </li>
+        `).join('');
+      } catch (err) {
+        alert(err.message);
       }
-      ul.innerHTML = eventos.map((e) => `
-        <li>
-          <div>${(rotulosEventos[e.tipo] || (() => 'Evento'))(e)}</div>
-          <div class="data">${formatarData(e.data)}</div>
-        </li>
-      `).join('');
     }
 
-    carregarIndicadores().catch((e) => alert(e.message));
-    carregarTimeline().catch((e) => alert(e.message));
+    await Promise.all([carregarIndicadores(), carregarTimeline()]);
   </script>
 </body>
 </html>

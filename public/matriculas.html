@@ -27,36 +27,40 @@
   <script src="/js/config.js"></script>
   <script src="/js/api.js"></script>
   <script src="/js/layout.js"></script>
-  <script>
+  <script type="module">
     const usuario = exigirAutenticacao();
     montarLayout('matriculas');
     document.getElementById('titulo-pagina').textContent = 'Matrículas';
 
     async function carregar() {
-      const matriculas = await api('/matriculas');
-      const corpo = document.getElementById('corpo-tabela');
+      try {
+        const matriculas = await api('/matriculas');
+        const corpo = document.getElementById('corpo-tabela');
 
-      if (matriculas.length === 0) {
-        corpo.innerHTML = '<tr><td colspan="6" class="texto-suave">Nenhuma matrícula encontrada.</td></tr>';
-        return;
+        if (matriculas.length === 0) {
+          corpo.innerHTML = '<tr><td colspan="6" class="texto-suave">Nenhuma matrícula encontrada.</td></tr>';
+          return;
+        }
+
+        corpo.innerHTML = matriculas.map((m) => `
+          <tr>
+            <td>${m.aluno_nome}<br><small class="texto-suave">${m.aluno_email}</small></td>
+            <td>${m.curso_titulo}</td>
+            <td><span class="badge badge-${m.status}">${m.status}</span></td>
+            <td class="min-w-160">
+              <div class="progress-bar"><div class="progress-bar-fill" style="width:${m.progresso_percentual}%;"></div></div>
+              <small>${m.progresso_percentual}%</small>
+            </td>
+            <td>${formatarData(m.data_matricula)}</td>
+            <td>
+              ${m.status !== 'cancelada' ? `<button type="button" class="btn btn-perigo btn-xs" onclick="cancelar(${m.id})">Cancelar</button>` : ''}
+              ${m.status === 'concluida' ? `<button type="button" class="btn btn-secundario btn-xs" onclick="emitirCertificado(${m.id})">Certificado</button>` : ''}
+            </td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        alert(err.message);
       }
-
-      corpo.innerHTML = matriculas.map((m) => `
-        <tr>
-          <td>${m.aluno_nome}<br><small class="texto-suave">${m.aluno_email}</small></td>
-          <td>${m.curso_titulo}</td>
-          <td><span class="badge badge-${m.status}">${m.status}</span></td>
-          <td class="min-w-160">
-            <div class="progress-bar"><div class="progress-bar-fill" style="width:${m.progresso_percentual}%;"></div></div>
-            <small>${m.progresso_percentual}%</small>
-          </td>
-          <td>${formatarData(m.data_matricula)}</td>
-          <td>
-            ${m.status !== 'cancelada' ? `<button type="button" class="btn btn-perigo btn-xs" onclick="cancelar(${m.id})">Cancelar</button>` : ''}
-            ${m.status === 'concluida' ? `<button type="button" class="btn btn-secundario btn-xs" onclick="emitirCertificado(${m.id})">Certificado</button>` : ''}
-          </td>
-        </tr>
-      `).join('');
     }
 
     async function cancelar(id) {
@@ -74,7 +78,12 @@
       } catch (err) { alert(err.message); }
     }
 
-    carregar().catch((e) => alert(e.message));
+    Object.assign(window, {
+      cancelar,
+      emitirCertificado,
+    });
+
+    await carregar();
   </script>
 </body>
 </html>

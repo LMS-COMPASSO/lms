@@ -79,13 +79,13 @@
   <script src="/js/config.js"></script>
   <script src="/js/api.js"></script>
   <script src="/js/layout.js"></script>
-  <script>
+  <script type="module">
     const usuario = exigirAutenticacao();
     montarLayout('cursos');
     document.getElementById('titulo-pagina').textContent = 'Cursos';
 
     if (usuario.perfil === 'aluno') {
-      document.querySelectorAll('.oculto-aluno').forEach((el) => el.classList.add('oculto'));
+      document.querySelectorAll('.oculto-aluno').forEach((el) => { el.classList.add('oculto'); });
     }
 
     function montarQuery() {
@@ -100,44 +100,48 @@
     }
 
     async function carregarCursos() {
-      const cursos = await api(`/cursos?${montarQuery()}`);
-      const container = document.getElementById('lista-cursos');
+      try {
+        const cursos = await api(`/cursos?${montarQuery()}`);
+        const container = document.getElementById('lista-cursos');
 
-      if (cursos.length === 0) {
-        container.innerHTML = '<p class="texto-suave">Nenhum curso encontrado.</p>';
-        return;
+        if (cursos.length === 0) {
+          container.innerHTML = '<p class="texto-suave">Nenhum curso encontrado.</p>';
+          return;
+        }
+
+        container.innerHTML = cursos.map((c) => {
+          const textoBotaoStatus = c.status === 'publicado' ? 'Voltar p/ rascunho' : 'Publicar';
+          return `
+            <div class="cartao">
+              <div class="flex-topo">
+                <span class="badge badge-${c.status}">${c.status}</span>
+                <span class="texto-suave">${c.carga_horaria}h</span>
+              </div>
+              <h3 class="mt-8 mb-10">${c.titulo}</h3>
+              <p class="texto-suave">${c.descricao || 'Sem descrição.'}</p>
+              <p class="texto-suave">
+                📘 ${c.eixo_bncc}<br>
+                🏫 ${c.ano_escolar} · 👨‍🏫 ${c.instrutor_nome}<br>
+                👥 ${c.total_matriculados || 0} matriculado(s)
+              </p>
+              <div class="flex-linha flex-wrap mt-10">
+                <a href="/curso-detalhe.html?id=${c.id}" class="btn btn-neutro btn-sm">Abrir</a>
+                ${usuario.perfil !== 'aluno' ? `
+                  <button type="button" class="btn btn-neutro btn-sm" onclick='editarCurso(${JSON.stringify(c)})'>Editar</button>
+                  <button type="button" class="btn btn-secundario btn-sm" onclick="alternarStatus(${c.id}, '${c.status}')">
+                    ${textoBotaoStatus}
+                  </button>
+                  <button type="button" class="btn btn-perigo btn-sm" onclick="excluirCurso(${c.id})">Excluir</button>
+                ` : `
+                  <button type="button" class="btn btn-primario btn-sm" onclick="matricular(${c.id})">Matricular-se</button>
+                `}
+              </div>
+            </div>
+          `;
+        }).join('');
+      } catch (err) {
+        alert(err.message);
       }
-
-      container.innerHTML = cursos.map((c) => {
-        const textoBotaoStatus = c.status === 'publicado' ? 'Voltar p/ rascunho' : 'Publicar';
-        return `
-          <div class="cartao">
-            <div class="flex-topo">
-              <span class="badge badge-${c.status}">${c.status}</span>
-              <span class="texto-suave">${c.carga_horaria}h</span>
-            </div>
-            <h3 class="mt-8 mb-10">${c.titulo}</h3>
-            <p class="texto-suave">${c.descricao || 'Sem descrição.'}</p>
-            <p class="texto-suave">
-              📘 ${c.eixo_bncc}<br>
-              🏫 ${c.ano_escolar} · 👨‍🏫 ${c.instrutor_nome}<br>
-              👥 ${c.total_matriculados || 0} matriculado(s)
-            </p>
-            <div class="flex-linha flex-wrap mt-10">
-              <a href="/curso-detalhe.html?id=${c.id}" class="btn btn-neutro btn-sm">Abrir</a>
-              ${usuario.perfil !== 'aluno' ? `
-                <button type="button" class="btn btn-neutro btn-sm" onclick='editarCurso(${JSON.stringify(c)})'>Editar</button>
-                <button type="button" class="btn btn-secundario btn-sm" onclick="alternarStatus(${c.id}, '${c.status}')">
-                  ${textoBotaoStatus}
-                </button>
-                <button type="button" class="btn btn-perigo btn-sm" onclick="excluirCurso(${c.id})">Excluir</button>
-              ` : `
-                <button type="button" class="btn btn-primario btn-sm" onclick="matricular(${c.id})">Matricular-se</button>
-              `}
-            </div>
-          </div>
-        `;
-      }).join('');
     }
 
     function abrirModalCurso() {
@@ -214,7 +218,16 @@
       window._t = setTimeout(carregarCursos, 350);
     });
 
-    carregarCursos().catch((e) => alert(e.message));
+    Object.assign(window, {
+      abrirModalCurso,
+      fecharModalCurso,
+      editarCurso,
+      alternarStatus,
+      excluirCurso,
+      matricular,
+    });
+
+    await carregarCursos();
   </script>
 </body>
 </html>
