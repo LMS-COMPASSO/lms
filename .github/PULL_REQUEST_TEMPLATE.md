@@ -27,6 +27,9 @@ Descreva como você validou que a alteração funciona corretamente:
 
 ## Checklist
 
+- [ ] Este Pull Request trata de uma entrega focada e está ligado à issue correspondente, quando aplicável.
+- [ ] Minha branch foi criada a partir da `main` atualizada; não enviei alterações diretamente para `main`.
+- [ ] Executei os testes e verificações relevantes e registrei os resultados acima.
 - [ ] Meu código segue as orientações do projeto e do [Guia de Contribuição](CONTRIBUTING.md).
 - [ ] Não incluí senhas, chaves de API ou dados confidenciais neste Pull Request.
 - [ ] Li e concordo com o [Código de Conduta](CODE_OF_CONDUCT.md).
