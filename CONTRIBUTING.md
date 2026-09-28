@@ -51,6 +51,25 @@ git checkout -b feature/minha-nova-funcionalidade
 git checkout -b fix/correcao-bug-login
 ```
 
+### Colaboração em Equipe
+
+- Use uma branch por issue ou entrega independente, não uma branch permanente por pessoa. Inclua o número da issue quando houver, por exemplo `fix/47-jwt-expiracao` ou `docs/51-escopo-curricular`.
+- Comece sempre da `main` atualizada. Em um clone direto do repositório, execute `git switch main` e `git pull --ff-only origin main` antes de criar a branch.
+- Se estiver trabalhando em um fork, configure o repositório original como `upstream` uma vez e sincronize antes de começar:
+
+   ```bash
+   git remote add upstream https://github.com/LMS-COMPASSO/lms.git
+   git fetch upstream
+   git switch main
+   git merge --ff-only upstream/main
+   git push origin main
+   git switch -c fix/47-jwt-expiracao
+   ```
+
+- Não envie commits diretamente para `main`, nem reutilize uma branch para issues sem relação. Se outra pessoa estiver trabalhando na mesma entrega, combine a responsabilidade antes de compartilhar a branch.
+- Envie a branch para o seu `origin` e abra um Pull Request para `main`. Vincule a issue, descreva os testes realizados e aguarde a revisão antes da integração.
+- Se `main` avançar durante o trabalho, atualize sua branch antes de concluir o PR. Evite force-push em branches que outras pessoas estejam usando.
+
 ### Passo 4: Fazer suas Alterações e Testar Localmente
 
 1. Instale as dependências:
