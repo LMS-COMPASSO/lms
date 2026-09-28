@@ -57,6 +57,8 @@ export async function sha256Hex(texto) {
     .join('');
 }
 
+export const JWT_TTL_SECONDS = 8 * 60 * 60;
+
 /**
  * Cria um token JWT assinado digitalmente com algoritmo HMAC SHA-256.
  * O token contém 3 partes separadas por ponto: CABEÇALHO.DADOS.ASSINATURA
@@ -65,9 +67,19 @@ export async function sha256Hex(texto) {
  * @param {string} segredo - Chave secreta usada para assinar o token.
  * @returns {Promise<string>} O token JWT completo pronto para envio ao cliente.
  */
-export async function signJwt(dados, segredo) {
+export async function signJwt(dados, segredo, expiresInSeconds = JWT_TTL_SECONDS) {
+  if (!Number.isSafeInteger(expiresInSeconds) || expiresInSeconds <= 0) {
+    throw new RangeError('A validade do token deve ser um número inteiro positivo.');
+  }
+
+  const issuedAt = Math.floor(Date.now() / 1000);
+  const payload = {
+    ...dados,
+    iat: issuedAt,
+    exp: issuedAt + expiresInSeconds,
+  };
   const cabecalhoSegmento = base64UrlEncode(JSON.stringify({ alg: 'HS256', typ: 'JWT' }));
-  const dadosSegmento = base64UrlEncode(JSON.stringify(dados));
+  const dadosSegmento = base64UrlEncode(JSON.stringify(payload));
   const entradaAssinatura = `${cabecalhoSegmento}.${dadosSegmento}`;
 
   const chave = await crypto.subtle.importKey(
@@ -120,6 +132,22 @@ export async function verifyJwt(token, segredo) {
     throw new Error('Token inválido ou expirado.');
   }
 
+  const cabecalhoDecodificado = JSON.parse(new TextDecoder().decode(base64UrlDecode(cabecalhoSegmento)));
   const dadosDecodificados = JSON.parse(new TextDecoder().decode(base64UrlDecode(dadosSegmento)));
+  const agora = Math.floor(Date.now() / 1000);
+
+  if (cabecalhoDecodificado.alg !== 'HS256' || cabecalhoDecodificado.typ !== 'JWT') {
+    throw new Error('Token inválido ou expirado.');
+  }
+  if (
+    !Number.isSafeInteger(dadosDecodificados.iat)
+    || !Number.isSafeInteger(dadosDecodificados.exp)
+    || dadosDecodificados.iat > agora
+    || dadosDecodificados.exp <= agora
+    || dadosDecodificados.exp <= dadosDecodificados.iat
+  ) {
+    throw new Error('Token inválido ou expirado.');
+  }
+
   return dadosDecodificados;
 }
