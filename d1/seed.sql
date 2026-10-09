@@ -39,6 +39,23 @@ INSERT OR IGNORE INTO aulas (id, modulo_id, titulo, tipo, conteudo, url_recurso,
 (4, 3, 'Hardware vs Software: O Corpo e a Mente da Máquina', 'texto', 'Hardware é a parte física (tela, teclado, processador) e software são as instruções e programas que fazem o hardware funcionar.', NULL, 30, 1),
 (5, 4, 'Privacidade e Segurança de Senhas', 'texto', 'Aprenda a criar senhas seguras e entender quais informações nunca devem ser compartilhadas com estranhos online.', NULL, 20, 1);
 
+-- 4.1 Aulas com atividades dinâmicas (página /atividades.html). O WHERE NOT EXISTS permite rodar o seed de novo sem duplicar aulas.
+INSERT INTO aulas (modulo_id, titulo, tipo, conteudo, url_recurso, duracao_min, ordem)
+SELECT 1, 'Atividade dinâmica: Monte o algoritmo de escovar os dentes', 'link', 'Coloque os passos na ordem certa e descubra qual passo não faz parte do algoritmo.', '/atividades.html?id=ordenar-escovar-dentes', 8, 3
+WHERE NOT EXISTS (SELECT 1 FROM aulas WHERE modulo_id = 1 AND url_recurso = '/atividades.html?id=ordenar-escovar-dentes');
+
+INSERT INTO aulas (modulo_id, titulo, tipo, conteudo, url_recurso, duracao_min, ordem)
+SELECT 1, 'Atividade dinâmica: Preparar um sanduíche', 'link', 'Monte a receita do sanduíche e descubra quais passos podem trocar de lugar.', '/atividades.html?id=ordenar-sanduiche', 10, 4
+WHERE NOT EXISTS (SELECT 1 FROM aulas WHERE modulo_id = 1 AND url_recurso = '/atividades.html?id=ordenar-sanduiche');
+
+INSERT INTO aulas (modulo_id, titulo, tipo, conteudo, url_recurso, duracao_min, ordem)
+SELECT 1, 'Atividade dinâmica: Robô a caminho da escola', 'link', 'Escreva os comandos do robô, passo a passo, e corrija o programa quando ele errar o caminho.', '/atividades.html?id=robo-caminho-escola', 8, 5
+WHERE NOT EXISTS (SELECT 1 FROM aulas WHERE modulo_id = 1 AND url_recurso = '/atividades.html?id=robo-caminho-escola');
+
+INSERT INTO aulas (modulo_id, titulo, tipo, conteudo, url_recurso, duracao_min, ordem)
+SELECT 2, 'Atividade dinâmica: O café da manhã em partes', 'link', 'Divida o problema de preparar o café da manhã em duas partes menores.', '/atividades.html?id=decompor-cafe-da-manha', 10, 2
+WHERE NOT EXISTS (SELECT 1 FROM aulas WHERE modulo_id = 2 AND url_recurso = '/atividades.html?id=decompor-cafe-da-manha');
+
 -- 5. Avaliações
 INSERT OR IGNORE INTO avaliacoes (id, modulo_id, titulo, descricao, nota_minima, tentativas_permitidas) VALUES
 (1, 1, 'Quiz: Introdução aos Algoritmos', 'Teste seus conhecimentos sobre comandos, instruções e sequenciamento lógico.', 6.0, 3);

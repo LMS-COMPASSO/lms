@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Detalhe do Curso — LMS BNCC Computação</title>
+<link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
@@ -50,6 +51,29 @@
       return `<button type="button" class="btn btn-perigo btn-xs" onclick="excluirAula(${aula.id})">Excluir</button>`;
     }
 
+    // Atividades dinâmicas do próprio LMS recebem a aula e o curso para marcar o progresso ao concluir.
+    // Links externos só são aceitos com http(s), o que impede endereços como "javascript:".
+    function montarLinkAula(aula, idDoCurso) {
+      const url = (aula.url_recurso || '').trim();
+      if (url.startsWith('/atividades.html')) {
+        const separador = url.includes('?') ? '&' : '?';
+        return { href: `${url}${separador}aula=${aula.id}&curso=${idDoCurso}`, rotulo: 'Abrir atividade', externo: false };
+      }
+      if (/^https?:\/\//i.test(url)) return { href: url, rotulo: 'Abrir recurso', externo: true };
+      return null;
+    }
+
+    function renderizarConteudoAula(aula, idDoCurso) {
+      const link = montarLinkAula(aula, idDoCurso);
+      const botao = link
+        ? `<div class="mt-8"><a class="btn btn-primario btn-xs" href="${escaparHtml(link.href)}"${link.externo ? ' target="_blank" rel="noopener"' : ''}>${link.rotulo}</a></div>`
+        : '';
+      const descricao = aula.conteudo
+        ? `<details class="mt-8"><summary class="texto-suave cursor-pointer">Ver descrição</summary><p class="texto-suave">${escaparHtml(aula.conteudo)}</p></details>`
+        : '';
+      return botao + descricao;
+    }
+
     async function carregarCurso() {
       try {
         const curso = await api(`/cursos/${cursoId}`);
@@ -80,7 +104,7 @@
               <tbody>
                 ${m.aulas.map((a) => `
                   <tr>
-                    <td>${a.titulo}</td>
+                    <td>${a.titulo}${renderizarConteudoAula(a, curso.id)}</td>
                     <td>${a.tipo}</td>
                     <td>${a.duracao_min || 0} min</td>
                     <td>

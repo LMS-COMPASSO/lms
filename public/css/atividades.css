@@ -1,0 +1,255 @@
+/* ============================================================================
+   LMS COMPASSO — ATIVIDADES DINÂMICAS (catálogo, jogadores e folha desplugada)
+   Usa as variáveis de style.css e publico.css.
+   ============================================================================ */
+
+.pagina-atividades { background: var(--cor-fundo); }
+
+/* Sem sessão: o conteúdo ocupa a largura da página; com sessão, convive com a barra lateral. */
+.modo-publico .atv-conteudo { width: 100%; max-width: 1120px; margin: 0 auto; padding: 32px 20px 56px; }
+.modo-app #topo-publico,
+.modo-app #rodape-publico { display: none; }
+.modo-publico #sidebar-container,
+.modo-publico #topbar-container { display: none; }
+
+.atv-raiz { max-width: 1040px; }
+.modo-publico .atv-raiz { max-width: none; }
+
+.atv-titulo-pagina { margin: 0 0 8px; color: var(--pub-azul-900); font-size: clamp(1.5rem, 3vw, 2rem); line-height: 1.2; }
+.atv-intro { max-width: 760px; margin: 0 0 20px; color: var(--pub-texto-suave); font-size: 1rem; line-height: 1.6; }
+
+/* ---------- Catálogo ---------- */
+.atv-resumo-progresso { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 20px; padding: 14px 18px; border-radius: var(--raio); background: #fff; box-shadow: var(--sombra); }
+.atv-resumo-progresso strong { color: var(--pub-azul-900); }
+.atv-resumo-progresso .progress-bar { flex: 1; min-width: 140px; height: 10px; }
+.atv-resumo-progresso .progress-bar-fill { background: var(--pub-verde-700); }
+
+.atv-filtros { display: grid; gap: 10px; margin-bottom: 22px; }
+.atv-filtro-grupo { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.atv-filtro-rotulo { margin-right: 4px; color: var(--pub-texto-suave); font-size: 0.85rem; font-weight: 700; }
+.atv-filtro {
+  padding: 8px 14px;
+  border: 2px solid var(--pub-borda);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--pub-texto);
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.atv-filtro:hover { border-color: var(--pub-azul-700); }
+.atv-filtro[aria-pressed='true'] { border-color: var(--pub-azul-700); background: var(--pub-azul-700); color: #fff; }
+
+.atv-grade { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 18px; padding: 0; margin: 0; list-style: none; }
+.atv-card { display: flex; flex-direction: column; height: 100%; padding: 22px; border: 1px solid var(--pub-borda); border-radius: 16px; background: #fff; box-shadow: var(--sombra); }
+.atv-card-topo { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.atv-card .pub-icone { width: 48px; height: 48px; font-size: 1.6rem; }
+.atv-card h2,
+.atv-card h3 { margin: 14px 0 6px; color: var(--pub-azul-900); font-size: 1.05rem; line-height: 1.3; }
+.atv-card p { margin: 0 0 14px; color: var(--pub-texto-suave); font-size: 0.92rem; line-height: 1.55; }
+.atv-meta { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 16px; padding: 0; list-style: none; }
+.atv-meta li { padding: 3px 10px; border-radius: 999px; background: var(--pub-fundo-alt); color: var(--pub-texto-suave); font-size: 0.78rem; font-weight: 600; }
+.atv-card .atv-card-acao { margin-top: auto; }
+.atv-concluida { padding: 4px 10px; border-radius: 999px; background: var(--pub-verde-100); color: var(--pub-verde-700); font-size: 0.76rem; font-weight: 700; }
+.atv-vazio-lista { padding: 24px; border-radius: var(--raio); background: #fff; color: var(--pub-texto-suave); }
+
+/* ---------- Jogador: cabeçalho ---------- */
+.atv-voltar { display: inline-block; margin-bottom: 14px; color: var(--pub-azul-700); font-weight: 700; }
+.atv-voltar:hover { text-decoration: underline; }
+.atv-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 10px; padding: 0; list-style: none; }
+.atv-chip { padding: 4px 12px; border-radius: 999px; background: var(--pub-azul-100); color: var(--pub-azul-700); font-size: 0.78rem; font-weight: 700; }
+.atv-instrucao { margin: 0 0 18px; padding: 14px 18px; border-left: 5px solid var(--pub-azul-700); border-radius: 8px; background: #fff; box-shadow: var(--sombra); line-height: 1.55; }
+.atv-painel { margin-bottom: 18px; padding: 20px; border-radius: 16px; background: #fff; box-shadow: var(--sombra); }
+.atv-painel h3,
+.atv-painel h4 { margin: 0 0 10px; color: var(--pub-azul-900); }
+.atv-painel h3 { font-size: 1rem; }
+
+/* ---------- Passos e tarefas (cartões tocáveis) ---------- */
+.atv-banco { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; margin: 0 0 6px; padding: 0; list-style: none; }
+.atv-passo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 56px;
+  padding: 10px 14px;
+  border: 2px solid var(--pub-borda);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--pub-texto);
+  font: inherit;
+  font-weight: 600;
+  line-height: 1.35;
+  text-align: left;
+  cursor: pointer;
+}
+.atv-passo:hover:not(:disabled) { border-color: var(--pub-azul-700); background: var(--pub-azul-100); }
+.atv-passo:disabled { cursor: default; opacity: 0.75; }
+.atv-passo[aria-pressed='true'] { border-color: var(--pub-azul-700); background: var(--pub-azul-100); box-shadow: 0 0 0 3px rgba(44, 82, 130, 0.25); }
+.atv-emoji { flex-shrink: 0; font-size: 1.5rem; line-height: 1; }
+.atv-vazio { margin: 0; padding: 14px; border: 2px dashed var(--pub-borda); border-radius: 12px; color: var(--pub-texto-suave); text-align: center; }
+
+.atv-sequencia { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; counter-reset: passo; }
+.atv-item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: 2px solid var(--pub-borda); border-radius: 12px; background: #fff; counter-increment: passo; }
+.atv-item::before {
+  content: counter(passo);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--pub-azul-700);
+  color: #fff;
+  font-weight: 800;
+}
+.atv-item-texto { display: flex; align-items: center; gap: 10px; flex: 1; font-weight: 600; line-height: 1.35; }
+.atv-item-controles { display: flex; gap: 6px; flex-shrink: 0; }
+.atv-controle {
+  min-width: 44px;
+  min-height: 44px;
+  border: 2px solid var(--pub-borda);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--pub-azul-900);
+  font: inherit;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.atv-controle:hover:not(:disabled) { border-color: var(--pub-azul-700); background: var(--pub-azul-100); }
+.atv-controle:disabled { opacity: 0.4; cursor: default; }
+
+.atv-marca { display: inline-block; margin-left: 6px; padding: 2px 8px; border-radius: 999px; font-size: 0.74rem; font-weight: 800; white-space: nowrap; }
+.atv-fora { border-color: var(--pub-ambar-500); background: #fffbea; }
+.atv-fora .atv-marca { background: var(--pub-ambar-100); color: var(--pub-ambar-700); }
+.atv-intruso { border-color: var(--cor-perigo); background: #fff5f5; }
+.atv-intruso .atv-marca { background: #fed7d7; color: #822727; }
+.atv-certo { border-color: var(--pub-verde-500); background: var(--pub-verde-100); }
+.atv-certo .atv-marca { background: #c6f6d5; color: var(--pub-verde-700); }
+
+/* ---------- Ações e feedback ---------- */
+.atv-acoes { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0 0; }
+.atv-acoes .btn { min-height: 46px; }
+.btn[disabled],
+.btn[aria-disabled='true'] { opacity: 0.55; cursor: not-allowed; }
+.atv-feedback { margin: 16px 0 0; padding: 14px 18px; border-radius: 12px; line-height: 1.55; }
+.atv-feedback:empty { display: none; }
+.atv-feedback.info { background: var(--pub-azul-100); color: var(--pub-azul-900); }
+.atv-feedback.erro { background: #fffbea; color: var(--pub-ambar-700); border: 1px solid var(--pub-ambar-500); }
+.atv-feedback.sucesso { background: var(--pub-verde-100); color: #1c4532; border: 1px solid var(--pub-verde-500); }
+.atv-feedback strong { display: block; margin-bottom: 4px; }
+.atv-feedback a { color: inherit; font-weight: 700; text-decoration: underline; }
+.atv-estrelas { font-size: 1.4rem; letter-spacing: 3px; }
+
+/* ---------- Dividir o problema ---------- */
+.atv-problema { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; padding: 16px 18px; border-radius: 12px; background: var(--pub-azul-900); color: #fff; font-size: 1.05rem; }
+.atv-problema .atv-emoji { font-size: 1.8rem; }
+.atv-partes { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+.atv-parte { display: flex; flex-direction: column; gap: 10px; padding: 14px; border: 2px solid var(--pub-azul-700); border-radius: 14px; background: #fff; }
+.atv-parte.descarte { border-style: dashed; border-color: var(--pub-texto-suave); background: var(--pub-fundo-alt); }
+.atv-parte h4 { margin: 0; color: var(--pub-azul-900); font-size: 0.98rem; }
+.atv-parte ul { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.atv-parte .atv-passo { min-height: 48px; font-size: 0.92rem; }
+.atv-parte-vazia { margin: 0; color: var(--pub-texto-suave); font-size: 0.85rem; }
+.atv-arvore { margin: 14px 0 0; padding-left: 20px; line-height: 1.7; }
+.atv-arvore ul { margin: 2px 0 6px; padding-left: 20px; }
+
+/* ---------- Robô ---------- */
+.atv-robo { display: grid; grid-template-columns: minmax(260px, 420px) 1fr; gap: 24px; align-items: start; }
+.atv-mapa {
+  --colunas: 4;
+  display: grid;
+  grid-template-columns: repeat(var(--colunas), minmax(0, 1fr));
+  gap: 5px;
+  padding: 10px;
+  border-radius: 14px;
+  background: var(--pub-azul-100);
+}
+.atv-celula { display: grid; place-items: center; position: relative; aspect-ratio: 1; border-radius: 10px; background: #fff; font-size: clamp(1.3rem, 5vw, 2rem); line-height: 1; }
+.atv-celula.visitada { background: var(--pub-ambar-100); }
+.atv-celula.obstaculo { background: #edf2f7; }
+.atv-celula.meta { box-shadow: inset 0 0 0 3px var(--pub-verde-500); }
+.atv-celula.inicio::after { content: 'início'; position: absolute; left: 3px; bottom: 2px; color: var(--pub-texto-suave); font-size: 0.55rem; font-weight: 700; text-transform: uppercase; }
+.atv-celula.batida { background: #fed7d7; box-shadow: inset 0 0 0 3px var(--cor-perigo); }
+.atv-legenda { margin: 10px 0 0; color: var(--pub-texto-suave); font-size: 0.85rem; }
+.atv-programa { display: flex; flex-wrap: wrap; gap: 8px; min-height: 56px; margin: 0 0 14px; padding: 10px; list-style: none; border: 2px dashed var(--pub-borda); border-radius: 12px; counter-reset: cmd; }
+.atv-comando {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  min-height: 48px;
+  padding: 0 12px;
+  border: 2px solid var(--pub-azul-700);
+  border-radius: 10px;
+  background: var(--pub-azul-100);
+  color: var(--pub-azul-900);
+  font: inherit;
+  font-size: 1.2rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+.atv-comando small { position: absolute; top: -9px; left: -6px; min-width: 20px; padding: 0 4px; border-radius: 999px; background: var(--pub-azul-700); color: #fff; font-size: 0.68rem; font-weight: 700; text-align: center; }
+.atv-comando.atual { background: var(--pub-ambar-500); border-color: var(--pub-ambar-700); color: #1a202c; }
+.atv-comando.erro { background: #fed7d7; border-color: var(--cor-perigo); }
+.atv-paleta { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-bottom: 12px; }
+.atv-direcao { display: grid; place-items: center; gap: 2px; min-height: 64px; padding: 6px; border: 2px solid var(--pub-azul-900); border-radius: 12px; background: var(--pub-azul-900); color: #fff; font: inherit; font-weight: 700; cursor: pointer; }
+.atv-direcao span:first-child { font-size: 1.5rem; line-height: 1; }
+.atv-direcao span:last-child { font-size: 0.74rem; }
+.atv-direcao:hover:not(:disabled) { background: var(--pub-azul-700); border-color: var(--pub-azul-700); }
+.atv-direcao:disabled { opacity: 0.5; cursor: not-allowed; }
+.atv-contagem { margin: 0 0 8px; color: var(--pub-texto-suave); font-size: 0.88rem; }
+
+/* ---------- Orientações para o professor ---------- */
+.atv-professor { margin-top: 20px; border: 1px solid var(--pub-borda); border-radius: 14px; background: #fff; }
+.atv-professor summary { padding: 14px 18px; color: var(--pub-azul-900); font-weight: 800; cursor: pointer; }
+.atv-professor-corpo { padding: 0 18px 18px; color: var(--pub-texto); line-height: 1.6; }
+.atv-professor-corpo h3 { margin: 16px 0 6px; color: var(--pub-azul-900); font-size: 0.95rem; }
+.atv-professor-corpo p,
+.atv-professor-corpo ul,
+.atv-professor-corpo dl { margin: 0; }
+.atv-professor-corpo ul { padding-left: 20px; }
+.atv-professor-corpo dt { margin-top: 8px; font-weight: 800; color: var(--pub-azul-700); }
+.atv-professor-corpo dd { margin: 2px 0 0; }
+.atv-aviso { margin-top: 8px !important; color: var(--pub-texto-suave); font-size: 0.85rem; }
+
+/* ---------- Folha desplugada (somente na impressão) ---------- */
+#folha-impressao { display: none; }
+
+.folha { font-family: 'Segoe UI', Roboto, Arial, sans-serif; color: #000; }
+.folha h1 { margin: 0 0 4px; font-size: 18pt; }
+.folha h2 { margin: 18px 0 8px; font-size: 13pt; }
+.folha p { margin: 0 0 8px; font-size: 11pt; line-height: 1.4; }
+.folha-cartoes { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8mm; margin-top: 8mm; }
+.folha-cartao { display: flex; align-items: center; gap: 4mm; min-height: 20mm; padding: 4mm; border: 1.5px dashed #000; border-radius: 3mm; font-size: 12pt; font-weight: 600; break-inside: avoid; }
+.folha-cartao .folha-emoji { font-size: 20pt; }
+.folha-cartoes.compactos { grid-template-columns: repeat(4, 1fr); }
+.folha-cartoes.compactos .folha-cartao { justify-content: center; min-height: 16mm; font-size: 18pt; }
+.folha-partes { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6mm; margin-top: 6mm; }
+.folha-parte { min-height: 34mm; padding: 4mm; border: 2px solid #000; border-radius: 3mm; font-weight: 700; break-inside: avoid; }
+.folha-mapa { display: grid; grid-template-columns: repeat(var(--colunas), 22mm); width: max-content; margin: 6mm 0; border-top: 1.5px solid #000; border-left: 1.5px solid #000; }
+.folha-celula { display: grid; place-items: center; width: 22mm; height: 22mm; border-right: 1.5px solid #000; border-bottom: 1.5px solid #000; font-size: 20pt; }
+.folha-gabarito { margin-top: 8mm; padding-top: 4mm; border-top: 2px solid #000; break-before: page; }
+.folha-gabarito ol,
+.folha-gabarito ul { margin: 0 0 8px; padding-left: 6mm; font-size: 11pt; line-height: 1.5; }
+
+/* ---------- Responsividade ---------- */
+@media (max-width: 860px) {
+  .atv-robo { grid-template-columns: 1fr; }
+  .atv-mapa { max-width: 420px; }
+}
+@media (max-width: 520px) {
+  .atv-item { flex-wrap: wrap; }
+  .atv-item-controles { width: 100%; justify-content: flex-end; }
+  .atv-banco { grid-template-columns: 1fr; }
+}
+
+@media print {
+  @page { size: A4; margin: 14mm; }
+  body.imprimindo > *:not(#folha-impressao) { display: none !important; }
+  body.imprimindo { background: #fff; }
+  body.imprimindo #folha-impressao { display: block; }
+}

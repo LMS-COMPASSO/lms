@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Criar conta — LMS COMPASSO</title>
+<title>Entrar — LMS COMPASSO</title>
 <link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/css/style.css">
 </head>
@@ -13,29 +13,25 @@
       <a href="/" class="login-logo" aria-label="LMS COMPASSO — página inicial">
         <img src="/img/logo.svg" alt="LMS COMPASSO — BNCC Computação">
       </a>
-      <h1>Criar Conta</h1>
-      <p class="subtitulo">Cadastro de novo aluno na plataforma</p>
+      <h1>Entrar na plataforma</h1>
+      <p class="subtitulo">Plataforma de ensino alinhada à BNCC Computação</p>
 
       <div id="alerta" class="alerta alerta-erro oculto"></div>
 
-      <form id="form-registro">
-        <div class="form-grupo">
-          <label for="nome">Nome completo</label>
-          <input type="text" id="nome" placeholder="Seu nome completo" required>
-        </div>
+      <form id="form-login">
         <div class="form-grupo">
           <label for="email">Email</label>
-          <input type="email" id="email" placeholder="seuemail@escola.edu.br" required>
+          <input type="email" id="email" required placeholder="seuemail@escola.edu.br">
         </div>
         <div class="form-grupo">
-          <label for="senha">Senha (mín. 6 caracteres)</label>
-          <input type="password" id="senha" autocomplete="new-password" placeholder="••••••••" required minlength="6">
+          <label for="senha">Senha</label>
+          <input type="password" id="senha" autocomplete="current-password" required placeholder="••••••••">
         </div>
-        <button type="submit" class="btn btn-secundario btn-bloco">Criar conta</button>
+        <button type="submit" class="btn btn-primario btn-bloco">Entrar</button>
       </form>
 
       <p class="texto-centro mt-18 texto-suave">
-        Já tem conta? <a href="/login.html" class="link-destaque">Fazer login</a>
+        Não tem conta? <a href="/registrar.html" class="link-destaque">Cadastre-se como aluno</a>
       </p>
       <p class="texto-centro mt-8 texto-suave">
         <a href="/" class="link-destaque">← Voltar à página inicial</a>
@@ -46,22 +42,26 @@
   <script src="/js/config.js"></script>
   <script src="/js/api.js"></script>
   <script>
-    document.getElementById('form-registro').addEventListener('submit', async (e) => {
+    const usuarioLogado = obterToken() ? obterUsuario() : null;
+    if (usuarioLogado) {
+      window.location.href = usuarioLogado.perfil === 'aluno' ? '/cursos.html' : '/dashboard.html';
+    }
+
+    document.getElementById('form-login').addEventListener('submit', async (e) => {
       e.preventDefault();
       const alertaEl = document.getElementById('alerta');
       alertaEl.classList.add('oculto');
 
-      const nome = document.getElementById('nome').value.trim();
       const email = document.getElementById('email').value.trim();
       const senha = document.getElementById('senha').value;
 
       try {
-        const resposta = await api('/auth/registrar', {
+        const resposta = await api('/auth/login', {
           method: 'POST',
-          body: JSON.stringify({ nome, email, senha }),
+          body: JSON.stringify({ email, senha }),
         });
         salvarSessao(resposta.token, resposta.usuario);
-        window.location.href = '/cursos.html';
+        window.location.href = resposta.usuario.perfil === 'aluno' ? '/cursos.html' : '/dashboard.html';
       } catch (err) {
         alertaEl.textContent = err.message;
         alertaEl.classList.remove('oculto');

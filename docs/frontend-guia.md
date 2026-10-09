@@ -54,6 +54,16 @@ window.LMS_API_BASE = overrideApi || DEFAULT_API;
 
 ---
 
+### 3. Atividades Dinâmicas (`public/atividades.html` e `public/js/atividades/`)
+
+- `atividades.html?id=<atividade>` abre uma atividade; sem parâmetros mostra o catálogo com filtros e o progresso do estudante.
+- Três tipos de jogador: **ordenar** passos de um algoritmo, **decompor** um problema em partes e **programar um robô** em um mapa.
+- A lógica pura (validação, pontuação, estrelas) fica em `logica.js`, `ordenar.js`, `decompor.js` e `robo.js`, cobertas por `tests/atividades.test.js`.
+- Funciona sem login; o progresso é guardado no `localStorage` do navegador, separado por usuário. Quando aberta a partir de uma aula, marca a aula como concluída.
+- Para vincular uma atividade a uma aula, crie uma aula do tipo `link` com `url_recurso` apontando para `/atividades.html?id=<atividade>` (veja exemplos em `d1/seed.sql`).
+
+---
+
 ## Como Publicar o Frontend no GitHub Pages (Custo Zero)
 
 Como o frontend é composto apenas de arquivos estáticos, você pode hospedá-lo gratuitamente no **GitHub Pages**:

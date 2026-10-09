@@ -34,6 +34,13 @@ function montarLayout(paginaAtiva) {
       perfis: ['administrador', 'instrutor', 'aluno'],
     },
     {
+      href: '/atividades.html',
+      icone: '🧩',
+      label: 'Atividades',
+      chave: 'atividades',
+      perfis: ['administrador', 'instrutor', 'aluno'],
+    },
+    {
       href: '/matriculas.html',
       icone: '🎓',
       label: 'Matrículas',
@@ -70,8 +77,11 @@ function montarLayout(paginaAtiva) {
   const sidebarHtml = `
     <aside class="sidebar" id="sidebar">
       <div class="logo">
-        LMS BNCC Computação
-        <small>Ensino de Computação • BNCC</small>
+        <img src="/img/logo-icone-branco.svg" alt="">
+        <span>
+          LMS COMPASSO
+          <small>BNCC Computação</small>
+        </span>
       </div>
       <nav>
         ${itensVisiveis.map((item) => `
