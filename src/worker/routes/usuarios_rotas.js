@@ -12,7 +12,7 @@
  * ============================================================================
  */
 
-import { sha256Hex } from '../crypto_seguranca.js';
+import { hashSenha } from '../crypto_seguranca.js';
 import {
   jsonResponse,
   jsonErro,
@@ -99,7 +99,7 @@ export async function criarUsuario(request, env, db) {
     return jsonErro('Já existe um usuário com este email.', 409);
   }
 
-  const senhaHash = await sha256Hex(senha);
+  const senhaHash = await hashSenha(senha);
   const resultado = await db.prepare(
     'INSERT INTO usuarios (nome, email, senha_hash, perfil, ativo) VALUES (?, ?, ?, ?, 1)',
   ).bind(nome, email, senhaHash, perfil).run();
@@ -167,7 +167,7 @@ export async function redefinirSenhaUsuario(request, env, db, targetId) {
     return jsonErro('A nova senha deve ter ao menos 6 caracteres.', 400);
   }
 
-  const novaHash = await sha256Hex(novaSenha);
+  const novaHash = await hashSenha(novaSenha);
   await db.prepare(
     'UPDATE usuarios SET senha_hash = ?, atualizado_em = CURRENT_TIMESTAMP WHERE id = ?',
   ).bind(novaHash, id).run();

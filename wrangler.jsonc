@@ -24,8 +24,5 @@
 			"database_name": "lms_prod",
 			"database_id": "a2f40e86-ab85-4672-8891-5eefbdad4656"
 		}
-	],
-	"vars": {
-		"JWT_SECRET": "mude-esta-chave-para-uma-aleatoria"
-	}
+	]
 }

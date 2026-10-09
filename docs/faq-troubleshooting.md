@@ -39,7 +39,7 @@ Ao tentar navegar entre as páginas, o sistema exibe uma mensagem de sessão exp
 
 **Causa:**
 
-O token JWT armazenado no seu navegador expirou ou o segredo `JWT_SECRET` no `wrangler.jsonc` foi alterado.
+O token JWT armazenado no seu navegador expirou (a validade é de 8 horas) ou o segredo `JWT_SECRET` foi rotacionado.
 
 **Como Solucionar:**
 
@@ -132,3 +132,20 @@ npx wrangler dev --port 8788
 ```
 
 E atualizar temporariamente o seu `public/js/config.js` para apontar para `http://localhost:8788/api`.
+
+---
+
+## 7. Erro 500: "JWT_SECRET não configurado corretamente"
+
+**Sintoma:**
+
+Login, cadastro ou qualquer chamada autenticada da API retornam erro 500 com essa mensagem.
+
+**Causa:**
+
+O Worker não aceita mais um segredo padrão: `JWT_SECRET` precisa existir, ter ao menos 32 caracteres e não pode ser um valor de exemplo.
+
+**Como Solucionar:**
+
+- **Local:** copie `.dev.vars.example` para `.dev.vars`, preencha `JWT_SECRET` e reinicie o `npm run dev`.
+- **Produção:** `npx wrangler secret put JWT_SECRET` (veja o passo 4 de [Guia do Backend](backend-cloudflare.md)).

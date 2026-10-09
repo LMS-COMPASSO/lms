@@ -1,2 +1,9 @@
-# Chave secreta para assinatura dos tokens JWT em ambiente de desenvolvimento local (Wrangler)
-JWT_SECRET=coloque-uma-chave-secreta-longa-e-aleatoria-para-testes-locais
+# Segredos para desenvolvimento local (Wrangler). Copie este arquivo para .dev.vars (ignorado pelo Git).
+# Em PRODUÇÃO use Cloudflare Secrets (npx wrangler secret put NOME) — nunca versione valores reais.
+
+# OBRIGATÓRIO. Mínimo de 32 caracteres aleatórios; o Worker recusa valores ausentes, curtos ou de exemplo.
+# Gere um com: node -e "console.log(require('crypto').randomBytes(48).toString('base64'))"
+JWT_SECRET=gere-um-valor-aleatorio-com-pelo-menos-32-caracteres
+
+# OPCIONAL. Senha do administrador padrão criado quando o banco está vazio (padrão: Admin@12345, só para demonstração).
+# ADMIN_INITIAL_PASSWORD=defina-uma-senha-forte
