@@ -4,6 +4,7 @@
 [![Cloudflare D1](https://img.shields.io/badge/Database-Cloudflare%20D1-orange?logo=sqlite&logoColor=white)](https://developers.cloudflare.com/d1/)
 [![BNCC Computação](https://img.shields.io/badge/BNCC-Computação%20Escolar-2563eb)](docs/bncc-computacao.md)
 [![Status Produção](https://img.shields.io/badge/Status-Online%20em%20Produção-22c55e)](https://lms.thedelacosta.workers.dev/)
+[![CI](https://github.com/LMS-COMPASSO/lms/actions/workflows/ci.yml/badge.svg)](https://github.com/LMS-COMPASSO/lms/actions/workflows/ci.yml)
 [![Licença MIT](https://img.shields.io/badge/Licen%C3%A7a-MIT-blue.svg)](LICENSE)
 
 Plataforma aberta de Gestão de Aprendizagem (LMS) orientada à implementação das diretrizes da **Base Nacional Comum Curricular (BNCC) para a Computação** (Resolução CNE/CP nº 1/2022) na Educação Básica e Redes Municipais de Ensino.
@@ -27,7 +28,9 @@ Acesse o ambiente oficial em produção na Cloudflare:
 - **Dashboard Administrativo:** Indicadores de engajamento escolar em tempo real, matrículas ativas, taxa de conclusão e linha do tempo de atividades pedagógicas.
 - **Sala de Aula Interativa:** Módulos sequenciais, aulas multimídia (texto, vídeo, links) e cálculo de progresso por aula.
 - **Avaliações com Correção Automática:** Questionários de múltipla escolha com cálculo imediato de notas e controle de tentativas.
+- **Atividades Dinâmicas Interativas:** Página /atividades.html com jogos de sequenciamento de algoritmos, decomposição de problemas e programação de robô, que funcionam sem login e podem ser vinculados às aulas dos cursos.
 - **Certificados Digitais com Validação Pública:** Emissão instantânea com indicação de carga horária e eixo BNCC, layout pronto para impressão A4 e código verificador consultável pela Secretaria.
+- **Segurança de Credenciais:** Senhas com PBKDF2-SHA256 e salt individual, tokens JWT com expiração de 8 horas e segredo de assinatura mantido em Cloudflare Secrets (nunca versionado).
 - **Frontend Leve e Nativo:** Construído em HTML5, CSS Vanilla e JS nativo — entregue com máxima velocidade diretamente pelo CDN Edge da Cloudflare.
 
 ---
@@ -44,15 +47,21 @@ cd lms
 # 2. Instale as dependências
 npm install
 
-# 3. Crie e popule o banco local D1 (apenas na primeira vez)
+# 3. Configure o segredo local (obrigatório): copie o modelo e preencha JWT_SECRET
+cp .dev.vars.example .dev.vars
+# Gere um valor: node -e "console.log(require('crypto').randomBytes(48).toString('base64'))"
+
+# 4. Crie e popule o banco local D1 (apenas na primeira vez)
 npm run cf:db:local
 npm run cf:seed:local
 
-# 4. Inicie o ambiente local completo
+# 5. Inicie o ambiente local completo
 npm run dev
 ```
 
 Acesse **`http://localhost:8787`** no seu navegador para utilizar o sistema.
+
+> Sem o `JWT_SECRET` configurado (mínimo de 32 caracteres), a API responde erro 500 em login e cadastro. Em produção, grave-o com `npx wrangler secret put JWT_SECRET` — veja o [Guia do Backend](docs/backend-cloudflare.md).
 
 ---
 
@@ -86,6 +95,7 @@ Guias técnicos e pedagógicos detalhados na pasta `docs/`:
 
 | Comando | Descrição |
 | --- | --- |
+| `npm test` | Executa a suíte de testes automatizados (criptografia, autenticação e atividades dinâmicas) |
 | `npm run dev` (ou `npm run cf:dev`) | Inicia o servidor local completo (Frontend + API Worker) em `http://localhost:8787` |
 | `npm run deploy` (ou `npm run cf:deploy`) | Faz o deploy em produção na Cloudflare (páginas estáticas e Worker) |
 | `npm run cf:db:local` | Executa a criação de tabelas (`schema.sql`) no banco local |
@@ -98,7 +108,7 @@ Guias técnicos e pedagógicos detalhados na pasta `docs/`:
 ## Estrutura do Repositório
 
 ```text
-├── .github/                    # Templates de Issues e Pull Requests
+├── .github/                    # Templates de Issues/PRs e workflow de CI (workflows/ci.yml)
 ├── d1/                         # Arquivos SQL do banco Cloudflare D1 (schema e seed BNCC)
 │   ├── schema.sql              # Estrutura de tabelas e índices
 │   └── seed.sql                # Dados modelo da BNCC Computação
@@ -121,6 +131,7 @@ Guias técnicos e pedagógicos detalhados na pasta `docs/`:
 │           ├── certificados_rotas.js
 │           ├── usuarios_rotas.js
 │           └── dashboard_rotas.js
+├── tests/                      # Testes automatizados (node --test)
 ├── package.json                # Dependências de desenvolvimento e scripts
 ├── wrangler.jsonc              # Configuração oficial do Cloudflare Workers, Assets & D1
 ├── CONTRIBUTING.md             # Como colaborar com código ou planos de aula
