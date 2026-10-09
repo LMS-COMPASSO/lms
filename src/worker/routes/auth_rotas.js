@@ -10,7 +10,12 @@
  * ============================================================================
  */
 
-import { sha256Hex, signJwt } from '../crypto_seguranca.js';
+import {
+  exigirSegredoJwt,
+  hashSenha,
+  signJwt,
+  verificarSenha,
+} from '../crypto_seguranca.js';
 import {
   jsonResponse,
   jsonErro,
@@ -42,7 +47,8 @@ export async function registrar(request, env, db) {
     return jsonErro('Já existe um usuário cadastrado com este email.', 409);
   }
 
-  const senhaHash = await sha256Hex(senha);
+  const segredo = exigirSegredoJwt(env.JWT_SECRET);
+  const senhaHash = await hashSenha(senha);
   const resultado = await db.prepare(
     "INSERT INTO usuarios (nome, email, senha_hash, perfil, ativo) VALUES (?, ?, ?, 'aluno', 1)",
   ).bind(nome, email, senhaHash).run();
@@ -54,7 +60,7 @@ export async function registrar(request, env, db) {
     perfil: 'aluno',
   };
 
-  const token = await signJwt(usuario, env.JWT_SECRET || 'dev-secret-change-me');
+  const token = await signJwt(usuario, segredo);
   return jsonResponse({ mensagem: 'Cadastro realizado com sucesso.', usuario, token }, 201);
 }
 
@@ -80,9 +86,17 @@ export async function login(request, env, db) {
     return jsonErro('Este usuário está desativado. Contate a administração.', 403);
   }
 
-  const senhaHash = await sha256Hex(senha);
-  if (usuario.senha_hash !== senhaHash) {
+  const segredo = exigirSegredoJwt(env.JWT_SECRET);
+  const conferencia = await verificarSenha(senha, usuario.senha_hash);
+  if (!conferencia.valido) {
     return jsonErro('Email ou senha inválidos.', 401);
+  }
+
+  // Migração transparente: contas com hash legado (SHA-256 sem salt) são regravadas em PBKDF2.
+  if (conferencia.precisaRehash) {
+    await db.prepare(
+      'UPDATE usuarios SET senha_hash = ?, atualizado_em = CURRENT_TIMESTAMP WHERE id = ?',
+    ).bind(await hashSenha(senha), usuario.id).run();
   }
 
   const dadosSessao = {
@@ -92,7 +106,7 @@ export async function login(request, env, db) {
     perfil: usuario.perfil,
   };
 
-  const token = await signJwt(dadosSessao, env.JWT_SECRET || 'dev-secret-change-me');
+  const token = await signJwt(dadosSessao, segredo);
   return jsonResponse({ mensagem: 'Login realizado com sucesso.', usuario: dadosSessao, token });
 }
 
@@ -126,12 +140,12 @@ export async function alterarSenha(request, env, db) {
     return jsonErro('Usuário não encontrado.', 404);
   }
 
-  const atualHash = await sha256Hex(senhaAtual);
-  if (usuarioBanco.senha_hash !== atualHash) {
+  const conferencia = await verificarSenha(senhaAtual, usuarioBanco.senha_hash);
+  if (!conferencia.valido) {
     return jsonErro('Senha atual incorreta.', 401);
   }
 
-  const novaHash = await sha256Hex(novaSenha);
+  const novaHash = await hashSenha(novaSenha);
   await db.prepare(
     'UPDATE usuarios SET senha_hash = ?, atualizado_em = CURRENT_TIMESTAMP WHERE id = ?',
   ).bind(novaHash, user.id).run();

@@ -304,7 +304,7 @@ export default {
 
     // Garante existência do admin padrão inicial
     try {
-      await ensureDefaultAdmin(db);
+      await ensureDefaultAdmin(db, env);
     } catch {
       // Ignora erro inicial antes do schema
     }

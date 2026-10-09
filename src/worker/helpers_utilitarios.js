@@ -11,7 +11,7 @@
  * ============================================================================
  */
 
-import { sha256Hex, verifyJwt } from './crypto_seguranca.js';
+import { exigirSegredoJwt, hashSenha, verifyJwt } from './crypto_seguranca.js';
 
 /**
  * Cabeçalhos padrão para permitir que qualquer navegador acesse a API (CORS).
@@ -170,9 +170,12 @@ export async function authorizeUser(request, env, db) {
     throw new ErroHttp('Token de acesso não fornecido.', 401);
   }
 
+  // Fora do try/catch: segredo ausente é erro de configuração (500), não token inválido (401).
+  const segredo = exigirSegredoJwt(env.JWT_SECRET);
+
   let payload;
   try {
-    payload = await verifyJwt(token, env.JWT_SECRET || 'dev-secret-change-me');
+    payload = await verifyJwt(token, segredo);
   } catch {
     throw new ErroHttp('Token inválido ou expirado.', 401);
   }
@@ -190,12 +193,17 @@ export async function authorizeUser(request, env, db) {
 
 /**
  * Garante a existência do usuário administrador padrão do sistema ao iniciar o backend.
- * Caso o banco seja recém-criado, insere admin@lms-bncc.edu.br com senha Admin@12345.
+ * Caso o banco seja recém-criado, insere admin@lms-bncc.edu.br. A senha inicial vem do
+ * Secret opcional ADMIN_INITIAL_PASSWORD; sem ele, usa Admin@12345 (apenas para demonstração,
+ * deve ser alterada no primeiro acesso).
+ *
+ * @param {D1Database} db - Banco de dados D1.
+ * @param {object} env - Variáveis de ambiente do Worker.
  */
-export async function ensureDefaultAdmin(db) {
+export async function ensureDefaultAdmin(db, env = {}) {
   const existing = await queryOne(db, 'SELECT id FROM usuarios WHERE email = ?', ['admin@lms-bncc.edu.br']);
   if (!existing) {
-    const senhaHash = await sha256Hex('Admin@12345');
+    const senhaHash = await hashSenha(env.ADMIN_INITIAL_PASSWORD || 'Admin@12345');
     await db.prepare(
       "INSERT INTO usuarios (nome, email, senha_hash, perfil, ativo) VALUES (?, ?, ?, 'administrador', 1)",
     ).bind('Administrador do Sistema', 'admin@lms-bncc.edu.br', senhaHash).run();

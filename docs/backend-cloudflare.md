@@ -78,14 +78,37 @@ No arquivo `wrangler.jsonc` na raiz do projeto, insira o seu `database_id`:
       "database_name": "lms_prod",
       "database_id": "COLE_SEU_DATABASE_ID_AQUI"
     }
-  ],
-  "vars": {
-    "JWT_SECRET": "coloque-uma-chave-secreta-longa-e-aleatoria"
-  }
+  ]
 }
 ```
 
-### 4. Executar Migrações e Dados Iniciais
+> **Não coloque `JWT_SECRET` no `wrangler.jsonc`.** Segredos nunca são versionados: em produção use Cloudflare Secrets (passo 4) e, no ambiente local, o arquivo `.dev.vars` (ignorado pelo Git).
+
+### 4. Configurar os Segredos (Cloudflare Secrets)
+
+| Segredo | Obrigatório | Para que serve |
+| --- | --- | --- |
+| `JWT_SECRET` | **Sim** | Chave que assina os tokens de login (mín. 32 caracteres aleatórios). Sem ele, o login e as rotas autenticadas retornam erro 500. |
+| `ADMIN_INITIAL_PASSWORD` | Opcional | Senha do administrador padrão criado quando o banco está vazio. Sem ele, usa `Admin@12345` (somente demonstração). |
+
+```bash
+# Gere um valor aleatório forte
+node -e "console.log(require('crypto').randomBytes(48).toString('base64'))"
+
+# Grave o segredo no Worker (o valor é pedido de forma interativa e nunca fica no repositório)
+npx wrangler secret put JWT_SECRET
+
+# Opcional
+npx wrangler secret put ADMIN_INITIAL_PASSWORD
+```
+
+**Impacto da rotação:** trocar o `JWT_SECRET` invalida todas as sessões ativas; os usuários só precisam fazer login novamente.
+
+**Ambiente local:** copie `.dev.vars.example` para `.dev.vars` e preencha `JWT_SECRET`.
+
+**Senhas:** são gravadas com PBKDF2-SHA256, salt aleatório por usuário e 100.000 iterações (máximo suportado pelo Cloudflare Workers). Contas antigas com hash SHA-256 continuam entrando e são convertidas para o novo formato automaticamente no primeiro login bem-sucedido, sem nenhuma migração manual do banco.
+
+### 5. Executar Migrações e Dados Iniciais
 
 ```bash
 # Cria as tabelas e índices
@@ -95,7 +118,7 @@ npm run cf:db:remote
 npm run cf:seed:remote
 ```
 
-### 5. Publicar o Worker
+### 6. Publicar o Worker
 
 ```bash
 npm run deploy
