@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atividades dinâmicas — LMS COMPASSO</title>
+<meta name="description" content="Atividades interativas de Pensamento Computacional para o Ensino Fundamental: algoritmos do cotidiano e decomposição lógica, com versão desplugada.">
+<meta name="theme-color" content="#1a365d">
+<link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/publico.css">
+<link rel="stylesheet" href="/css/atividades.css">
+</head>
+<body class="pagina-atividades">
+  <a class="pular-conteudo" href="#conteudo">Pular para o conteúdo</a>
+
+  <!-- Cabeçalho público: some quando há uma sessão ativa (a barra lateral da plataforma assume) -->
+  <header class="pub-topo" id="topo-publico">
+    <div class="pub-container pub-topo-conteudo">
+      <a href="/" class="pub-logo" aria-label="LMS COMPASSO — página inicial">
+        <img src="/img/logo.svg" alt="LMS COMPASSO — BNCC Computação">
+      </a>
+      <nav class="pub-nav" aria-label="Principal">
+        <a href="/">Início</a>
+        <a href="/atividades.html" aria-current="page">Atividades</a>
+      </nav>
+      <div class="pub-acoes">
+        <a href="/login.html" class="btn btn-contorno-escuro btn-sm">Entrar</a>
+        <a href="/registrar.html" class="btn btn-primario btn-sm">Criar conta</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="app-shell">
+    <div id="sidebar-container"></div>
+    <main class="conteudo atv-conteudo" id="conteudo" tabindex="-1">
+      <div id="topbar-container"></div>
+      <div id="atividades-raiz" class="atv-raiz">
+        <noscript><p class="atv-intro">Esta página precisa de JavaScript para funcionar. Ative o JavaScript no navegador e recarregue.</p></noscript>
+      </div>
+    </main>
+  </div>
+
+  <!-- Anúncios para leitores de tela e folha de impressão da versão desplugada -->
+  <div id="atv-anuncio" class="somente-leitor" role="status" aria-live="polite"></div>
+  <div id="folha-impressao" aria-hidden="true"></div>
+
+  <footer class="pub-rodape" id="rodape-publico">
+    <div class="pub-container">
+      <div class="pub-rodape-grade">
+        <div>
+          <img src="/img/logo-branco.svg" alt="LMS COMPASSO — BNCC Computação">
+          <p>Plataforma aberta para o ensino de Computação no Ensino Fundamental, alinhada à BNCC Computação.</p>
+        </div>
+        <nav aria-labelledby="rodape-plataforma">
+          <h2 id="rodape-plataforma">Plataforma</h2>
+          <ul>
+            <li><a href="/">Página inicial</a></li>
+            <li><a href="/login.html">Entrar</a></li>
+            <li><a href="/registrar.html">Criar conta de aluno</a></li>
+          </ul>
+        </nav>
+        <nav aria-labelledby="rodape-projeto">
+          <h2 id="rodape-projeto">Projeto</h2>
+          <ul>
+            <li><a href="https://github.com/LMS-COMPASSO/lms" rel="noopener">Código no GitHub</a></li>
+            <li><a href="https://github.com/LMS-COMPASSO/lms/blob/main/docs/atividades-dinamicas.md" rel="noopener">Como criar atividades</a></li>
+            <li><a href="https://github.com/LMS-COMPASSO/lms/blob/main/LICENSE" rel="noopener">Licença MIT</a></li>
+          </ul>
+        </nav>
+      </div>
+      <p class="pub-rodape-fim">
+        Projeto de Inovação SUAP/IFMA nº 14246/2025 · Startup LMS COMPASSO · IFMA Campus Grajaú.
+      </p>
+    </div>
+  </footer>
+
+  <script src="/js/config.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/layout.js"></script>
+  <script type="module" src="/js/atividades.js"></script>
+</body>
+</html>

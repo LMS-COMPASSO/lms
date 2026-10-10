@@ -3,60 +3,316 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Entrar — LMS BNCC Computação</title>
+<title>LMS COMPASSO — Computação na escola, passo a passo, com a BNCC</title>
+<meta name="description" content="Plataforma aberta e leve para ensinar Computação no Ensino Fundamental, alinhada à BNCC Computação: cursos, atividades dinâmicas e desplugadas, avaliações e certificados.">
+<meta name="theme-color" content="#1a365d">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="LMS COMPASSO — Computação na escola, passo a passo">
+<meta property="og:description" content="Plataforma aberta e leve para ensinar Computação no Ensino Fundamental com a BNCC como guia.">
+<link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/publico.css">
 </head>
 <body>
-  <div class="pagina-login">
-    <div class="caixa-login">
-      <h1>LMS BNCC Computação</h1>
-      <p class="subtitulo">Plataforma de ensino alinhada à BNCC Computação</p>
+  <a class="pular-conteudo" href="#conteudo">Pular para o conteúdo</a>
 
-      <div id="alerta" class="alerta alerta-erro oculto"></div>
+  <header class="pub-topo">
+    <div class="pub-container pub-topo-conteudo">
+      <a href="/" class="pub-logo" aria-label="LMS COMPASSO — página inicial">
+        <img src="/img/logo.svg" alt="LMS COMPASSO — BNCC Computação">
+      </a>
+      <nav class="pub-nav" aria-label="Principal">
+        <a href="#projeto">O projeto</a>
+        <a href="#eixos">Eixos da BNCC</a>
+        <a href="#atividades">Atividades</a>
+        <a href="#para-quem">Para quem</a>
+        <a href="#estagio">Estágio</a>
+      </nav>
+      <div class="pub-acoes">
+        <a href="/login.html" class="btn btn-contorno-escuro btn-sm" id="acao-entrar">Entrar</a>
+        <a href="/registrar.html" class="btn btn-primario btn-sm" id="acao-cadastrar">Criar conta</a>
+      </div>
+    </div>
+  </header>
 
-      <form id="form-login">
-        <div class="form-grupo">
-          <label for="email">Email</label>
-          <input type="email" id="email" required placeholder="seuemail@escola.edu.br">
+  <main id="conteudo">
+    <section class="pub-hero" aria-labelledby="titulo-hero">
+      <div class="pub-container pub-hero-grade">
+        <div>
+          <p class="pub-eyebrow">Projeto de Inovação SUAP/IFMA · Startup LMS COMPASSO</p>
+          <h1 id="titulo-hero">Computação na escola, <em>passo a passo</em>.</h1>
+          <p class="pub-lead">
+            O LMS COMPASSO é uma plataforma aberta e leve que ajuda redes municipais e escolas a ensinar
+            Pensamento Computacional, Mundo Digital e Cultura Digital no Ensino Fundamental, com a BNCC Computação como guia.
+          </p>
+          <div class="pub-cta">
+            <a href="/atividades.html" class="btn btn-claro btn-grande">Experimente uma atividade</a>
+            <a href="/login.html" class="btn btn-contorno-claro btn-grande" id="cta-plataforma">Entrar na plataforma</a>
+          </div>
+          <ul class="pub-confianca">
+            <li>Código aberto (licença MIT)</li>
+            <li>Alinhada à BNCC Computação</li>
+            <li>Leve: HTML, CSS e JavaScript puros</li>
+          </ul>
         </div>
-        <div class="form-grupo">
-          <label for="senha">Senha</label>
-          <input type="password" id="senha" autocomplete="current-password" required placeholder="••••••••">
-        </div>
-        <button type="submit" class="btn btn-primario btn-bloco">Entrar</button>
-      </form>
 
-      <p class="texto-centro mt-18 texto-suave">
-        Não tem conta? <a href="/registrar.html" class="link-destaque">Cadastre-se como aluno</a>
+        <div class="pub-mock" aria-hidden="true">
+          <div class="pub-mock-cartao pub-mock-atividade">
+            <div class="pub-mock-topo"><span class="pub-mock-tag">Atividade dinâmica</span><span>🪥</span></div>
+            <strong>Monte o algoritmo: escovar os dentes</strong>
+            <ol class="pub-mock-passos">
+              <li class="ok"><span>1</span> Pegar a escova e a pasta</li>
+              <li class="ok"><span>2</span> Colocar a pasta na escova</li>
+              <li class="ok"><span>3</span> Escovar todos os dentes</li>
+              <li class="vazio"><span>4</span> Qual é o próximo passo?</li>
+            </ol>
+            <div class="pub-mock-barra"><i></i></div>
+          </div>
+          <div class="pub-mock-cartao pub-mock-robo">
+            <p>Robô no mapa</p>
+            <div class="pub-mock-mapa">
+              <span>🤖</span><span class="trilha">•</span><span class="trilha">•</span><span></span>
+              <span></span><span>🌳</span><span class="trilha">•</span><span></span>
+              <span></span><span></span><span class="trilha">•</span><span></span>
+              <span></span><span></span><span class="trilha">•</span><span>🏫</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="projeto" class="pub-secao" aria-labelledby="titulo-projeto">
+      <div class="pub-container">
+        <h2 id="titulo-projeto">O que é o LMS COMPASSO?</h2>
+        <p class="pub-intro">
+          É um sistema de gestão de aprendizagem (LMS) criado pela startup educacional COMPASSO, do IFMA Campus Grajaú,
+          no Projeto de Inovação SUAP/IFMA nº 14246/2025. Ele organiza cursos, aulas, atividades, avaliações e certificados
+          para que escolas e redes municipais ensinem Computação conforme a BNCC, sem depender de infraestrutura cara.
+        </p>
+        <div class="pub-grade">
+          <article class="pub-card">
+            <span class="pub-icone" aria-hidden="true">📘</span>
+            <h3>Alinhada à BNCC Computação</h3>
+            <p>Cursos e atividades organizados nos três eixos da BNCC Computação e por ano escolar, do 1º ao 9º ano.</p>
+          </article>
+          <article class="pub-card">
+            <span class="pub-icone" aria-hidden="true">🌐</span>
+            <h3>Aberta e de baixo custo</h3>
+            <p>Código aberto sob licença MIT, executado na borda da Cloudflare (Workers + D1) e pensado para custo zero em pequenas redes escolares.</p>
+          </article>
+          <article class="pub-card">
+            <span class="pub-icone" aria-hidden="true">🧩</span>
+            <h3>Com tela e sem tela</h3>
+            <p>Atividades dinâmicas no navegador e versões desplugadas, com papel e movimento, para equilibrar o uso de telas na infância.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="eixos" class="pub-secao pub-secao-alt" aria-labelledby="titulo-eixos">
+      <div class="pub-container">
+        <h2 id="titulo-eixos">Os três eixos da BNCC Computação</h2>
+        <p class="pub-intro">Todo curso da plataforma pertence a um eixo. Veja o que cada um trabalha com os estudantes.</p>
+        <div class="pub-grade">
+          <article class="pub-card pub-card-eixo">
+            <span class="pub-icone" aria-hidden="true">🧠</span>
+            <h3>Pensamento Computacional</h3>
+            <span class="pub-selo">Atividades dinâmicas disponíveis</span>
+            <p>Resolver problemas com lógica e criatividade.</p>
+            <ul>
+              <li>Algoritmos no cotidiano</li>
+              <li>Decomposição lógica</li>
+              <li>Reconhecimento de padrões</li>
+              <li>Abstração</li>
+            </ul>
+            <div class="pub-card-acao"><a class="pub-link" href="/atividades.html">Experimentar as atividades →</a></div>
+          </article>
+          <article class="pub-card pub-card-eixo mundo">
+            <span class="pub-icone" aria-hidden="true">💻</span>
+            <h3>Mundo Digital</h3>
+            <span class="pub-selo neutro">Curso de demonstração</span>
+            <p>Entender como as tecnologias funcionam.</p>
+            <ul>
+              <li>Hardware e software</li>
+              <li>Internet e redes</li>
+              <li>Dados e representação binária</li>
+            </ul>
+          </article>
+          <article class="pub-card pub-card-eixo cultura">
+            <span class="pub-icone" aria-hidden="true">🛡️</span>
+            <h3>Cultura Digital</h3>
+            <span class="pub-selo neutro">Curso de demonstração</span>
+            <p>Usar a tecnologia com ética, segurança e senso crítico.</p>
+            <ul>
+              <li>Privacidade e segurança de senhas</li>
+              <li>Cidadania na rede</li>
+              <li>Desinformação e cyberbullying</li>
+            </ul>
+          </article>
+        </div>
+        <p class="pub-nota">
+          Quer entender melhor? Leia as
+          <a class="pub-link" href="https://github.com/LMS-COMPASSO/lms/blob/main/docs/bncc-computacao.md" rel="noopener">Diretrizes Pedagógicas da BNCC Computação</a>.
+        </p>
+      </div>
+    </section>
+
+    <section id="atividades" class="pub-secao" aria-labelledby="titulo-atividades">
+      <div class="pub-container">
+        <h2 id="titulo-atividades">Aprender fazendo: atividades dinâmicas</h2>
+        <p class="pub-intro">
+          Algoritmos do cotidiano e decomposição lógica em atividades interativas, direto no navegador e sem cadastro.
+          Cada atividade traz orientações para o professor e uma versão desplugada.
+        </p>
+        <div class="pub-grade">
+          <article class="pub-card">
+            <span class="pub-icone" aria-hidden="true">🪥</span>
+            <h3>Monte o algoritmo</h3>
+            <p>Coloque os passos de uma tarefa do dia a dia na ordem certa e descubra quais passos não pertencem a ela.</p>
+            <div class="pub-card-acao"><a class="pub-link" href="/atividades.html?id=ordenar-escovar-dentes">Começar →</a></div>
+          </article>
+          <article class="pub-card">
+            <span class="pub-icone" aria-hidden="true">🥪</span>
+            <h3>Divida o problema</h3>
+            <p>Separe um problema grande em partes menores, como o café da manhã ou uma festa de aniversário.</p>
+            <div class="pub-card-acao"><a class="pub-link" href="/atividades.html?id=decompor-cafe-da-manha">Começar →</a></div>
+          </article>
+          <article class="pub-card">
+            <span class="pub-icone" aria-hidden="true">🤖</span>
+            <h3>Robô a caminho da escola</h3>
+            <p>Escreva os comandos do robô, passo a passo, e depure o programa quando ele errar o caminho.</p>
+            <div class="pub-card-acao"><a class="pub-link" href="/atividades.html?id=robo-caminho-escola">Começar →</a></div>
+          </article>
+        </div>
+        <p class="mt-18"><a href="/atividades.html" class="btn btn-primario btn-grande">Ver todas as atividades</a></p>
+      </div>
+    </section>
+
+    <section id="para-quem" class="pub-secao pub-secao-alt" aria-labelledby="titulo-para-quem">
+      <div class="pub-container">
+        <h2 id="titulo-para-quem">Para quem é</h2>
+        <p class="pub-intro">Cada perfil encontra na plataforma o que precisa para ensinar, aprender e acompanhar a Computação na escola.</p>
+        <div class="pub-grade">
+          <article class="pub-card">
+            <span class="pub-icone" aria-hidden="true">🎒</span>
+            <h3>Estudantes</h3>
+            <p>Escolhem cursos por eixo e ano, estudam por módulos, fazem atividades e recebem certificado com código de validação.</p>
+          </article>
+          <article class="pub-card">
+            <span class="pub-icone" aria-hidden="true">🍎</span>
+            <h3>Professores</h3>
+            <p>Criam cursos, módulos e aulas, levam as atividades para a sala, com ou sem tela, e acompanham as matrículas.</p>
+          </article>
+          <article class="pub-card">
+            <span class="pub-icone" aria-hidden="true">🏛️</span>
+            <h3>Gestão e secretarias</h3>
+            <p>Acompanham matrículas, conclusão e a linha do tempo das atividades, com certificados verificáveis publicamente.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="estagio" class="pub-secao" aria-labelledby="titulo-estagio">
+      <div class="pub-container">
+        <h2 id="titulo-estagio">Em que pé estamos</h2>
+        <p class="pub-intro">Transparência sobre o que já funciona hoje e o que está no roadmap do projeto.</p>
+        <div class="pub-colunas">
+          <article class="pub-card pub-pronto">
+            <h3>Já funciona</h3>
+            <ul class="pub-lista-estagio">
+              <li>Acesso por perfil: administrador, professor e aluno</li>
+              <li>Catálogo de cursos por eixo da BNCC e ano escolar</li>
+              <li>Sala de aula com módulos, aulas e progresso</li>
+              <li>Matrículas e certificados com validação pública e impressão em A4</li>
+              <li>Atividades dinâmicas de Pensamento Computacional</li>
+              <li>Painel de indicadores para professores e gestão</li>
+            </ul>
+          </article>
+          <article class="pub-card pub-roadmap">
+            <h3>Em construção</h3>
+            <ul class="pub-lista-estagio">
+              <li>Trilhas de aprendizagem progressivas por etapa</li>
+              <li>Catálogo de habilidades da BNCC Computação ligado às atividades</li>
+              <li>Computação desplugada com indicadores de acompanhamento</li>
+              <li>Planos de aula, avaliação por habilidades e relatórios por turma e rede</li>
+              <li>Modo offline (PWA) para laboratórios com conexão instável</li>
+              <li>Redes, escolas e turmas</li>
+            </ul>
+          </article>
+        </div>
+
+        <h3 class="mb-10">Metas do piloto (julho a dezembro de 2026)</h3>
+        <div class="pub-metricas">
+          <div class="pub-metrica"><strong>80%</strong><span>dos estudantes ativos semanalmente</span></div>
+          <div class="pub-metrica"><strong>70%</strong><span>de conclusão das trilhas iniciadas</span></div>
+          <div class="pub-metrica"><strong>60%</strong><span>de participação docente em formação continuada</span></div>
+          <div class="pub-metrica"><strong>100%</strong><span>das turmas com ao menos 1 atividade desplugada por semana</span></div>
+        </div>
+        <p class="pub-nota">Metas do edital. Os resultados serão divulgados ao final do piloto.</p>
+      </div>
+    </section>
+
+    <section class="pub-banda" aria-labelledby="titulo-comunidade">
+      <div class="pub-container">
+        <h2 id="titulo-comunidade">Projeto aberto: venha construir com a gente</h2>
+        <p>
+          Professores podem sugerir atividades e planos de aula. Desenvolvedores e designers podem contribuir
+          com código, acessibilidade e testes. Toda ajuda é bem-vinda.
+        </p>
+        <div class="pub-cta">
+          <a href="https://github.com/LMS-COMPASSO/lms/blob/main/CONTRIBUTING.md" class="btn btn-claro btn-grande" rel="noopener">Como contribuir</a>
+          <a href="https://github.com/LMS-COMPASSO/lms" class="btn btn-contorno-claro btn-grande" rel="noopener">Repositório no GitHub</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="pub-rodape">
+    <div class="pub-container">
+      <div class="pub-rodape-grade">
+        <div>
+          <img src="/img/logo-branco.svg" alt="LMS COMPASSO — BNCC Computação">
+          <p>Plataforma aberta para o ensino de Computação no Ensino Fundamental, alinhada à BNCC Computação.</p>
+        </div>
+        <nav aria-labelledby="rodape-plataforma">
+          <h2 id="rodape-plataforma">Plataforma</h2>
+          <ul>
+            <li><a href="/login.html">Entrar</a></li>
+            <li><a href="/registrar.html">Criar conta de aluno</a></li>
+            <li><a href="/atividades.html">Atividades dinâmicas</a></li>
+          </ul>
+        </nav>
+        <nav aria-labelledby="rodape-projeto">
+          <h2 id="rodape-projeto">Projeto</h2>
+          <ul>
+            <li><a href="https://github.com/LMS-COMPASSO/lms" rel="noopener">Código no GitHub</a></li>
+            <li><a href="https://github.com/LMS-COMPASSO/lms/tree/main/docs" rel="noopener">Documentação</a></li>
+            <li><a href="https://github.com/LMS-COMPASSO/lms/blob/main/LICENSE" rel="noopener">Licença MIT</a></li>
+          </ul>
+        </nav>
+      </div>
+      <p class="pub-rodape-fim">
+        Projeto de Inovação SUAP/IFMA nº 14246/2025 · Startup LMS COMPASSO · IFMA Campus Grajaú.
       </p>
     </div>
-  </div>
+  </footer>
 
   <script src="/js/config.js"></script>
   <script src="/js/api.js"></script>
   <script>
-    if (obterToken()) window.location.href = '/dashboard.html';
-
-    document.getElementById('form-login').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const alertaEl = document.getElementById('alerta');
-      alertaEl.classList.add('oculto');
-
-      const email = document.getElementById('email').value.trim();
-      const senha = document.getElementById('senha').value;
-
-      try {
-        const resposta = await api('/auth/login', {
-          method: 'POST',
-          body: JSON.stringify({ email, senha }),
-        });
-        salvarSessao(resposta.token, resposta.usuario);
-        window.location.href = resposta.usuario.perfil === 'aluno' ? '/cursos.html' : '/dashboard.html';
-      } catch (err) {
-        alertaEl.textContent = err.message;
-        alertaEl.classList.remove('oculto');
-      }
-    });
+    // Quem já tem sessão vai direto para a plataforma, sem passar pela tela de login.
+    const usuarioLogado = obterToken() ? obterUsuario() : null;
+    if (usuarioLogado) {
+      const destino = usuarioLogado.perfil === 'aluno' ? '/cursos.html' : '/dashboard.html';
+      const entrar = document.getElementById('acao-entrar');
+      entrar.href = destino;
+      entrar.textContent = 'Ir para a plataforma';
+      document.getElementById('acao-cadastrar').classList.add('oculto');
+      const cta = document.getElementById('cta-plataforma');
+      cta.href = destino;
+      cta.textContent = 'Ir para a plataforma';
+    }
   </script>
 </body>
 </html>

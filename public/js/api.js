@@ -48,7 +48,7 @@ function salvarSessao(token, usuario) {
 function encerrarSessao() {
   localStorage.removeItem('lms_token');
   localStorage.removeItem('lms_usuario');
-  window.location.href = '/index.html';
+  window.location.href = '/login.html';
 }
 
 /**
@@ -114,7 +114,7 @@ async function api(caminho, opcoes = {}) {
 function exigirAutenticacao(perfisPermitidos = null) {
   const usuario = obterUsuario();
   if (!obterToken() || !usuario) {
-    window.location.href = '/index.html';
+    window.location.href = '/login.html';
     return null;
   }
 
@@ -138,4 +138,15 @@ function formatarData(dataStr) {
   const dataFormatada = data.toLocaleDateString('pt-BR');
   const horaFormatada = data.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
   return `${dataFormatada} ${horaFormatada}`;
+}
+
+/**
+ * Escapa caracteres especiais de HTML para exibir com segurança textos cadastrados por usuários.
+ *
+ * @param {any} texto - Valor a ser exibido dentro de um HTML montado como texto.
+ * @returns {string} Texto sem tags ou aspas que possam ser interpretadas pelo navegador.
+ */
+function escaparHtml(texto) {
+  const substituicoes = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+  return String(texto ?? '').replace(/[&<>"']/g, (caractere) => substituicoes[caractere]);
 }
