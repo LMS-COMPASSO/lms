@@ -1,4 +1,4 @@
-# 📋 KANBAN GITHUB PROJECTS — LMS COMPASSO (BNCC COMPUTAÇÃO)
+# KANBAN GITHUB PROJECTS — LMS COMPASSO (BNCC COMPUTAÇÃO)
 
 > **Projeto de Inovação SUAP/IFMA nº 14246/2025**  
 > **Startup LMS COMPASSO — IFMA Campus Grajaú**  
@@ -7,17 +7,17 @@
 
 ---
 
-## 🎯 Visão Geral do Projeto e Quadro Kanban
+## Visão Geral do Projeto e Quadro Kanban
 
 Este documento estrutura o backlog completo de engenharia de software da **COMPASSO**, permitindo sua importação e acompanhamento direto no **GitHub Projects** (quadro Kanban / Tabela / Roadmap).
 
 ### Colunas Padrão do Quadro (Workflow de Trabalho)
 
-1. 📥 **Backlog:** Itens priorizados aguardando início do ciclo da sprint/milestone.
-2. 📋 **A Fazer (To Do):** Itens selecionados para a sprint corrente e prontos para desenvolvimento.
-3. ⚙️ **Em Progresso (In Progress):** Tarefas em desenvolvimento ativo.
-4. 🧪 **Revisão & QA (Review / In Test):** Código em Pull Request, validação por pares e testes automatizados.
-5. ✅ **Concluído (Done):** Tarefa aprovada em homologação, com testes passando e deploy efetuado.
+1. **Backlog:** Itens priorizados aguardando início do ciclo da sprint/milestone.
+2. **A Fazer (To Do):** Itens selecionados para a sprint corrente e prontos para desenvolvimento.
+3. **Em Progresso (In Progress):** Tarefas em desenvolvimento ativo.
+4. **Revisão & QA (Review / In Test):** Código em Pull Request, validação por pares e testes automatizados.
+5. **Concluído (Done):** Tarefa aprovada em homologação, com testes passando e deploy efetuado.
 
 ## 🏷️ Dicionário de Labels do GitHub Projects
 
