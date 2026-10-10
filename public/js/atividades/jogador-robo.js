@@ -291,11 +291,36 @@ export function jogadorRobo(atividade, ctx) {
       h(
         'div',
         { class: 'atv-acoes' },
-        h('button', { type: 'button', class: 'btn btn-primario', 'data-foco': 'executar', onclick: executar }, estado.animando ? '⏹ Parar' : '▶ Executar'),
-        h('button', { type: 'button', class: 'btn btn-neutro', 'data-foco': 'passo', disabled: estado.animando, onclick: passoAPasso }, '⏭ Passo a passo'),
-        h('button', { type: 'button', class: 'btn btn-neutro', 'data-foco': 'desfazer', disabled: bloqueado || !estado.programa.length, onclick: desfazer }, '↩ Desfazer'),
-        h('button', { type: 'button', class: 'btn btn-neutro', 'data-foco': 'limpar', disabled: bloqueado || !estado.programa.length, onclick: limpar }, '🗑 Limpar'),
-        h('button', { type: 'button', class: 'btn btn-neutro', 'data-foco': 'recomecar', onclick: recomecar }, 'Recomeçar'),
+        h(
+          'button',
+          { type: 'button', class: 'btn btn-primario flex-inline-icon', 'data-foco': 'executar', onclick: executar },
+          h('span', { class: 'material-symbols-outlined icon-xs' }, estado.animando ? 'stop' : 'play_arrow'),
+          estado.animando ? ' Parar' : ' Executar',
+        ),
+        h(
+          'button',
+          { type: 'button', class: 'btn btn-neutro flex-inline-icon', 'data-foco': 'passo', disabled: estado.animando, onclick: passoAPasso },
+          h('span', { class: 'material-symbols-outlined icon-xs' }, 'skip_next'),
+          ' Passo a passo',
+        ),
+        h(
+          'button',
+          { type: 'button', class: 'btn btn-neutro flex-inline-icon', 'data-foco': 'desfazer', disabled: bloqueado || !estado.programa.length, onclick: desfazer },
+          h('span', { class: 'material-symbols-outlined icon-xs' }, 'undo'),
+          ' Desfazer',
+        ),
+        h(
+          'button',
+          { type: 'button', class: 'btn btn-neutro flex-inline-icon', 'data-foco': 'limpar', disabled: bloqueado || !estado.programa.length, onclick: limpar },
+          h('span', { class: 'material-symbols-outlined icon-xs' }, 'delete'),
+          ' Limpar',
+        ),
+        h(
+          'button',
+          { type: 'button', class: 'btn btn-neutro flex-inline-icon', 'data-foco': 'recomecar', onclick: recomecar },
+          h('span', { class: 'material-symbols-outlined icon-xs' }, 'refresh'),
+          ' Recomeçar',
+        ),
       ),
     );
   }

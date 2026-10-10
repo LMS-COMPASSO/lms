@@ -164,7 +164,7 @@ export function gerarHtmlCertificado(cert) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Certificado - ${cert.aluno_nome} - LMS BNCC Computação</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Inter:wght@400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Inter:wght@400;500;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap');
     
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -198,6 +198,7 @@ export function gerarHtmlCertificado(cert) {
       text-decoration: none;
       transition: all 0.2s;
     }
+    .toolbar .material-symbols-outlined { font-size: 1.15rem; }
     .btn-voltar { background: #334155; color: #f8fafc; border: none; }
     .btn-voltar:hover { background: #475569; }
     .btn-imprimir { background: #2563eb; color: #fff; border: none; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); }
@@ -369,8 +370,8 @@ export function gerarHtmlCertificado(cert) {
 </head>
 <body>
   <div class="toolbar">
-    <button class="btn-voltar" onclick="window.close(); history.back();">← Voltar</button>
-    <button class="btn-imprimir" onclick="window.print()">Imprimir / Salvar em PDF</button>
+    <button class="btn-voltar" onclick="window.close(); history.back();"><span class="material-symbols-outlined">arrow_back</span> Voltar</button>
+    <button class="btn-imprimir" onclick="window.print()"><span class="material-symbols-outlined">print</span> Imprimir / Salvar em PDF</button>
   </div>
 
   <div class="certificate-wrapper">

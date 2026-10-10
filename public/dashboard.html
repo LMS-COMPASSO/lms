@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dashboard — LMS BNCC Computação</title>
 <link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
 <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
@@ -38,7 +41,7 @@
 
     const rotulosEventos = {
       matricula: (e) => `<strong>${e.usuario_nome}</strong> se matriculou em <strong>${e.curso_titulo}</strong>`,
-      conclusao: (e) => `<strong>${e.usuario_nome}</strong> concluiu o curso <strong>${e.curso_titulo}</strong> 🎉`,
+      conclusao: (e) => `<strong>${e.usuario_nome}</strong> concluiu o curso <strong>${e.curso_titulo}</strong> <span class="material-symbols-outlined icon-xs">military_tech</span>`,
       curso_publicado: (e) => `Curso <strong>${e.curso_titulo}</strong> foi publicado por ${e.usuario_nome}`,
       certificado: (e) => `Certificado emitido para <strong>${e.usuario_nome}</strong> (${e.curso_titulo})`,
     };

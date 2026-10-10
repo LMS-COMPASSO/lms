@@ -69,7 +69,7 @@ function cartaoDaAtividade(atividade) {
         'div',
         { class: 'atv-card-topo' },
         h('span', { class: 'pub-icone', 'aria-hidden': 'true' }, atividade.emoji),
-        concluida ? h('span', { class: 'atv-concluida' }, '✔ Concluída') : null,
+        concluida ? h('span', { class: 'atv-concluida flex-inline-icon' }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'check_circle'), ' Concluída') : null,
       ),
       h(TituloCartao, {}, atividade.titulo),
       h('p', {}, atividade.resumo),
@@ -185,7 +185,7 @@ function painelDoProfessor(atividade) {
       professor.observacao ? h('p', { class: 'atv-aviso' }, professor.observacao) : null,
       h('h3', {}, 'Versão desplugada (sem tela)'),
       h('p', {}, professor.desplugada),
-      h('p', { class: 'mt-10' }, h('button', { type: 'button', class: 'btn btn-neutro btn-sm', onclick: () => imprimirFichas(atividade) }, '🖨️ Imprimir fichas (A4)')),
+      h('p', { class: 'mt-10' }, h('button', { type: 'button', class: 'btn btn-neutro btn-sm flex-inline-icon', onclick: () => imprimirFichas(atividade) }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'print'), ' Imprimir fichas (A4)')),
       h('h3', {}, 'Para conversar em sala'),
       h('ul', {}, professor.conversa.map((pergunta) => h('li', {}, pergunta))),
     ),
@@ -204,7 +204,7 @@ function renderAtividade(atividade) {
     const proxima = ATIVIDADES[ATIVIDADES.findIndex((item) => item.id === atividade.id) + 1];
     const acoes = [
       proxima
-        ? h('a', { class: 'btn btn-primario', href: `/atividades.html?id=${encodeURIComponent(proxima.id)}` }, 'Próxima atividade →')
+        ? h('a', { class: 'btn btn-primario flex-inline-icon', href: `/atividades.html?id=${encodeURIComponent(proxima.id)}` }, 'Próxima atividade', h('span', { class: 'material-symbols-outlined icon-xs' }, 'arrow_forward'))
         : null,
       h('a', { class: 'btn btn-neutro', href: '/atividades.html' }, 'Ver todas as atividades'),
     ];
@@ -215,7 +215,7 @@ function renderAtividade(atividade) {
       aulaSincronizada = true;
       try {
         await api(`/aulas/${aulaId}/progresso`, { method: 'POST', body: JSON.stringify({ concluida: true }) });
-        avisos.push(h('p', { class: 'atv-feedback sucesso' }, '✔ A aula foi marcada como concluída no seu curso.'));
+        avisos.push(h('p', { class: 'atv-feedback sucesso flex-inline-icon' }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'check_circle'), ' A aula foi marcada como concluída no seu curso.'));
       } catch (erro) {
         avisos.push(h('p', { class: 'atv-feedback erro' }, `Não foi possível marcar a aula como concluída no curso: ${erro.message}`));
       }
@@ -231,8 +231,8 @@ function renderAtividade(atividade) {
 
   raiz.replaceChildren(
     usuario && cursoId
-      ? h('a', { class: 'atv-voltar', href: `/curso-detalhe.html?id=${cursoId}` }, '← Voltar ao curso')
-      : h('a', { class: 'atv-voltar', href: '/atividades.html' }, '← Todas as atividades'),
+      ? h('a', { class: 'atv-voltar flex-inline-icon', href: `/curso-detalhe.html?id=${cursoId}` }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'arrow_back'), ' Voltar ao curso')
+      : h('a', { class: 'atv-voltar flex-inline-icon', href: '/atividades.html' }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'arrow_back'), ' Todas as atividades'),
     h(
       'ul',
       { class: 'atv-chips' },

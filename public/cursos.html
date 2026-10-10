@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cursos — LMS BNCC Computação</title>
 <link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
 <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
@@ -29,7 +32,7 @@
             </select>
             <input type="text" id="busca" class="max-w-220" title="Buscar curso por título ou palavra-chave" aria-label="Buscar curso" placeholder="Buscar curso...">
           </div>
-          <button type="button" class="btn btn-primario oculto-aluno" onclick="abrirModalCurso()">+ Novo Curso</button>
+          <button type="button" class="btn btn-primario flex-inline-icon oculto-aluno" onclick="abrirModalCurso()"><span class="material-symbols-outlined icon-xs">add</span> Novo Curso</button>
         </div>
       </div>
 
@@ -120,11 +123,11 @@
               </div>
               <h3 class="mt-8 mb-10">${c.titulo}</h3>
               <p class="texto-suave">${c.descricao || 'Sem descrição.'}</p>
-              <p class="texto-suave">
-                📘 ${c.eixo_bncc}<br>
-                🏫 ${c.ano_escolar} · 👨‍🏫 ${c.instrutor_nome}<br>
-                👥 ${c.total_matriculados || 0} matriculado(s)
-              </p>
+              <div class="curso-meta-info texto-suave">
+                <div><span class="material-symbols-outlined icon-xs">category</span> <span>${c.eixo_bncc}</span></div>
+                <div><span class="material-symbols-outlined icon-xs">school</span> <span>${c.ano_escolar}</span> · <span class="material-symbols-outlined icon-xs">person</span> <span>${c.instrutor_nome}</span></div>
+                <div><span class="material-symbols-outlined icon-xs">group</span> <span>${c.total_matriculados || 0} matriculado(s)</span></div>
+              </div>
               <div class="flex-linha flex-wrap mt-10">
                 <a href="/curso-detalhe.html?id=${c.id}" class="btn btn-neutro btn-sm">Abrir</a>
                 ${usuario.perfil !== 'aluno' ? `
