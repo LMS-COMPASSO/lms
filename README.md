@@ -1,13 +1,8 @@
-<div align="center">
+# LMS BNCC Computação
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="public/img/logo-icone-branco.svg">
-  <img src="public/img/logo-icone.svg" alt="Ícone do LMS COMPASSO" width="112" height="112">
-</picture>
+![Ícone do LMS COMPASSO](public/img/logo-icone.svg)
 
-<h1>LMS BNCC Computação</h1>
-
-<strong>LMS COMPASSO</strong> · Computação na Educação Básica, alinhada à BNCC
+**LMS COMPASSO** · Computação na Educação Básica, alinhada à BNCC
 
 [![Cloudflare Workers](https://img.shields.io/badge/Cloudflare-Workers-F38020?logo=cloudflare&logoColor=white)](https://workers.cloudflare.com/)
 [![Cloudflare D1](https://img.shields.io/badge/Database-Cloudflare%20D1-orange?logo=sqlite&logoColor=white)](https://developers.cloudflare.com/d1/)
@@ -15,8 +10,6 @@
 [![Status Produção](https://img.shields.io/badge/Status-Online%20em%20Produção-22c55e)](https://lms.thedelacosta.workers.dev/)
 [![CI](https://github.com/LMS-COMPASSO/lms/actions/workflows/ci.yml/badge.svg)](https://github.com/LMS-COMPASSO/lms/actions/workflows/ci.yml)
 [![Licença MIT](https://img.shields.io/badge/Licen%C3%A7a-MIT-blue.svg)](LICENSE)
-
-</div>
 
 Plataforma aberta de Gestão de Aprendizagem (LMS) orientada à implementação das diretrizes da **Base Nacional Comum Curricular (BNCC) para a Computação** (Resolução CNE/CP nº 1/2022) na Educação Básica e Redes Municipais de Ensino.
 
@@ -30,29 +23,26 @@ Acesse o ambiente oficial em produção na Cloudflare:
 
 **[https://lms.thedelacosta.workers.dev/](https://lms.thedelacosta.workers.dev/)**
 
-<div align="center">
+[![QR Code para acessar o LMS COMPASSO em lms.thedelacosta.workers.dev](docs/img/qrcode-site.svg)](https://lms.thedelacosta.workers.dev/)
 
-<a href="https://lms.thedelacosta.workers.dev/">
-  <img src="docs/img/qrcode-site.svg" alt="QR Code para acessar o LMS COMPASSO em lms.thedelacosta.workers.dev" width="200" height="200">
-</a>
-
-<sub>Aponte a câmera do celular para o QR Code e acesse o sistema.</sub>
-
-</div>
+*Aponte a câmera do celular para o QR Code e acesse o sistema diretamente.*
 
 ---
 
 ## Principais Recursos
 
 - **Alinhamento Integral à BNCC Computação:** Cursos organizados nos 3 eixos fundamentais (*Pensamento Computacional*, *Mundo Digital* e *Cultura Digital*), com segmentação para o Ensino Fundamental I (1º ao 5º ano) e Ensino Fundamental II (6º ao 9º ano).
+- **Design Responsivo e Acessibilidade:** Interface totalmente auditada e adaptável (Mobile 320px+, Tablet 768px+, Desktop 1200px+), com barra lateral retrátil (drawer com backdrop para toque móvel), navegação por teclado e sem transbordamento de tabelas ou grids.
+- **Tipografia e Ícones Google Material Symbols:** Substituição completa de emojis por ícones vetoriais modernos do Google Fonts ([Material Symbols Outlined](https://fonts.google.com/icons)), garantindo alinhamento ótico uniforme em qualquer sistema operacional.
 - **Controle de Acesso por Perfil (RBAC):** Níveis diferenciados para Administradores da Secretaria Municipal, Instrutores/Professores e Alunos.
 - **Dashboard Administrativo:** Indicadores de engajamento escolar em tempo real, matrículas ativas, taxa de conclusão e linha do tempo de atividades pedagógicas.
 - **Sala de Aula Interativa:** Módulos sequenciais, aulas multimídia (texto, vídeo, links) e cálculo de progresso por aula.
 - **Avaliações com Correção Automática:** Questionários de múltipla escolha com cálculo imediato de notas e controle de tentativas.
-- **Atividades Dinâmicas Interativas:** Página /atividades.html com jogos de sequenciamento de algoritmos, decomposição de problemas e programação de robô, que funcionam sem login e podem ser vinculados às aulas dos cursos.
+- **Atividades Dinâmicas Interativas:** Página `/atividades.html` com jogos de sequenciamento de algoritmos, decomposição de problemas e programação de robô no mapa, que funcionam no navegador sem login e podem ser vinculados às aulas dos cursos.
 - **Certificados Digitais com Validação Pública:** Emissão instantânea com indicação de carga horária e eixo BNCC, layout pronto para impressão A4 e código verificador consultável pela Secretaria.
 - **Segurança de Credenciais:** Senhas com PBKDF2-SHA256 e salt individual, tokens JWT com expiração de 8 horas e segredo de assinatura mantido em Cloudflare Secrets (nunca versionado).
-- **Frontend Leve e Nativo:** Construído em HTML5, CSS Vanilla e JS nativo — entregue com máxima velocidade diretamente pelo CDN Edge da Cloudflare.
+- **Suíte de Testes Automatizados:** 50 testes automatizados cobrindo criptografia, ciclo de vida de tokens JWT, migração legada de senhas e toda a lógica pedagógica e de solução das atividades dinâmicas.
+- **Frontend Leve e Nativo:** Construído em HTML5, CSS Vanilla e JS nativo — entregue com máxima velocidade diretamente pelo CDN Edge da Cloudflare sem frameworks pesados.
 
 ---
 
