@@ -1,4 +1,13 @@
-# LMS BNCC Computação
+<div align="center">
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="public/img/logo-icone-branco.svg">
+  <img src="public/img/logo-icone.svg" alt="Ícone do LMS COMPASSO" width="112" height="112">
+</picture>
+
+<h1>LMS BNCC Computação</h1>
+
+<strong>LMS COMPASSO</strong> · Computação na Educação Básica, alinhada à BNCC
 
 [![Cloudflare Workers](https://img.shields.io/badge/Cloudflare-Workers-F38020?logo=cloudflare&logoColor=white)](https://workers.cloudflare.com/)
 [![Cloudflare D1](https://img.shields.io/badge/Database-Cloudflare%20D1-orange?logo=sqlite&logoColor=white)](https://developers.cloudflare.com/d1/)
@@ -6,6 +15,8 @@
 [![Status Produção](https://img.shields.io/badge/Status-Online%20em%20Produção-22c55e)](https://lms.thedelacosta.workers.dev/)
 [![CI](https://github.com/LMS-COMPASSO/lms/actions/workflows/ci.yml/badge.svg)](https://github.com/LMS-COMPASSO/lms/actions/workflows/ci.yml)
 [![Licença MIT](https://img.shields.io/badge/Licen%C3%A7a-MIT-blue.svg)](LICENSE)
+
+</div>
 
 Plataforma aberta de Gestão de Aprendizagem (LMS) orientada à implementação das diretrizes da **Base Nacional Comum Curricular (BNCC) para a Computação** (Resolução CNE/CP nº 1/2022) na Educação Básica e Redes Municipais de Ensino.
 
@@ -18,6 +29,16 @@ O sistema opera sobre uma arquitetura moderna **Edge Fullstack Serverless** na *
 Acesse o ambiente oficial em produção na Cloudflare:
 
 **[https://lms.thedelacosta.workers.dev/](https://lms.thedelacosta.workers.dev/)**
+
+<div align="center">
+
+<a href="https://lms.thedelacosta.workers.dev/">
+  <img src="docs/img/qrcode-site.svg" alt="QR Code para acessar o LMS COMPASSO em lms.thedelacosta.workers.dev" width="200" height="200">
+</a>
+
+<sub>Aponte a câmera do celular para o QR Code e acesse o sistema.</sub>
+
+</div>
 
 ---
 
