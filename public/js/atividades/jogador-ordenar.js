@@ -118,22 +118,22 @@ export function jogadorOrdenar(atividade, ctx) {
     if (resultado) {
       if (idsIntrusos.has(id)) {
         classe += ' atv-intruso';
-        marca = '✖ Não faz parte';
+        marca = h('span', { class: 'atv-marca flex-inline-icon' }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'close'), ' Não faz parte');
       } else if (resultado.foraDoLugar.includes(id)) {
         classe += ' atv-fora';
-        marca = '⚠ Fora do lugar';
+        marca = h('span', { class: 'atv-marca flex-inline-icon' }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'warning'), ' Fora do lugar');
       } else {
         classe += ' atv-certo';
-        marca = '✔ No lugar';
+        marca = h('span', { class: 'atv-marca flex-inline-icon' }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'check_circle'), ' No lugar');
       }
     }
 
     const controles = estado.concluida ? null : h(
       'span',
       { class: 'atv-item-controles' },
-      h('button', { type: 'button', class: 'atv-controle', 'data-foco': `sobe-${id}`, 'aria-label': `Mover para cima: ${passo.texto}`, disabled: indice === 0, onclick: () => mover(id, -1) }, '↑'),
-      h('button', { type: 'button', class: 'atv-controle', 'data-foco': `desce-${id}`, 'aria-label': `Mover para baixo: ${passo.texto}`, disabled: indice === estado.sequencia.length - 1, onclick: () => mover(id, 1) }, '↓'),
-      h('button', { type: 'button', class: 'atv-controle', 'data-foco': `remover-${id}`, 'aria-label': `Remover: ${passo.texto}`, onclick: () => remover(id) }, '✕'),
+      h('button', { type: 'button', class: 'atv-controle', 'data-foco': `sobe-${id}`, 'aria-label': `Mover para cima: ${passo.texto}`, disabled: indice === 0, onclick: () => mover(id, -1) }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'arrow_upward')),
+      h('button', { type: 'button', class: 'atv-controle', 'data-foco': `desce-${id}`, 'aria-label': `Mover para baixo: ${passo.texto}`, disabled: indice === estado.sequencia.length - 1, onclick: () => mover(id, 1) }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'arrow_downward')),
+      h('button', { type: 'button', class: 'atv-controle', 'data-foco': `remover-${id}`, 'aria-label': `Remover: ${passo.texto}`, onclick: () => remover(id) }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'close')),
     );
 
     return h(
@@ -144,7 +144,7 @@ export function jogadorOrdenar(atividade, ctx) {
         { class: 'atv-item-texto' },
         h('span', { class: 'atv-emoji', 'aria-hidden': 'true' }, passo.emoji),
         passo.texto,
-        marca ? h('span', { class: 'atv-marca' }, marca) : null,
+        marca,
       ),
       controles,
     );
@@ -173,9 +173,9 @@ export function jogadorOrdenar(atividade, ctx) {
         h(
           'div',
           { class: 'atv-acoes' },
-          h('button', { type: 'button', class: 'btn btn-primario', 'data-foco': 'verificar', disabled: estado.concluida || !estado.sequencia.length, onclick: verificar }, 'Verificar'),
-          h('button', { type: 'button', class: 'btn btn-neutro', 'data-foco': 'dica', disabled: estado.concluida, onclick: () => feedback.info('Dica', atividade.dica) }, 'Quero uma dica'),
-          h('button', { type: 'button', class: 'btn btn-neutro', 'data-foco': 'recomecar', onclick: recomecar }, 'Recomeçar'),
+          h('button', { type: 'button', class: 'btn btn-primario flex-inline-icon', 'data-foco': 'verificar', disabled: estado.concluida || !estado.sequencia.length, onclick: verificar }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'check'), ' Verificar'),
+          h('button', { type: 'button', class: 'btn btn-neutro flex-inline-icon', 'data-foco': 'dica', disabled: estado.concluida, onclick: () => feedback.info('Dica', atividade.dica) }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'lightbulb'), ' Quero uma dica'),
+          h('button', { type: 'button', class: 'btn btn-neutro flex-inline-icon', 'data-foco': 'recomecar', onclick: recomecar }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'refresh'), ' Recomeçar'),
         ),
       ],
       foco,
