@@ -87,7 +87,10 @@ test('verifyJwt rejects invalid time claims and JWT headers', async (t) => {
 
 test('verifyJwt rejects an invalid signature', async () => {
   const token = await signJwt({ id: 7 }, segredo);
-  const tamperedToken = `${token.slice(0, -1)}${token.endsWith('a') ? 'b' : 'a'}`;
+  // Adultera o PRIMEIRO caractere da assinatura: nele os 6 bits contam. No último caractere de um
+  // HMAC-SHA256 em Base64URL só 4 bits contam, então trocá-lo às vezes não altera os bytes (teste instável).
+  const [cabecalho, dados, assinatura] = token.split('.');
+  const tamperedToken = `${cabecalho}.${dados}.${assinatura[0] === 'A' ? 'B' : 'A'}${assinatura.slice(1)}`;
 
   await assert.rejects(verifyJwt(tamperedToken, segredo), /inválido ou expirado/);
 });
