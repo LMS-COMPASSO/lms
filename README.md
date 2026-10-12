@@ -23,7 +23,9 @@ Acesse o ambiente oficial em produção na Cloudflare:
 
 **[https://lms.thedelacosta.workers.dev/](https://lms.thedelacosta.workers.dev/)**
 
-[![QR Code para acessar o LMS COMPASSO em lms.thedelacosta.workers.dev](docs/img/qrcode-site.svg)](https://lms.thedelacosta.workers.dev/)
+<a href="https://lms.thedelacosta.workers.dev/">
+  <img src="docs/img/qrcode-site.svg" alt="QR Code para acessar o LMS COMPASSO em lms.thedelacosta.workers.dev" width="180" height="180">
+</a>
 
 *Aponte a câmera do celular para o QR Code e acesse o sistema diretamente.*
 
