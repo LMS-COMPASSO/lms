@@ -100,19 +100,37 @@
     let dadosGamificacao = null;
 
     async function carregarMedalhas() {
+      const grade = document.getElementById('grade-medalhas');
+      const textoProgresso = document.getElementById('progresso-medalhas-texto');
+      const barra = document.getElementById('barra-progresso-medalhas');
+
       try {
+        grade.innerHTML = '<p class="texto-suave flex-inline-icon"><span class="material-symbols-outlined icon-spin icon-xs">sync</span> Carregando conquistas...</p>';
+
         // Tenta avaliar conquistas automáticas antes de listar
         try { await api('/gamificacao/avaliar', { method: 'POST' }); } catch {}
 
         dadosGamificacao = await api('/gamificacao/medalhas');
-        renderizarMedalhas(dadosGamificacao.medalhas);
+        renderizarMedalhas(dadosGamificacao.medalhas || []);
 
-        const { total, conquistadas, percentualConclusao } = dadosGamificacao.resumo;
-        document.getElementById('progresso-medalhas-texto').textContent =
+        const { total = 0, conquistadas = 0, percentualConclusao = 0 } = dadosGamificacao.resumo || {};
+        textoProgresso.textContent =
           `${conquistadas} de ${total} medalhas conquistadas (${percentualConclusao}% de domínio dos eixos da BNCC)`;
-        document.getElementById('barra-progresso-medalhas').style.width = `${percentualConclusao}%`;
+        barra.style.width = `${percentualConclusao}%`;
       } catch (err) {
-        document.getElementById('grade-medalhas').innerHTML = `<p class="texto-suave">Não foi possível carregar as medalhas: ${err.message}</p>`;
+        console.warn('Erro ao carregar medalhas:', err);
+        grade.innerHTML = `
+          <div style="grid-column: 1 / -1; background: #f8fafc; border: 1px dashed var(--cor-borda); border-radius: var(--raio-medio); padding: 24px; text-align: center;">
+            <span class="material-symbols-outlined" style="font-size: 36px; color: var(--cor-texto-suave);">military_tech</span>
+            <p style="margin: 8px 0 4px; font-weight: 600; color: var(--cor-texto);">Conquistas e Selos da BNCC</p>
+            <p class="texto-suave" style="font-size: 0.875rem; margin-bottom: 14px;">As medalhas ainda estão sendo sincronizadas com o banco de dados.</p>
+            <button type="button" class="btn btn-sm btn-primario" onclick="carregarMedalhas()">
+              <span class="material-symbols-outlined icon-xs">refresh</span> Sincronizar Agora
+            </button>
+          </div>
+        `;
+        textoProgresso.textContent = 'Carregamento pendente';
+        barra.style.width = '0%';
       }
     }
 
