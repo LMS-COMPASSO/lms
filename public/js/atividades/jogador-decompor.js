@@ -7,6 +7,7 @@
 import { h, anunciar, criarFeedback, renderizarComFoco } from './dom.js';
 import { avaliarClassificacao, embaralharDiferente, plural } from './logica.js';
 import { tocarSom, criarBotaoSom } from './som.js';
+import { renderizarIcone } from './icones.js';
 
 export function jogadorDecompor(atividade, ctx) {
   const tarefas = new Map(atividade.tarefas.map((tarefa) => [tarefa.id, tarefa]));
@@ -176,7 +177,7 @@ export function jogadorDecompor(atividade, ctx) {
       h(
         'div',
         { class: 'atv-parte-cabecalho' },
-        h('h4', {}, h('span', { 'aria-hidden': 'true' }, parte.emoji), ` ${parte.titulo}`),
+        h('h4', { class: 'atv-parte-titulo-flex' }, renderizarIcone(parte.id || parte.emoji, { classe: 'atv-parte-icone' }), h('span', {}, parte.titulo)),
         h('span', { class: 'atv-parte-count' }, `${ids.length} ${plural(ids.length, 'item', 'itens')}`),
       ),
       h(
@@ -215,13 +216,14 @@ export function jogadorDecompor(atividade, ctx) {
             atividade.partes.map((parte) => h(
               'li',
               {},
-              `${parte.emoji} ${parte.titulo}`,
+              renderizarIcone(parte.id || parte.emoji, { classe: 'icon-xs', fallback: 'folder' }),
+              ` ${parte.titulo}`,
               h('ul', {}, atividade.tarefas.filter((tarefa) => tarefa.parte === parte.id).map((tarefa) => h('li', {}, tarefa.texto))),
             )),
           ),
         ),
         temDescarte
-          ? h('li', {}, `🗑️ ${atividade.descarteTitulo}: ${atividade.tarefas.filter((tarefa) => tarefa.parte === 'fora').map((tarefa) => tarefa.texto).join('; ')}`)
+          ? h('li', {}, renderizarIcone('fora', { classe: 'icon-xs' }), ` ${atividade.descarteTitulo}: ${atividade.tarefas.filter((tarefa) => tarefa.parte === 'fora').map((tarefa) => tarefa.texto).join('; ')}`)
           : null,
       ),
     );
@@ -264,7 +266,7 @@ export function jogadorDecompor(atividade, ctx) {
         h(
           'div',
           { class: 'atv-problema' },
-          h('span', { class: 'atv-emoji', 'aria-hidden': 'true' }, '🎯'),
+          renderizarIcone('problema', { classe: 'atv-problema-icone' }),
           h('span', {}, 'Problema: ', h('strong', {}, atividade.problema)),
         ),
         h(

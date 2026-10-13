@@ -1218,6 +1218,167 @@
   background: var(--pub-fundo-alt);
 }
 
+/* ============================================================================
+   SISTEMA DE ÍCONES VETORIAIS E TOKENS VISUAIS (SUBSTITUIÇÃO DE EMOJIS)
+   ============================================================================ */
+
+.atv-icone-simbolo {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  vertical-align: middle;
+  user-select: none;
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Tamanhos Padronizados */
+.icon-xs { font-size: 16px; width: 16px; height: 16px; }
+.icon-sm { font-size: 20px; width: 20px; height: 20px; }
+.icon-md { font-size: 24px; width: 24px; height: 24px; }
+.icon-lg { font-size: 32px; width: 32px; height: 32px; }
+.icon-xl { font-size: 40px; width: 40px; height: 40px; }
+
+/* Paleta de Cores Semânticas com Alto Contraste (WCAG AA) */
+.cor-robo { color: #0284c7; }
+.cor-meta { color: #2563eb; }
+.cor-arvore, .cor-natureza, .cor-planta { color: #16a34a; }
+.cor-poca { color: #0284c7; }
+.cor-obra { color: #d97706; }
+.cor-pedra { color: #64748b; }
+.cor-fruta { color: #dc2626; }
+.cor-mochila { color: #7c3aed; }
+.cor-padaria, .cor-cafe { color: #b45309; }
+.cor-saude { color: #0891b2; }
+.cor-aviso { color: #d97706; }
+.cor-comida { color: #ea580c; }
+.cor-festa { color: #db2777; }
+.cor-jogo { color: #7c3aed; }
+.cor-pesquisa { color: #4f46e5; }
+.cor-geometria { color: #0284c7; }
+.cor-labirinto { color: #059669; }
+.cor-estrela { color: #d97706; }
+.cor-descarte, .cor-erro { color: #dc2626; }
+.cor-item { color: #d97706; }
+.cor-padrao { color: #475569; }
+
+/* Ícones de Passos e Tarefas */
+.atv-passo-icone,
+.atv-item-icone,
+.atv-parte-icone {
+  font-size: 1.45rem;
+  line-height: 1;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.atv-passo .atv-passo-icone {
+  margin-right: 2px;
+}
+
+.atv-problema-icone {
+  font-size: 1.6rem;
+  line-height: 1;
+  color: var(--pub-azul-700);
+  flex-shrink: 0;
+}
+
+.atv-parte-titulo-flex {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+
+.atv-card .pub-icone .atv-icone-simbolo {
+  font-size: 28px;
+}
+
+/* Destaques de Alto Contraste na Arena Escura do Robô */
+.atv-arena-wrapper .atv-icone-simbolo.cor-robo { color: #38bdf8; }
+.atv-arena-wrapper .atv-icone-simbolo.cor-meta { color: #34d399; }
+.atv-arena-wrapper .atv-icone-simbolo.cor-arvore { color: #4ade80; }
+.atv-arena-wrapper .atv-icone-simbolo.cor-poca { color: #38bdf8; }
+.atv-arena-wrapper .atv-icone-simbolo.cor-obra { color: #fbbf24; }
+.atv-arena-wrapper .atv-icone-simbolo.cor-pedra { color: #94a3b8; }
+.atv-arena-wrapper .atv-icone-simbolo.cor-item { color: #fbbf24; }
+.atv-arena-wrapper .atv-icone-simbolo.cor-mochila { color: #c084fc; }
+.atv-arena-wrapper .atv-icone-simbolo.cor-fruta { color: #f87171; }
+.atv-arena-wrapper .atv-icone-simbolo.cor-padaria { color: #fcd34d; }
+.atv-arena-wrapper .atv-icone-simbolo.cor-planta { color: #4ade80; }
+
+.atv-celula-glyph {
+  font-size: clamp(1.4rem, 4vw, 2.2rem);
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.atv-celula-game:hover .atv-celula-glyph {
+  transform: scale(1.1);
+}
+
+.atv-robo-corpo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.atv-robo-corpo .atv-icone-simbolo {
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  color: #38bdf8;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+}
+
+.badge-legenda {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.badge-legenda .atv-icone-simbolo {
+  font-size: 1.15rem;
+}
+
+/* Impressão Desplugada com Ícones Vetoriais */
+.folha-icone {
+  font-size: 16pt;
+  vertical-align: middle;
+  margin-right: 2mm;
+  color: #000;
+}
+.folha-celula .atv-celula-glyph {
+  font-size: 18pt;
+  color: #000;
+}
+.folha-cartao .atv-icone-simbolo {
+  font-size: 16pt;
+  color: #000;
+}
+.folha-legenda {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4mm;
+  font-size: 10pt;
+  margin: 4mm 0;
+}
+.folha-legenda .atv-icone-simbolo {
+  font-size: 12pt;
+}
+
 /* ---------- Responsividade ---------- */
 @media (max-width: 960px) {
   .blocos-grade-principal {

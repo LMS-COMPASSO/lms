@@ -22,6 +22,10 @@ import {
   plural,
   registrarConclusao,
 } from '../public/js/atividades/logica.js';
+import {
+  DICIONARIO_ICONES,
+  obterInfoIcone,
+} from '../public/js/atividades/icones.js';
 
 const porTipo = (tipo) => ATIVIDADES.filter((atividade) => atividade.tipo === tipo);
 
@@ -348,4 +352,38 @@ test('atividades de programação em blocos têm metas válidas e blocos dispon�
     }
   }
 });
+
+test('o dicionário de ícones vetoriais mapeia todas as atividades sem depender de emojis', () => {
+  assert.ok(Object.keys(DICIONARIO_ICONES).length >= 50);
+
+  for (const atividade of ATIVIDADES) {
+    const info = obterInfoIcone(atividade.id);
+    assert.notEqual(info.icone, 'category', `Atividade ${atividade.id} está sem ícone mapeado no dicionário`);
+    assert.ok(typeof info.icone === 'string' && info.icone.length > 0);
+    assert.ok(typeof info.cor === 'string' && info.cor.startsWith('cor-'));
+  }
+});
+
+test('o dicionário de ícones cobre elementos de tabuleiro, passos e partes de problemas', () => {
+  // Tabuleiro e arena
+  assert.equal(obterInfoIcone('R').icone, 'smart_toy');
+  assert.equal(obterInfoIcone('M').icone, 'school');
+  assert.equal(obterInfoIcone('#').icone, 'park');
+  assert.equal(obterInfoIcone('I').icone, 'stars');
+
+  // Passos de ordenação
+  assert.equal(obterInfoIcone('pegar').icone, 'pan_tool_alt');
+  assert.equal(obterInfoIcone('escovar').icone, 'dentistry');
+  assert.equal(obterInfoIcone('atravessar').icone, 'directions_walk');
+
+  // Partes de decomposição
+  assert.equal(obterInfoIcone('problema').icone, 'track_changes');
+  assert.equal(obterInfoIcone('fora').icone, 'delete_outline');
+
+  // Fallback seguro para IDs desconhecidos
+  const fallback = obterInfoIcone('id-inexistente-xyz');
+  assert.equal(fallback.icone, 'category');
+  assert.equal(fallback.cor, 'cor-padrao');
+});
+
 

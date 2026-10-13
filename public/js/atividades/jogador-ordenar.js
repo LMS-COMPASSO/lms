@@ -7,6 +7,7 @@
 import { h, anunciar, criarFeedback, renderizarComFoco } from './dom.js';
 import { avaliarOrdem, embaralharDiferente, plural } from './logica.js';
 import { tocarSom, criarBotaoSom } from './som.js';
+import { renderizarIcone } from './icones.js';
 
 export function jogadorOrdenar(atividade, ctx) {
   const todos = [...atividade.passos, ...(atividade.intrusos || [])];
@@ -130,7 +131,7 @@ export function jogadorOrdenar(atividade, ctx) {
     return h(
       'button',
       { type: 'button', class: 'atv-passo', 'data-foco': `banco-${id}`, disabled: estado.concluida, onclick: () => adicionar(id) },
-      h('span', { class: 'atv-emoji', 'aria-hidden': 'true' }, passo.emoji),
+      renderizarIcone(passo.id || passo.emoji, { classe: 'atv-passo-icone' }),
       passo.texto,
     );
   }
@@ -168,7 +169,7 @@ export function jogadorOrdenar(atividade, ctx) {
       h(
         'span',
         { class: 'atv-item-texto' },
-        h('span', { class: 'atv-emoji', 'aria-hidden': 'true' }, passo.emoji),
+        renderizarIcone(passo.id || passo.emoji, { classe: 'atv-item-icone' }),
         h('strong', { class: 'atv-item-pos' }, `${indice + 1}º `),
         passo.texto,
         marca,

@@ -24,6 +24,7 @@ import {
   plural,
 } from './logica.js';
 import { tocarSom, alternarSom as alternarSomModulo, somAtivo } from './som.js';
+import { renderizarIcone, renderizarIconeCelula } from './icones.js';
 
 // Mapeamento de ângulos de rotação em graus por direção
 const ANGULOS_DIRECAO = {
@@ -542,17 +543,17 @@ export function jogadorRobo(atividade, ctx) {
         const chave = `${x},${y}`;
         const isRoboAqui = x === posicao.x && y === posicao.y;
         const classes = ['atv-celula-game'];
-        let conteudo = '';
+        let iconeElemento = null;
 
         if (mapa.obstaculos.has(chave)) {
           classes.push('obstaculo');
-          conteudo = tema.obstaculo;
+          iconeElemento = renderizarIconeCelula('#', tema);
         } else if (x === mapa.meta.x && y === mapa.meta.y) {
           classes.push('meta');
-          conteudo = tema.meta;
+          iconeElemento = renderizarIconeCelula('M', tema);
         } else if (mapa.itens.some((item) => item.x === x && item.y === y) && !coletados.has(chave)) {
           classes.push('item-coletavel');
-          conteudo = tema.item;
+          iconeElemento = renderizarIconeCelula('I', tema);
         }
 
         if (x === mapa.inicio.x && y === mapa.inicio.y) classes.push('inicio');
@@ -568,7 +569,7 @@ export function jogadorRobo(atividade, ctx) {
               'aria-hidden': 'true',
             },
             h('span', { class: 'atv-celula-coord' }, `${x},${y}`),
-            h('span', { class: 'atv-celula-icone' }, conteudo),
+            iconeElemento ? h('span', { class: 'atv-celula-icone' }, iconeElemento) : null,
           ),
         );
       }
@@ -602,17 +603,17 @@ export function jogadorRobo(atividade, ctx) {
             style: `left: ${leftPct}%; top: ${topPct}%; width: ${widthPct}%; height: ${heightPct}%; transform: rotate(${estado.anguloRobo}deg);`,
           },
           h('div', { class: 'atv-robo-farol' }),
-          h('div', { class: 'atv-robo-corpo' }, tema.robo),
+          h('div', { class: 'atv-robo-corpo' }, renderizarIcone('smart_toy', { classe: 'cor-robo' })),
           h('div', { class: 'atv-robo-aura' }),
         ),
       ),
       h(
         'div',
         { class: 'atv-legenda-game' },
-        h('span', { class: 'badge-legenda' }, `${tema.robo} Robô`),
-        h('span', { class: 'badge-legenda' }, `${tema.meta} ${tema.nomeMeta || 'Destino'}`),
-        tema.item ? h('span', { class: 'badge-legenda' }, `${tema.item} ${tema.nomeItem || 'Coletável'}`) : null,
-        h('span', { class: 'badge-legenda' }, `${tema.obstaculo} ${tema.nomeObstaculo || 'Obstáculo'}`),
+        h('span', { class: 'badge-legenda' }, renderizarIcone('smart_toy', { classe: 'cor-robo icon-sm' }), ' Robô'),
+        h('span', { class: 'badge-legenda' }, renderizarIconeCelula('M', tema), ` ${tema.nomeMeta || 'Destino'}`),
+        tema.item ? h('span', { class: 'badge-legenda' }, renderizarIconeCelula('I', tema), ` ${tema.nomeItem || 'Coletável'}`) : null,
+        h('span', { class: 'badge-legenda' }, renderizarIconeCelula('#', tema), ` ${tema.nomeObstaculo || 'Obstáculo'}`),
       ),
     );
   }
