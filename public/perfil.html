@@ -16,25 +16,48 @@
     <main class="conteudo">
       <div id="topbar-container"></div>
 
-      <div class="cartao max-w-480">
-        <h3>Meus Dados</h3>
-        <div id="dados-usuario"></div>
+      <div class="grid-2col">
+        <div class="cartao">
+          <h3>Meus Dados</h3>
+          <div id="dados-usuario"></div>
+        </div>
+
+        <div class="cartao">
+          <h3>Alterar Senha</h3>
+          <div id="alerta" class="alerta oculto"></div>
+          <form id="form-senha">
+            <div class="form-grupo">
+              <label for="senha-atual">Senha atual</label>
+              <input type="password" id="senha-atual" autocomplete="current-password" placeholder="••••••••" required>
+            </div>
+            <div class="form-grupo">
+              <label for="nova-senha">Nova senha</label>
+              <input type="password" id="nova-senha" autocomplete="new-password" placeholder="••••••••" required minlength="6">
+            </div>
+            <button type="submit" class="btn btn-primario flex-inline-icon"><span class="material-symbols-outlined icon-xs">lock_reset</span> Salvar nova senha</button>
+          </form>
+        </div>
       </div>
 
-      <div class="cartao max-w-480">
-        <h3>Alterar Senha</h3>
-        <div id="alerta" class="alerta oculto"></div>
-        <form id="form-senha">
-          <div class="form-grupo">
-            <label for="senha-atual">Senha atual</label>
-            <input type="password" id="senha-atual" autocomplete="current-password" placeholder="••••••••" required>
+      <div class="cartao mt-16" id="secao-medalhas">
+        <div class="flex-entre flex-wrap gap-10">
+          <div>
+            <h3 class="flex-inline-icon"><span class="material-symbols-outlined icon-sm">military_tech</span> Minhas Medalhas e Selos da BNCC Computação</h3>
+            <p class="texto-suave" id="progresso-medalhas-texto">Carregando conquistas...</p>
           </div>
-          <div class="form-grupo">
-            <label for="nova-senha">Nova senha</label>
-            <input type="password" id="nova-senha" autocomplete="new-password" placeholder="••••••••" required minlength="6">
+          <div class="filtro-eixos flex gap-6" id="botoes-filtro-medalhas">
+            <button type="button" class="btn btn-sm btn-primario" onclick="filtrarMedalhas(null, this)">Todas</button>
+            <button type="button" class="btn btn-sm btn-neutro" onclick="filtrarMedalhas('Pensamento Computacional', this)">Pensamento Computacional</button>
+            <button type="button" class="btn btn-sm btn-neutro" onclick="filtrarMedalhas('Mundo Digital', this)">Mundo Digital</button>
+            <button type="button" class="btn btn-sm btn-neutro" onclick="filtrarMedalhas('Cultura Digital', this)">Cultura Digital</button>
           </div>
-          <button type="submit" class="btn btn-primario flex-inline-icon"><span class="material-symbols-outlined icon-xs">lock_reset</span> Salvar nova senha</button>
-        </form>
+        </div>
+
+        <div class="barra-progresso-wrap mt-8 mb-10">
+          <div class="barra-progresso-preenchimento" id="barra-progresso-medalhas"></div>
+        </div>
+
+        <div class="grade-medalhas" id="grade-medalhas"></div>
       </div>
     </main>
   </div>
@@ -73,6 +96,74 @@
         alertaEl.className = 'alerta alerta-erro';
       }
     });
+
+    let dadosGamificacao = null;
+
+    async function carregarMedalhas() {
+      try {
+        // Tenta avaliar conquistas automáticas antes de listar
+        try { await api('/gamificacao/avaliar', { method: 'POST' }); } catch {}
+
+        dadosGamificacao = await api('/gamificacao/medalhas');
+        renderizarMedalhas(dadosGamificacao.medalhas);
+
+        const { total, conquistadas, percentualConclusao } = dadosGamificacao.resumo;
+        document.getElementById('progresso-medalhas-texto').textContent =
+          `${conquistadas} de ${total} medalhas conquistadas (${percentualConclusao}% de domínio dos eixos da BNCC)`;
+        document.getElementById('barra-progresso-medalhas').style.width = `${percentualConclusao}%`;
+      } catch (err) {
+        document.getElementById('grade-medalhas').innerHTML = `<p class="texto-suave">Não foi possível carregar as medalhas: ${err.message}</p>`;
+      }
+    }
+
+    function renderizarMedalhas(lista) {
+      const container = document.getElementById('grade-medalhas');
+      if (lista.length === 0) {
+        container.innerHTML = '<p class="texto-suave">Nenhuma medalha encontrada para este eixo.</p>';
+        return;
+      }
+
+      container.innerHTML = lista.map((m) => {
+        const bloqueada = m.conquistada !== 1;
+        const dataStr = m.conquistada_em ? formatarData(m.conquistada_em) : null;
+
+        return `
+          <div class="card-medalha ${bloqueada ? 'bloqueada' : ''}">
+            <div class="card-medalha-topo">
+              <div class="card-medalha-icone" style="background: ${m.cor || '#2563eb'}">
+                <span class="material-symbols-outlined">${m.icone || 'military_tech'}</span>
+              </div>
+              <div>
+                <h4 class="card-medalha-titulo">${m.titulo}</h4>
+                <span class="card-medalha-eixo">${m.eixo_bncc}</span>
+              </div>
+            </div>
+            <p class="card-medalha-desc">${m.descricao}</p>
+            <div class="card-medalha-status">
+              ${bloqueada
+                ? '<span class="flex-inline-icon"><span class="material-symbols-outlined icon-xs">lock</span> Bloqueada</span>'
+                : `<span class="badge badge-conquistada flex-inline-icon"><span class="material-symbols-outlined icon-xs">check_circle</span> Conquistada</span>`}
+              <span>${dataStr ? `Em ${dataStr}` : 'Em andamento'}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    window.filtrarMedalhas = function(eixo, btn) {
+      document.querySelectorAll('#botoes-filtro-medalhas button').forEach((b) => {
+        b.className = 'btn btn-sm btn-neutro';
+      });
+      if (btn) btn.className = 'btn btn-sm btn-primario';
+
+      if (!dadosGamificacao) return;
+      const filtradas = eixo
+        ? dadosGamificacao.medalhas.filter((m) => m.eixo_bncc === eixo)
+        : dadosGamificacao.medalhas;
+      renderizarMedalhas(filtradas);
+    };
+
+    carregarMedalhas();
   </script>
 </body>
 </html>

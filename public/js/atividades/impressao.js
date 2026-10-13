@@ -132,9 +132,35 @@ function folhaRobo(atividade) {
   );
 }
 
+function folhaBlocos(atividade) {
+  const blocosCartoes = (atividade.blocosDisponiveis || []).map((b) =>
+    h('div', { class: 'folha-cartao' },
+      h('span', { class: 'folha-emoji' }, '🧩'),
+      `${b.rotulo} (${b.categoria})`,
+    ),
+  );
+
+  return h(
+    'div',
+    { class: 'folha' },
+    ...cabecalho(
+      atividade,
+      'Recorte os blocos de comando abaixo e monte o algoritmo no caderno ou na mesa usando laços de repetição e condições.',
+    ),
+    h('div', { class: 'folha-cartoes' }, blocosCartoes),
+    rodape(atividade),
+    guiaDoProfessor(
+      atividade,
+      h('p', {}, h('strong', {}, 'Conceito em destaque: '), 'Iteração (loops), controle de fluxo e modularização em blocos.'),
+      h('p', {}, h('strong', {}, 'Desafio desplugado: '), 'Os estudantes organizam os blocos em cartolinas e simulam o papel do robô caminhando na sala de aula.'),
+    ),
+  );
+}
+
 function construirFolha(atividade) {
   if (atividade.tipo === 'ordenar') return folhaOrdenar(atividade);
   if (atividade.tipo === 'decompor') return folhaDecompor(atividade);
+  if (atividade.tipo === 'blocos') return folhaBlocos(atividade);
   return folhaRobo(atividade);
 }
 

@@ -31,6 +31,7 @@ import * as enrollmentRoutes from './routes/matriculas_rotas.js';
 import * as certificateRoutes from './routes/certificados_rotas.js';
 import * as userRoutes from './routes/usuarios_rotas.js';
 import * as dashboardRoutes from './routes/dashboard_rotas.js';
+import * as gamificationRoutes from './routes/gamificacao_rotas.js';
 
 /**
  * Roteia requisições do domínio de Autenticação (/api/auth/*)
@@ -226,7 +227,29 @@ async function rotearDashboard(partes, metodo, request, env, db, url) {
   if (partes.length === 3 && partes[2] === 'linha-do-tempo' && metodo === 'GET') {
     return dashboardRoutes.obterLinhaDoTempo(request, env, db, url);
   }
+  if (partes.length === 3 && partes[2] === 'relatorio-pedagogico' && metodo === 'GET') {
+    return dashboardRoutes.obterRelatorioPedagogico(request, env, db, url);
+  }
   return jsonErro('Endpoint de dashboard não encontrado.', 404);
+}
+
+/**
+ * Roteia requisições do domínio de Gamificação (/api/gamificacao/*)
+ */
+async function rotearGamificacao(partes, metodo, request, env, db, url) {
+  // /api/gamificacao/medalhas
+  if (partes.length === 3 && partes[2] === 'medalhas' && metodo === 'GET') {
+    return gamificationRoutes.listarMedalhas(request, env, db, url);
+  }
+  // /api/gamificacao/avaliar
+  if (partes.length === 3 && partes[2] === 'avaliar' && metodo === 'POST') {
+    return gamificationRoutes.avaliarConquistasAutomaticas(request, env, db);
+  }
+  // /api/gamificacao/concluir-atividade
+  if (partes.length === 3 && partes[2] === 'concluir-atividade' && metodo === 'POST') {
+    return gamificationRoutes.registrarAtividadeConcluida(request, env, db);
+  }
+  return jsonErro('Endpoint de gamificação não encontrado.', 404);
 }
 
 /**
@@ -263,6 +286,8 @@ async function despacharRotaApi(partes, metodo, request, env, db, url) {
       return rotearCertificados(partes, metodo, request, env, db, url);
     case 'dashboard':
       return rotearDashboard(partes, metodo, request, env, db, url);
+    case 'gamificacao':
+      return rotearGamificacao(partes, metodo, request, env, db, url);
     default:
       return jsonErro('Endpoint não encontrado.', 404);
   }

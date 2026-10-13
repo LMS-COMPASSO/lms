@@ -124,6 +124,43 @@ CREATE TABLE IF NOT EXISTS certificados (
   FOREIGN KEY (matricula_id) REFERENCES matriculas(id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS medalhas (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  codigo TEXT NOT NULL UNIQUE,
+  titulo TEXT NOT NULL,
+  descricao TEXT NOT NULL,
+  eixo_bncc TEXT NOT NULL CHECK(eixo_bncc IN ('Pensamento Computacional', 'Mundo Digital', 'Cultura Digital', 'Geral')),
+  icone TEXT NOT NULL,
+  cor TEXT NOT NULL DEFAULT '#2563eb',
+  criterio_tipo TEXT NOT NULL,
+  criterio_meta INTEGER NOT NULL DEFAULT 1,
+  criado_em TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS usuario_medalhas (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  usuario_id INTEGER NOT NULL,
+  medalha_id INTEGER NOT NULL,
+  conquistada_em TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+  FOREIGN KEY (medalha_id) REFERENCES medalhas(id) ON DELETE CASCADE,
+  UNIQUE(usuario_id, medalha_id)
+);
+
+CREATE TABLE IF NOT EXISTS desempenho_habilidades (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  usuario_id INTEGER NOT NULL,
+  curso_id INTEGER,
+  habilidade_codigo TEXT NOT NULL,
+  origem_tipo TEXT NOT NULL CHECK(origem_tipo IN ('atividade', 'avaliacao', 'projeto')) DEFAULT 'atividade',
+  origem_id TEXT NOT NULL,
+  pontuacao REAL NOT NULL DEFAULT 0.0,
+  nivel_atingido TEXT NOT NULL CHECK(nivel_atingido IN ('em_desenvolvimento', 'adequado', 'avancado')) DEFAULT 'adequado',
+  registrado_em TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+  FOREIGN KEY (curso_id) REFERENCES cursos(id) ON DELETE SET NULL
+);
+
 CREATE INDEX IF NOT EXISTS idx_cursos_instrutor ON cursos(instrutor_id);
 CREATE INDEX IF NOT EXISTS idx_cursos_status ON cursos(status);
 CREATE INDEX IF NOT EXISTS idx_cursos_eixo ON cursos(eixo_bncc);
@@ -136,3 +173,7 @@ CREATE INDEX IF NOT EXISTS idx_matriculas_usuario ON matriculas(usuario_id);
 CREATE INDEX IF NOT EXISTS idx_matriculas_curso ON matriculas(curso_id);
 CREATE INDEX IF NOT EXISTS idx_progresso_matricula ON progresso_aulas(matricula_id);
 CREATE INDEX IF NOT EXISTS idx_tentativas_matricula ON tentativas_avaliacao(matricula_id);
+CREATE INDEX IF NOT EXISTS idx_usuario_medalhas_user ON usuario_medalhas(usuario_id);
+CREATE INDEX IF NOT EXISTS idx_desempenho_hab_user ON desempenho_habilidades(usuario_id);
+CREATE INDEX IF NOT EXISTS idx_desempenho_hab_cod ON desempenho_habilidades(habilidade_codigo);
+CREATE INDEX IF NOT EXISTS idx_desempenho_hab_curso ON desempenho_habilidades(curso_id);

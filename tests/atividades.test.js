@@ -33,6 +33,7 @@ test('o catálogo tem atividades de algoritmos do cotidiano e de decomposição 
   assert.ok(porTipo('ordenar').length >= 3);
   assert.ok(porTipo('decompor').length >= 3);
   assert.ok(porTipo('robo').length >= 3);
+  assert.ok(porTipo('blocos').length >= 3);
   assert.ok(ATIVIDADES.some((atividade) => atividade.conceito === 'algoritmos'));
   assert.ok(ATIVIDADES.some((atividade) => atividade.conceito === 'decomposicao'));
 });
@@ -321,3 +322,30 @@ test('plural usa singular apenas para a quantidade 1', () => {
   assert.equal(plural(0, 'passo', 'passos'), '0 passos');
   assert.equal(plural(3, 'passo', 'passos'), '3 passos');
 });
+
+test('atividades de programação em blocos têm metas válidas e blocos disponíveis', () => {
+  const blocos = porTipo('blocos');
+  assert.ok(blocos.length >= 3);
+
+  for (const atv of blocos) {
+    assert.ok(atv.meta, `${atv.id}: falta meta`);
+    assert.ok(['desenho', 'labirinto'].includes(atv.meta.tipo));
+    assert.ok(Array.isArray(atv.blocosDisponiveis) && atv.blocosDisponiveis.length >= 4);
+
+    for (const b of atv.blocosDisponiveis) {
+      assert.ok(typeof b.id === 'string' && b.id.length > 0);
+      assert.ok(['movimento', 'controle', 'aparencia'].includes(b.categoria));
+      assert.ok(typeof b.rotulo === 'string' && b.rotulo.length > 0);
+      assert.ok(typeof b.cor === 'string' && b.cor.startsWith('#'));
+    }
+
+    if (atv.meta.tipo === 'desenho') {
+      assert.ok(Number.isInteger(atv.meta.lados) && atv.meta.lados >= 3);
+      assert.ok(Number.isInteger(atv.meta.angulo) && atv.meta.angulo > 0);
+    } else if (atv.meta.tipo === 'labirinto') {
+      assert.ok(Array.isArray(atv.meta.grade) && atv.meta.grade.length >= 3);
+      assert.ok(atv.meta.inicio && atv.meta.alvo);
+    }
+  }
+});
+

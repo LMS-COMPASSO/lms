@@ -7,10 +7,12 @@
 import { jogadorOrdenar } from './jogador-ordenar.js';
 import { jogadorDecompor } from './jogador-decompor.js';
 import { jogadorRobo } from './jogador-robo.js';
+import { jogadorBlocos } from './jogador-blocos.js';
 
 export function criarJogador(atividade, ctx) {
   if (atividade.tipo === 'ordenar') return jogadorOrdenar(atividade, ctx);
   if (atividade.tipo === 'decompor') return jogadorDecompor(atividade, ctx);
   if (atividade.tipo === 'robo') return jogadorRobo(atividade, ctx);
+  if (atividade.tipo === 'blocos') return jogadorBlocos(atividade, ctx);
   throw new Error(`Tipo de atividade desconhecido: ${atividade.tipo}`);
 }
