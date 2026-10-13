@@ -76,4 +76,62 @@ INSERT OR IGNORE INTO alternativas (id, questao_id, texto, correta) VALUES
 
 -- 8. Matrícula de Exemplo para Teste
 INSERT OR IGNORE INTO matriculas (id, usuario_id, curso_id, status, progresso_percentual) VALUES
-(1, (SELECT id FROM usuarios WHERE email = 'aluno.pedro@escola.gov.br'), 1, 'ativa', 0.0);
+(1, (SELECT id FROM usuarios WHERE email = 'aluno.pedro@escola.gov.br'), 1, 'ativa', 35.0);
+
+-- 9. Alunos adicionais para demonstração de turma
+INSERT INTO usuarios (nome, email, senha_hash, perfil, ativo) VALUES
+('Sofia Oliveira (Aluna)', 'aluna.sofia@escola.gov.br', '6f2cb9dd8f4b65e24e1c3f3fa5bc57982349237f11abceacd45bbcb74d621c25', 'aluno', 1),
+('Lucas Ferreira (Aluno)', 'aluno.lucas@escola.gov.br', '6f2cb9dd8f4b65e24e1c3f3fa5bc57982349237f11abceacd45bbcb74d621c25', 'aluno', 1)
+ON CONFLICT(email) DO NOTHING;
+
+-- Matrículas adicionais
+INSERT OR IGNORE INTO matriculas (usuario_id, curso_id, status, progresso_percentual) VALUES
+((SELECT id FROM usuarios WHERE email = 'aluna.sofia@escola.gov.br'), 1, 'ativa', 85.0),
+((SELECT id FROM usuarios WHERE email = 'aluno.lucas@escola.gov.br'), 1, 'concluida', 100.0);
+
+-- 10. Catálogo de Medalhas / Selos por Eixo da BNCC Computação
+INSERT OR IGNORE INTO medalhas (id, codigo, titulo, descricao, eixo_bncc, icone, cor, criterio_tipo, criterio_meta) VALUES
+(1, 'mestre_algoritmos', 'Mestre dos Algoritmos', 'Completou com sucesso atividades de sequenciamento e ordenação lógica.', 'Pensamento Computacional', 'format_list_numbered', '#2563eb', 'concluir_atividade', 1),
+(2, 'arquiteto_decomposicao', 'Arquiteto da Decomposição', 'Dominou a técnica de dividir problemas complexos em partes menores.', 'Pensamento Computacional', 'extension', '#0284c7', 'concluir_atividade', 1),
+(3, 'programador_blocos', 'Programador de Blocos', 'Criou e simulou programas com repetições e seleções no simulador visual.', 'Pensamento Computacional', 'code_blocks', '#7c3aed', 'concluir_blocos', 1),
+(4, 'detetive_hardware_software', 'Mundo Digital: Hardware & Software', 'Compreendeu a diferença prática entre partes físicas e lógicas da computação.', 'Mundo Digital', 'memory', '#059669', 'concluir_aula', 1),
+(5, 'arquiteto_redes', 'Navegador da Internet e Redes', 'Entendeu como pacotes de dados e conexões trafegam pela rede mundial.', 'Mundo Digital', 'lan', '#0d9488', 'concluir_aula', 1),
+(6, 'guardiao_privacidade', 'Guardião da Privacidade', 'Adotou boas práticas de proteção de dados pessoais e senhas seguras.', 'Cultura Digital', 'verified_user', '#d97706', 'concluir_aula', 1),
+(7, 'cidadao_etico', 'Cidadão Digital Consciente', 'Identificou fontes confiáveis e debateu ética e segurança no ambiente virtual.', 'Cultura Digital', 'diversity_3', '#ea580c', 'concluir_aula', 1),
+(8, 'primeiro_passo', 'Primeiro Passo na Computação', 'Completou a primeira aula ou desafio dinâmico na plataforma.', 'Geral', 'flag', '#16a34a', 'primeira_acao', 1),
+(9, 'trilha_completa', 'Certificado BNCC Conquistado', 'Concluiu 100% de uma trilha formativa com certificado emitido.', 'Geral', 'military_tech', '#eab308', 'certificado', 1);
+
+-- Conquistas de exemplo
+INSERT OR IGNORE INTO usuario_medalhas (usuario_id, medalha_id) VALUES
+((SELECT id FROM usuarios WHERE email = 'aluno.pedro@escola.gov.br'), 1),
+((SELECT id FROM usuarios WHERE email = 'aluno.pedro@escola.gov.br'), 8),
+((SELECT id FROM usuarios WHERE email = 'aluna.sofia@escola.gov.br'), 1),
+((SELECT id FROM usuarios WHERE email = 'aluna.sofia@escola.gov.br'), 2),
+((SELECT id FROM usuarios WHERE email = 'aluno.lucas@escola.gov.br'), 1),
+((SELECT id FROM usuarios WHERE email = 'aluno.lucas@escola.gov.br'), 2),
+((SELECT id FROM usuarios WHERE email = 'aluno.lucas@escola.gov.br'), 3),
+((SELECT id FROM usuarios WHERE email = 'aluno.lucas@escola.gov.br'), 9);
+
+-- 11. Registros de Desempenho por Habilidade BNCC (Base do Relatório Pedagógico)
+INSERT OR IGNORE INTO desempenho_habilidades (usuario_id, curso_id, habilidade_codigo, origem_tipo, origem_id, pontuacao, nivel_atingido) VALUES
+((SELECT id FROM usuarios WHERE email = 'aluno.pedro@escola.gov.br'), 1, 'EF01CO02', 'atividade', 'ordenar-escovar-dentes', 9.5, 'avancado'),
+((SELECT id FROM usuarios WHERE email = 'aluno.pedro@escola.gov.br'), 1, 'EF01CO03', 'atividade', 'ordenar-escovar-dentes', 8.0, 'adequado'),
+((SELECT id FROM usuarios WHERE email = 'aluno.pedro@escola.gov.br'), 1, 'EF15CO02', 'atividade', 'robo-caminho-escola', 7.5, 'adequado'),
+((SELECT id FROM usuarios WHERE email = 'aluna.sofia@escola.gov.br'), 1, 'EF01CO02', 'atividade', 'ordenar-escovar-dentes', 10.0, 'avancado'),
+((SELECT id FROM usuarios WHERE email = 'aluna.sofia@escola.gov.br'), 1, 'EF01CO03', 'atividade', 'ordenar-escovar-dentes', 9.0, 'avancado'),
+((SELECT id FROM usuarios WHERE email = 'aluna.sofia@escola.gov.br'), 1, 'EF03CO03', 'atividade', 'decompor-cafe-da-manha', 8.5, 'avancado'),
+((SELECT id FROM usuarios WHERE email = 'aluna.sofia@escola.gov.br'), 1, 'EF15CO02', 'atividade', 'robo-caminho-escola', 8.0, 'adequado'),
+((SELECT id FROM usuarios WHERE email = 'aluno.lucas@escola.gov.br'), 1, 'EF01CO02', 'atividade', 'ordenar-escovar-dentes', 10.0, 'avancado'),
+((SELECT id FROM usuarios WHERE email = 'aluno.lucas@escola.gov.br'), 1, 'EF03CO03', 'atividade', 'decompor-cafe-da-manha', 9.0, 'avancado'),
+((SELECT id FROM usuarios WHERE email = 'aluno.lucas@escola.gov.br'), 1, 'EF15CO02', 'atividade', 'robo-caminho-escola', 9.5, 'avancado'),
+((SELECT id FROM usuarios WHERE email = 'aluno.lucas@escola.gov.br'), 1, 'EF69CO03', 'atividade', 'blocos-geometria-quadrado', 9.0, 'avancado'),
+((SELECT id FROM usuarios WHERE email = 'aluno.lucas@escola.gov.br'), 1, 'EF69CO04', 'atividade', 'blocos-labirinto-condicional', 8.5, 'avancado');
+
+-- 12. Aulas com Simulador de Programação em Blocos (Fundamental II)
+INSERT INTO aulas (modulo_id, titulo, tipo, conteudo, url_recurso, duracao_min, ordem)
+SELECT 1, 'Atividade dinâmica: Simulador de Blocos — Geometria com Algoritmos', 'link', 'Programe o robô desenhista com blocos de repetição e ângulos para criar figuras geométricas.', '/atividades.html?id=blocos-geometria-quadrado', 15, 6
+WHERE NOT EXISTS (SELECT 1 FROM aulas WHERE modulo_id = 1 AND url_recurso = '/atividades.html?id=blocos-geometria-quadrado');
+
+INSERT INTO aulas (modulo_id, titulo, tipo, conteudo, url_recurso, duracao_min, ordem)
+SELECT 1, 'Atividade dinâmica: Simulador de Blocos — Labirinto e Condicionais', 'link', 'Use blocos condicionais (se... então) e repetições para desviar dos obstáculos no labirinto.', '/atividades.html?id=blocos-labirinto-condicional', 15, 7
+WHERE NOT EXISTS (SELECT 1 FROM aulas WHERE modulo_id = 1 AND url_recurso = '/atividades.html?id=blocos-labirinto-condicional');

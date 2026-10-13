@@ -84,3 +84,46 @@ Todo curso concluído na plataforma permite a emissão de um certificado que ref
 - O eixo temático correspondente.
 - O ano escolar contemplado.
 - Código único de verificação de autenticidade para auditoria da secretaria municipal.
+
+---
+
+## Simulador de Programação em Blocos (Ensino Fundamental II)
+
+Para atender diretamente as competências do Ensino Fundamental II (6º ao 9º ano), a plataforma incorpora um **Simulador de Programação Visual em Blocos** nativo (tipo Scratch/Blockly, sem dependências pesadas):
+
+- **Habilidades contempladas:**
+  - `EF15CO02`: Construção e simulação de algoritmos com sequências, seleções e repetições.
+  - `EF69CO02`: Reconhecimento e formulação de padrões em figuras e trajetórias.
+  - `EF69CO03`: Estruturação de algoritmos com iterações (`Repetir N vezes`) e seleções (`Se ... Senão`).
+  - `EF69CO04`: Automação e resolução de problemas através de ambiente visual com transição para código textual (JavaScript / Pseudocódigo).
+- **Recursos Pedagógicos:**
+  - Paleta de blocos dividida por categorias (Movimento, Controle e Laços, Aparência e Arte).
+  - Palco (Canvas) interativo em tempo real com animação passo a passo e visualizador de traçado geométrico.
+  - Alternância imediata entre blocos visuais e o código textual gerado em JavaScript para letramento computacional avançado.
+
+---
+
+## Gamificação Pedagógica: Medalhas por Eixo da BNCC
+
+O sistema estimula o engajamento estudantil através de selos e medalhas digitais organizados por eixo curricular:
+
+- **Pensamento Computacional:**
+  - *Mestre dos Algoritmos:* sequenciamento de passos e depuração de instruções intrusas.
+  - *Arquiteto da Decomposição:* quebra de problemas complexos em subtarefas.
+  - *Programador de Blocos:* construção de algoritmos com repetições e condicionais no simulador.
+- **Mundo Digital:**
+  - *Detetive de Hardware & Software:* diferenciação dos componentes físicos e lógicos da computação.
+  - *Navegador da Internet e Redes:* compreensão do tráfego de dados e infraestrutura de comunicação.
+- **Cultura Digital:**
+  - *Guardião da Privacidade:* segurança de senhas e proteção de pegada digital.
+  - *Cidadão Digital Consciente:* senso crítico contra desinformação e combate ao ciberbullying.
+
+---
+
+## Relatório Pedagógico por Turma e Diário Escolar
+
+Para facilitar o trabalho do professor regente e das Secretarias Municipais de Educação:
+
+1. **Acompanhamento da Consolidação:** Classificação automática do domínio da turma em cada código da BNCC (*Em Desenvolvimento*, *Adequado* e *Consolidado*).
+2. **Exportação para Diário de Classe (CSV):** Gera planilha compatível com Excel e LibreOffice Calc contendo o desempenho dos estudantes, notas e níveis atingidos para lançamento direto nos sistemas municipais.
+3. **Formato para Impressão A4:** Ata pedagógica para conselhos de classe e reuniões pedagógicas.

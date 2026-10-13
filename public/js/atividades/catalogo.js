@@ -15,6 +15,7 @@
 import { ATIVIDADES_ORDENAR } from './ordenar.js';
 import { ATIVIDADES_DECOMPOR } from './decompor.js';
 import { ATIVIDADES_ROBO } from './robo.js';
+import { ATIVIDADES_BLOCOS } from './blocos.js';
 
 export const CONCEITOS = {
   algoritmos: { rotulo: 'Algoritmos do cotidiano', emoji: '🔢' },
@@ -25,6 +26,7 @@ export const TIPOS = {
   ordenar: { rotulo: 'Montar a sequência' },
   decompor: { rotulo: 'Dividir o problema' },
   robo: { rotulo: 'Programar o robô' },
+  blocos: { rotulo: 'Programação em blocos' },
 };
 
 // Mesmos agrupamentos usados nas propostas pedagógicas do projeto.
@@ -66,6 +68,14 @@ export const HABILIDADES = {
     anos: '1º ao 5º ano',
     texto: 'Aplicar a estratégia de decomposição para resolver problemas complexos, dividindo esse problema em partes menores, resolvendo-as e combinando suas soluções.',
   },
+  EF69CO02: {
+    anos: '6º ao 9º ano',
+    texto: 'Reconhecer, formular e modelar padrões para criar soluções algorítmicas reutilizáveis.',
+  },
+  EF69CO03: {
+    anos: '6º ao 9º ano',
+    texto: 'Desenvolver algoritmos usando estruturas de sequenciação, seleção e repetição para solucionar problemas computacionais.',
+  },
   EF69CO04: {
     anos: '6º ao 9º ano',
     texto: 'Construir soluções de problemas usando a técnica de decomposição e automatizar tais soluções usando uma linguagem de programação.',
@@ -76,6 +86,7 @@ export const ATIVIDADES = [
   ...ATIVIDADES_ORDENAR,
   ...ATIVIDADES_DECOMPOR,
   ...ATIVIDADES_ROBO,
+  ...ATIVIDADES_BLOCOS,
 ];
 
 export function buscarAtividade(id) {

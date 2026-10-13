@@ -40,10 +40,12 @@ Acesse o ambiente oficial em produção na Cloudflare:
 - **Dashboard Administrativo:** Indicadores de engajamento escolar em tempo real, matrículas ativas, taxa de conclusão e linha do tempo de atividades pedagógicas.
 - **Sala de Aula Interativa:** Módulos sequenciais, aulas multimídia (texto, vídeo, links) e cálculo de progresso por aula.
 - **Avaliações com Correção Automática:** Questionários de múltipla escolha com cálculo imediato de notas e controle de tentativas.
-- **Atividades Dinâmicas Interativas:** Página `/atividades.html` com jogos de sequenciamento de algoritmos, decomposição de problemas e programação de robô no mapa, que funcionam no navegador sem login e podem ser vinculados às aulas dos cursos.
+- **Atividades Dinâmicas & Simulador de Blocos:** Página `/atividades.html` com jogos de sequenciamento de algoritmos, decomposição lógica, robô no mapa e **Simulador de Programação em Blocos** nativo (tipo Scratch/Blockly) para Ensino Fundamental II com alternância para código textual em tempo real.
+- **Gamificação por Eixo da BNCC:** Sistema de medalhas e selos digitais que premia os estudantes conforme dominam os eixos *Pensamento Computacional*, *Mundo Digital* e *Cultura Digital*, com acompanhamento visual no perfil.
+- **Relatório Pedagógico e Diário Escolar (CSV):** Painel do professor para monitorar a consolidação das habilidades BNCC por turma, com exportação direta em CSV para lançamento em diários de classe e impressão A4.
 - **Certificados Digitais com Validação Pública:** Emissão instantânea com indicação de carga horária e eixo BNCC, layout pronto para impressão A4 e código verificador consultável pela Secretaria.
 - **Segurança de Credenciais:** Senhas com PBKDF2-SHA256 e salt individual, tokens JWT com expiração de 8 horas e segredo de assinatura mantido em Cloudflare Secrets (nunca versionado).
-- **Suíte de Testes Automatizados:** 50 testes automatizados cobrindo criptografia, ciclo de vida de tokens JWT, migração legada de senhas e toda a lógica pedagógica e de solução das atividades dinâmicas.
+- **Suíte de Testes Automatizados:** 55 testes automatizados cobrindo criptografia, autenticação, ciclo de vida de tokens JWT, migração de senhas, simulador de blocos, gamificação e relatórios pedagógicos.
 - **Frontend Leve e Nativo:** Construído em HTML5, CSS Vanilla e JS nativo — entregue com máxima velocidade diretamente pelo CDN Edge da Cloudflare sem frameworks pesados.
 
 ---
@@ -92,11 +94,13 @@ Ao executar a carga de dados modelo (`npm run cf:seed:local` ou `cf:seed:remote`
 
 ## Central de Documentação
 
-Guias técnicos e pedagógicos detalhados na pasta `docs/`:
+Guias técnicos, pedagógicos e estratégicos detalhados na pasta `docs/`:
 
 | Guia | Descrição | Público-Alvo |
 | --- | --- | --- |
 | **[Diretrizes da BNCC Computação](docs/bncc-computacao.md)** | Os 3 eixos curriculares, anos escolares, competências pedagógicas e sugestões de atividades. | Professores e Coordenadores |
+| **[Business Model Canvas — BMC](docs/bmc/README.md)** | Matriz estratégica dos 32 cards, PDF A4 Paisagem, imagem HD e template executivo. | Gestores, Bancas e Investidores |
+| **[Materiais de Compartilhamento](docs/compartilhamento/)** | Modelos para murais escolares, cartazes A4 e gerador de QR Codes de acesso rápido. | Escolas e Secretarias |
 | **[Guia do Backend Cloudflare](docs/backend-cloudflare.md)** | Configuração do Worker, banco relacional D1, Wrangler CLI e deploy em produção. | Desenvolvedores e TI |
 | **[Guia do Frontend](docs/frontend-guia.md)** | Arquitetura das páginas web, autenticação JWT e componentes visuais. | Desenvolvedores Web |
 | **[Catálogo da API REST](docs/api-endpoints.md)** | Relação completa de endpoints, métodos HTTP, parâmetros e modelos de resposta. | Integradores de Sistemas |
@@ -115,6 +119,10 @@ Guias técnicos e pedagógicos detalhados na pasta `docs/`:
 | `npm run cf:seed:local` | Carrega os cursos modelo da BNCC e usuários no banco local |
 | `npm run cf:db:remote` | Executa as tabelas e índices no banco de produção Cloudflare D1 |
 | `npm run cf:seed:remote` | Popula os cursos modelo da BNCC no banco oficial de produção |
+| `npm run gerar:bmc` | Renderiza o PDF A4 e PNG de alta resolução do Business Model Canvas via Chromium |
+| `npm run gerar:pdf` | Gera o PDF A4 com QR Code oficial para murais e divulgação escolar |
+| `npm run gerar:png` | Gera a imagem quadrada otimizada do QR Code para redes sociais e mídias |
+| `npm run gerar:todos` | Executa em lote a geração de todos os PDFs e imagens de divulgação e BMC |
 
 ---
 
@@ -125,33 +133,32 @@ Guias técnicos e pedagógicos detalhados na pasta `docs/`:
 ├── d1/                         # Arquivos SQL do banco Cloudflare D1 (schema e seed BNCC)
 │   ├── schema.sql              # Estrutura de tabelas e índices
 │   └── seed.sql                # Dados modelo da BNCC Computação
-├── docs/                       # Documentação técnica e pedagógica (BNCC, Backend, Frontend, API)
+├── docs/                       # Documentação técnica, pedagógica e estratégica
+│   ├── bmc/                    # Subpasta dedicada ao Business Model Canvas (BMC)
+│   │   ├── README.md           # Matriz estratégica com os 32 cards do Canvas
+│   │   ├── lms-compasso-bmc.html # Template interativo A4 Paisagem
+│   │   ├── lms-compasso-bmc.pdf  # PDF executivo oficial de 1 página A4
+│   │   └── img/                # Imagem Ultra HD do BMC (200 DPI)
+│   ├── compartilhamento/       # Materiais para divulgação e murais escolares (QR Codes)
+│   ├── api-endpoints.md        # Catálogo de endpoints da API REST
+│   ├── backend-cloudflare.md   # Guia técnico de Workers e D1
+│   ├── bncc-computacao.md      # Matriz curricular e pedagógica da BNCC Computação
+│   ├── faq-troubleshooting.md  # Dúvidas comuns e troubleshooting
+│   └── frontend-guia.md        # Guia de componentes e UI
 ├── public/                     # Frontend estático entregue pelo Edge da Cloudflare
-│   ├── css/                    # Estilos CSS modernos e responsivos
-│   └── js/                     # Integração com a API (config.js, api.js, layout.js)
+│   ├── css/                    # Estilos CSS modernos e responsivos (style.css, atividades.css)
+│   ├── img/                    # Ícones vetoriais SVG, logos e capturas de divulgação
+│   └── js/                     # Módulos JS nativos (api.js, config.js, layout.js, atividades/)
+├── scripts/                    # Scripts de automação e renderização de ativos
+│   ├── gerar-bmc.sh            # Script modular de compilação de PDF e PNG do BMC
+│   └── gerar-compartilhamento.sh # Script de geração de materiais de QR Code
 ├── src/
 │   └── worker/                 # Backend Serverless modular (Cloudflare Workers)
 │       ├── index.js            # Roteador principal e orquestrador de requisições
 │       ├── helpers_utilitarios.js # Utilitários de resposta, banco D1 e autenticação
 │       ├── crypto_seguranca.js # Hashing de senhas e geração de tokens JWT
-│       └── routes/             # Módulos de regras de negócio por domínio
-│           ├── auth_rotas.js
-│           ├── cursos_rotas.js
-│           ├── modulos_rotas.js
-│           ├── aulas_rotas.js
-│           ├── avaliacoes_rotas.js
-│           ├── matriculas_rotas.js
-│           ├── certificados_rotas.js
-│           ├── usuarios_rotas.js
-│           └── dashboard_rotas.js
-├── tests/                      # Testes automatizados (node --test)
-├── package.json                # Dependências de desenvolvimento e scripts
-├── wrangler.jsonc              # Configuração oficial do Cloudflare Workers, Assets & D1
-├── CONTRIBUTING.md             # Como colaborar com código ou planos de aula
-├── CODE_OF_CONDUCT.md          # Diretrizes de respeito e convivência acolhedora
-├── SECURITY.md                 # Política de reporte responsável de vulnerabilidades
-├── LICENSE                     # Licença de código aberto (MIT)
-└── README.md                   # Este sumário principal
+│       └── routes/             # Módulos de regras de negócio (auth, dashboard, cursos, etc.)
+└── tests/                      # 55 testes automatizados nativos (node --test)
 ```
 
 ---
