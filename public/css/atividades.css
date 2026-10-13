@@ -73,7 +73,7 @@
 }
 .atv-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 10px; padding: 0; list-style: none; }
 .atv-chip { padding: 4px 12px; border-radius: 999px; background: var(--pub-azul-100); color: var(--pub-azul-700); font-size: 0.78rem; font-weight: 700; }
-.atv-instrucao { margin: 0 0 18px; padding: 14px 18px; border-left: 5px solid var(--pub-azul-700); border-radius: 8px; background: #fff; box-shadow: var(--sombra); line-height: 1.55; }
+.atv-instrucao { margin: 0 0 18px; padding: 14px 18px; border: 1px solid var(--pub-borda); border-radius: 12px; background: #fff; box-shadow: var(--sombra); line-height: 1.55; }
 .atv-painel { margin-bottom: 18px; padding: 20px; border-radius: 16px; background: #fff; box-shadow: var(--sombra); }
 .atv-painel h3,
 .atv-painel h4 { margin: 0 0 10px; color: var(--pub-azul-900); }
@@ -173,7 +173,548 @@
 .atv-arvore { margin: 14px 0 0; padding-left: 20px; line-height: 1.7; }
 .atv-arvore ul { margin: 2px 0 6px; padding-left: 20px; }
 
-/* ---------- Robô ---------- */
+/* ---------- Robô (Wishlabs Game Simulation & GSAP) ---------- */
+.atv-game-shell {
+  background: linear-gradient(180deg, #090e1a 0%, #0d1527 50%, #080d19 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
+  padding: 20px;
+  color: #f1f5f9;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  margin-bottom: 24px;
+}
+
+/* HUD Superior de Telemetria */
+.atv-game-hud {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+}
+
+.atv-hud-linha-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding-bottom: 12px;
+}
+
+.atv-fases-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.atv-fase-tab {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 7px 14px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #cbd5e1;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.atv-fase-tab small {
+  font-size: 0.68rem;
+  color: #94a3b8;
+  font-weight: 500;
+  margin-top: 1px;
+}
+
+.atv-fase-tab:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.atv-fase-tab.ativo {
+  background: rgba(37, 99, 235, 0.25);
+  border-color: #3b82f6;
+  color: #ffffff;
+}
+
+.atv-fase-tab.ativo small {
+  color: #93c5fd;
+}
+
+.atv-fase-tab.concluida {
+  border-color: #10b981;
+}
+
+.atv-hud-acoes-quick {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-hud-tool {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #e2e8f0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-hud-tool:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+/* Grid de Telemetria Técnica */
+.atv-telemetria-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.atv-telemetria-card {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.telemetria-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #94a3b8;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.telemetria-valor {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.95rem;
+  color: #38bdf8;
+}
+
+.telemetria-pct {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #10b981;
+}
+
+.atv-bateria-trilho {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 6px;
+}
+
+.atv-bateria-preenchimento {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981 0%, #34d399 100%);
+  border-radius: 999px;
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s ease;
+}
+
+.atv-bateria-preenchimento.alerta {
+  background: linear-gradient(90deg, #f59e0b 0%, #fbbf24 100%);
+}
+
+.atv-bateria-preenchimento.critico {
+  background: linear-gradient(90deg, #ef4444 0%, #f87171 100%);
+}
+
+/* Palco Central do Jogo */
+.atv-game-stage {
+  display: grid;
+  grid-template-columns: minmax(300px, 460px) 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.atv-arena-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.atv-mapa-game {
+  --colunas: 4;
+  --linhas: 4;
+  display: grid;
+  grid-template-columns: repeat(var(--colunas), 1fr);
+  grid-template-rows: repeat(var(--linhas), 1fr);
+  gap: 6px;
+  padding: 12px;
+  background: #060a12;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  position: relative;
+  aspect-ratio: 1;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.atv-celula-game {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  aspect-ratio: 1;
+  user-select: none;
+  transition: all 0.2s ease;
+}
+
+.atv-celula-coord {
+  position: absolute;
+  top: 3px;
+  left: 4px;
+  font-size: 0.55rem;
+  font-family: monospace;
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.atv-celula-icone {
+  font-size: clamp(1.4rem, 4vw, 2.2rem);
+  line-height: 1;
+  z-index: 1;
+}
+
+.atv-celula-game.inicio {
+  border-color: rgba(56, 189, 248, 0.4);
+  background: rgba(56, 189, 248, 0.06);
+}
+
+.atv-celula-game.inicio::after {
+  content: 'PARTIDA';
+  position: absolute;
+  bottom: 3px;
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #38bdf8;
+}
+
+.atv-celula-game.meta {
+  border: 2px solid #10b981;
+  background: rgba(16, 185, 129, 0.12);
+}
+
+.atv-celula-game.obstaculo {
+  background: rgba(239, 68, 68, 0.08);
+  border-color: rgba(239, 68, 68, 0.25);
+}
+
+.atv-celula-game.item-coletavel {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: rgba(245, 158, 11, 0.4);
+  animation: flutuarItem 2s ease-in-out infinite alternate;
+}
+
+@keyframes flutuarItem {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-4px); }
+}
+
+.atv-celula-game.visitada-neon {
+  background: rgba(59, 130, 246, 0.15);
+  border-color: rgba(96, 165, 250, 0.3);
+}
+
+.atv-celula-game.batida {
+  background: rgba(239, 68, 68, 0.35);
+  border-color: #ef4444;
+}
+
+/* Avatar Sprite Dinâmico do Robô com Orientação GSAP */
+.atv-robo-avatar {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 10;
+  transition: transform 0.15s ease-out;
+}
+
+.atv-robo-corpo {
+  font-size: clamp(1.8rem, 4.5vw, 2.6rem);
+  line-height: 1;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+}
+
+.atv-robo-farol {
+  position: absolute;
+  top: -6px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #38bdf8;
+}
+
+.atv-legenda-game {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.badge-legenda {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 0.78rem;
+  color: #cbd5e1;
+}
+
+/* Painel de Algoritmos & Pipeline */
+.atv-deck-comandos {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.atv-badge-limite {
+  background: rgba(59, 130, 246, 0.2);
+  color: #93c5fd;
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+
+.atv-contagem-suave {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #94a3b8;
+}
+
+/* Fita de Pipeline de Comandos */
+.atv-fita-wrapper {
+  min-height: 64px;
+  background: #060a12;
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 10px;
+  overflow-x: auto;
+}
+
+.atv-fita-pipeline {
+  display: flex;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.atv-fita-comando {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 54px;
+  height: 54px;
+  padding: 4px 8px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.atv-fita-comando .cmd-num {
+  position: absolute;
+  top: 2px;
+  left: 4px;
+  font-size: 0.6rem;
+  color: #94a3b8;
+  font-family: monospace;
+}
+
+.atv-fita-comando .cmd-icone {
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+.atv-fita-comando .cmd-nome {
+  font-size: 0.6rem;
+  color: #cbd5e1;
+  text-transform: uppercase;
+}
+
+.atv-fita-comando:hover {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: #ef4444;
+  transform: translateY(-2px);
+}
+
+.atv-fita-comando.ativo-executando {
+  background: rgba(245, 158, 11, 0.25);
+  border-color: #f59e0b;
+  color: #fef08a;
+}
+
+.atv-fita-comando.erro-colisao {
+  background: rgba(239, 68, 68, 0.3);
+  border-color: #ef4444;
+}
+
+.atv-fita-vazia {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #64748b;
+  font-size: 0.85rem;
+  padding: 14px;
+}
+
+/* Arcade Gamepad D-Pad */
+.atv-gamepad-deck {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.gamepad-label {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #94a3b8;
+  margin-bottom: 8px;
+}
+
+.atv-gamepad-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.atv-btn-direcao {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  height: 60px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.atv-btn-direcao .simbolo-seta {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.atv-btn-direcao .nome-direcao {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #cbd5e1;
+}
+
+.atv-btn-direcao:hover:not(:disabled) {
+  background: rgba(37, 99, 235, 0.25);
+  border-color: #3b82f6;
+  transform: translateY(-2px);
+}
+
+.atv-btn-direcao:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+.atv-btn-direcao:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* Botões de Ação do Jogo */
+.atv-acoes-game {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.btn-executar-glow {
+  padding: 10px 20px;
+  font-weight: 700;
+}
+
+/* Terminal Console (Logs de Telemetria ao Vivo) */
+.atv-terminal-detalhes {
+  background: #050811;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.terminal-cabecalho {
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #94a3b8;
+  cursor: pointer;
+  user-select: none;
+}
+
+.atv-terminal-body {
+  padding: 10px 14px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.76rem;
+  line-height: 1.6;
+  color: #38bdf8;
+  max-height: 110px;
+  overflow-y: auto;
+}
+
+.terminal-linha {
+  word-break: break-all;
+}
+
+.atv-vitoria-box {
+  padding: 8px 0;
+}
+
+.atv-dica-footer {
+  margin-top: 14px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Modo antigo para impressão e fallback */
 .atv-robo { display: grid; grid-template-columns: minmax(260px, 420px) 1fr; gap: 24px; align-items: start; }
 .atv-mapa {
   --colunas: 4;

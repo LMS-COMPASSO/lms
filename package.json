@@ -17,7 +17,8 @@
     "gerar:bmc": "bash scripts/gerar-bmc.sh",
     "gerar:pdf": "bash scripts/gerar-compartilhamento.sh --pdf",
     "gerar:png": "bash scripts/gerar-compartilhamento.sh --png",
-    "gerar:todos": "bash scripts/gerar-bmc.sh && bash scripts/gerar-compartilhamento.sh"
+    "gerar:logos": "bash scripts/gerar-logos-png.sh",
+    "gerar:todos": "bash scripts/gerar-bmc.sh && bash scripts/gerar-compartilhamento.sh && bash scripts/gerar-logos-png.sh"
   },
   "license": "MIT",
   "devDependencies": {

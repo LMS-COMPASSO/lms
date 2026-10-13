@@ -122,7 +122,8 @@ Guias técnicos, pedagógicos e estratégicos detalhados na pasta `docs/`:
 | `npm run gerar:bmc` | Renderiza o PDF A4 e PNG de alta resolução do Business Model Canvas via Chromium |
 | `npm run gerar:pdf` | Gera o PDF A4 com QR Code oficial para murais e divulgação escolar |
 | `npm run gerar:png` | Gera a imagem quadrada otimizada do QR Code para redes sociais e mídias |
-| `npm run gerar:todos` | Executa em lote a geração de todos os PDFs e imagens de divulgação e BMC |
+| `npm run gerar:logos` | Gera as logos em PNG de alta resolução (transparentes e card) para Canva e mídias |
+| `npm run gerar:todos` | Executa em lote a geração de todos os PDFs, imagens de divulgação, logos e BMC |
 
 ---
 
