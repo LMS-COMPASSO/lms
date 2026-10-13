@@ -34,11 +34,18 @@ docs/
 │   ├── lms-compasso-bmc.html           # Template interativo A4 Paisagem
 │   ├── lms-compasso-bmc.pdf            # PDF oficial para impressão
 │   └── img/lms-compasso-bmc.png        # Imagem Ultra HD (200 DPI)
-├── compartilhamento/                   # Materiais de divulgação e QR Codes
+├── compartilhamento/                   # Materiais de divulgação, marcas e QR Codes
 │   ├── compartilhamento-qrcode.html    # Folha de compartilhamento com QR Code
 │   ├── compartilhar-simplificado.html  # Card quadrado do QR Code
+│   ├── logo-compartilhamento.html      # Card institucional 1200x630 para redes e Canva
 │   ├── lms-compasso-compartilhamento.pdf
-│   └── img/lms-compasso-qrcode-simplificado.png
+│   └── img/
+│       ├── logo.png                    # Logo horizontal transparente Ultra HD
+│       ├── logo-branco.png             # Logo versão negativa transparente
+│       ├── logo-icone.png              # Ícone quadrado transparente (1024x1024)
+│       ├── logo-icone-branco.png       # Ícone branco transparente (1024x1024)
+│       ├── logo-compartilhamento.png   # Banner institucional (1200x630)
+│       └── lms-compasso-qrcode-simplificado.png
 ├── api-endpoints.md                    # Catálogo de endpoints da API
 ├── backend-cloudflare.md               # Guia técnico do backend
 ├── bncc-computacao.md                  # Matriz pedagógica da BNCC

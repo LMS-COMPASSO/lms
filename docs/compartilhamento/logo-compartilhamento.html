@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LMS COMPASSO — Card de Compartilhamento</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      width: 1200px;
+      height: 630px;
+      background: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .card {
+      width: 1140px;
+      height: 570px;
+      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 60%, #edf2f7 100%);
+      border: 1.5px solid #e2e8f0;
+      border-radius: 28px;
+      box-shadow: 0 20px 48px -12px rgba(15, 23, 42, 0.12);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      padding: 48px 60px 42px 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Linha decorativa de marca no topo */
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, #1a365d 0%, #2b6cb0 40%, #38a169 75%, #d69e2e 100%);
+    }
+
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 18px;
+      background: rgba(43, 108, 176, 0.08);
+      border: 1px solid rgba(43, 108, 176, 0.2);
+      border-radius: 9999px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #1a365d;
+    }
+
+    .badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #38a169;
+      box-shadow: 0 0 0 3px rgba(56, 161, 105, 0.2);
+    }
+
+    .main-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 22px;
+      margin-top: 10px;
+    }
+
+    .logo-img {
+      width: 620px;
+      height: auto;
+      filter: drop-shadow(0 6px 16px rgba(26, 54, 93, 0.08));
+    }
+
+    .tagline {
+      font-size: 21px;
+      font-weight: 600;
+      color: #2d3748;
+      max-width: 840px;
+      line-height: 1.4;
+    }
+
+    .sub-tagline {
+      font-size: 15px;
+      font-weight: 500;
+      color: #718096;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sub-tagline strong {
+      color: #276749;
+    }
+
+    .footer-bar {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 24px;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .pill-group {
+      display: flex;
+      gap: 12px;
+    }
+
+    .pill {
+      font-size: 13px;
+      font-weight: 600;
+      color: #4a5568;
+      background: #edf2f7;
+      padding: 6px 14px;
+      border-radius: 8px;
+    }
+
+    .authority {
+      font-size: 13px;
+      font-weight: 700;
+      color: #1a365d;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      letter-spacing: 0.02em;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="header-badge">
+      <span class="badge-dot"></span>
+      Plataforma Educacional Aberta • BNCC Computação
+    </div>
+
+    <div class="main-content">
+      <img src="../../public/img/logo.svg" alt="LMS COMPASSO — BNCC Computação" class="logo-img">
+      <p class="tagline">
+        Pensamento Computacional, Algoritmos e Cultura Digital no Ensino Fundamental
+      </p>
+      <p class="sub-tagline">
+        <span>Alinhamento Pedagógico Oficial:</span>
+        <strong>Resolução CNE/CP nº 2/2025</strong>
+        <span>• 100% Livre e Gratuito</span>
+      </p>
+    </div>
+
+    <div class="footer-bar">
+      <div class="pill-group">
+        <span class="pill">🧩 Atividades Desplugadas</span>
+        <span class="pill">🤖 Simuladores Interativos</span>
+        <span class="pill">📊 Gestão &amp; BNCC</span>
+      </div>
+      <div class="authority">
+        COMPASSO LMS • Educação Pública com Tecnologia
+      </div>
+    </div>
+  </div>
+</body>
+</html>
