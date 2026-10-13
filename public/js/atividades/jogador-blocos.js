@@ -9,6 +9,7 @@
  */
 
 import { anunciar, criarFeedback, h } from './dom.js';
+import { tocarSom, criarBotaoSom } from './som.js';
 
 export function jogadorBlocos(atividade, ctx) {
   let tentativas = 0;
@@ -274,6 +275,7 @@ export function jogadorBlocos(atividade, ctx) {
         class: 'btn-bloco-acao',
         title: 'Mover para cima',
         onclick: () => {
+          tocarSom('mover');
           [listaMae[idx - 1], listaMae[idx]] = [listaMae[idx], listaMae[idx - 1]];
           atualizarListaWorkspace();
         },
@@ -286,6 +288,7 @@ export function jogadorBlocos(atividade, ctx) {
         class: 'btn-bloco-acao',
         title: 'Mover para baixo',
         onclick: () => {
+          tocarSom('mover');
           [listaMae[idx + 1], listaMae[idx]] = [listaMae[idx], listaMae[idx + 1]];
           atualizarListaWorkspace();
         },
@@ -297,6 +300,7 @@ export function jogadorBlocos(atividade, ctx) {
       class: 'btn-bloco-remover',
       title: 'Excluir bloco',
       onclick: () => {
+        tocarSom('click');
         listaMae.splice(idx, 1);
         atualizarListaWorkspace();
       },
@@ -363,8 +367,15 @@ export function jogadorBlocos(atividade, ctx) {
       executarPassoIndividual(passo);
       desenharPalco(passo.id);
 
+      if (passo.tipo === 'avancar') tocarSom('passo');
+      else if (passo.tipo && passo.tipo.startsWith('girar')) tocarSom('giro');
+
       if (estadoSimulacao.bateu) {
         teveErro = true;
+        tocarSom('erro');
+        if (typeof window !== 'undefined' && window.gsap) {
+          window.gsap.to(canvasPalco, { x: -6, repeat: 4, yoyo: true, duration: 0.05, clearProps: 'x' });
+        }
         feedback.erro('Colisão!', 'O robô bateu em um obstáculo. Reveja seu caminho e tente novamente.');
         break;
       }
@@ -509,6 +520,10 @@ export function jogadorBlocos(atividade, ctx) {
   }
 
   async function finalizarComVitoria(estrelas) {
+    tocarSom('vitoria');
+    if (typeof window !== 'undefined' && window.gsap) {
+      window.gsap.fromTo(canvasPalco, { scale: 0.95 }, { scale: 1, duration: 0.4, ease: 'back.out(2)' });
+    }
     feedback.sucesso('Missão Concluída! ⭐⭐⭐', atividade.conclusao);
     anunciar(`Parabéns! ${atividade.conclusao}`);
 
@@ -555,6 +570,7 @@ export function jogadorBlocos(atividade, ctx) {
         class: 'btn-bloco-paleta',
         style: `--bloco-cor: ${b.cor}`,
         onclick: () => {
+          tocarSom('bloco');
           programa.push({
             id: `cmd-${Date.now()}-${Math.random()}`,
             tipo: b.id,
@@ -598,6 +614,7 @@ export function jogadorBlocos(atividade, ctx) {
           }
         },
       }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'code'), ' Ver Código'),
+      criarBotaoSom(),
     ),
     h('div', { class: 'blocos-dica-meta' },
       h('span', { class: 'material-symbols-outlined icon-xs' }, 'info'),
