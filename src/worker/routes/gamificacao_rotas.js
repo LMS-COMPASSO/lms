@@ -20,6 +20,78 @@ import {
 } from '../helpers_utilitarios.js';
 
 /**
+ * Garante que as tabelas de gamificação existam no D1 SQLite, semeando as medalhas padrão caso necessário.
+ */
+export async function garantirTabelasGamificacao(db) {
+  if (!db || typeof db.prepare !== 'function') return;
+  try {
+    const check = await queryOne(db, "SELECT name FROM sqlite_master WHERE type='table' AND name='medalhas'");
+    if (!check) {
+      await db.prepare(`
+        CREATE TABLE IF NOT EXISTS medalhas (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          codigo TEXT NOT NULL UNIQUE,
+          titulo TEXT NOT NULL,
+          descricao TEXT NOT NULL,
+          eixo_bncc TEXT NOT NULL CHECK(eixo_bncc IN ('Pensamento Computacional', 'Mundo Digital', 'Cultura Digital', 'Geral')),
+          icone TEXT NOT NULL,
+          cor TEXT NOT NULL DEFAULT '#2563eb',
+          criterio_tipo TEXT NOT NULL,
+          criterio_meta INTEGER NOT NULL DEFAULT 1,
+          criado_em TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+        )
+      `).run();
+
+      await db.prepare(`
+        CREATE TABLE IF NOT EXISTS usuario_medalhas (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          usuario_id INTEGER NOT NULL,
+          medalha_id INTEGER NOT NULL,
+          conquistada_em TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+          FOREIGN KEY (medalha_id) REFERENCES medalhas(id) ON DELETE CASCADE,
+          UNIQUE(usuario_id, medalha_id)
+        )
+      `).run();
+
+      await db.prepare(`
+        CREATE TABLE IF NOT EXISTS desempenho_habilidades (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          usuario_id INTEGER NOT NULL,
+          curso_id INTEGER,
+          habilidade_codigo TEXT NOT NULL,
+          origem_tipo TEXT NOT NULL CHECK(origem_tipo IN ('atividade', 'avaliacao', 'projeto')) DEFAULT 'atividade',
+          origem_id TEXT NOT NULL,
+          pontuacao REAL NOT NULL DEFAULT 0.0,
+          nivel_atingido TEXT NOT NULL CHECK(nivel_atingido IN ('em_desenvolvimento', 'adequado', 'avancado')) DEFAULT 'adequado',
+          registrado_em TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+          FOREIGN KEY (curso_id) REFERENCES cursos(id) ON DELETE SET NULL
+        )
+      `).run();
+
+      const padroes = [
+        ['primeiro_passo', 'Primeiro Passo na Computação', 'Concluiu a primeira atividade interativa ou aula no LMS.', 'Geral', 'rocket_launch', '#3b82f6', 'atividades', 1],
+        ['mestre_algoritmos', 'Mestre dos Algoritmos', 'Completou todas as trilhas de sequenciamento e passos lógicos.', 'Pensamento Computacional', 'psychology', '#8b5cf6', 'eixo_pc', 3],
+        ['arquiteto_decomposicao', 'Arquiteto da Decomposição', 'Resolveu desafios quebrando problemas complexos em partes menores.', 'Pensamento Computacional', 'account_tree', '#6366f1', 'decomposicao', 2],
+        ['programador_blocos', 'Programador em Blocos Jr.', 'Montou e executou com sucesso rotinas de lógica no simulador.', 'Pensamento Computacional', 'terminal', '#0ea5e9', 'blocos', 3],
+        ['detetive_hardware_software', 'Detetive de Hardware & Software', 'Compreendeu os componentes de computadores, periféricos e redes.', 'Mundo Digital', 'memory', '#10b981', 'mundo_digital', 2],
+        ['guardiao_privacidade', 'Guardião da Privacidade & Ética', 'Dominou práticas de cidadania digital, senhas seguras e direitos na web.', 'Cultura Digital', 'verified_user', '#f59e0b', 'cultura_digital', 2],
+        ['trilha_completa', 'Pioneiro da BNCC Computação', 'Concluiu com êxito pelo menos um curso completo da plataforma.', 'Geral', 'workspace_premium', '#ec4899', 'cursos', 1],
+      ];
+
+      for (const p of padroes) {
+        await db.prepare('INSERT OR IGNORE INTO medalhas (codigo, titulo, descricao, eixo_bncc, icone, cor, criterio_tipo, criterio_meta) VALUES (?, ?, ?, ?, ?, ?, ?, ?)')
+          .bind(...p)
+          .run();
+      }
+    }
+  } catch (err) {
+    // Silencia erros caso seja ambiente de teste com mocks restritos
+  }
+}
+
+/**
  * Lista todas as medalhas do catálogo indicando quais o usuário logado já conquistou.
  * Permite filtrar por eixo da BNCC (?eixo_bncc=...).
  */
@@ -45,7 +117,21 @@ export async function listarMedalhas(request, env, db, url) {
 
   sql += ' ORDER BY m.eixo_bncc ASC, m.id ASC';
 
-  const medalhas = await queryAll(db, sql, params);
+  let medalhas;
+  try {
+    medalhas = await queryAll(db, sql, params);
+  } catch (err) {
+    if (err && String(err.message || err).includes('no such table')) {
+      await garantirTabelasGamificacao(db);
+      try {
+        medalhas = await queryAll(db, sql, params);
+      } catch {
+        medalhas = [];
+      }
+    } else {
+      throw err;
+    }
+  }
 
   // Calcula estatísticas gerais de gamificação
   const totalMedalhas = medalhas.length;
