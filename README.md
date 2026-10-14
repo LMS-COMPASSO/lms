@@ -99,7 +99,6 @@ Guias técnicos, pedagógicos e estratégicos detalhados na pasta `docs/`:
 | Guia | Descrição | Público-Alvo |
 | --- | --- | --- |
 | **[Diretrizes da BNCC Computação](docs/bncc-computacao.md)** | Os 3 eixos curriculares, anos escolares, competências pedagógicas e sugestões de atividades. | Professores e Coordenadores |
-| **[Business Model Canvas — BMC](docs/bmc/README.md)** | Matriz estratégica dos 32 cards, PDF A4 Paisagem, imagem HD e template executivo. | Gestores, Bancas e Investidores |
 | **[Materiais de Compartilhamento](docs/compartilhamento/)** | Modelos para murais escolares, cartazes A4 e gerador de QR Codes de acesso rápido. | Escolas e Secretarias |
 | **[Guia do Backend Cloudflare](docs/backend-cloudflare.md)** | Configuração do Worker, banco relacional D1, Wrangler CLI e deploy em produção. | Desenvolvedores e TI |
 | **[Guia do Frontend](docs/frontend-guia.md)** | Arquitetura das páginas web, autenticação JWT e componentes visuais. | Desenvolvedores Web |
@@ -118,12 +117,10 @@ Guias técnicos, pedagógicos e estratégicos detalhados na pasta `docs/`:
 | `npm run cf:db:local` | Executa a criação de tabelas (`schema.sql`) no banco local |
 | `npm run cf:seed:local` | Carrega os cursos modelo da BNCC e usuários no banco local |
 | `npm run cf:db:remote` | Executa as tabelas e índices no banco de produção Cloudflare D1 |
-| `npm run cf:seed:remote` | Popula os cursos modelo da BNCC no banco oficial de produção |
-| `npm run gerar:bmc` | Renderiza o PDF A4 e PNG de alta resolução do Business Model Canvas via Chromium |
 | `npm run gerar:pdf` | Gera o PDF A4 com QR Code oficial para murais e divulgação escolar |
 | `npm run gerar:png` | Gera a imagem quadrada otimizada do QR Code para redes sociais e mídias |
 | `npm run gerar:logos` | Gera as logos em PNG de alta resolução (transparentes e card) para Canva e mídias |
-| `npm run gerar:todos` | Executa em lote a geração de todos os PDFs, imagens de divulgação, logos e BMC |
+| `npm run gerar:todos` | Executa em lote a geração de todos os PDFs, imagens de divulgação e logos |
 
 ---
 
@@ -135,11 +132,6 @@ Guias técnicos, pedagógicos e estratégicos detalhados na pasta `docs/`:
 │   ├── schema.sql              # Estrutura de tabelas e índices
 │   └── seed.sql                # Dados modelo da BNCC Computação
 ├── docs/                       # Documentação técnica, pedagógica e estratégica
-│   ├── bmc/                    # Subpasta dedicada ao Business Model Canvas (BMC)
-│   │   ├── README.md           # Matriz estratégica com os 32 cards do Canvas
-│   │   ├── lms-compasso-bmc.html # Template interativo A4 Paisagem
-│   │   ├── lms-compasso-bmc.pdf  # PDF executivo oficial de 1 página A4
-│   │   └── img/                # Imagem Ultra HD do BMC (200 DPI)
 │   ├── compartilhamento/       # Materiais para divulgação e murais escolares (QR Codes)
 │   ├── api-endpoints.md        # Catálogo de endpoints da API REST
 │   ├── backend-cloudflare.md   # Guia técnico de Workers e D1
@@ -151,8 +143,8 @@ Guias técnicos, pedagógicos e estratégicos detalhados na pasta `docs/`:
 │   ├── img/                    # Ícones vetoriais SVG, logos e capturas de divulgação
 │   └── js/                     # Módulos JS nativos (api.js, config.js, layout.js, atividades/)
 ├── scripts/                    # Scripts de automação e renderização de ativos
-│   ├── gerar-bmc.sh            # Script modular de compilação de PDF e PNG do BMC
-│   └── gerar-compartilhamento.sh # Script de geração de materiais de QR Code
+│   ├── gerar-compartilhamento.sh # Script de geração de materiais de QR Code
+│   └── gerar-logos-png.sh      # Script de geração de logos transparentes e cards
 ├── src/
 │   └── worker/                 # Backend Serverless modular (Cloudflare Workers)
 │       ├── index.js            # Roteador principal e orquestrador de requisições

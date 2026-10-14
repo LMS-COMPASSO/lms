@@ -48,10 +48,9 @@ O **LMS COMPASSO** é uma plataforma aberta, leve e serverless de Gestão de Apr
 ## Evidence on Hand
 
 - Sistema em produção oficial na Cloudflare: `https://lms.thedelacosta.workers.dev/`
-- Matriz estratégica completa do Business Model Canvas (BMC) com 32 cards: `docs/bmc/README.md`, `docs/bmc/lms-compasso-bmc.html`, `public/bmc.html`, `public/lms-compasso-bmc.pdf`
 - Documentação pedagógica detalhada: `docs/bncc-computacao.md`
 - Banco de dados relacional populado com esquema D1 e seeds representativos: `d1/schema.sql`, `d1/seed.sql`
-- Suíte automatizada com 55 testes funcionais validados em `tests/`
+- Suíte automatizada com 57 testes funcionais validados em `tests/`
 - Telas funcionais ativas em `public/` (incluindo `dashboard.html`, `atividades.html`, `perfil.html`, `login.html`)
 
 ## Product Principles

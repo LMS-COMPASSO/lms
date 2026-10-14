@@ -9,7 +9,6 @@ Esta pasta reúne todos os guias técnicos, pedagógicos, estratégicos e materi
 | Documento | Descrição | Público-Alvo |
 | --- | --- | --- |
 | **[`docs/bncc-computacao.md`](file:///home/thiago/lms/docs/bncc-computacao.md)** | Diretrizes curriculares dos 3 eixos da BNCC Computação (Resolução CNE/CP nº 1/2022). | Professores e Coordenadores |
-| **[`docs/bmc/README.md`](file:///home/thiago/lms/docs/bmc/README.md)** | **Business Model Canvas (BMC)**: 32 cards estratégicos, PDF A4 e PNG de alta resolução. | Gestores, Investidores e Bancas |
 | **[`docs/compartilhamento/`](file:///home/thiago/lms/docs/compartilhamento/)** | Modelos para compartilhamento, murais escolares e geração de QR Codes de divulgação. | Escolas e Secretarias |
 
 ---
@@ -29,11 +28,6 @@ Esta pasta reúne todos os guias técnicos, pedagógicos, estratégicos e materi
 
 ```text
 docs/
-├── bmc/                                # Subpasta dedicada ao Business Model Canvas
-│   ├── README.md                       # Matriz dos 32 cards estratégicos do Canvas
-│   ├── lms-compasso-bmc.html           # Template interativo A4 Paisagem
-│   ├── lms-compasso-bmc.pdf            # PDF oficial para impressão
-│   └── img/lms-compasso-bmc.png        # Imagem Ultra HD (200 DPI)
 ├── compartilhamento/                   # Materiais de divulgação, marcas e QR Codes
 │   ├── compartilhamento-qrcode.html    # Folha de compartilhamento com QR Code
 │   ├── compartilhar-simplificado.html  # Card quadrado do QR Code
