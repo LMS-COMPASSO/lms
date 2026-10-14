@@ -14,11 +14,10 @@
     "cf:db:remote": "wrangler d1 execute lms_prod --remote --file=./d1/schema.sql",
     "cf:seed:local": "wrangler d1 execute lms_prod --local --file=./d1/seed.sql",
     "cf:seed:remote": "wrangler d1 execute lms_prod --remote --file=./d1/seed.sql",
-    "gerar:bmc": "bash scripts/gerar-bmc.sh",
     "gerar:pdf": "bash scripts/gerar-compartilhamento.sh --pdf",
     "gerar:png": "bash scripts/gerar-compartilhamento.sh --png",
     "gerar:logos": "bash scripts/gerar-logos-png.sh",
-    "gerar:todos": "bash scripts/gerar-bmc.sh && bash scripts/gerar-compartilhamento.sh && bash scripts/gerar-logos-png.sh"
+    "gerar:todos": "bash scripts/gerar-compartilhamento.sh && bash scripts/gerar-logos-png.sh"
   },
   "license": "MIT",
   "devDependencies": {
