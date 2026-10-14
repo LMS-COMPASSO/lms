@@ -1,0 +1,858 @@
+/* ============================================================================
+   LMS COMPASSO — TELA DE BOAS-VINDAS E PARCEIROS (INSPIRAÇÃO WISHLABS & GSAP)
+   Design futurista, materiais escolares inteligentes e conceitos de programação.
+   Em total conformidade com as diretrizes Impeccable (WCAG AA, tipografia nítida).
+   ============================================================================ */
+
+.pagina-boas-vindas {
+  background-color: #0b1120;
+  color: #f8fafc;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+/* ---------- Topo / Header Futurista ---------- */
+.bv-topo {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(11, 17, 32, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 14px 0;
+}
+
+.bv-topo-conteudo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.bv-logo img {
+  height: 38px;
+  width: auto;
+  display: block;
+}
+
+.bv-nav {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.bv-nav a {
+  color: #94a3b8;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.bv-nav a:hover,
+.bv-nav a[aria-current='page'] {
+  color: #38bdf8;
+}
+
+.bv-nav a[aria-current='page'] {
+  font-weight: 700;
+}
+
+.bv-acoes {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ---------- Hero Section (Palco Wishlabs) ---------- */
+.bv-hero {
+  position: relative;
+  padding: 64px 0 72px;
+  background: radial-gradient(circle at 50% 10%, rgba(37, 99, 235, 0.12) 0%, rgba(11, 17, 32, 0) 70%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.bv-hero-grade {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  align-items: center;
+  gap: 48px;
+}
+
+.bv-badge-inovacao {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  color: #7dd3fc;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin-bottom: 20px;
+}
+
+.bv-titulo {
+  font-size: clamp(2.3rem, 4.5vw, 3.4rem);
+  line-height: 1.15;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 20px;
+  letter-spacing: -0.02em;
+}
+
+.bv-titulo span {
+  color: #38bdf8;
+}
+
+.bv-descricao {
+  font-size: 1.15rem;
+  line-height: 1.65;
+  color: #94a3b8;
+  margin: 0 0 32px;
+  max-width: 580px;
+}
+
+.bv-cta-grupo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 36px;
+}
+
+.btn-futurista-primario {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 26px;
+  border-radius: 12px;
+  background: #2563eb;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1rem;
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  transition: all 0.2s ease;
+}
+
+.btn-futurista-primario:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
+}
+
+.btn-futurista-contorno {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 24px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #e2e8f0;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: all 0.2s ease;
+}
+
+.btn-futurista-contorno:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: #94a3b8;
+  color: #ffffff;
+}
+
+.bv-metricas-rapidas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.bv-metrica-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.bv-metrica-valor {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: #38bdf8;
+  line-height: 1.1;
+}
+
+.bv-metrica-rotulo {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ---------- Palco de Objetos e Código Flutuantes (Wishlabs Stage) ---------- */
+.bv-palco-visual {
+  position: relative;
+  min-height: 480px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bv-palco-backdrop {
+  position: absolute;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.12) 0%, rgba(11, 17, 32, 0) 70%);
+  pointer-events: none;
+}
+
+.bv-grid-flutuante {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  height: 460px;
+}
+
+/* Cards Flutuantes */
+.bv-card-flutuante {
+  position: absolute;
+  border-radius: 16px;
+  background: rgba(30, 41, 59, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 16px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  transition: transform 0.25s ease, border-color 0.25s ease;
+  cursor: default;
+}
+
+.bv-card-flutuante:hover {
+  border-color: rgba(56, 189, 248, 0.5);
+  background: rgba(30, 41, 59, 0.9);
+}
+
+/* Card 1: Robô e Simulação */
+.bv-card-robo {
+  top: 10px;
+  left: 10px;
+  width: 220px;
+  z-index: 3;
+}
+
+.bv-card-robo-cabecalho {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.bv-card-icone {
+  width: 48px;
+  height: 48px;
+  padding: 12px;
+  box-sizing: border-box;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  flex-shrink: 0;
+}
+
+.bv-card-icone .material-symbols-outlined {
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+}
+
+.bv-card-titulo {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ffffff;
+  display: block;
+}
+
+.bv-card-subtitulo {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  margin: 0;
+  display: block;
+}
+
+.bv-card-badge-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #34d399;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(52, 211, 153, 0.1);
+  margin-top: 6px;
+}
+
+/* Card 2: Snippet de Programação */
+.bv-card-codigo {
+  top: 90px;
+  right: 0;
+  width: 250px;
+  z-index: 4;
+}
+
+.bv-codigo-topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 0.75rem;
+  color: #94a3b8;
+  font-family: monospace;
+}
+
+.bv-codigo-bolinhas {
+  display: flex;
+  gap: 5px;
+}
+
+.bv-codigo-bolinhas span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: block;
+}
+
+.bv-codigo-bolinhas span:nth-child(1) { background: #ef4444; }
+.bv-codigo-bolinhas span:nth-child(2) { background: #f59e0b; }
+.bv-codigo-bolinhas span:nth-child(3) { background: #10b981; }
+
+.bv-codigo-bloco {
+  background: #0f172a;
+  border-radius: 8px;
+  padding: 12px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.bv-kw { color: #f43f5e; font-weight: 700; }
+.bv-fn { color: #38bdf8; }
+.bv-str { color: #a3e635; }
+.bv-num { color: #fbbf24; }
+
+/* Card 3: Material Escolar (Compasso & Régua) */
+.bv-card-compasso {
+  bottom: 80px;
+  left: 0;
+  width: 210px;
+  z-index: 2;
+}
+
+.bv-compasso-icone {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+}
+
+.bv-tag-bncc {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #fbbf24;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: rgba(245, 158, 11, 0.1);
+  margin-top: 6px;
+}
+
+/* Card 4: Mochila & Estrutura de Dados */
+.bv-card-mochila {
+  bottom: 10px;
+  right: 15px;
+  width: 220px;
+  z-index: 3;
+}
+
+.bv-mochila-icone {
+  background: rgba(192, 132, 252, 0.15);
+  color: #c084fc;
+}
+
+.bv-mochila-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.bv-mochila-chip {
+  font-size: 0.72rem;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
+}
+
+/* ---------- Seção: Parceiros e Ecossistema ---------- */
+.bv-secao {
+  padding: 80px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.bv-secao-cabecalho {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 52px;
+}
+
+.bv-secao-eyebrow {
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #38bdf8;
+  margin-bottom: 12px;
+}
+
+.bv-secao-titulo {
+  font-size: clamp(2rem, 3.4vw, 2.7rem);
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 16px;
+  line-height: 1.25;
+}
+
+.bv-secao-subtitulo {
+  font-size: 1.08rem;
+  line-height: 1.6;
+  color: #94a3b8;
+  margin: 0;
+}
+
+/* Grid de Logos de Parceiros */
+.bv-parceiros-grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 22px;
+}
+
+.bv-parceiro-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  padding: 26px;
+  border-radius: 16px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.bv-parceiro-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(56, 189, 248, 0.4);
+  background: rgba(15, 23, 42, 0.9);
+}
+
+.bv-parceiro-emblema {
+  width: 56px;
+  height: 56px;
+  padding: 14px;
+  box-sizing: border-box;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.bv-parceiro-emblema .material-symbols-outlined {
+  font-size: 26px;
+  width: 26px;
+  height: 26px;
+  line-height: 26px;
+}
+
+.bv-emblema-ifma { background: rgba(34, 197, 94, 0.12); color: #4ade80; border-color: rgba(34, 197, 94, 0.25); }
+.bv-emblema-suap { background: rgba(56, 189, 248, 0.12); color: #38bdf8; border-color: rgba(56, 189, 248, 0.25); }
+.bv-emblema-mec { background: rgba(245, 158, 11, 0.12); color: #fbbf24; border-color: rgba(245, 158, 11, 0.25); }
+.bv-emblema-escola { background: rgba(192, 132, 252, 0.12); color: #c084fc; border-color: rgba(192, 132, 252, 0.25); }
+.bv-emblema-git { background: rgba(255, 255, 255, 0.08); color: #f8fafc; border-color: rgba(255, 255, 255, 0.2); }
+.bv-emblema-wish { background: rgba(236, 72, 153, 0.12); color: #f472b6; border-color: rgba(236, 72, 153, 0.25); }
+
+.bv-parceiro-info {
+  flex: 1;
+}
+
+.bv-parceiro-topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.bv-parceiro-nome {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.bv-parceiro-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #94a3b8;
+  white-space: nowrap;
+}
+
+.bv-parceiro-papel {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #38bdf8;
+  margin: 0 0 6px;
+}
+
+.bv-parceiro-desc {
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: #94a3b8;
+  margin: 0;
+}
+
+/* ---------- Seção: Da Mochila ao Código (Conexões Didáticas) ---------- */
+.bv-conexao-grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 18px;
+}
+
+.bv-conexao-card {
+  padding: 24px 20px;
+  border-radius: 16px;
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  text-align: center;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.bv-conexao-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(56, 189, 248, 0.35);
+  background: rgba(15, 23, 42, 0.8);
+}
+
+.bv-conexao-icone {
+  width: 56px;
+  height: 56px;
+  padding: 14px;
+  box-sizing: border-box;
+  border-radius: 14px;
+  margin: 0 auto 16px;
+  display: grid;
+  place-items: center;
+  background: rgba(56, 189, 248, 0.1);
+  color: #38bdf8;
+}
+
+.bv-conexao-icone .material-symbols-outlined {
+  font-size: 26px;
+  width: 26px;
+  height: 26px;
+  line-height: 26px;
+}
+
+.bv-conexao-objeto {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #94a3b8;
+  margin: 0 0 6px;
+}
+
+.bv-conexao-seta {
+  font-size: 1.2rem;
+  color: #38bdf8;
+  margin: 4px 0;
+  display: block;
+}
+
+.bv-conexao-conceito {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 8px;
+}
+
+.bv-conexao-desc {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: #94a3b8;
+  margin: 0;
+}
+
+/* ---------- Seção: Os 3 Eixos da BNCC Computação ---------- */
+.bv-eixos-grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.bv-eixo-card {
+  padding: 34px 28px;
+  border-radius: 20px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+
+.bv-eixo-card:hover {
+  transform: translateY(-4px);
+}
+
+.bv-eixo-card.pc { border-color: rgba(56, 189, 248, 0.35); }
+.bv-eixo-card.md { border-color: rgba(52, 211, 153, 0.35); }
+.bv-eixo-card.cd { border-color: rgba(251, 191, 36, 0.35); }
+
+.bv-eixo-icone-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 22px;
+}
+
+.bv-eixo-icone {
+  width: 60px;
+  height: 60px;
+  padding: 14px;
+  box-sizing: border-box;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+}
+
+.bv-eixo-icone .material-symbols-outlined {
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
+  line-height: 28px;
+}
+
+.bv-eixo-card.pc .bv-eixo-icone { background: rgba(56, 189, 248, 0.15); color: #38bdf8; }
+.bv-eixo-card.md .bv-eixo-icone { background: rgba(52, 211, 153, 0.15); color: #34d399; }
+.bv-eixo-card.cd .bv-eixo-icone { background: rgba(251, 191, 36, 0.15); color: #fbbf24; }
+
+.bv-eixo-pill {
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #cbd5e1;
+}
+
+.bv-eixo-titulo {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 12px;
+}
+
+.bv-eixo-desc {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #94a3b8;
+  margin: 0 0 22px;
+  flex: 1;
+}
+
+.bv-eixo-topicos {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bv-eixo-topicos li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+  color: #cbd5e1;
+}
+
+.bv-eixo-topicos .material-symbols-outlined {
+  font-size: 1.15rem;
+  color: #38bdf8;
+}
+
+.bv-eixo-card.md .bv-eixo-topicos .material-symbols-outlined { color: #34d399; }
+.bv-eixo-card.cd .bv-eixo-topicos .material-symbols-outlined { color: #fbbf24; }
+
+/* ---------- Banner Final de Chamada para Ação ---------- */
+.bv-cta-final {
+  padding: 80px 0;
+  background: radial-gradient(circle at 50% 50%, rgba(37, 99, 235, 0.14) 0%, rgba(11, 17, 32, 0) 70%);
+}
+
+.bv-cta-caixa {
+  padding: 52px 36px;
+  border-radius: 24px;
+  background: rgba(30, 41, 59, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+  max-width: 840px;
+  margin: 0 auto;
+}
+
+.bv-cta-caixa h2 {
+  font-size: clamp(2rem, 3.5vw, 2.5rem);
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 16px;
+}
+
+.bv-cta-caixa p {
+  font-size: 1.1rem;
+  line-height: 1.65;
+  color: #94a3b8;
+  margin: 0 auto 32px;
+  max-width: 640px;
+}
+
+.bv-cta-botoes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+}
+
+/* ---------- Rodapé Escuro da Tela de Boas-Vindas ---------- */
+.bv-rodape {
+  padding: 52px 0 36px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: #070d18;
+}
+
+.bv-rodape-grade {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+.bv-rodape-info p {
+  color: #94a3b8;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  margin: 14px 0 0;
+  max-width: 380px;
+}
+
+.bv-rodape-col h3 {
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #cbd5e1;
+  margin: 0 0 18px;
+}
+
+.bv-rodape-col ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bv-rodape-col a {
+  color: #94a3b8;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.bv-rodape-col a:hover {
+  color: #38bdf8;
+}
+
+.bv-rodape-fim {
+  padding-top: 26px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  text-align: center;
+  font-size: 0.82rem;
+  color: #94a3b8;
+}
+
+/* ---------- Responsividade ---------- */
+@media (max-width: 960px) {
+  .bv-hero-grade {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .bv-palco-visual {
+    min-height: 400px;
+  }
+  .bv-grid-flutuante {
+    max-width: 380px;
+    height: 420px;
+  }
+  .bv-rodape-grade {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+}
+
+@media (max-width: 640px) {
+  .bv-nav {
+    display: none;
+  }
+  .bv-cta-grupo {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .bv-parceiros-grade {
+    grid-template-columns: 1fr;
+  }
+  .bv-card-codigo {
+    width: 220px;
+    font-size: 0.72rem;
+  }
+}
+
+/* Suporte para Movimento Reduzido (Acessibilidade) */
+@media (prefers-reduced-motion: reduce) {
+  .bv-card-flutuante {
+    animation: none !important;
+    transform: none !important;
+  }
+}
