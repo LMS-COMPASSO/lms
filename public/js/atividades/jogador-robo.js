@@ -23,6 +23,8 @@ import {
   menorPrograma,
   plural,
 } from './logica.js';
+import { tocarSom, alternarSom as alternarSomModulo, somAtivo } from './som.js';
+import { renderizarIcone, renderizarIconeCelula } from './icones.js';
 
 // Mapeamento de ângulos de rotação em graus por direção
 const ANGULOS_DIRECAO = {
@@ -40,95 +42,6 @@ const BUSSOLA_SIMBOLOS = {
   esquerda: '◄ OESTE',
 };
 
-// Sistema de Áudio Sintetizado Nativo (Web Audio API)
-let audioCtx = null;
-let somHabilitado = true;
-
-function tocarSom(tipo) {
-  if (!somHabilitado || typeof window === 'undefined') return;
-  try {
-    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-    if (!AudioContextClass) return;
-    if (!audioCtx) audioCtx = new AudioContextClass();
-    if (audioCtx.state === 'suspended') audioCtx.resume();
-    const agora = audioCtx.currentTime;
-
-    if (tipo === 'passo') {
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(320, agora);
-      osc.frequency.exponentialRampToValueAtTime(160, agora + 0.08);
-      gain.gain.setValueAtTime(0.08, agora);
-      gain.gain.exponentialRampToValueAtTime(0.001, agora + 0.08);
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.start(agora);
-      osc.stop(agora + 0.08);
-    } else if (tipo === 'giro') {
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(440, agora);
-      osc.frequency.exponentialRampToValueAtTime(660, agora + 0.07);
-      gain.gain.setValueAtTime(0.06, agora);
-      gain.gain.exponentialRampToValueAtTime(0.001, agora + 0.07);
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.start(agora);
-      osc.stop(agora + 0.07);
-    } else if (tipo === 'item') {
-      [523.25, 659.25, 783.99].forEach((freq, idx) => {
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(freq, agora + idx * 0.07);
-        gain.gain.setValueAtTime(0.12, agora + idx * 0.07);
-        gain.gain.exponentialRampToValueAtTime(0.001, agora + idx * 0.07 + 0.25);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start(agora + idx * 0.07);
-        osc.stop(agora + idx * 0.07 + 0.25);
-      });
-    } else if (tipo === 'erro') {
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(160, agora);
-      osc.frequency.linearRampToValueAtTime(60, agora + 0.25);
-      gain.gain.setValueAtTime(0.18, agora);
-      gain.gain.exponentialRampToValueAtTime(0.001, agora + 0.25);
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.start(agora);
-      osc.stop(agora + 0.25);
-    } else if (tipo === 'vitoria') {
-      [261.63, 329.63, 392.00, 523.25, 659.25].forEach((freq, idx) => {
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(freq, agora + idx * 0.09);
-        gain.gain.setValueAtTime(0.14, agora + idx * 0.09);
-        gain.gain.exponentialRampToValueAtTime(0.001, agora + idx * 0.09 + 0.3);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start(agora + idx * 0.09);
-        osc.stop(agora + idx * 0.09 + 0.3);
-      });
-    } else if (tipo === 'click') {
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(800, agora);
-      gain.gain.setValueAtTime(0.04, agora);
-      gain.gain.exponentialRampToValueAtTime(0.001, agora + 0.04);
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.start(agora);
-      osc.stop(agora + 0.04);
-    }
-  } catch {}
-}
 
 export function jogadorRobo(atividade, ctx) {
   // Lista de fases da atividade (suporta tanto atividades multi-missão quanto canônicas)
@@ -172,7 +85,8 @@ export function jogadorRobo(atividade, ctx) {
     faseIndex = indice;
     faseAtual = listaFases[faseIndex];
     mapa = lerMapa(faseAtual.grade);
-    minimo = menorPrograma(mapa).length;
+    const solucao = menorPrograma(mapa);
+    minimo = solucao ? solucao.length : (faseAtual.limite || 10);
     tema = faseAtual.tema || atividade.tema;
     estado = novoEstado();
     feedback.limpar();
@@ -265,8 +179,7 @@ export function jogadorRobo(atividade, ctx) {
   }
 
   function alternarSom() {
-    somHabilitado = !somHabilitado;
-    if (somHabilitado) tocarSom('click');
+    alternarSomModulo();
     renderizar();
   }
 
@@ -559,11 +472,11 @@ export function jogadorRobo(atividade, ctx) {
             {
               type: 'button',
               class: 'btn-hud-tool',
-              title: somHabilitado ? 'Desativar áudio' : 'Ativar áudio',
+              title: somAtivo() ? 'Desativar áudio' : 'Ativar áudio',
               onclick: alternarSom,
             },
-            h('span', { class: 'material-symbols-outlined icon-xs' }, somHabilitado ? 'volume_up' : 'volume_off'),
-            somHabilitado ? ' Som' : ' Mudo',
+            h('span', { class: 'material-symbols-outlined icon-xs' }, somAtivo() ? 'volume_up' : 'volume_off'),
+            somAtivo() ? ' Som' : ' Mudo',
           ),
           h(
             'button',
@@ -630,17 +543,17 @@ export function jogadorRobo(atividade, ctx) {
         const chave = `${x},${y}`;
         const isRoboAqui = x === posicao.x && y === posicao.y;
         const classes = ['atv-celula-game'];
-        let conteudo = '';
+        let iconeElemento = null;
 
         if (mapa.obstaculos.has(chave)) {
           classes.push('obstaculo');
-          conteudo = tema.obstaculo;
+          iconeElemento = renderizarIconeCelula('#', tema);
         } else if (x === mapa.meta.x && y === mapa.meta.y) {
           classes.push('meta');
-          conteudo = tema.meta;
+          iconeElemento = renderizarIconeCelula('M', tema);
         } else if (mapa.itens.some((item) => item.x === x && item.y === y) && !coletados.has(chave)) {
           classes.push('item-coletavel');
-          conteudo = tema.item;
+          iconeElemento = renderizarIconeCelula('I', tema);
         }
 
         if (x === mapa.inicio.x && y === mapa.inicio.y) classes.push('inicio');
@@ -656,7 +569,7 @@ export function jogadorRobo(atividade, ctx) {
               'aria-hidden': 'true',
             },
             h('span', { class: 'atv-celula-coord' }, `${x},${y}`),
-            h('span', { class: 'atv-celula-icone' }, conteudo),
+            iconeElemento ? h('span', { class: 'atv-celula-icone' }, iconeElemento) : null,
           ),
         );
       }
@@ -690,17 +603,17 @@ export function jogadorRobo(atividade, ctx) {
             style: `left: ${leftPct}%; top: ${topPct}%; width: ${widthPct}%; height: ${heightPct}%; transform: rotate(${estado.anguloRobo}deg);`,
           },
           h('div', { class: 'atv-robo-farol' }),
-          h('div', { class: 'atv-robo-corpo' }, tema.robo),
+          h('div', { class: 'atv-robo-corpo' }, renderizarIcone('smart_toy', { classe: 'cor-robo' })),
           h('div', { class: 'atv-robo-aura' }),
         ),
       ),
       h(
         'div',
         { class: 'atv-legenda-game' },
-        h('span', { class: 'badge-legenda' }, `${tema.robo} Robô`),
-        h('span', { class: 'badge-legenda' }, `${tema.meta} ${tema.nomeMeta || 'Destino'}`),
-        tema.item ? h('span', { class: 'badge-legenda' }, `${tema.item} ${tema.nomeItem || 'Coletável'}`) : null,
-        h('span', { class: 'badge-legenda' }, `${tema.obstaculo} ${tema.nomeObstaculo || 'Obstáculo'}`),
+        h('span', { class: 'badge-legenda' }, renderizarIcone('smart_toy', { classe: 'cor-robo icon-sm' }), ' Robô'),
+        h('span', { class: 'badge-legenda' }, renderizarIconeCelula('M', tema), ` ${tema.nomeMeta || 'Destino'}`),
+        tema.item ? h('span', { class: 'badge-legenda' }, renderizarIconeCelula('I', tema), ` ${tema.nomeItem || 'Coletável'}`) : null,
+        h('span', { class: 'badge-legenda' }, renderizarIconeCelula('#', tema), ` ${tema.nomeObstaculo || 'Obstáculo'}`),
       ),
     );
   }

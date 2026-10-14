@@ -22,6 +22,7 @@ import { contarConcluidas, registrarConclusao } from './atividades/logica.js';
 import { anunciar, h } from './atividades/dom.js';
 import { criarJogador } from './atividades/jogadores.js';
 import { imprimirFichas } from './atividades/impressao.js';
+import { renderizarIcone } from './atividades/icones.js';
 
 const raiz = document.getElementById('atividades-raiz');
 const parametros = new URLSearchParams(window.location.search);
@@ -68,7 +69,7 @@ function cartaoDaAtividade(atividade) {
       h(
         'div',
         { class: 'atv-card-topo' },
-        h('span', { class: 'pub-icone', 'aria-hidden': 'true' }, atividade.emoji),
+        h('div', { class: 'pub-icone', 'aria-hidden': 'true' }, renderizarIcone(atividade.id)),
         concluida ? h('span', { class: 'atv-concluida flex-inline-icon' }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'check_circle'), ' Concluída') : null,
       ),
       h(TituloCartao, {}, atividade.titulo),

@@ -5,10 +5,11 @@
 
 import { h } from './dom.js';
 import { DIRECOES, embaralharDiferente, lerMapa, menorPrograma } from './logica.js';
+import { renderizarIcone, renderizarIconeCelula } from './icones.js';
 
 function cabecalho(atividade, orientacao) {
   return [
-    h('h1', {}, `${atividade.emoji} ${atividade.titulo}`),
+    h('h1', { class: 'folha-titulo' }, renderizarIcone(atividade.id, { classe: 'folha-icone' }), ` ${atividade.titulo}`),
     h('p', {}, `Atividade desplugada · ${atividade.anos} · Pensamento Computacional`),
     h('p', {}, orientacao),
   ];
@@ -48,7 +49,7 @@ function folhaOrdenar(atividade) {
     h(
       'div',
       { class: 'folha-cartoes' },
-      cartoes.map((passo) => h('div', { class: 'folha-cartao' }, h('span', { class: 'folha-emoji' }, passo.emoji), passo.texto)),
+      cartoes.map((passo) => h('div', { class: 'folha-cartao' }, renderizarIcone(passo.id || passo.emoji, { classe: 'folha-icone' }), ` ${passo.texto}`)),
     ),
     rodape(atividade),
     guiaDoProfessor(
@@ -79,8 +80,8 @@ function folhaDecompor(atividade) {
     h(
       'div',
       { class: 'folha-partes' },
-      atividade.partes.map((parte) => h('div', { class: 'folha-parte' }, `${parte.emoji} ${parte.titulo}`)),
-      descarte.length ? h('div', { class: 'folha-parte' }, `🗑️ ${atividade.descarteTitulo}`) : null,
+      atividade.partes.map((parte) => h('div', { class: 'folha-parte' }, renderizarIcone(parte.id || parte.emoji, { classe: 'folha-icone' }), ` ${parte.titulo}`)),
+      descarte.length ? h('div', { class: 'folha-parte' }, renderizarIcone('fora', { classe: 'folha-icone' }), ` ${atividade.descarteTitulo}`) : null,
     ),
     h('div', { class: 'folha-cartoes' }, cartoes.map((tarefa) => h('div', { class: 'folha-cartao' }, tarefa.texto))),
     rodape(atividade),
@@ -108,8 +109,7 @@ function folhaRobo(atividade) {
   const solucao = menorPrograma(mapa).map((comando) => DIRECOES[comando].simbolo).join(' ');
 
   const celulas = atividade.grade.flatMap((linha) => [...linha].map((simbolo) => {
-    const emoji = { R: tema.robo, M: tema.meta, '#': tema.obstaculo, I: tema.item }[simbolo] || '';
-    return h('div', { class: 'folha-celula' }, emoji);
+    return h('div', { class: 'folha-celula' }, renderizarIconeCelula(simbolo, tema));
   }));
 
   const comandos = Object.values(DIRECOES).flatMap((direcao) => Array.from({ length: 6 }, () => h('div', { class: 'folha-cartao' }, direcao.simbolo)));
@@ -122,7 +122,18 @@ function folhaRobo(atividade) {
       'Use uma ficha pequena como robô. Monte o programa com as fichas de comando, na ordem certa, e confira movendo o robô no mapa, um quadrado por comando.',
     ),
     h('div', { class: 'folha-mapa', style: `--colunas:${mapa.largura}` }, celulas),
-    h('p', {}, `${tema.robo} robô · ${tema.meta} destino${tema.item ? ` · ${tema.item} lugar para passar` : ''} · ${tema.obstaculo} obstáculo`),
+    h(
+      'p',
+      { class: 'folha-legenda' },
+      renderizarIcone('smart_toy', { classe: 'folha-icone' }),
+      ' robô · ',
+      renderizarIconeCelula('M', tema),
+      ` ${tema.nomeMeta || 'destino'}`,
+      tema.item ? [' · ', renderizarIconeCelula('I', tema), ` ${tema.nomeItem || 'lugar para passar'}`] : '',
+      ' · ',
+      renderizarIconeCelula('#', tema),
+      ` ${tema.nomeObstaculo || 'obstáculo'}`,
+    ),
     h('div', { class: 'folha-cartoes compactos' }, comandos),
     rodape(atividade),
     guiaDoProfessor(
@@ -135,8 +146,8 @@ function folhaRobo(atividade) {
 function folhaBlocos(atividade) {
   const blocosCartoes = (atividade.blocosDisponiveis || []).map((b) =>
     h('div', { class: 'folha-cartao' },
-      h('span', { class: 'folha-emoji' }, '🧩'),
-      `${b.rotulo} (${b.categoria})`,
+      renderizarIcone('extension', { classe: 'folha-icone' }),
+      ` ${b.rotulo} (${b.categoria})`,
     ),
   );
 

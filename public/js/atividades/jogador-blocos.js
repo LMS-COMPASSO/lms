@@ -9,6 +9,7 @@
  */
 
 import { anunciar, criarFeedback, h } from './dom.js';
+import { tocarSom, criarBotaoSom } from './som.js';
 
 export function jogadorBlocos(atividade, ctx) {
   let tentativas = 0;
@@ -76,7 +77,10 @@ export function jogadorBlocos(atividade, ctx) {
 
     // Atualiza balão de fala se houver
     if (estadoSimulacao.fala) {
-      balaoFala.textContent = `💬 ${estadoSimulacao.fala}`;
+      balaoFala.replaceChildren(
+        h('span', { class: 'material-symbols-outlined icon-xs', style: 'vertical-align: middle; margin-right: 4px;' }, 'chat'),
+        document.createTextNode(estadoSimulacao.fala),
+      );
       balaoFala.classList.remove('oculto');
     } else {
       balaoFala.classList.add('oculto');
@@ -101,21 +105,42 @@ export function jogadorBlocos(atividade, ctx) {
         ctx2d.strokeRect(px, py, tam, tam);
 
         if (cel === 'X') {
-          ctx2d.fillStyle = '#64748b';
+          // Bloco obstáculo estilizado com textura de tijolo vetorial
+          ctx2d.fillStyle = '#475569';
           ctx2d.fillRect(px + 2, py + 2, tam - 4, tam - 4);
-          ctx2d.fillStyle = '#ffffff';
-          ctx2d.font = '18px sans-serif';
-          ctx2d.textAlign = 'center';
-          ctx2d.textBaseline = 'middle';
-          ctx2d.fillText('🧱', px + tam / 2, py + tam / 2);
+          ctx2d.strokeStyle = '#334155';
+          ctx2d.lineWidth = 1.5;
+          ctx2d.strokeRect(px + 2, py + 2, tam - 4, tam - 4);
+          ctx2d.strokeStyle = '#64748b';
+          ctx2d.beginPath();
+          ctx2d.moveTo(px + 2, py + tam / 2);
+          ctx2d.lineTo(px + tam - 2, py + tam / 2);
+          ctx2d.moveTo(px + tam / 2, py + 2);
+          ctx2d.lineTo(px + tam / 2, py + tam / 2);
+          ctx2d.moveTo(px + tam * 0.25, py + tam / 2);
+          ctx2d.lineTo(px + tam * 0.25, py + tam - 2);
+          ctx2d.moveTo(px + tam * 0.75, py + tam / 2);
+          ctx2d.lineTo(px + tam * 0.75, py + tam - 2);
+          ctx2d.stroke();
         } else if (r === alvo.y && c === alvo.x) {
+          // Alvo vetorial com círculos concêntricos de alta precisão
+          const cx = px + tam / 2;
+          const cy = py + tam / 2;
+          const raio = (tam - 8) / 2;
           ctx2d.fillStyle = '#fef3c7';
           ctx2d.fillRect(px + 2, py + 2, tam - 4, tam - 4);
-          ctx2d.fillStyle = '#d97706';
-          ctx2d.font = '22px sans-serif';
-          ctx2d.textAlign = 'center';
-          ctx2d.textBaseline = 'middle';
-          ctx2d.fillText('🎯', px + tam / 2, py + tam / 2);
+          ctx2d.beginPath();
+          ctx2d.fillStyle = '#ef4444';
+          ctx2d.arc(cx, cy, raio, 0, Math.PI * 2);
+          ctx2d.fill();
+          ctx2d.beginPath();
+          ctx2d.fillStyle = '#ffffff';
+          ctx2d.arc(cx, cy, raio * 0.65, 0, Math.PI * 2);
+          ctx2d.fill();
+          ctx2d.beginPath();
+          ctx2d.fillStyle = '#ef4444';
+          ctx2d.arc(cx, cy, raio * 0.35, 0, Math.PI * 2);
+          ctx2d.fill();
         } else {
           ctx2d.fillStyle = '#f8fafc';
           ctx2d.fillRect(px + 1, py + 1, tam - 2, tam - 2);
@@ -123,13 +148,45 @@ export function jogadorBlocos(atividade, ctx) {
       }
     }
 
-    // Desenha o robô
+    // Desenha o robô vetorial
     const robX = offsetX + estadoSimulacao.x * tam + tam / 2;
     const robY = offsetY + estadoSimulacao.y * tam + tam / 2;
-    ctx2d.font = '24px sans-serif';
-    ctx2d.textAlign = 'center';
-    ctx2d.textBaseline = 'middle';
-    ctx2d.fillText('🤖', robX, robY);
+    const rad = Math.min(tam * 0.35, 15);
+
+    // Chassi do robô
+    ctx2d.fillStyle = '#38bdf8';
+    ctx2d.beginPath();
+    if (typeof ctx2d.roundRect === 'function') {
+      ctx2d.roundRect(robX - rad, robY - rad, rad * 2, rad * 2, [rad * 0.35]);
+    } else {
+      ctx2d.rect(robX - rad, robY - rad, rad * 2, rad * 2);
+    }
+    ctx2d.fill();
+    ctx2d.strokeStyle = '#0284c7';
+    ctx2d.lineWidth = 2;
+    ctx2d.stroke();
+
+    // Antena
+    ctx2d.beginPath();
+    ctx2d.moveTo(robX, robY - rad);
+    ctx2d.lineTo(robX, robY - rad - 4);
+    ctx2d.stroke();
+    ctx2d.fillStyle = '#f59e0b';
+    ctx2d.beginPath();
+    ctx2d.arc(robX, robY - rad - 5, 2.5, 0, Math.PI * 2);
+    ctx2d.fill();
+
+    // Olhos digitais
+    ctx2d.fillStyle = '#ffffff';
+    ctx2d.beginPath();
+    ctx2d.arc(robX - rad * 0.45, robY - rad * 0.1, rad * 0.25, 0, Math.PI * 2);
+    ctx2d.arc(robX + rad * 0.45, robY - rad * 0.1, rad * 0.25, 0, Math.PI * 2);
+    ctx2d.fill();
+    ctx2d.fillStyle = '#0f172a';
+    ctx2d.beginPath();
+    ctx2d.arc(robX - rad * 0.45, robY - rad * 0.1, rad * 0.12, 0, Math.PI * 2);
+    ctx2d.arc(robX + rad * 0.45, robY - rad * 0.1, rad * 0.12, 0, Math.PI * 2);
+    ctx2d.fill();
   }
 
   function desenharGeometria(ctx2d) {
@@ -274,6 +331,7 @@ export function jogadorBlocos(atividade, ctx) {
         class: 'btn-bloco-acao',
         title: 'Mover para cima',
         onclick: () => {
+          tocarSom('mover');
           [listaMae[idx - 1], listaMae[idx]] = [listaMae[idx], listaMae[idx - 1]];
           atualizarListaWorkspace();
         },
@@ -286,6 +344,7 @@ export function jogadorBlocos(atividade, ctx) {
         class: 'btn-bloco-acao',
         title: 'Mover para baixo',
         onclick: () => {
+          tocarSom('mover');
           [listaMae[idx + 1], listaMae[idx]] = [listaMae[idx], listaMae[idx + 1]];
           atualizarListaWorkspace();
         },
@@ -297,6 +356,7 @@ export function jogadorBlocos(atividade, ctx) {
       class: 'btn-bloco-remover',
       title: 'Excluir bloco',
       onclick: () => {
+        tocarSom('click');
         listaMae.splice(idx, 1);
         atualizarListaWorkspace();
       },
@@ -363,8 +423,15 @@ export function jogadorBlocos(atividade, ctx) {
       executarPassoIndividual(passo);
       desenharPalco(passo.id);
 
+      if (passo.tipo === 'avancar') tocarSom('passo');
+      else if (passo.tipo && passo.tipo.startsWith('girar')) tocarSom('giro');
+
       if (estadoSimulacao.bateu) {
         teveErro = true;
+        tocarSom('erro');
+        if (typeof window !== 'undefined' && window.gsap) {
+          window.gsap.to(canvasPalco, { x: -6, repeat: 4, yoyo: true, duration: 0.05, clearProps: 'x' });
+        }
         feedback.erro('Colisão!', 'O robô bateu em um obstáculo. Reveja seu caminho e tente novamente.');
         break;
       }
@@ -509,6 +576,10 @@ export function jogadorBlocos(atividade, ctx) {
   }
 
   async function finalizarComVitoria(estrelas) {
+    tocarSom('vitoria');
+    if (typeof window !== 'undefined' && window.gsap) {
+      window.gsap.fromTo(canvasPalco, { scale: 0.95 }, { scale: 1, duration: 0.4, ease: 'back.out(2)' });
+    }
     feedback.sucesso('Missão Concluída! ⭐⭐⭐', atividade.conclusao);
     anunciar(`Parabéns! ${atividade.conclusao}`);
 
@@ -555,6 +626,7 @@ export function jogadorBlocos(atividade, ctx) {
         class: 'btn-bloco-paleta',
         style: `--bloco-cor: ${b.cor}`,
         onclick: () => {
+          tocarSom('bloco');
           programa.push({
             id: `cmd-${Date.now()}-${Math.random()}`,
             tipo: b.id,
@@ -598,6 +670,7 @@ export function jogadorBlocos(atividade, ctx) {
           }
         },
       }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'code'), ' Ver Código'),
+      criarBotaoSom(),
     ),
     h('div', { class: 'blocos-dica-meta' },
       h('span', { class: 'material-symbols-outlined icon-xs' }, 'info'),

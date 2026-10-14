@@ -1,10 +1,13 @@
 /**
  * Jogador de atividades "Montar a sequência": o estudante toca nos passos para colocá-los em ordem.
  * Funciona com toque, mouse e teclado (cada passo é um botão).
+ * Aprimorado com telemetria visual, GSAP e sintetizador de som nativo Web Audio API.
  */
 
 import { h, anunciar, criarFeedback, renderizarComFoco } from './dom.js';
 import { avaliarOrdem, embaralharDiferente, plural } from './logica.js';
+import { tocarSom, criarBotaoSom } from './som.js';
+import { renderizarIcone } from './icones.js';
 
 export function jogadorOrdenar(atividade, ctx) {
   const todos = [...atividade.passos, ...(atividade.intrusos || [])];
@@ -27,6 +30,7 @@ export function jogadorOrdenar(atividade, ctx) {
   }
 
   function adicionar(id) {
+    tocarSom('click');
     const posicao = estado.banco.indexOf(id);
     estado.banco.splice(posicao, 1);
     estado.sequencia.push(id);
@@ -34,9 +38,17 @@ export function jogadorOrdenar(atividade, ctx) {
     const vizinho = estado.banco[posicao] ?? estado.banco[posicao - 1];
     anunciar(`Passo “${texto(id)}” colocado na posição ${estado.sequencia.length}.`);
     renderizar(vizinho ? `banco-${vizinho}` : 'verificar');
+
+    if (typeof window !== 'undefined' && window.gsap) {
+      const items = area.querySelectorAll('.atv-item');
+      if (items.length) {
+        window.gsap.from(items[items.length - 1], { scale: 0.92, opacity: 0.7, duration: 0.2 });
+      }
+    }
   }
 
   function remover(id) {
+    tocarSom('click');
     estado.sequencia.splice(estado.sequencia.indexOf(id), 1);
     estado.banco.push(id);
     estado.resultado = null;
@@ -48,6 +60,7 @@ export function jogadorOrdenar(atividade, ctx) {
     const de = estado.sequencia.indexOf(id);
     const para = de + deslocamento;
     if (para < 0 || para >= estado.sequencia.length) return;
+    tocarSom('mover');
     [estado.sequencia[de], estado.sequencia[para]] = [estado.sequencia[para], estado.sequencia[de]];
     estado.resultado = null;
     anunciar(`Passo “${texto(id)}” agora está na posição ${para + 1}.`);
@@ -61,10 +74,24 @@ export function jogadorOrdenar(atividade, ctx) {
 
     if (resposta.ok) {
       estado.concluida = true;
+      tocarSom('vitoria');
       feedback.sucesso('Algoritmo correto! 🎉', atividade.conclusao);
       renderizar('recomecar');
+
+      if (typeof window !== 'undefined' && window.gsap) {
+        const seqEl = area.querySelector('.atv-sequencia');
+        if (seqEl) {
+          window.gsap.fromTo(seqEl, { scale: 0.96 }, { scale: 1, duration: 0.35, ease: 'back.out(2)' });
+        }
+      }
+
       ctx.aoConcluir({ tentativas: estado.tentativas });
       return;
+    }
+
+    tocarSom('erro');
+    if (typeof window !== 'undefined' && window.gsap) {
+      window.gsap.to(area, { x: -6, repeat: 4, yoyo: true, duration: 0.05, clearProps: 'x' });
     }
 
     const mensagens = [];
@@ -92,6 +119,7 @@ export function jogadorOrdenar(atividade, ctx) {
   }
 
   function recomecar() {
+    tocarSom('click');
     estado = novoEstado();
     feedback.limpar();
     anunciar('Atividade reiniciada.');
@@ -103,7 +131,7 @@ export function jogadorOrdenar(atividade, ctx) {
     return h(
       'button',
       { type: 'button', class: 'atv-passo', 'data-foco': `banco-${id}`, disabled: estado.concluida, onclick: () => adicionar(id) },
-      h('span', { class: 'atv-emoji', 'aria-hidden': 'true' }, passo.emoji),
+      renderizarIcone(passo.id || passo.emoji, { classe: 'atv-passo-icone' }),
       passo.texto,
     );
   }
@@ -114,7 +142,6 @@ export function jogadorOrdenar(atividade, ctx) {
     let classe = 'atv-item';
     let marca = null;
 
-    // As marcas usam texto e símbolo, não apenas cor.
     if (resultado) {
       if (idsIntrusos.has(id)) {
         classe += ' atv-intruso';
@@ -142,7 +169,8 @@ export function jogadorOrdenar(atividade, ctx) {
       h(
         'span',
         { class: 'atv-item-texto' },
-        h('span', { class: 'atv-emoji', 'aria-hidden': 'true' }, passo.emoji),
+        renderizarIcone(passo.id || passo.emoji, { classe: 'atv-item-icone' }),
+        h('strong', { class: 'atv-item-pos' }, `${indice + 1}º `),
         passo.texto,
         marca,
       ),
@@ -150,10 +178,39 @@ export function jogadorOrdenar(atividade, ctx) {
     );
   }
 
+  function barraTelemetria() {
+    const totalEsperado = atividade.passos.length;
+    const atual = estado.sequencia.length;
+    return h(
+      'div',
+      { class: 'atv-telemetria-bar' },
+      h(
+        'div',
+        { class: 'atv-telemetria-col' },
+        h('span', { class: 'atv-telemetria-rotulo' }, 'Construção do Algoritmo'),
+        h(
+          'div',
+          { class: 'atv-telemetria-gauge' },
+          h('progress', { class: 'atv-telemetria-progress', value: String(atual), max: String(totalEsperado), 'aria-label': 'Progresso do algoritmo' }),
+          h('span', { class: 'atv-telemetria-valor' }, `${atual}/${totalEsperado} passos`),
+        ),
+      ),
+      h(
+        'div',
+        { class: 'atv-telemetria-acoes' },
+        estado.tentativas > 0
+          ? h('span', { class: 'atv-badge-tentativas' }, `${estado.tentativas} ${plural(estado.tentativas, 'tentativa', 'tentativas')}`)
+          : null,
+        criarBotaoSom(() => renderizar()),
+      ),
+    );
+  }
+
   function renderizar(foco = null) {
     renderizarComFoco(
       area,
       () => [
+        barraTelemetria(),
         estado.concluida && !estado.banco.length ? null : h(
           'div',
           { class: 'atv-painel' },
@@ -174,7 +231,7 @@ export function jogadorOrdenar(atividade, ctx) {
           'div',
           { class: 'atv-acoes' },
           h('button', { type: 'button', class: 'btn btn-primario flex-inline-icon', 'data-foco': 'verificar', disabled: estado.concluida || !estado.sequencia.length, onclick: verificar }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'check'), ' Verificar'),
-          h('button', { type: 'button', class: 'btn btn-neutro flex-inline-icon', 'data-foco': 'dica', disabled: estado.concluida, onclick: () => feedback.info('Dica', atividade.dica) }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'lightbulb'), ' Quero uma dica'),
+          h('button', { type: 'button', class: 'btn btn-neutro flex-inline-icon', 'data-foco': 'dica', disabled: estado.concluida, onclick: () => { tocarSom('click'); feedback.info('Dica', atividade.dica); } }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'lightbulb'), ' Quero uma dica'),
           h('button', { type: 'button', class: 'btn btn-neutro flex-inline-icon', 'data-foco': 'recomecar', onclick: recomecar }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'refresh'), ' Recomeçar'),
         ),
       ],
