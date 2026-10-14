@@ -1,0 +1,1186 @@
+/* ==========================================================================
+   LMS COMPASSO — EIXO MUNDO DIGITAL (SIMULADOR 3D DE HARDWARE E REDES)
+   Arquitetura de von Neumann, Placa-mãe interativa, Ciclo da CPU e Pacotes TCP/IP
+   Alinhado à BNCC Computação: EF01CO04, EF02CO03, EF04CO03, EF05CO03, EF69CO05
+   ========================================================================== */
+
+/* ---------- Reset e Configurações Globais ---------- */
+body.pagina-mundo-digital {
+  background-color: #0b1120;
+  color: #f8fafc;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* ---------- Topo de Navegação ---------- */
+.md-topo {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(11, 17, 32, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.md-topo-conteudo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.md-logo img {
+  height: 38px;
+  display: block;
+}
+
+.md-nav {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.md-nav a {
+  color: #94a3b8;
+  text-decoration: none;
+  font-size: 0.92rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.md-nav a:hover {
+  color: #38bdf8;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.md-nav a[aria-current="page"] {
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  font-weight: 600;
+}
+
+.md-acoes {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ---------- Hero Section ---------- */
+.md-hero {
+  position: relative;
+  padding: 72px 20px 54px;
+  background: radial-gradient(circle at 50% 15%, #0f274a 0%, #0b1120 70%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.md-hero-conteudo {
+  max-width: 1000px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.md-badge-eixo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.28);
+  color: #38bdf8;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.md-titulo {
+  font-size: 2.75rem;
+  font-weight: 800;
+  line-height: 1.15;
+  color: #ffffff;
+  margin: 0 0 18px;
+  letter-spacing: -0.02em;
+}
+
+.md-titulo span {
+  color: #38bdf8;
+}
+
+.md-descricao {
+  font-size: 1.12rem;
+  color: #94a3b8;
+  max-width: 780px;
+  margin: 0 auto 32px;
+  line-height: 1.65;
+}
+
+.md-hero-cta {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 36px;
+}
+
+.btn-md-primario {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  border-radius: 12px;
+  background: #0369a1;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1rem;
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.btn-md-primario:hover {
+  background: #075985;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+}
+
+.btn-md-contorno {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 24px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #e2e8f0;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.btn-md-contorno:hover {
+  background: rgba(255, 255, 255, 0.09);
+  color: #ffffff;
+  border-color: #94a3b8;
+}
+
+/* Indicadores de Habilidades BNCC */
+.md-tags-habilidades {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.md-tag-hab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.82rem;
+  color: #cbd5e1;
+}
+
+.md-tag-hab strong {
+  color: #38bdf8;
+}
+
+/* ---------- Container Geral das Seções ---------- */
+.md-secao {
+  padding: 64px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.md-secao-cabecalho {
+  margin-bottom: 36px;
+  text-align: center;
+}
+
+.md-subtitulo-secao {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #38bdf8;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.md-titulo-secao {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 12px;
+  letter-spacing: -0.01em;
+}
+
+.md-desc-secao {
+  font-size: 1.05rem;
+  color: #94a3b8;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+/* ---------- Seção 1: Simulador 3D da Placa-Mãe (PC Builder & Raio-X) ---------- */
+.md-laboratorio-grid {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+.md-laboratorio-palco {
+  position: relative;
+}
+
+.md-palco-topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.md-status-post {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+}
+
+.md-status-post.ligado {
+  background: rgba(34, 197, 94, 0.15);
+  border-color: rgba(34, 197, 94, 0.35);
+  color: #4ade80;
+}
+
+.md-led-status {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #64748b;
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+.md-status-post.ligado .md-led-status {
+  background: #22c55e;
+}
+
+.md-controles-vista {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-vista {
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #cbd5e1;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.btn-vista:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+}
+
+.btn-vista.ativo {
+  background: #0369a1;
+  border-color: #38bdf8;
+  color: #ffffff;
+}
+
+/* Palco da Placa-Mãe com perspectiva 3D */
+.md-placa-container {
+  position: relative;
+  min-height: 440px;
+  perspective: 1000px;
+  display: grid;
+  place-items: center;
+  padding: 20px 10px;
+}
+
+.md-placa-mae-3d {
+  width: 100%;
+  max-width: 480px;
+  aspect-ratio: 1 / 1;
+  padding: 16px;
+  box-sizing: border-box;
+  background: #0d2818; /* PCB Verde Escuro clássico */
+  background-image: radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.12) 0%, #061e12 85%);
+  border-radius: 16px;
+  border: 3px solid #064e3b;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.md-placa-mae-3d.vista-isometrica {
+  transform: rotateX(42deg) rotateZ(-24deg) scale(0.92);
+}
+
+.md-placa-mae-3d.vista-topo {
+  transform: rotateX(0deg) rotateZ(0deg) scale(1);
+}
+
+.md-placa-mae-3d.vista-lateral {
+  transform: rotateX(65deg) rotateZ(-10deg) scale(1.05);
+}
+
+/* Componentes Interativos dentro da Placa-Mãe */
+.md-slot-componente {
+  position: absolute;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.25s ease;
+  transform-style: preserve-3d;
+}
+
+button.md-slot-componente {
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  color: inherit;
+  padding: 0;
+  text-align: inherit;
+}
+
+.md-slot-componente:hover,
+.md-slot-componente:focus-visible {
+  outline: 2px solid #38bdf8;
+  outline-offset: 4px;
+}
+
+.md-slot-componente.selecionado {
+  outline: 2px solid #38bdf8;
+  outline-offset: 4px;
+}
+
+/* 1. Socket & CPU */
+.md-slot-cpu {
+  top: 22%;
+  left: 26%;
+  width: 104px;
+  height: 104px;
+  background: #1e293b;
+  border: 2px solid #475569;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.md-slot-cpu.instalado {
+  background: #334155;
+  border-color: #38bdf8;
+}
+
+.md-cpu-chip {
+  width: 76px;
+  height: 76px;
+  background: #0f172a;
+  border: 1px solid #38bdf8;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 0.75rem;
+  color: #38bdf8;
+  font-weight: 700;
+  padding: 4px;
+  box-sizing: border-box;
+}
+
+.md-cooler-anim {
+  width: 64px;
+  height: 64px;
+  padding: 14px;
+  box-sizing: border-box;
+  border-radius: 50%;
+  border: 2px dashed #94a3b8;
+  display: grid;
+  place-items: center;
+  animation: none;
+}
+
+.md-cooler-anim .material-symbols-outlined {
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+}
+
+.md-placa-mae-3d.ligada .md-cooler-anim {
+  animation: girarCooler 0.6s linear infinite;
+  border-color: #38bdf8;
+}
+
+@keyframes girarCooler {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* 2. Slots de Memória RAM DDR5 */
+.md-slots-ram {
+  top: 18%;
+  right: 18%;
+  display: flex;
+  gap: 8px;
+}
+
+.md-slot-ram {
+  width: 22px;
+  height: 130px;
+  background: #1e293b;
+  border: 2px solid #475569;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 4px 2px;
+  box-sizing: border-box;
+}
+
+.md-slot-ram.instalado {
+  background: #0369a1;
+  border-color: #38bdf8;
+}
+
+.md-ram-pente {
+  width: 100%;
+  height: 100%;
+  background: #0369a1;
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.md-ram-chip {
+  width: 12px;
+  height: 16px;
+  background: #0f172a;
+  border-radius: 1px;
+}
+
+/* 3. Slot M.2 SSD NVMe */
+.md-slot-ssd {
+  bottom: 30%;
+  left: 28%;
+  width: 110px;
+  height: 28px;
+  background: #1e293b;
+  border: 2px dashed #64748b;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8px;
+  box-sizing: border-box;
+  font-size: 0.75rem;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.md-slot-ssd.instalado {
+  background: #1e1b4b;
+  border: 2px solid #a855f7;
+  color: #d8b4fe;
+}
+
+/* 4. Slot PCIe para Placa de Vídeo (GPU) */
+.md-slot-gpu {
+  bottom: 12%;
+  left: 15%;
+  width: 220px;
+  height: 38px;
+  background: #1e293b;
+  border: 2px solid #475569;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  color: #cbd5e1;
+  font-weight: 700;
+}
+
+.md-slot-gpu.instalado {
+  background: #78350f;
+  border-color: #f59e0b;
+  color: #fef3c7;
+}
+
+/* 5. Painel Traseiro de Portas I/O */
+.md-slot-io {
+  top: 10%;
+  left: 4%;
+  width: 32px;
+  height: 160px;
+  background: #334155;
+  border: 1px solid #64748b;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  padding: 6px 0;
+}
+
+.md-io-porta {
+  width: 18px;
+  height: 12px;
+  background: #0f172a;
+  border: 1px solid #475569;
+  border-radius: 2px;
+}
+
+/* Rótulos de identificação */
+.md-etiqueta-componente {
+  position: absolute;
+  bottom: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(15, 23, 42, 0.9);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.78rem;
+  color: #e2e8f0;
+  white-space: nowrap;
+  pointer-events: none;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Painel Lateral Holográfico: Detalhes e Modo Montagem */
+.md-painel-lateral {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.md-card-holografico {
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.md-card-holografico-topo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.md-icone-componente-grande {
+  width: 52px;
+  height: 52px;
+  padding: 12px;
+  box-sizing: border-box;
+  border-radius: 14px;
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  display: grid;
+  place-items: center;
+}
+
+.md-icone-componente-grande .material-symbols-outlined {
+  font-size: 28px;
+}
+
+.md-titulo-componente {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.md-categoria-bncc {
+  font-size: 0.8rem;
+  color: #38bdf8;
+  font-weight: 600;
+  display: block;
+}
+
+.md-detalhes-corpo p {
+  color: #94a3b8;
+  font-size: 0.95rem;
+  margin: 0 0 16px;
+  line-height: 1.6;
+}
+
+.md-analogia-box {
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 18px;
+}
+
+.md-analogia-titulo {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #38bdf8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.md-analogia-texto {
+  font-size: 0.9rem;
+  color: #e2e8f0;
+  margin: 0;
+}
+
+.md-lista-specs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.md-spec-item {
+  background: rgba(255, 255, 255, 0.03);
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.md-spec-rotulo {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  text-transform: uppercase;
+  display: block;
+}
+
+.md-spec-valor {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+/* Caixa de Missão / PC Builder */
+.md-card-missao {
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 24px;
+}
+
+.md-card-missao-topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.md-card-missao-titulo {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+
+.md-progresso-montagem {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #38bdf8;
+}
+
+.md-lista-etapas {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.md-etapa-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 0.9rem;
+  color: #cbd5e1;
+  transition: all 0.2s ease;
+}
+
+.md-etapa-item.concluida {
+  background: rgba(34, 197, 94, 0.1);
+  border-color: rgba(34, 197, 94, 0.25);
+  color: #4ade80;
+}
+
+.md-etapa-icone {
+  font-size: 18px;
+  color: #94a3b8;
+}
+
+.md-etapa-item.concluida .md-etapa-icone {
+  color: #4ade80;
+}
+
+.md-acoes-montagem {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-acao-montar {
+  flex: 1;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background: #0369a1;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.btn-acao-montar:hover:not(:disabled) {
+  background: #075985;
+}
+
+.btn-acao-montar:disabled {
+  background: rgba(255, 255, 255, 0.08);
+  color: #64748b;
+  cursor: not-allowed;
+}
+
+.btn-reset-montar {
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #94a3b8;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-reset-montar:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+}
+
+/* ---------- Seção 2: Simulador do Ciclo da CPU (Busca - Decodificação - Execução) ---------- */
+.md-cpu-simulador-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  align-items: center;
+}
+
+.md-cpu-arquitetura {
+  position: relative;
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.md-cpu-bloco {
+  padding: 16px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 16px;
+  transition: all 0.3s ease;
+}
+
+.md-cpu-bloco.ativo {
+  border-color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+}
+
+.md-cpu-bloco-titulo {
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #38bdf8;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.md-cpu-bloco-conteudo {
+  font-family: monospace;
+  font-size: 1rem;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.md-barramento-dados {
+  height: 8px;
+  background: #1e293b;
+  border-radius: 4px;
+  margin: 12px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.md-pulso-eletrico {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 100%;
+  background: #38bdf8;
+  border-radius: 4px;
+  opacity: 0;
+}
+
+.md-pulso-eletrico.animando {
+  animation: pulsoBarramento 1.2s ease-in-out infinite;
+  opacity: 1;
+}
+
+@keyframes pulsoBarramento {
+  0% { left: 0%; }
+  100% { left: 90%; }
+}
+
+.md-cpu-explicacao {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.md-passo-ciclo {
+  padding: 16px;
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.25s ease;
+}
+
+.md-passo-ciclo.ativo {
+  border-color: #38bdf8;
+  background: rgba(56, 189, 248, 0.1);
+}
+
+.md-passo-numero {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: #0369a1;
+  color: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.md-passo-titulo {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 6px;
+}
+
+.md-passo-desc {
+  font-size: 0.9rem;
+  color: #94a3b8;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.md-controles-ciclo {
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+/* ---------- Seção 3: Simulador de Redes e Pacotes TCP/IP ---------- */
+.md-rede-simulador {
+  position: relative;
+}
+
+.md-rede-mapa {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  position: relative;
+  margin-bottom: 36px;
+  padding: 20px 0;
+}
+
+.md-no-rede {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  width: 140px;
+}
+
+.md-no-icone {
+  width: 68px;
+  height: 68px;
+  padding: 16px;
+  box-sizing: border-box;
+  border-radius: 18px;
+  background: #0f172a;
+  border: 2px solid #334155;
+  color: #38bdf8;
+  display: grid;
+  place-items: center;
+  margin-bottom: 10px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+  transition: all 0.3s ease;
+}
+
+.md-no-icone .material-symbols-outlined {
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
+  line-height: 28px;
+}
+
+.md-no-rede.ativo .md-no-icone {
+  border-color: #38bdf8;
+  background: rgba(56, 189, 248, 0.18);
+  transform: scale(1.08);
+}
+
+.md-no-nome {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 4px;
+}
+
+.md-no-ip {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  font-family: monospace;
+}
+
+/* Linhas de Conexão Física (Fibra / Wi-Fi) */
+.md-linha-conexao {
+  flex: 1;
+  height: 4px;
+  background: #1e293b;
+  position: relative;
+  border-radius: 2px;
+}
+
+.md-pacote-animado {
+  position: absolute;
+  top: -8px;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #38bdf8;
+  border: 2px solid #ffffff;
+  display: none;
+}
+
+.md-pacote-animado.viajando {
+  display: block;
+  animation: viagemPacote 2.5s ease-in-out infinite;
+}
+
+.btn-bloco-enviar {
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.btn-bloco-perda {
+  width: 100%;
+}
+
+@keyframes viagemPacote {
+  0% { left: 0%; opacity: 1; }
+  100% { left: 100%; opacity: 1; }
+}
+
+/* Painel de Inspeção do Pacote */
+.md-inspecao-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.md-inspecao-cabecalho {
+  font-family: monospace;
+  font-size: 0.85rem;
+  color: #cbd5e1;
+  background: #0f172a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.md-inspecao-linha {
+  display: flex;
+  justify-content: space-between;
+}
+
+.md-inspecao-chave {
+  color: #94a3b8;
+}
+
+.md-inspecao-valor {
+  color: #38bdf8;
+  font-weight: 700;
+}
+
+/* ---------- Rodapé Institucional ---------- */
+.md-rodape {
+  margin-top: 80px;
+  padding: 48px 20px 24px;
+  background: #070d18;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.md-rodape-grade {
+  max-width: 1200px;
+  margin: 0 auto 36px;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 36px;
+}
+
+.md-rodape-info p {
+  color: #94a3b8;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  margin-top: 12px;
+}
+
+.md-rodape-col h3 {
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #cbd5e1;
+  margin: 0 0 16px;
+}
+
+.md-rodape-col ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.md-rodape-col a {
+  color: #94a3b8;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.2s ease;
+}
+
+.md-rodape-col a:hover {
+  color: #38bdf8;
+}
+
+.md-rodape-fim {
+  text-align: center;
+  font-size: 0.82rem;
+  color: #94a3b8;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ---------- Responsividade ---------- */
+@media (max-width: 960px) {
+  .md-laboratorio-grid,
+  .md-cpu-simulador-grid,
+  .md-inspecao-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .md-rodape-grade {
+    grid-template-columns: 1fr;
+  }
+
+  .md-nav {
+    display: none; /* Em telas móveis reduz para visualização limpa */
+  }
+
+  .md-rede-mapa {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .md-linha-conexao {
+    width: 4px;
+    height: 30px;
+  }
+}

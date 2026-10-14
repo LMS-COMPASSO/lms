@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mundo Digital — Laboratório 3D de Hardware e Redes · LMS COMPASSO</title>
+<meta name="description" content="Laboratório interativo do Eixo Mundo Digital alinhado à BNCC Computação: explore a placa-mãe em 3D, monte componentes, compreenda o ciclo da CPU e simule o tráfego de pacotes na internet.">
+<link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/publico.css">
+<link rel="stylesheet" href="/css/mundo-digital.css">
+</head>
+<body class="pagina-mundo-digital">
+  <a class="pular-conteudo" href="#conteudo">Pular para o conteúdo principal</a>
+
+  <!-- Topo de Navegação -->
+  <header class="md-topo">
+    <div class="pub-container md-topo-conteudo">
+      <a href="/" class="md-logo" aria-label="LMS COMPASSO — Retornar à página inicial">
+        <img src="/img/logo-branco.svg" alt="LMS COMPASSO — BNCC Computação">
+      </a>
+      <nav class="md-nav" aria-label="Navegação da tela Mundo Digital">
+        <a href="/">
+          <span class="material-symbols-outlined icon-xs" aria-hidden="true">arrow_back</span> Início
+        </a>
+        <a href="/boas-vindas.html">Boas-vindas</a>
+        <a href="/mundo-digital.html" aria-current="page">Mundo Digital</a>
+        <a href="/cultura-digital.html">Cultura Digital</a>
+        <a href="/atividades.html">Atividades</a>
+      </nav>
+      <div class="md-acoes">
+        <a href="/login.html" class="btn btn-contorno-claro btn-sm">Entrar</a>
+        <a href="/registrar.html" class="btn btn-primario btn-sm">Criar conta</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="conteudo" tabindex="-1">
+    <!-- Hero Section -->
+    <section class="md-hero" aria-labelledby="titulo-mundo-digital">
+      <div class="pub-container md-hero-conteudo">
+        <div class="md-badge-eixo">
+          <span class="material-symbols-outlined icon-xs" aria-hidden="true">developer_board</span>
+          <span>Eixo 2 da BNCC Computação · Resolução CNE/CP nº 1/2022</span>
+        </div>
+        <h1 id="titulo-mundo-digital" class="md-titulo">
+          Mundo Digital: <span>Hardware &amp; Redes</span>
+        </h1>
+        <p class="md-descricao">
+          Como os computadores realmente pensam, guardam memórias e conversam através de cabos e ondas de rádio?
+          Explore a placa-mãe interativa em 3D, inspecione a CPU em funcionamento e acompanhe pacotes de dados viajando pela internet.
+        </p>
+        <div class="md-hero-cta">
+          <a href="#laboratorio-hardware" class="btn-md-primario">
+            <span class="material-symbols-outlined" aria-hidden="true">layers</span>
+            Explorar Placa-Mãe 3D
+          </a>
+          <a href="#ciclo-cpu" class="btn-md-contorno">
+            <span class="material-symbols-outlined" aria-hidden="true">memory</span>
+            Simular Ciclo da CPU
+          </a>
+          <a href="#simulador-redes" class="btn-md-contorno">
+            <span class="material-symbols-outlined" aria-hidden="true">router</span>
+            Tráfego de Pacotes na Internet
+          </a>
+        </div>
+        <div class="md-tags-habilidades">
+          <span class="md-tag-hab"><strong>EF01CO04</strong> Periféricos I/O</span>
+          <span class="md-tag-hab"><strong>EF02CO03</strong> Componentes &amp; Memória</span>
+          <span class="md-tag-hab"><strong>EF04CO03</strong> Dados &amp; Redes</span>
+          <span class="md-tag-hab"><strong>EF05CO03</strong> Arquitetura da CPU</span>
+          <span class="md-tag-hab"><strong>EF69CO05</strong> Roteamento &amp; Internet</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Seção 1: Laboratório 3D da Placa-Mãe (Raio-X e PC Builder) -->
+    <section class="md-secao" id="laboratorio-hardware" aria-labelledby="titulo-hardware">
+      <div class="md-secao-cabecalho">
+        <h2 id="titulo-hardware" class="md-titulo-secao">Placa-Mãe 3D: Raio-X &amp; PC Builder</h2>
+        <p class="md-desc-secao">
+          Clique nos componentes para inspecionar sua função pedagógica ou use o desafio de montagem para encaixar peças e ligar o sistema.
+        </p>
+      </div>
+
+      <div class="md-laboratorio-grid">
+        <!-- Palco Visual 3D -->
+        <div class="md-laboratorio-palco">
+          <div class="md-palco-topo">
+            <div class="md-status-post" id="status-post-badge">
+              <span class="md-led-status"></span> Em Espera (Desligado)
+            </div>
+            <div class="md-controles-vista" role="group" aria-label="Modos de visualização da placa-mãe">
+              <button type="button" class="btn-vista ativo" data-vista="isometrica">
+                <span class="material-symbols-outlined icon-xs" aria-hidden="true">view_in_ar</span> Isométrica 3D
+              </button>
+              <button type="button" class="btn-vista" data-vista="topo">
+                <span class="material-symbols-outlined icon-xs" aria-hidden="true">view_quilt</span> Topo
+              </button>
+              <button type="button" class="btn-vista" data-vista="lateral">
+                <span class="material-symbols-outlined icon-xs" aria-hidden="true">view_sidebar</span> Perfil
+              </button>
+            </div>
+          </div>
+
+          <!-- Palco 3D -->
+          <div class="md-placa-container">
+            <div class="md-placa-mae-3d vista-isometrica" id="placa-mae-3d">
+              <!-- Componente: CPU Socket -->
+              <button type="button" class="md-slot-componente md-slot-cpu" data-componente="cpu" aria-label="Processador Central CPU">
+                <span class="md-cpu-chip">
+                  <span class="md-cooler-anim">
+                    <span class="material-symbols-outlined icon-xs" aria-hidden="true">memory</span>
+                  </span>
+                  <span>CPU</span>
+                </span>
+                <span class="md-etiqueta-componente">Processador</span>
+              </button>
+
+              <!-- Componente: Memória RAM -->
+              <button type="button" class="md-slot-componente md-slots-ram" data-componente="ram" aria-label="Slots de Memória RAM">
+                <span class="md-slot-ram">
+                  <span class="md-ram-pente">
+                    <span class="md-ram-chip"></span>
+                    <span class="md-ram-chip"></span>
+                    <span class="md-ram-chip"></span>
+                  </span>
+                </span>
+                <span class="md-slot-ram">
+                  <span class="md-ram-pente">
+                    <span class="md-ram-chip"></span>
+                    <span class="md-ram-chip"></span>
+                    <span class="md-ram-chip"></span>
+                  </span>
+                </span>
+                <span class="md-etiqueta-componente">Memória RAM</span>
+              </button>
+
+              <!-- Componente: SSD NVMe M.2 -->
+              <button type="button" class="md-slot-componente md-slot-ssd" data-componente="ssd" aria-label="Armazenamento SSD M.2">
+                <span>NVMe M.2</span>
+                <span class="material-symbols-outlined icon-xs" aria-hidden="true">save</span>
+                <span class="md-etiqueta-componente">Armazenamento SSD</span>
+              </button>
+
+              <!-- Componente: Placa de Vídeo GPU -->
+              <button type="button" class="md-slot-componente md-slot-gpu" data-componente="gpu" aria-label="Slot PCIe Placa de Vídeo GPU">
+                <span class="material-symbols-outlined icon-xs" aria-hidden="true">videogame_asset</span>
+                <span>PCIe 4.0 x16 (Placa de Vídeo)</span>
+                <span class="md-etiqueta-componente">GPU Dedicada</span>
+              </button>
+
+              <!-- Componente: Painel Traseiro I/O -->
+              <button type="button" class="md-slot-componente md-slot-io" data-componente="io" aria-label="Painel Traseiro de Portas USB, HDMI e Rede">
+                <span class="md-io-porta"></span>
+                <span class="md-io-porta"></span>
+                <span class="md-io-porta"></span>
+                <span class="md-io-porta"></span>
+                <span class="md-etiqueta-componente">Portas I/O</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Painel Lateral Holográfico -->
+        <div class="md-painel-lateral">
+          <!-- Card de Detalhes Raio-X -->
+          <div class="md-card-holografico" aria-live="polite">
+            <div class="md-card-holografico-topo">
+              <div class="md-icone-componente-grande" id="painel-icone-wrap" aria-hidden="true">
+                <span class="material-symbols-outlined">memory</span>
+              </div>
+              <div>
+                <h3 class="md-titulo-componente" id="painel-titulo-comp">Processador Central (CPU)</h3>
+                <span class="md-categoria-bncc" id="painel-cat-comp">Unidade de Processamento</span>
+              </div>
+            </div>
+
+            <div class="md-detalhes-corpo">
+              <p id="painel-desc-comp">
+                A CPU executa as instruções de todos os programas. Ela interpreta cálculos matemáticos e lógicos através de bilhões de ciclos elétricos por segundo.
+              </p>
+
+              <div class="md-analogia-box">
+                <div class="md-analogia-titulo">
+                  <span class="material-symbols-outlined icon-xs" aria-hidden="true">lightbulb</span>
+                  Analogia Pedagógica
+                </div>
+                <p class="md-analogia-texto" id="painel-analogia-comp">
+                  É como o Chef de Cozinha de um restaurante: recebe os pedidos, prepara as receitas e comanda a equipe.
+                </p>
+              </div>
+
+              <div class="md-lista-specs" id="painel-specs-grid">
+                <!-- Preenchido via JavaScript -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Card Desafio PC Builder -->
+          <div class="md-card-missao">
+            <div class="md-card-missao-topo">
+              <h3 class="md-card-missao-titulo">
+                <span class="material-symbols-outlined" aria-hidden="true">build</span>
+                Desafio: Monte o Computador
+              </h3>
+              <span class="md-progresso-montagem" id="texto-progresso-montagem">0 / 5 Instalados</span>
+            </div>
+            <ul class="md-lista-etapas" id="lista-etapas-montagem">
+              <!-- Preenchido via JavaScript -->
+            </ul>
+            <div class="md-acoes-montagem">
+              <button type="button" class="btn-acao-montar" id="btn-instalar-etapa">
+                <span class="material-symbols-outlined" aria-hidden="true">add_circle</span> Encaixar Próximo Componente
+              </button>
+              <button type="button" class="btn-reset-montar" id="btn-reset-montagem" title="Reiniciar montagem">
+                Reiniciar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Seção 2: Ciclo da CPU (Busca - Decodificação - Execução) -->
+    <section class="md-secao" id="ciclo-cpu" aria-labelledby="titulo-ciclo">
+      <div class="md-secao-cabecalho">
+        <h2 id="titulo-ciclo" class="md-titulo-secao">O Ciclo de Clock da CPU</h2>
+        <p class="md-desc-secao">
+          Como bilhões de transistores transformam pulsos elétricos em tarefas reais? Veja o ciclo de busca, decodificação e execução.
+        </p>
+      </div>
+
+      <div class="md-cpu-simulador-grid">
+        <div class="md-cpu-arquitetura">
+          <div class="md-cpu-bloco" id="cpu-bloco-ir">
+            <div class="md-cpu-bloco-titulo">
+              <span class="material-symbols-outlined icon-xs" aria-hidden="true">input</span>
+              Registrador de Instrução (IR)
+            </div>
+            <div class="md-cpu-bloco-conteudo" id="cpu-valor-ir">OP_SOMAR [0x01]</div>
+          </div>
+
+          <div class="md-barramento-dados" aria-hidden="true">
+            <div class="md-pulso-eletrico" id="pulso-barramento-cpu"></div>
+          </div>
+
+          <div class="md-cpu-bloco" id="cpu-bloco-uc">
+            <div class="md-cpu-bloco-titulo">
+              <span class="material-symbols-outlined icon-xs" aria-hidden="true">psychology</span>
+              Unidade de Controle (UC)
+            </div>
+            <div class="md-cpu-bloco-conteudo">Decodificador: Operação Aritmética</div>
+          </div>
+
+          <div class="md-cpu-bloco" id="cpu-bloco-ula">
+            <div class="md-cpu-bloco-titulo">
+              <span class="material-symbols-outlined icon-xs" aria-hidden="true">calculate</span>
+              Unidade Lógica e Aritmética (ULA)
+            </div>
+            <div class="md-cpu-bloco-conteudo" id="cpu-valor-ula">Aguardando Operandos...</div>
+          </div>
+        </div>
+
+        <div class="md-cpu-explicacao">
+          <div class="md-passo-ciclo ativo">
+            <span class="md-passo-numero">Fase 1</span>
+            <h3 class="md-passo-titulo">Busca (Fetch)</h3>
+            <p class="md-passo-desc">
+              O endereço de memória é consultado e a próxima instrução é trazida da RAM para o Registrador de Instrução interno da CPU.
+            </p>
+          </div>
+
+          <div class="md-passo-ciclo">
+            <span class="md-passo-numero">Fase 2</span>
+            <h3 class="md-passo-titulo">Decodificação (Decode)</h3>
+            <p class="md-passo-desc">
+              A Unidade de Controle traduz os bits da instrução e identifica quais circuitos e registradores precisam ser acionados.
+            </p>
+          </div>
+
+          <div class="md-passo-ciclo">
+            <span class="md-passo-numero">Fase 3</span>
+            <h3 class="md-passo-titulo">Execução (Execute)</h3>
+            <p class="md-passo-desc">
+              A ULA processa a conta ou a comparação lógica e armazena o resultado no Acumulador, concluindo o ciclo de clock.
+            </p>
+          </div>
+
+          <div class="md-controles-ciclo">
+            <button type="button" class="btn-md-primario" id="btn-cpu-passo">
+              <span class="material-symbols-outlined" aria-hidden="true">skip_next</span> Avançar Passo a Passo
+            </button>
+            <button type="button" class="btn-md-contorno" id="btn-cpu-auto">
+              <span class="material-symbols-outlined" aria-hidden="true">play_arrow</span> Ciclo Automático
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Seção 3: Simulador de Redes e Pacotes TCP/IP -->
+    <section class="md-secao" id="simulador-redes" aria-labelledby="titulo-redes">
+      <div class="md-secao-cabecalho">
+        <h2 id="titulo-redes" class="md-titulo-secao">Como os Pacotes Trafegam na Internet?</h2>
+        <p class="md-desc-secao">
+          Nenhuma foto ou mensagem viaja inteira pela rede: ela é fragmentada em pacotes com endereços IP e remontada no servidor de destino.
+        </p>
+      </div>
+
+      <div class="md-rede-simulador">
+        <div class="md-rede-mapa">
+          <!-- Nó 1: Computador Aluno -->
+          <div class="md-no-rede ativo" id="no-aluno">
+            <div class="md-no-icone" aria-hidden="true">
+              <span class="material-symbols-outlined">laptop_chromebook</span>
+            </div>
+            <h3 class="md-no-nome">Computador Aluno</h3>
+            <span class="md-no-ip">192.168.1.15</span>
+          </div>
+
+          <div class="md-linha-conexao">
+            <div class="md-pacote-animado" id="pacote-animado-rede"></div>
+          </div>
+
+          <!-- Nó 2: Roteador Wi-Fi -->
+          <div class="md-no-rede" id="no-roteador">
+            <div class="md-no-icone" aria-hidden="true">
+              <span class="material-symbols-outlined">router</span>
+            </div>
+            <h3 class="md-no-nome">Roteador Wi-Fi</h3>
+            <span class="md-no-ip">192.168.1.1</span>
+          </div>
+
+          <div class="md-linha-conexao"></div>
+
+          <!-- Nó 3: Fibra Óptica / Internet -->
+          <div class="md-no-rede" id="no-provedor">
+            <div class="md-no-icone" aria-hidden="true">
+              <span class="material-symbols-outlined">public</span>
+            </div>
+            <h3 class="md-no-nome">Provedor &amp; Fibra</h3>
+            <span class="md-no-ip">200.18.96.1</span>
+          </div>
+
+          <div class="md-linha-conexao"></div>
+
+          <!-- Nó 4: Servidor LMS COMPASSO -->
+          <div class="md-no-rede" id="no-servidor">
+            <div class="md-no-icone" aria-hidden="true">
+              <span class="material-symbols-outlined">dns</span>
+            </div>
+            <h3 class="md-no-nome">Servidor COMPASSO</h3>
+            <span class="md-no-ip">185.199.108.153</span>
+          </div>
+        </div>
+
+        <div class="md-inspecao-grid">
+          <div class="md-inspecao-cabecalho">
+            <div class="md-inspecao-linha">
+              <span class="md-inspecao-chave">Protocolo:</span>
+              <span class="md-inspecao-valor">TCP / IPv4</span>
+            </div>
+            <div class="md-inspecao-linha">
+              <span class="md-inspecao-chave">Sequência (SYN):</span>
+              <span class="md-inspecao-valor" id="pacote-seq-num">48291</span>
+            </div>
+            <div class="md-inspecao-linha">
+              <span class="md-inspecao-chave">Carga Útil (Payload):</span>
+              <span class="md-inspecao-valor">"Olá, Escola! Atividade Concluída"</span>
+            </div>
+            <div class="md-inspecao-linha">
+              <span class="md-inspecao-chave">Status de Entrega:</span>
+              <span class="md-inspecao-valor" id="pacote-status-txt">Pronto para Enviar</span>
+            </div>
+          </div>
+
+          <div class="md-acoes-rede">
+            <button type="button" class="btn-md-primario btn-bloco-enviar" id="btn-enviar-pacote">
+              <span class="material-symbols-outlined" aria-hidden="true">send</span> Disparar Pacote de Dados
+            </button>
+            <button type="button" class="btn-md-contorno btn-bloco-perda" id="btn-simular-perda">
+              Simular Perda de Pacote (Retransmissão TCP)
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Rodapé Institucional -->
+  <footer class="md-rodape">
+    <div class="md-rodape-grade">
+      <div class="md-rodape-info">
+        <img src="/img/logo-branco.svg" alt="LMS COMPASSO — BNCC Computação" height="34">
+        <p>
+          Plataforma aberta para o ensino de Computação no Ensino Fundamental, alinhada à BNCC Computação e desenvolvida com apoio do IFMA Campus Grajaú.
+        </p>
+      </div>
+      <div class="md-rodape-col">
+        <h3>Eixos Curriculares</h3>
+        <ul>
+          <li><a href="/atividades.html">Pensamento Computacional</a></li>
+          <li><a href="/mundo-digital.html">Mundo Digital (Hardware/Redes)</a></li>
+          <li><a href="/cultura-digital.html">Cultura Digital (Cidadania)</a></li>
+        </ul>
+      </div>
+      <div class="md-rodape-col">
+        <h3>Acesso Rápido</h3>
+        <ul>
+          <li><a href="/boas-vindas.html">Boas-vindas &amp; Parceiros</a></li>
+          <li><a href="/login.html">Entrar na Plataforma</a></li>
+          <li><a href="https://github.com/LMS-COMPASSO/lms" rel="noopener">Código no GitHub (MIT)</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="md-rodape-fim">
+      Projeto de Inovação SUAP/IFMA nº 14246/2025 · Startup LMS COMPASSO · Eixo Mundo Digital.
+    </div>
+  </footer>
+
+  <script src="/js/mundo-digital.js"></script>
+</body>
+</html>
