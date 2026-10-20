@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cultura Digital — Cidadania e Diálogo · LMS COMPASSO</title>
+<meta name="description" content="Laboratório interativo do Eixo Cultura Digital alinhado à BNCC Computação: tome decisões éticas em chats interativos, identifique phishing e fake news, proteja sua pegada digital e teste a segurança de senhas.">
+<link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/publico.css">
+<link rel="stylesheet" href="/css/cultura-digital.css">
+</head>
+<body class="pagina-cultura-digital">
+  <a class="pular-conteudo" href="#conteudo">Pular para o conteúdo principal</a>
+
+  <!-- Topo de Navegação -->
+  <header class="cd-topo">
+    <div class="pub-container cd-topo-conteudo">
+      <a href="/" class="cd-logo" aria-label="LMS COMPASSO — Retornar à página inicial">
+        <img src="/img/logo-branco.svg" alt="LMS COMPASSO — BNCC Computação">
+      </a>
+      <nav class="cd-nav" aria-label="Navegação da tela Cultura Digital">
+        <a href="/">
+          <span class="material-symbols-outlined icon-xs" aria-hidden="true">arrow_back</span> Início
+        </a>
+        <a href="/boas-vindas.html">Boas-vindas</a>
+        <a href="/mundo-digital.html">Mundo Digital</a>
+        <a href="/cultura-digital.html" aria-current="page">Cultura Digital</a>
+        <a href="/atividades.html">Atividades</a>
+      </nav>
+      <div class="cd-acoes">
+        <a href="/login.html" class="btn btn-contorno-claro btn-sm">Entrar</a>
+        <a href="/registrar.html" class="btn btn-primario btn-sm">Criar conta</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="conteudo" tabindex="-1">
+    <!-- Hero Section -->
+    <section class="cd-hero" aria-labelledby="titulo-cultura-digital">
+      <div class="pub-container cd-hero-conteudo">
+        <div class="cd-badge-eixo">
+          <span class="material-symbols-outlined icon-xs" aria-hidden="true">verified_user</span>
+          <span>Eixo 3 da BNCC Computação · Resolução CNE/CP nº 1/2022</span>
+        </div>
+        <h1 id="titulo-cultura-digital" class="cd-titulo">
+          Cultura Digital: <span>Cidadania &amp; Ética na Rede</span>
+        </h1>
+        <p class="cd-descricao">
+          Como navegar com segurança, discernir verdades de boatos e construir um ambiente de respeito mútuo nas redes?
+          Tome decisões em conversas simuladas, descubra golpes de phishing, teste a resistência de senhas e meça sua pegada digital.
+        </p>
+        <div class="cd-hero-cta">
+          <a href="#simulador-mensagens" class="btn-cd-primario">
+            <span class="material-symbols-outlined" aria-hidden="true">chat</span>
+            Iniciar Chat Interativo
+          </a>
+          <a href="#cofre-senhas" class="btn-cd-contorno">
+            <span class="material-symbols-outlined" aria-hidden="true">lock</span>
+            Cofre de Senhas Seguras
+          </a>
+          <a href="#pegada-digital" class="btn-cd-contorno">
+            <span class="material-symbols-outlined" aria-hidden="true">fingerprint</span>
+            Medidor de Pegada Digital
+          </a>
+        </div>
+        <div class="cd-tags-habilidades">
+          <span class="cd-tag-hab"><strong>EF01CO05</strong> Ética &amp; Respeito</span>
+          <span class="cd-tag-hab"><strong>EF02CO04</strong> Proteção de Dados</span>
+          <span class="cd-tag-hab"><strong>EF03CO04</strong> Fake News &amp; Fatos</span>
+          <span class="cd-tag-hab"><strong>EF04CO04</strong> Phishing &amp; Cyberbullying</span>
+          <span class="cd-tag-hab"><strong>EF05CO04</strong> Pegada Digital</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Seção 1: Simulador de Mensagens e Diálogo ("ZapCompasso") -->
+    <section class="cd-secao" id="simulador-mensagens" aria-labelledby="titulo-chat">
+      <div class="cd-secao-cabecalho">
+        <h2 id="titulo-chat" class="cd-titulo-secao">ZapCompasso: Simulador de Diálogo e Cidadania</h2>
+        <p class="cd-desc-secao">
+          Escolha um contato na lista lateral, analise as mensagens recebidas e tome a decisão correta para proteger seus dados e combater abusos online.
+        </p>
+      </div>
+
+      <div class="cd-chat-app">
+        <!-- Coluna de Conversas -->
+        <div class="cd-chat-sidebar">
+          <div class="cd-sidebar-topo">
+            <h3 class="cd-sidebar-titulo">
+              <span class="material-symbols-outlined icon-xs" aria-hidden="true">forum</span>
+              Conversas
+            </h3>
+            <span class="cd-pontos-cidadania" id="pontos-cidadania-badge">0 Pontos de Cidadania</span>
+          </div>
+
+          <div class="cd-lista-conversas" role="tablist" aria-label="Cenários de Diálogo Digital">
+            <button type="button" class="cd-item-conversa ativo" data-cenario="phishing" role="tab" aria-selected="true">
+              <span class="cd-avatar-conversa" aria-hidden="true">
+                <span class="material-symbols-outlined">smart_toy</span>
+              </span>
+              <span class="cd-conversa-info">
+                <span class="cd-conversa-nome">Leo (Colega)</span>
+                <span class="cd-conversa-previa">Mano, achei um site que dá moedas grátis!</span>
+              </span>
+            </button>
+
+            <button type="button" class="cd-item-conversa" data-cenario="cyberbullying" role="tab" aria-selected="false">
+              <span class="cd-avatar-conversa" aria-hidden="true">
+                <span class="material-symbols-outlined">groups</span>
+              </span>
+              <span class="cd-conversa-info">
+                <span class="cd-conversa-nome">Turma 5º B</span>
+                <span class="cd-conversa-previa">Olha a foto do Pedro no recreio kkk</span>
+              </span>
+            </button>
+
+            <button type="button" class="cd-item-conversa" data-cenario="privacidade" role="tab" aria-selected="false">
+              <span class="cd-avatar-conversa" aria-hidden="true">
+                <span class="material-symbols-outlined">person</span>
+              </span>
+              <span class="cd-conversa-info">
+                <span class="cd-conversa-nome">ShadowGamer_99</span>
+                <span class="cd-conversa-previa">Onde você mora? Passa seu Whats!</span>
+              </span>
+            </button>
+
+            <button type="button" class="cd-item-conversa" data-cenario="fakenews" role="tab" aria-selected="false">
+              <span class="cd-avatar-conversa" aria-hidden="true">
+                <span class="material-symbols-outlined">family_restroom</span>
+              </span>
+              <span class="cd-conversa-info">
+                <span class="cd-conversa-nome">Tia Cláudia</span>
+                <span class="cd-conversa-previa">URGENTE! Repassem para todos!</span>
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Janela de Mensagens Ativa -->
+        <div class="cd-chat-janela">
+          <div class="cd-chat-topo">
+            <div class="cd-chat-contato">
+              <div>
+                <h3 class="cd-contato-nome" id="chat-contato-nome">Leo (Colega de Jogo)</h3>
+                <span class="cd-contato-status" id="chat-contato-status">Online agora</span>
+              </div>
+            </div>
+            <span class="cd-badge-tema" id="chat-badge-tema">Phishing &amp; Engenharia Social</span>
+          </div>
+
+          <div class="cd-chat-mensagens" id="chat-mensagens-container" aria-live="polite">
+            <!-- Balões inseridos via JS -->
+          </div>
+
+          <!-- Painel de Decisão do Estudante -->
+          <div class="cd-chat-decisao">
+            <div class="cd-decisao-rotulo">
+              <span class="material-symbols-outlined icon-xs" aria-hidden="true">psychology_alt</span>
+              Qual é a melhor atitude como cidadão digital?
+            </div>
+            <div class="cd-opcoes-decisao" id="chat-opcoes-container">
+              <!-- Botões inseridos via JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Seção 2: Laboratório de Senhas Seguras ("Cofre Digital") -->
+    <section class="cd-secao" id="cofre-senhas" aria-labelledby="titulo-senhas">
+      <div class="cd-secao-cabecalho">
+        <h2 id="titulo-senhas" class="cd-titulo-secao">Cofre Digital: Testador de Senhas Seguras</h2>
+        <p class="cd-desc-secao">
+          Aprenda a construir chaves digitais invioláveis. Veja em tempo real quanto tempo um computador levaria para adivinhar sua senha.
+        </p>
+      </div>
+
+      <div class="cd-cofre-grid">
+        <div class="cd-cofre-painel">
+          <div class="cd-campo-senha-wrap">
+            <label for="input-teste-senha" class="cd-label-senha">Digite uma senha para testar a força:</label>
+            <input type="text" id="input-teste-senha" class="cd-input-senha" placeholder="Ex: MinhaEscola#2026!" autocomplete="off">
+
+            <div class="cd-termometro-forca" aria-hidden="true">
+              <div class="cd-barra-forca" id="barra-forca-senha"></div>
+            </div>
+
+            <div class="cd-status-senha-txt">
+              <span id="status-senha-txt">Digite uma senha para testar</span>
+              <span class="cd-tempo-quebra" id="tempo-quebra-txt">Tempo para quebrar: —</span>
+            </div>
+          </div>
+
+          <ul class="cd-requisitos-lista" aria-label="Requisitos para senha forte">
+            <li class="cd-req-item" id="req-tamanho">
+              <span class="material-symbols-outlined cd-req-icone" aria-hidden="true">check_circle</span>
+              <span>Pelo menos 8 caracteres</span>
+            </li>
+            <li class="cd-req-item" id="req-maiuscula">
+              <span class="material-symbols-outlined cd-req-icone" aria-hidden="true">check_circle</span>
+              <span>Letras maiúsculas e minúsculas</span>
+            </li>
+            <li class="cd-req-item" id="req-numero">
+              <span class="material-symbols-outlined cd-req-icone" aria-hidden="true">check_circle</span>
+              <span>Pelo menos um número</span>
+            </li>
+            <li class="cd-req-item" id="req-simbolo">
+              <span class="material-symbols-outlined cd-req-icone" aria-hidden="true">check_circle</span>
+              <span>Símbolos (@, #, $, !, %)</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="cd-cofre-dicas">
+          <div class="cd-dica-bloco">
+            <h3 class="cd-dica-titulo">
+              <span class="material-symbols-outlined icon-xs" aria-hidden="true">shield</span>
+              A Regra dos 4 Elementos (EF02CO04)
+            </h3>
+            <p class="cd-dica-texto">
+              Senhas com apenas números (como 123456 ou datas de aniversário) são descobertas em frações de segundo por programas de ataque.
+              Misturar palavras com números e símbolos cria trilhões de combinações possíveis.
+            </p>
+          </div>
+
+          <div class="cd-dica-bloco">
+            <h3 class="cd-dica-titulo">
+              <span class="material-symbols-outlined icon-xs" aria-hidden="true">key</span>
+              Dica Mnemônica para Crianças
+            </h3>
+            <p class="cd-dica-texto">
+              Crie frases fáceis de lembrar para você, mas impossíveis para outros adivinharem. Exemplo: <em>"GostoDeAstronomiaNoIFMA#2026!"</em>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Seção 3: Medidor de Pegada Digital (Digital Footprint) -->
+    <section class="cd-secao" id="pegada-digital" aria-labelledby="titulo-pegada">
+      <div class="cd-secao-cabecalho">
+        <h2 id="titulo-pegada" class="cd-titulo-secao">Sua Pegada Digital no Mundo (EF05CO04)</h2>
+        <p class="cd-desc-secao">
+          Tudo o que você curte, compartilha e cadastra na internet deixa rastros permanentes. Marque suas ações diárias para ver o estado da sua pegada.
+        </p>
+      </div>
+
+      <div class="cd-pegada-grid">
+        <div class="cd-pegada-visual">
+          <div class="cd-pegada-icone-grande" id="pegada-icone-wrap" aria-hidden="true">
+            <span class="material-symbols-outlined">fingerprint</span>
+          </div>
+          <h3 class="cd-pegada-status-titulo" id="pegada-titulo-status">Pegada Digital Limpa &amp; Protegida</h3>
+          <p class="cd-pegada-status-desc" id="pegada-desc-status">
+            Você cuida com atenção da sua privacidade, não compartilha dados sensíveis e mantém sua identidade resguardada.
+          </p>
+        </div>
+
+        <div class="cd-pegada-acoes-lista">
+          <label class="cd-opcao-pegada">
+            <span>Posto fotos com uniforme da escola ou mostrando a fachada da minha casa</span>
+            <input type="checkbox" class="cd-chk-pegada" data-peso="risco">
+          </label>
+          <label class="cd-opcao-pegada">
+            <span>Deixo a localização (GPS) sempre ativada publicamente nas redes sociais</span>
+            <input type="checkbox" class="cd-chk-pegada" data-peso="risco">
+          </label>
+          <label class="cd-opcao-pegada">
+            <span>Aceito termos de uso de jogos e apps sem conferir quais dados eles coletam</span>
+            <input type="checkbox" class="cd-chk-pegada" data-peso="risco">
+          </label>
+          <label class="cd-opcao-pegada">
+            <span>Uso a mesma senha simples para o e-mail, jogos e redes sociais</span>
+            <input type="checkbox" class="cd-chk-pegada" data-peso="risco">
+          </label>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Rodapé Institucional -->
+  <footer class="cd-rodape">
+    <div class="cd-rodape-grade">
+      <div class="cd-rodape-info">
+        <img src="/img/logo-branco.svg" alt="LMS COMPASSO — BNCC Computação" height="34">
+        <p>
+          Plataforma aberta para o ensino de Computação no Ensino Fundamental, alinhada à BNCC Computação e desenvolvida com apoio do IFMA Campus Grajaú.
+        </p>
+      </div>
+      <div class="cd-rodape-col">
+        <h3>Eixos Curriculares</h3>
+        <ul>
+          <li><a href="/atividades.html">Pensamento Computacional</a></li>
+          <li><a href="/mundo-digital.html">Mundo Digital (Hardware/Redes)</a></li>
+          <li><a href="/cultura-digital.html">Cultura Digital (Cidadania)</a></li>
+        </ul>
+      </div>
+      <div class="cd-rodape-col">
+        <h3>Acesso Rápido</h3>
+        <ul>
+          <li><a href="/boas-vindas.html">Boas-vindas &amp; Parceiros</a></li>
+          <li><a href="/login.html">Entrar na Plataforma</a></li>
+          <li><a href="https://github.com/LMS-COMPASSO/lms" rel="noopener">Código no GitHub (MIT)</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="cd-rodape-fim">
+      Projeto de Inovação SUAP/IFMA nº 14246/2025 · Startup LMS COMPASSO · Eixo Cultura Digital.
+    </div>
+  </footer>
+
+  <script src="/js/cultura-digital.js"></script>
+</body>
+</html>

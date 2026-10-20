@@ -1,0 +1,795 @@
+/* ==========================================================================
+   LMS COMPASSO — EIXO CULTURA DIGITAL (SIMULADOR DE CHAT, CIDADANIA E ÉTICA)
+   Mensageiro interativo, Phishing, Fake News, Cyberbullying e Pegada Digital
+   Alinhado à BNCC Computação: EF01CO05, EF02CO04, EF03CO04, EF04CO04, EF05CO04
+   ========================================================================== */
+
+/* ---------- Reset e Configurações Globais ---------- */
+body.pagina-cultura-digital {
+  background-color: #0b1120;
+  color: #f8fafc;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* ---------- Topo de Navegação ---------- */
+.cd-topo {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(11, 17, 32, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.cd-topo-conteudo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.cd-logo img {
+  height: 38px;
+  display: block;
+}
+
+.cd-nav {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.cd-nav a {
+  color: #94a3b8;
+  text-decoration: none;
+  font-size: 0.92rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.cd-nav a:hover {
+  color: #38bdf8;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.cd-nav a[aria-current="page"] {
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.12);
+  font-weight: 600;
+}
+
+.cd-acoes {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ---------- Hero Section ---------- */
+.cd-hero {
+  position: relative;
+  padding: 72px 20px 54px;
+  background: radial-gradient(circle at 50% 15%, #2a1b08 0%, #0b1120 70%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.cd-hero-conteudo {
+  max-width: 1000px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.cd-badge-eixo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  background: rgba(251, 191, 36, 0.12);
+  border: 1px solid rgba(251, 191, 36, 0.28);
+  color: #fbbf24;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.cd-titulo {
+  font-size: 2.75rem;
+  font-weight: 800;
+  line-height: 1.15;
+  color: #ffffff;
+  margin: 0 0 18px;
+  letter-spacing: -0.02em;
+}
+
+.cd-titulo span {
+  color: #fbbf24;
+}
+
+.cd-descricao {
+  font-size: 1.12rem;
+  color: #94a3b8;
+  max-width: 780px;
+  margin: 0 auto 32px;
+  line-height: 1.65;
+}
+
+.cd-hero-cta {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 36px;
+}
+
+.btn-cd-primario {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  border-radius: 12px;
+  background: #b45309; /* Amber-700 para WCAG AA com texto branco */
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1rem;
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.btn-cd-primario:hover {
+  background: #92400e;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+}
+
+.btn-cd-contorno {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 24px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #e2e8f0;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.btn-cd-contorno:hover {
+  background: rgba(255, 255, 255, 0.09);
+  color: #ffffff;
+  border-color: #94a3b8;
+}
+
+/* Indicadores de Habilidades BNCC */
+.cd-tags-habilidades {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.cd-tag-hab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.82rem;
+  color: #cbd5e1;
+}
+
+.cd-tag-hab strong {
+  color: #fbbf24;
+}
+
+/* ---------- Container Geral das Seções ---------- */
+.cd-secao {
+  padding: 64px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.cd-secao-cabecalho {
+  margin-bottom: 36px;
+  text-align: center;
+}
+
+.cd-titulo-secao {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 12px;
+  letter-spacing: -0.01em;
+}
+
+.cd-desc-secao {
+  font-size: 1.05rem;
+  color: #94a3b8;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+/* ---------- Seção 1: Simulador de Mensagens e Diálogo ("ZapCompasso") ---------- */
+.cd-chat-app {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  height: 600px;
+  background: #0f172a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 12px;
+  gap: 12px;
+  box-sizing: border-box;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
+}
+
+/* Coluna Lateral de Contatos / Cenários */
+.cd-chat-sidebar {
+  background: #0b1120;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.cd-sidebar-topo {
+  padding: 18px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cd-sidebar-titulo {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cd-pontos-cidadania {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #4ade80;
+  background: rgba(34, 197, 94, 0.15);
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.cd-lista-conversas {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.cd-item-conversa {
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.2s ease;
+}
+
+.cd-item-conversa:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.cd-item-conversa.ativo {
+  background: rgba(251, 191, 36, 0.14);
+  border: 1px solid rgba(251, 191, 36, 0.35);
+  border-radius: 10px;
+}
+
+.cd-avatar-conversa {
+  width: 44px;
+  height: 44px;
+  padding: 10px;
+  box-sizing: border-box;
+  border-radius: 50%;
+  background: #1e293b;
+  color: #fbbf24;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.cd-avatar-conversa .material-symbols-outlined {
+  font-size: 22px;
+  width: 22px;
+  height: 22px;
+  line-height: 22px;
+}
+
+.cd-conversa-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.cd-conversa-nome {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2px;
+}
+
+.cd-conversa-previa {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+}
+
+/* Área Principal do Chat */
+.cd-chat-janela {
+  display: flex;
+  flex-direction: column;
+  background: #070d18;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.cd-chat-topo {
+  padding: 14px 20px;
+  background: #0f172a;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cd-chat-contato {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cd-contato-nome {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.cd-contato-status {
+  font-size: 0.78rem;
+  color: #4ade80;
+  margin: 0;
+}
+
+.cd-badge-tema {
+  font-size: 0.78rem;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: rgba(251, 191, 36, 0.12);
+  border: 1px solid rgba(251, 191, 36, 0.25);
+  color: #fbbf24;
+  font-weight: 600;
+}
+
+/* Mensagens do Chat */
+.cd-chat-mensagens {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cd-balao {
+  max-width: 75%;
+  padding: 14px 18px;
+  border-radius: 14px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  position: relative;
+}
+
+.cd-balao-recebido {
+  align-self: flex-start;
+  background: #1e293b;
+  color: #f8fafc;
+  border-bottom-left-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.cd-balao-enviado {
+  align-self: flex-end;
+  background: #0369a1;
+  color: #ffffff;
+  border-bottom-right-radius: 4px;
+}
+
+.cd-balao-alerta {
+  align-self: center;
+  max-width: 90%;
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  color: #fbbf24;
+  font-size: 0.88rem;
+  text-align: center;
+}
+
+.cd-balao-hora {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  display: block;
+  text-align: right;
+  margin-top: 4px;
+}
+
+.cd-balao-enviado .cd-balao-hora {
+  color: #cbd5e1;
+}
+
+/* Área de Decisão do Estudante */
+.cd-chat-decisao {
+  padding: 18px 20px;
+  background: #0f172a;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.cd-decisao-rotulo {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #fbbf24;
+  margin: 0 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cd-opcoes-decisao {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.btn-opcao-decisao {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: #f1f5f9;
+  font-size: 0.92rem;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.2s ease;
+}
+
+.btn-opcao-decisao:hover {
+  background: rgba(251, 191, 36, 0.12);
+  border-color: #fbbf24;
+  color: #ffffff;
+}
+
+/* ---------- Seção 2: Laboratório de Senhas Seguras ("Cofre Digital") ---------- */
+.cd-cofre-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+.cd-cofre-painel {
+  background: #070d18;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 32px;
+}
+
+.cd-campo-senha-wrap {
+  margin-bottom: 24px;
+}
+
+.cd-label-senha {
+  display: block;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 8px;
+}
+
+.cd-input-senha {
+  width: 100%;
+  padding: 14px 18px;
+  border-radius: 12px;
+  background: #0f172a;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-family: monospace;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease;
+}
+
+.cd-input-senha:focus {
+  outline: none;
+  border-color: #fbbf24;
+}
+
+.cd-termometro-forca {
+  height: 10px;
+  background: #1e293b;
+  border-radius: 5px;
+  margin: 16px 0 10px;
+  overflow: hidden;
+}
+
+.cd-barra-forca {
+  height: 100%;
+  width: 20%;
+  background: #ef4444;
+  border-radius: 5px;
+  transition: width 0.3s ease, background 0.3s ease;
+}
+
+.cd-status-senha-txt {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #ef4444;
+  display: flex;
+  justify-content: space-between;
+}
+
+.cd-tempo-quebra {
+  color: #94a3b8;
+  font-size: 0.85rem;
+}
+
+/* Requisitos de Senha */
+.cd-requisitos-lista {
+  list-style: none;
+  padding: 0;
+  margin: 24px 0 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.cd-req-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: #94a3b8;
+}
+
+.cd-req-item.atendido {
+  color: #4ade80;
+}
+
+.cd-req-icone {
+  font-size: 18px;
+}
+
+/* Painel Explicativo do Cofre */
+.cd-cofre-dicas {
+  background: #0f172a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 28px;
+}
+
+.cd-dica-bloco {
+  margin-bottom: 20px;
+}
+
+.cd-dica-titulo {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fbbf24;
+  margin: 0 0 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cd-dica-texto {
+  font-size: 0.92rem;
+  color: #94a3b8;
+  margin: 0;
+  line-height: 1.55;
+}
+
+/* ---------- Seção 3: Medidor de Pegada Digital (Digital Footprint) ---------- */
+.cd-pegada-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  align-items: center;
+}
+
+.cd-pegada-visual {
+  text-align: center;
+  padding: 36px 20px;
+  background: #070d18;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+}
+
+.cd-pegada-icone-grande {
+  width: 90px;
+  height: 90px;
+  padding: 20px;
+  box-sizing: border-box;
+  border-radius: 50%;
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 20px;
+  transition: all 0.3s ease;
+}
+
+.cd-pegada-icone-grande .material-symbols-outlined {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  line-height: 48px;
+}
+
+.cd-pegada-status-titulo {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 8px;
+}
+
+.cd-pegada-status-desc {
+  font-size: 0.95rem;
+  color: #94a3b8;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.cd-pegada-acoes-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cd-opcao-pegada {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.92rem;
+  color: #e2e8f0;
+}
+
+.cd-opcao-pegada input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #fbbf24;
+  cursor: pointer;
+}
+
+/* ---------- Rodapé Institucional ---------- */
+.cd-rodape {
+  margin-top: 80px;
+  padding: 48px 20px 24px;
+  background: #070d18;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.cd-rodape-grade {
+  max-width: 1200px;
+  margin: 0 auto 36px;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 36px;
+}
+
+.cd-rodape-info p {
+  color: #94a3b8;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  margin-top: 12px;
+}
+
+.cd-rodape-col h3 {
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #cbd5e1;
+  margin: 0 0 16px;
+}
+
+.cd-rodape-col ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cd-rodape-col a {
+  color: #94a3b8;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.2s ease;
+}
+
+.cd-rodape-col a:hover {
+  color: #fbbf24;
+}
+
+.cd-rodape-fim {
+  text-align: center;
+  font-size: 0.82rem;
+  color: #94a3b8;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ---------- Responsividade ---------- */
+@media (max-width: 960px) {
+  .cd-chat-app {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+  .cd-chat-sidebar {
+    max-height: 200px;
+  }
+  .cd-cofre-grid,
+  .cd-pegada-grid,
+  .cd-rodape-grade {
+    grid-template-columns: 1fr;
+  }
+  .cd-nav {
+    display: none;
+  }
+}

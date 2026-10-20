@@ -19,18 +19,18 @@
       <h1>Entrar na plataforma</h1>
       <p class="subtitulo">Plataforma de ensino alinhada à BNCC Computação</p>
 
-      <div id="alerta" class="alerta alerta-erro oculto"></div>
+      <div id="alerta" class="alerta alerta-erro oculto" role="alert" aria-live="polite"></div>
 
       <form id="form-login">
         <div class="form-grupo">
           <label for="email">Email</label>
-          <input type="email" id="email" required placeholder="seuemail@escola.edu.br">
+          <input type="email" id="email" autocomplete="email" spellcheck="false" required placeholder="seuemail@escola.edu.br">
         </div>
         <div class="form-grupo">
           <label for="senha">Senha</label>
           <input type="password" id="senha" autocomplete="current-password" required placeholder="••••••••">
         </div>
-        <button type="submit" class="btn btn-primario btn-bloco">Entrar</button>
+        <button type="submit" id="btn-submit" class="btn btn-primario btn-bloco">Entrar</button>
       </form>
 
       <p class="texto-centro mt-18 texto-suave">
@@ -55,10 +55,13 @@
       const alertaEl = document.getElementById('alerta');
       alertaEl.classList.add('oculto');
 
+      const btnSubmit = document.getElementById('btn-submit');
       const email = document.getElementById('email').value.trim();
       const senha = document.getElementById('senha').value;
 
       try {
+        btnSubmit.disabled = true;
+        btnSubmit.textContent = 'Entrando…';
         const resposta = await api('/auth/login', {
           method: 'POST',
           body: JSON.stringify({ email, senha }),
@@ -66,6 +69,8 @@
         salvarSessao(resposta.token, resposta.usuario);
         window.location.href = resposta.usuario.perfil === 'aluno' ? '/cursos.html' : '/dashboard.html';
       } catch (err) {
+        btnSubmit.disabled = false;
+        btnSubmit.textContent = 'Entrar';
         alertaEl.textContent = err.message;
         alertaEl.classList.remove('oculto');
       }

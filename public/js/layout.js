@@ -81,6 +81,20 @@ function montarLayout(paginaAtiva) {
       perfis: ['administrador', 'instrutor', 'aluno'],
     },
     {
+      href: '/mundo-digital.html',
+      icone: 'developer_board',
+      label: 'Mundo Digital',
+      chave: 'mundo-digital',
+      perfis: ['administrador', 'instrutor', 'aluno'],
+    },
+    {
+      href: '/cultura-digital.html',
+      icone: 'chat',
+      label: 'Cultura Digital',
+      chave: 'cultura-digital',
+      perfis: ['administrador', 'instrutor', 'aluno'],
+    },
+    {
       href: '/matriculas.html',
       icone: 'how_to_reg',
       label: 'Matrículas',

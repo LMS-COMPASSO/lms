@@ -80,6 +80,50 @@ export const HABILIDADES = {
     anos: '6º ao 9º ano',
     texto: 'Construir soluções de problemas usando a técnica de decomposição e automatizar tais soluções usando uma linguagem de programação.',
   },
+  EF01CO04: {
+    anos: '1º ano',
+    texto: 'Reconhecer e utilizar componentes e periféricos básicos de dispositivos computacionais (mouse, teclado, tela, impressora).',
+  },
+  EF01CO05: {
+    anos: '1º ano',
+    texto: 'Compreender o uso ético, seguro e equilibrado das tecnologias digitais no cotidiano e respeitar os limites de uso.',
+  },
+  EF02CO03: {
+    anos: '2º ano',
+    texto: 'Identificar componentes de um dispositivo computacional e diferenciá-los entre entrada, processamento, armazenamento e saída.',
+  },
+  EF02CO04: {
+    anos: '2º ano',
+    texto: 'Compreender a importância da privacidade e proteção de dados pessoais, criando senhas seguras e não compartilhando dados com estranhos.',
+  },
+  EF03CO04: {
+    anos: '3º ano',
+    texto: 'Analisar criticamente conteúdos e mensagens digitais, checando fontes e diferenciando fatos de boatos ou desinformação (Fake News).',
+  },
+  EF04CO03: {
+    anos: '4º ano',
+    texto: 'Compreender que as informações no computador são representadas em formato binário e como os dados trafegam em redes de computadores.',
+  },
+  EF04CO04: {
+    anos: '4º ano',
+    texto: 'Reconhecer práticas de cidadania digital, prevenindo riscos de engenharia social (phishing) e combatendo ativamente o cyberbullying.',
+  },
+  EF05CO03: {
+    anos: '5º ano',
+    texto: 'Compreender a arquitetura básica de computadores (CPU, memória RAM, armazenamento e barramentos) e o ciclo de busca, decodificação e execução.',
+  },
+  EF05CO04: {
+    anos: '5º ano',
+    texto: 'Analisar o impacto social, ético e ambiental das tecnologias digitais, compreendendo a pegada digital e o descarte de lixo eletrônico.',
+  },
+  EF69CO05: {
+    anos: '6º ao 9º ano',
+    texto: 'Descrever e simular os elementos da infraestrutura da Internet: roteadores, servidores, pacotes de dados, endereçamento IP e DNS.',
+  },
+  EF69CO07: {
+    anos: '6º ao 9º ano',
+    texto: 'Debater sobre direitos autorais, licenças livres de software e conteúdo digital e segurança da informação.',
+  },
 };
 
 export const ATIVIDADES = [
