@@ -99,7 +99,8 @@ INSERT OR IGNORE INTO medalhas (id, codigo, titulo, descricao, eixo_bncc, icone,
 (6, 'guardiao_privacidade', 'Guardião da Privacidade', 'Adotou boas práticas de proteção de dados pessoais e senhas seguras.', 'Cultura Digital', 'verified_user', '#d97706', 'concluir_aula', 1),
 (7, 'cidadao_etico', 'Cidadão Digital Consciente', 'Identificou fontes confiáveis e debateu ética e segurança no ambiente virtual.', 'Cultura Digital', 'diversity_3', '#ea580c', 'concluir_aula', 1),
 (8, 'primeiro_passo', 'Primeiro Passo na Computação', 'Completou a primeira aula ou desafio dinâmico na plataforma.', 'Geral', 'flag', '#16a34a', 'primeira_acao', 1),
-(9, 'trilha_completa', 'Certificado BNCC Conquistado', 'Concluiu 100% de uma trilha formativa com certificado emitido.', 'Geral', 'military_tech', '#eab308', 'certificado', 1);
+(9, 'trilha_completa', 'Certificado BNCC Conquistado', 'Concluiu 100% de uma trilha formativa com certificado emitido.', 'Geral', 'military_tech', '#eab308', 'certificado', 1),
+(10, 'explorador_python_3d', 'Explorador Python 3D', 'Concluiu as 6 atividades tridimensionais de lógica de programação em Python (Sequências, Condicionais, Laços, Funções, Ordenação e Recursão).', 'Pensamento Computacional', 'view_in_ar', '#0284c7', 'concluir_python3d', 6);
 
 -- Conquistas de exemplo
 INSERT OR IGNORE INTO usuario_medalhas (usuario_id, medalha_id) VALUES
@@ -135,3 +136,25 @@ WHERE NOT EXISTS (SELECT 1 FROM aulas WHERE modulo_id = 1 AND url_recurso = '/at
 INSERT INTO aulas (modulo_id, titulo, tipo, conteudo, url_recurso, duracao_min, ordem)
 SELECT 1, 'Atividade dinâmica: Simulador de Blocos — Labirinto e Condicionais', 'link', 'Use blocos condicionais (se... então) e repetições para desviar dos obstáculos no labirinto.', '/atividades.html?id=blocos-labirinto-condicional', 15, 7
 WHERE NOT EXISTS (SELECT 1 FROM aulas WHERE modulo_id = 1 AND url_recurso = '/atividades.html?id=blocos-labirinto-condicional');
+
+-- 13. Submissões de Código Python 3D da Turma (Exemplos Individuais e Pair Programming)
+INSERT INTO submissoes_python (usuario_id, atividade_id, codigo_python, sucesso, tentativas, estrelas, parceiro_dupla, papel_dupla)
+SELECT (SELECT id FROM usuarios WHERE email = 'aluno.pedro@escola.gov.br'),
+  'python3d-sequencia-labirinto',
+  'robo.mover()\nrobo.mover()\nrobo.coletar()\nrobo.girar_direita()\nrobo.mover()\nrobo.mover()',
+  1, 1, 3, 'Sofia Oliveira', 'piloto'
+WHERE NOT EXISTS (SELECT 1 FROM submissoes_python WHERE atividade_id = 'python3d-sequencia-labirinto');
+
+INSERT INTO submissoes_python (usuario_id, atividade_id, codigo_python, sucesso, tentativas, estrelas, parceiro_dupla, papel_dupla)
+SELECT (SELECT id FROM usuarios WHERE email = 'aluna.sofia@escola.gov.br'),
+  'python3d-condicionais-portas',
+  'for passo in range(4):\n    if robo.frente_porta():\n        robo.abrir_porta()\n    robo.mover()\n    if robo.tem_item():\n        robo.coletar()\nrobo.girar_direita()\nrobo.mover()\nrobo.mover()',
+  1, 2, 3, 'Pedro Santos', 'navegador'
+WHERE NOT EXISTS (SELECT 1 FROM submissoes_python WHERE atividade_id = 'python3d-condicionais-portas');
+
+INSERT INTO submissoes_python (usuario_id, atividade_id, codigo_python, sucesso, tentativas, estrelas, parceiro_dupla, papel_dupla)
+SELECT (SELECT id FROM usuarios WHERE email = 'aluno.lucas@escola.gov.br'),
+  'python3d-recursao-hanoi',
+  'def resolver_hanoi(n, origem, destino, auxiliar):\n    if n == 1:\n        hanoi.mover_disco(origem, destino)\n    else:\n        resolver_hanoi(n - 1, origem, auxiliar, destino)\n        hanoi.mover_disco(origem, destino)\n        resolver_hanoi(n - 1, auxiliar, destino, origem)\n\nresolver_hanoi(3, ''A'', ''C'', ''B'')',
+  1, 1, 3, NULL, 'individual'
+WHERE NOT EXISTS (SELECT 1 FROM submissoes_python WHERE atividade_id = 'python3d-recursao-hanoi');

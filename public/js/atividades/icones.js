@@ -32,10 +32,40 @@ export const DICIONARIO_ICONES = {
   'blocos-geometria-quadrado': { icone: 'square', cor: 'cor-geometria' },
   'blocos-labirinto-condicional': { icone: 'explore', cor: 'cor-labirinto' },
   'blocos-padrao-estrela': { icone: 'star', cor: 'cor-estrela' },
+  'python3d-sequencia-labirinto': { icone: 'view_in_ar', cor: 'cor-robo' },
+  'python3d-condicionais-portas': { icone: 'sensor_door', cor: 'cor-labirinto' },
+  'python3d-lacos-repeticao': { icone: 'repeat', cor: 'cor-geometria' },
+  'python3d-funcoes-decomposicao': { icone: 'functions', cor: 'cor-pesquisa' },
+  'python3d-listas-ordenacao': { icone: 'bar_chart', cor: 'cor-estrela' },
+  'python3d-recursao-hanoi': { icone: 'stacked_bar_chart', cor: 'cor-meta' },
 
-  // Conceitos Pedagógicos
-  algoritmos: { icone: 'terminal', cor: 'cor-robo' },
+  // Conceitos Pedagógicos e de Computação (Pilar 1 - Sem ambiguidade)
+  algoritmos: { icone: 'format_list_numbered', cor: 'cor-robo' },
+  algoritmo: { icone: 'format_list_numbered', cor: 'cor-robo' },
   decomposicao: { icone: 'account_tree', cor: 'cor-pesquisa' },
+  laco: { icone: 'repeat', cor: 'cor-geometria' },
+  condicional: { icone: 'alt_route', cor: 'cor-labirinto' },
+  funcao: { icone: 'functions', cor: 'cor-pesquisa' },
+  dados: { icone: 'database', cor: 'cor-estrela' },
+  rede: { icone: 'hub', cor: 'cor-robo' },
+  seguranca: { icone: 'verified_user', cor: 'cor-meta' },
+  hardware: { icone: 'memory', cor: 'cor-robo' },
+
+  // Funções Universais de Wayfinding e Sistema (Pilar 1)
+  configuracoes: { icone: 'settings', cor: 'cor-padrao' },
+  buscar: { icone: 'search', cor: 'cor-pesquisa' },
+  inicio: { icone: 'home', cor: 'cor-meta' },
+  perfil: { icone: 'account_circle', cor: 'cor-robo' },
+  ajuda: { icone: 'help', cor: 'cor-aviso' },
+  notificacoes: { icone: 'notifications', cor: 'cor-estrela' },
+  sair: { icone: 'logout', cor: 'cor-erro' },
+  voltar: { icone: 'arrow_back', cor: 'cor-padrao' },
+  proxima_atividade: { icone: 'arrow_forward', cor: 'cor-meta' },
+  concluido: { icone: 'check_circle', cor: 'cor-natureza' },
+  bloqueado: { icone: 'lock', cor: 'cor-padrao' },
+  em_andamento: { icone: 'schedule', cor: 'cor-aviso' },
+  download: { icone: 'download', cor: 'cor-robo' },
+  executar_codigo: { icone: 'play_arrow', cor: 'cor-natureza' },
 
   // Elementos do Tabuleiro / Arena do Robô
   R: { icone: 'smart_toy', cor: 'cor-robo' },

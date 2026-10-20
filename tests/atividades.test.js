@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
 import test from 'node:test';
 import {
   ATIVIDADES,
@@ -26,6 +27,15 @@ import {
   DICIONARIO_ICONES,
   obterInfoIcone,
 } from '../public/js/atividades/icones.js';
+import {
+  executarPythonPedagogicoFallback,
+  traduzirErroPython,
+} from '../public/js/atividades/pyodide-worker.js';
+import {
+  SVG_ICON_PATHS,
+  gerarSvgIconeHtml,
+  resolverNomeIconeUniversal,
+} from '../public/js/icones-universais.js';
 
 const porTipo = (tipo) => ATIVIDADES.filter((atividade) => atividade.tipo === tipo);
 
@@ -385,5 +395,73 @@ test('o dicionário de ícones cobre elementos de tabuleiro, passos e partes de 
   assert.equal(fallback.icone, 'category');
   assert.equal(fallback.cor, 'cor-padrao');
 });
+
+test('atividades 3D Python têm código inicial, solução de referência que resolve a cena e mensagens de erro claras', () => {
+  const python3d = porTipo('python3d');
+  assert.ok(python3d.length >= 6);
+
+  for (const atv of python3d) {
+    assert.ok(atv.cena3d && typeof atv.cena3d.modo === 'string');
+    assert.ok(typeof atv.codigoInicial === 'string' && atv.codigoInicial.length > 10);
+    assert.ok(typeof atv.solucaoReferencia === 'string' && atv.solucaoReferencia.length > 10);
+
+    const execucao = executarPythonPedagogicoFallback(atv.solucaoReferencia, atv.cena3d);
+    assert.equal(execucao.ok, true, `${atv.id}: erro ao executar solução de referência: ${execucao.erro}`);
+    assert.ok(execucao.eventos.length > 0, `${atv.id}: solução não gerou eventos 3D`);
+    assert.equal(execucao.resumo.sucesso, true, `${atv.id}: solução de referência não cumpriu objetivo (${execucao.resumo.motivo})`);
+  }
+
+  const erroSintaxe = executarPythonPedagogicoFallback('if robo.esta_livre()\n    robo.mover()', { modo: 'grade', grade: ['R.M'] });
+  assert.equal(erroSintaxe.ok, false);
+  assert.match(erroSintaxe.erro, /Erro na linha 1/);
+  assert.match(traduzirErroPython('IndentationError: unexpected indent', 2), /recuo \(indentação\)/);
+});
+
+test('Pilar 1: registro JSON de ícones universais, sprite SVG e conceitos de Computação sem ambiguidade', () => {
+  const registryRaw = fs.readFileSync(new URL('../public/data/icon-registry.json', import.meta.url), 'utf8');
+  const registry = JSON.parse(registryRaw);
+
+  assert.equal(registry.meta.espessuraTraco, 2);
+  assert.deepEqual(registry.meta.gradeTamanhosPx, { xs: 16, sm: 20, md: 24, lg: 32 });
+
+  // Verifica funções universais obrigatórias
+  const obrigatoriosSistema = [
+    'configuracoes', 'buscar', 'inicio', 'perfil', 'ajuda',
+    'notificacoes', 'sair', 'voltar', 'proxima_atividade',
+  ];
+  for (const chave of obrigatoriosSistema) {
+    assert.ok(registry.navegacaoEWayfinding[chave], `Falta ${chave} em navegacaoEWayfinding`);
+    assert.notEqual(obterInfoIcone(chave).icone, 'category', `Falta ${chave} em DICIONARIO_ICONES`);
+  }
+
+  const obrigatoriosEstados = ['concluido', 'bloqueado', 'em_andamento', 'download', 'executar_codigo'];
+  for (const chave of obrigatoriosEstados) {
+    assert.ok(registry.estadosEFluxo[chave], `Falta ${chave} em estadosEFluxo`);
+    assert.notEqual(obterInfoIcone(chave).icone, 'category', `Falta ${chave} em DICIONARIO_ICONES`);
+  }
+
+  // Verifica conceitos de Computação BNCC sem ícones duplicados
+  const conceitosBNCC = ['algoritmo', 'laco', 'condicional', 'funcao', 'decomposicao', 'dados', 'hardware', 'rede', 'seguranca'];
+  const idsUsados = new Set();
+  for (const conceito of conceitosBNCC) {
+    const item = registry.conceitosComputacaoBNCC[conceito];
+    assert.ok(item, `Falta conceito ${conceito} no registro JSON`);
+    assert.ok(!idsUsados.has(item.id), `Ícone duplicado para o conceito ${conceito}: ${item.id}`);
+    idsUsados.add(item.id);
+    const chaveSvg = resolverNomeIconeUniversal(item.id);
+    assert.ok(SVG_ICON_PATHS[chaveSvg], `Falta path SVG para ${item.id}`);
+  }
+
+  // Verifica renderização SVG decorativa vs funcional na grade 16/20/24/32px
+  const svgDecorativo = gerarSvgIconeHtml('home', { tamanho: 20 });
+  assert.ok(svgDecorativo.includes('width="20" height="20"'));
+  assert.ok(svgDecorativo.includes('stroke-width="2"'));
+  assert.ok(svgDecorativo.includes('aria-hidden="true"'));
+
+  const svgFuncional = gerarSvgIconeHtml('search', { tamanho: 24, rotulo: 'Buscar atividades' });
+  assert.ok(svgFuncional.includes('width="24" height="24"'));
+  assert.ok(svgFuncional.includes('role="img" aria-label="Buscar atividades"'));
+});
+
 
 

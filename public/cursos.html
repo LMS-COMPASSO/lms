@@ -30,7 +30,10 @@
               <option value="publicado">Publicado</option>
               <option value="rascunho">Rascunho</option>
             </select>
-            <input type="text" id="busca" class="max-w-220" title="Buscar curso por título ou palavra-chave" aria-label="Buscar curso" placeholder="Buscar curso...">
+            <div class="flex-inline-icon">
+              <span class="material-symbols-outlined icon-xs texto-suave" aria-hidden="true">search</span>
+              <input type="search" id="busca" class="max-w-220" title="Buscar curso por título ou palavra-chave" aria-label="Buscar curso" placeholder="Buscar curso...">
+            </div>
           </div>
           <button type="button" class="btn btn-primario flex-inline-icon oculto-aluno" onclick="abrirModalCurso()"><span class="material-symbols-outlined icon-xs">add</span> Novo Curso</button>
         </div>
@@ -113,31 +116,51 @@
           return;
         }
 
+        const iconesPorEixo = {
+          'Pensamento Computacional': 'format_list_numbered',
+          'Mundo Digital': 'memory',
+          'Cultura Digital': 'verified_user',
+        };
+
         container.innerHTML = cursos.map((c) => {
           const textoBotaoStatus = c.status === 'publicado' ? 'Voltar p/ rascunho' : 'Publicar';
+          const iconeStatus = c.status === 'publicado' ? 'schedule' : 'check_circle';
+          const iconeEixo = iconesPorEixo[c.eixo_bncc] || 'menu_book';
           return `
             <div class="cartao">
               <div class="flex-topo">
-                <span class="badge badge-${c.status}">${c.status}</span>
-                <span class="texto-suave">${c.carga_horaria}h</span>
+                <span class="badge badge-${c.status} flex-inline-icon">
+                  <span class="material-symbols-outlined icon-xs" aria-hidden="true">${c.status === 'publicado' ? 'check_circle' : 'schedule'}</span>
+                  ${c.status}
+                </span>
+                <span class="texto-suave flex-inline-icon"><span class="material-symbols-outlined icon-xs" aria-hidden="true">schedule</span> ${c.carga_horaria}h</span>
               </div>
               <h3 class="mt-8 mb-10">${c.titulo}</h3>
               <p class="texto-suave">${c.descricao || 'Sem descrição.'}</p>
               <div class="curso-meta-info texto-suave">
-                <div><span class="material-symbols-outlined icon-xs">category</span> <span>${c.eixo_bncc}</span></div>
-                <div><span class="material-symbols-outlined icon-xs">school</span> <span>${c.ano_escolar}</span> · <span class="material-symbols-outlined icon-xs">person</span> <span>${c.instrutor_nome}</span></div>
-                <div><span class="material-symbols-outlined icon-xs">group</span> <span>${c.total_matriculados || 0} matriculado(s)</span></div>
+                <div><span class="material-symbols-outlined icon-xs" aria-hidden="true">${iconeEixo}</span> <span>${c.eixo_bncc}</span></div>
+                <div><span class="material-symbols-outlined icon-xs" aria-hidden="true">school</span> <span>${c.ano_escolar}</span> · <span class="material-symbols-outlined icon-xs" aria-hidden="true">person</span> <span>${c.instrutor_nome}</span></div>
+                <div><span class="material-symbols-outlined icon-xs" aria-hidden="true">group</span> <span>${c.total_matriculados || 0} matriculado(s)</span></div>
               </div>
               <div class="flex-linha flex-wrap mt-10">
-                <a href="/curso-detalhe.html?id=${c.id}" class="btn btn-neutro btn-sm">Abrir</a>
+                <a href="/curso-detalhe.html?id=${c.id}" class="btn btn-neutro btn-sm flex-inline-icon">
+                  <span>Abrir</span>
+                  <span class="material-symbols-outlined icon-xs" aria-hidden="true">arrow_forward</span>
+                </a>
                 ${usuario.perfil !== 'aluno' ? `
-                  <button type="button" class="btn btn-neutro btn-sm" onclick='editarCurso(${JSON.stringify(c)})'>Editar</button>
-                  <button type="button" class="btn btn-secundario btn-sm" onclick="alternarStatus(${c.id}, '${c.status}')">
-                    ${textoBotaoStatus}
+                  <button type="button" class="btn btn-neutro btn-sm flex-inline-icon" onclick='editarCurso(${JSON.stringify(c)})'>
+                    <span class="material-symbols-outlined icon-xs" aria-hidden="true">edit</span> Editar
                   </button>
-                  <button type="button" class="btn btn-perigo btn-sm" onclick="excluirCurso(${c.id})">Excluir</button>
+                  <button type="button" class="btn btn-secundario btn-sm flex-inline-icon" onclick="alternarStatus(${c.id}, '${c.status}')">
+                    <span class="material-symbols-outlined icon-xs" aria-hidden="true">${iconeStatus}</span> ${textoBotaoStatus}
+                  </button>
+                  <button type="button" class="btn btn-perigo btn-sm flex-inline-icon" onclick="excluirCurso(${c.id})">
+                    <span class="material-symbols-outlined icon-xs" aria-hidden="true">delete</span> Excluir
+                  </button>
                 ` : `
-                  <button type="button" class="btn btn-primario btn-sm" onclick="matricular(${c.id})">Matricular-se</button>
+                  <button type="button" class="btn btn-primario btn-sm flex-inline-icon" onclick="matricular(${c.id})">
+                    <span class="material-symbols-outlined icon-xs" aria-hidden="true">how_to_reg</span> Matricular-se
+                  </button>
                 `}
               </div>
             </div>

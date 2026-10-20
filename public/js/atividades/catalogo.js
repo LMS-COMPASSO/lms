@@ -16,6 +16,25 @@ import { ATIVIDADES_ORDENAR } from './ordenar.js';
 import { ATIVIDADES_DECOMPOR } from './decompor.js';
 import { ATIVIDADES_ROBO } from './robo.js';
 import { ATIVIDADES_BLOCOS } from './blocos.js';
+import { ATIVIDADES_PYTHON3D } from './python3d.js';
+
+export const EIXOS_BNCC = {
+  'pensamento-computacional': {
+    rotulo: 'Pensamento Computacional',
+    icone: 'psychology',
+    cor: '#2563eb',
+  },
+  'mundo-digital': {
+    rotulo: 'Mundo Digital',
+    icone: 'developer_board',
+    cor: '#059669',
+  },
+  'cultura-digital': {
+    rotulo: 'Cultura Digital',
+    icone: 'verified_user',
+    cor: '#d97706',
+  },
+};
 
 export const CONCEITOS = {
   algoritmos: { rotulo: 'Algoritmos do cotidiano', emoji: '🔢' },
@@ -27,6 +46,7 @@ export const TIPOS = {
   decompor: { rotulo: 'Dividir o problema' },
   robo: { rotulo: 'Programar o robô' },
   blocos: { rotulo: 'Programação em blocos' },
+  python3d: { rotulo: 'Laboratório 3D Python' },
 };
 
 // Mesmos agrupamentos usados nas propostas pedagógicas do projeto.
@@ -131,7 +151,11 @@ export const ATIVIDADES = [
   ...ATIVIDADES_DECOMPOR,
   ...ATIVIDADES_ROBO,
   ...ATIVIDADES_BLOCOS,
-];
+  ...ATIVIDADES_PYTHON3D,
+].map((atividade) => ({
+  eixo: atividade.eixo || 'pensamento-computacional',
+  ...atividade,
+}));
 
 export function buscarAtividade(id) {
   return ATIVIDADES.find((atividade) => atividade.id === id) || null;

@@ -194,6 +194,11 @@ async function rotearMatriculas(partes, metodo, request, env, db, url) {
  * Roteia requisições do domínio de Certificados (/api/certificados/*)
  */
 async function rotearCertificados(partes, metodo, request, env, db, url) {
+  // /api/certificados/python3d
+  if (partes.length === 3 && partes[2] === 'python3d' && metodo === 'GET') {
+    return certificateRoutes.visualizarCertificadoPython3dHtml(request, env, db, url);
+  }
+
   // /api/certificados/visualizar/:codigo
   if (partes.length === 4 && partes[2] === 'visualizar' && metodo === 'GET') {
     return certificateRoutes.visualizarCertificadoHtml(request, env, db, partes[3]);
@@ -230,6 +235,9 @@ async function rotearDashboard(partes, metodo, request, env, db, url) {
   if (partes.length === 3 && partes[2] === 'relatorio-pedagogico' && metodo === 'GET') {
     return dashboardRoutes.obterRelatorioPedagogico(request, env, db, url);
   }
+  if (partes.length === 3 && partes[2] === 'submissoes-python' && metodo === 'GET') {
+    return dashboardRoutes.listarSubmissoesPython(request, env, db, url);
+  }
   return jsonErro('Endpoint de dashboard não encontrado.', 404);
 }
 
@@ -247,6 +255,10 @@ async function rotearGamificacao(partes, metodo, request, env, db, url) {
   }
   // /api/gamificacao/concluir-atividade
   if (partes.length === 3 && partes[2] === 'concluir-atividade' && metodo === 'POST') {
+    return gamificationRoutes.registrarAtividadeConcluida(request, env, db);
+  }
+  // /api/gamificacao/submissoes-python
+  if (partes.length === 3 && partes[2] === 'submissoes-python' && metodo === 'POST') {
     return gamificationRoutes.registrarAtividadeConcluida(request, env, db);
   }
   return jsonErro('Endpoint de gamificação não encontrado.', 404);

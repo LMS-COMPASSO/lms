@@ -25,15 +25,16 @@
         <img src="/img/logo.svg" alt="LMS COMPASSO — BNCC Computação">
       </a>
       <nav class="pub-nav" aria-label="Principal">
-        <a href="/boas-vindas.html">Boas-vindas</a>
-        <a href="/mundo-digital.html">Mundo Digital</a>
-        <a href="/cultura-digital.html">Cultura Digital</a>
-        <a href="/atividades.html">Atividades</a>
-        <a href="#projeto">O projeto</a>
+        <a href="/" aria-current="page"><span class="material-symbols-outlined icon-xs" aria-hidden="true">home</span> Início</a>
+        <a href="/boas-vindas.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">rocket_launch</span> Boas-vindas</a>
+        <a href="/atividades.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">format_list_numbered</span> Atividades</a>
+        <a href="/mundo-digital.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">memory</span> Mundo Digital</a>
+        <a href="/cultura-digital.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">verified_user</span> Cultura Digital</a>
         <a href="#eixos">Eixos da BNCC</a>
       </nav>
       <div class="pub-acoes">
-        <a href="/login.html" class="btn btn-contorno-escuro btn-sm" id="acao-entrar">Entrar</a>
+        <a href="/atividades.html" class="btn btn-contorno-escuro btn-sm flex-inline-icon" title="Buscar atividades BNCC" aria-label="Buscar atividades"><span class="material-symbols-outlined icon-xs" aria-hidden="true">search</span> Buscar</a>
+        <a href="/login.html" class="btn btn-contorno-escuro btn-sm flex-inline-icon" id="acao-entrar"><span class="material-symbols-outlined icon-xs" aria-hidden="true">account_circle</span> Entrar</a>
         <a href="/registrar.html" class="btn btn-primario btn-sm" id="acao-cadastrar">Criar conta</a>
       </div>
     </div>
@@ -120,7 +121,7 @@
         <p class="pub-intro">Todo curso da plataforma pertence a um eixo. Veja o que cada um trabalha com os estudantes.</p>
         <div class="pub-grade">
           <article class="pub-card pub-card-eixo">
-            <span class="pub-icone" aria-hidden="true"><span class="material-symbols-outlined">psychology</span></span>
+            <span class="pub-icone" aria-hidden="true"><span class="material-symbols-outlined">format_list_numbered</span></span>
             <h3>Pensamento Computacional</h3>
             <span class="pub-selo">Atividades dinâmicas disponíveis</span>
             <p>Resolver problemas com lógica e criatividade.</p>
@@ -133,7 +134,7 @@
             <div class="pub-card-acao"><a class="pub-link" href="/atividades.html">Experimentar as atividades <span class="material-symbols-outlined">arrow_forward</span></a></div>
           </article>
           <article class="pub-card pub-card-eixo mundo">
-            <span class="pub-icone" aria-hidden="true"><span class="material-symbols-outlined">devices</span></span>
+            <span class="pub-icone" aria-hidden="true"><span class="material-symbols-outlined">memory</span></span>
             <h3>Mundo Digital</h3>
             <span class="pub-selo">Simulador 3D &amp; Hardware</span>
             <p>Entender como as tecnologias funcionam por dentro.</p>
@@ -310,6 +311,7 @@
 
   <script src="/js/config.js"></script>
   <script src="/js/api.js"></script>
+  <script type="module" src="/js/icones-universais.js"></script>
   <script>
     // Quem já tem sessão vai direto para a plataforma, sem passar pela tela de login.
     const usuarioLogado = obterToken() ? obterUsuario() : null;

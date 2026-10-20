@@ -161,6 +161,20 @@ CREATE TABLE IF NOT EXISTS desempenho_habilidades (
   FOREIGN KEY (curso_id) REFERENCES cursos(id) ON DELETE SET NULL
 );
 
+CREATE TABLE IF NOT EXISTS submissoes_python (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  usuario_id INTEGER NOT NULL,
+  atividade_id TEXT NOT NULL,
+  codigo_python TEXT NOT NULL,
+  sucesso INTEGER NOT NULL DEFAULT 1,
+  tentativas INTEGER NOT NULL DEFAULT 1,
+  estrelas INTEGER NOT NULL DEFAULT 3,
+  parceiro_dupla TEXT,
+  papel_dupla TEXT NOT NULL CHECK(papel_dupla IN ('individual', 'piloto', 'navegador')) DEFAULT 'individual',
+  criado_em TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+);
+
 CREATE INDEX IF NOT EXISTS idx_cursos_instrutor ON cursos(instrutor_id);
 CREATE INDEX IF NOT EXISTS idx_cursos_status ON cursos(status);
 CREATE INDEX IF NOT EXISTS idx_cursos_eixo ON cursos(eixo_bncc);
@@ -177,3 +191,5 @@ CREATE INDEX IF NOT EXISTS idx_usuario_medalhas_user ON usuario_medalhas(usuario
 CREATE INDEX IF NOT EXISTS idx_desempenho_hab_user ON desempenho_habilidades(usuario_id);
 CREATE INDEX IF NOT EXISTS idx_desempenho_hab_cod ON desempenho_habilidades(habilidade_codigo);
 CREATE INDEX IF NOT EXISTS idx_desempenho_hab_curso ON desempenho_habilidades(curso_id);
+CREATE INDEX IF NOT EXISTS idx_submissoes_python_user ON submissoes_python(usuario_id);
+CREATE INDEX IF NOT EXISTS idx_submissoes_python_atv ON submissoes_python(atividade_id);

@@ -44,7 +44,7 @@
       <section class="dashboard-atalhos" aria-label="Atalhos Rápidos de Ação">
         <a href="/atividades.html" class="atalho-card" title="Acessar catálogo de algoritmos, simulador de blocos e folhas desplugadas">
           <span class="atalho-icone">
-            <span class="material-symbols-outlined">extension</span>
+            <span class="material-symbols-outlined">format_list_numbered</span>
           </span>
           <span class="atalho-info">
             <span class="atalho-titulo">Simulador &amp; Desplugadas</span>
@@ -250,6 +250,66 @@
             </table>
           </div>
         </section>
+
+        <!-- Submissões de Código Python 3D dos Estudantes (Persistência Cloudflare D1) -->
+        <section class="cartao cartao-dashboard mt-16" id="secao-submissoes-python" aria-labelledby="titulo-submissoes-python">
+          <div class="relatorio-pedagogico-topo">
+            <div>
+              <h3 id="titulo-submissoes-python" class="flex-inline-icon">
+                <span class="material-symbols-outlined icon-sm">deployed_code</span> Submissões de Código Python 3D da Turma (Cloudflare D1)
+              </h3>
+              <p class="texto-suave">Visualize o código Python exato submetido por cada estudante ou dupla (Pair Programming) nas 6 atividades tridimensionais.</p>
+            </div>
+            <div class="relatorio-acoes">
+              <select id="filtro-atividade-python" aria-label="Filtrar submissões por atividade Python 3D" onchange="carregarSubmissoesPython(this.value)" style="width:auto; min-height:38px; padding:6px 12px;">
+                <option value="">Todas as 6 missões Python 3D</option>
+                <option value="python3d-sequencia">1. Sequências: Robô Coletor 3D</option>
+                <option value="python3d-condicional">2. Condicionais: Sensores e Portas 3D</option>
+                <option value="python3d-lacos">3. Laços (for): Ponte de Energia 3D</option>
+                <option value="python3d-funcoes">4. Funções (def): Sub-rotinas 3D</option>
+                <option value="python3d-listas">5. Listas: Ordenação de Torres 3D</option>
+                <option value="python3d-hanoi">6. Recursão: Torre de Hanói 3D</option>
+              </select>
+              <a href="/api/certificados/python3d" target="_blank" rel="noopener" class="btn btn-sm btn-primario flex-inline-icon">
+                <span class="material-symbols-outlined icon-xs">workspace_premium</span> Modelo Certificado Python 3D
+              </a>
+            </div>
+          </div>
+
+          <div class="tabela-scroll">
+            <table id="tabela-submissoes-python" class="tabela-relatorio">
+              <thead>
+                <tr>
+                  <th scope="col">Estudante &amp; Modo</th>
+                  <th scope="col">Atividade Python 3D</th>
+                  <th scope="col">Desempenho</th>
+                  <th scope="col">Data / Hora</th>
+                  <th scope="col">Código Submetido</th>
+                </tr>
+              </thead>
+              <tbody id="corpo-submissoes-python">
+                <tr><td colspan="5" class="texto-centro texto-suave">Carregando submissões de código Python da turma...</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Inspetor de Código Python Submetido pelo Aluno -->
+          <div id="inspetor-codigo-python" style="margin-top: 16px; background: #0f172a; color: #f8fafc; border-radius: 12px; padding: 16px; border: 1px solid rgba(56, 189, 248, 0.3);" hidden>
+            <div class="flex-entre flex-wrap gap-8 mb-8">
+              <div>
+                <strong id="inspetor-python-titulo" style="color: #38bdf8; font-size: 0.95rem;">Código Python do Estudante</strong>
+                <div id="inspetor-python-meta" style="font-size: 0.8rem; color: #94a3b8;"></div>
+              </div>
+              <div class="flex-inline-icon gap-8">
+                <a id="inspetor-python-certificado" href="/api/certificados/python3d" target="_blank" rel="noopener" class="btn btn-xs btn-primario flex-inline-icon">
+                  <span class="material-symbols-outlined icon-xs">workspace_premium</span> Emitir Certificado do Aluno
+                </a>
+                <button type="button" class="btn btn-xs btn-neutro" onclick="document.getElementById('inspetor-codigo-python').hidden = true">Fechar</button>
+              </div>
+            </div>
+            <pre id="inspetor-python-pre" style="margin: 0; padding: 14px; background: #090d16; color: #e2e8f0; border-radius: 8px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.86rem; line-height: 1.55; overflow-x: auto; border: 1px solid rgba(255,255,255,0.1);"></pre>
+          </div>
+        </section>
       </div>
 
       <!-- ============================================================== -->
@@ -331,7 +391,7 @@
     const metadadosEixos = {
       'Pensamento Computacional': {
         classe: 'eixo-pensamento',
-        icone: 'psychology',
+        icone: 'format_list_numbered',
         descricao: 'Algoritmos, decomposição, reconhecimento de padrões e abstração lógica.',
         anos: '1º ao 9º Ano'
       },
@@ -343,7 +403,7 @@
       },
       'Cultura Digital': {
         classe: 'eixo-cultura',
-        icone: 'public',
+        icone: 'verified_user',
         descricao: 'Cidadania na rede, ética, segurança, privacidade e pensamento crítico.',
         anos: 'Fundamental Geral'
       }
@@ -521,6 +581,108 @@
       }
     }
 
+    const titulosPython3d = {
+      'python3d-sequencia': '1. Sequências: Robô Coletor 3D',
+      'python3d-sequencia-labirinto': '1. Sequências: Robô Coletor 3D',
+      'python3d-condicional': '2. Condicionais: Sensores e Portas 3D',
+      'python3d-condicionais-portas': '2. Condicionais: Sensores e Portas 3D',
+      'python3d-lacos': '3. Laços (for): Ponte de Energia 3D',
+      'python3d-lacos-repeticao': '3. Laços (for): Ponte de Energia 3D',
+      'python3d-funcoes': '4. Funções (def): Sub-rotinas 3D',
+      'python3d-funcoes-decomposicao': '4. Funções (def): Sub-rotinas 3D',
+      'python3d-listas': '5. Listas: Ordenação de Torres 3D',
+      'python3d-listas-ordenacao': '5. Listas: Ordenação de Torres 3D',
+      'python3d-hanoi': '6. Recursão: Torre de Hanói 3D',
+      'python3d-recursao-hanoi': '6. Recursão: Torre de Hanói 3D',
+    };
+
+    let cacheSubmissoesPython = [];
+
+    window.carregarSubmissoesPython = async function(filtroAtividade = '') {
+      const tbody = document.getElementById('corpo-submissoes-python');
+      if (!tbody) return;
+      try {
+        const sufixo = filtroAtividade ? `?atividade_id=${encodeURIComponent(filtroAtividade)}` : '';
+        const dados = await api(`/dashboard/submissoes-python${sufixo}`);
+        let submissoes = Array.isArray(dados?.submissoes) ? dados.submissoes : [];
+
+        // Combina com submissões locais recentes (caso aluno tenha testado no mesmo navegador)
+        try {
+          const locais = JSON.parse(localStorage.getItem('lms_submissoes_python_local') || '[]');
+          const locaisFiltradas = filtroAtividade
+            ? locais.filter((item) => item.atividade_id === filtroAtividade)
+            : locais;
+          submissoes = [...locaisFiltradas, ...submissoes];
+        } catch {
+          // Ignora erro local
+        }
+
+        cacheSubmissoesPython = submissoes;
+
+        if (submissoes.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5" class="texto-centro texto-suave">Nenhuma submissão de código Python encontrada para este filtro.</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = submissoes.map((s, idx) => {
+          const tituloAtv = titulosPython3d[s.atividade_id] || s.atividade_id;
+          const estrelas = '★'.repeat(Math.max(1, Math.min(3, Number(s.estrelas) || 3)));
+          const badgeDupla = s.parceiro_dupla
+            ? `<span class="chip-aluno" title="Pair Programming (${s.papel_dupla || 'piloto'})">👥 Dupla com ${s.parceiro_dupla} (${s.papel_dupla || 'piloto'})</span>`
+            : '<span class="texto-suave texto-pequeno">Individual</span>';
+
+          return `
+            <tr class="linha-pedagogica">
+              <td>
+                <strong>${s.aluno_nome || 'Estudante'}</strong>
+                <div>${badgeDupla}</div>
+              </td>
+              <td><span class="badge-bncc-codigo">${tituloAtv}</span></td>
+              <td>
+                <strong style="color:#d97706;">${estrelas}</strong>
+                <span class="texto-suave texto-pequeno">(${s.tentativas || 1} tent.)</span>
+              </td>
+              <td class="texto-suave texto-pequeno">${formatarData(s.criado_em)}</td>
+              <td>
+                <button type="button" class="btn btn-xs btn-primario flex-inline-icon" onclick="inspecionarCodigoPython(${idx})">
+                  <span class="material-symbols-outlined icon-xs">code</span> Ver Código Python
+                </button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="5" class="texto-centro texto-suave">Erro ao carregar submissões Python: ${err.message}</td></tr>`;
+      }
+    };
+
+    window.inspecionarCodigoPython = function(indice) {
+      const item = cacheSubmissoesPython[indice];
+      if (!item) return;
+      const painel = document.getElementById('inspetor-codigo-python');
+      const titulo = document.getElementById('inspetor-python-titulo');
+      const meta = document.getElementById('inspetor-python-meta');
+      const pre = document.getElementById('inspetor-python-pre');
+      const linkCert = document.getElementById('inspetor-python-certificado');
+
+      const tituloAtv = titulosPython3d[item.atividade_id] || item.atividade_id;
+      titulo.textContent = `${item.aluno_nome || 'Estudante'} — ${tituloAtv}`;
+      meta.textContent = item.parceiro_dupla
+        ? `Modo Desafio Colaborativo (Dupla com ${item.parceiro_dupla} • Papel: ${item.papel_dupla || 'piloto'}) • ${item.tentativas || 1} tentativa(s)`
+        : `Modo Individual • ${item.tentativas || 1} tentativa(s) • Submetido em ${formatarData(item.criado_em)}`;
+      pre.textContent = item.codigo_python || '# Sem código registrado';
+
+      if (linkCert) {
+        const params = new URLSearchParams();
+        if (item.aluno_nome) params.set('aluno', item.aluno_nome);
+        if (item.parceiro_dupla) params.set('dupla', item.parceiro_dupla);
+        linkCert.href = `/api/certificados/python3d?${params.toString()}`;
+      }
+
+      painel.hidden = false;
+      painel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    };
+
     function executarAnimacoesGSAP() {
       const prefereReduzido = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -663,7 +825,7 @@
       if (typeof gsap !== 'undefined' && icone) {
         gsap.to(icone, { rotation: '+=360', duration: 0.7, ease: 'power2.inOut' });
       }
-      await Promise.all([carregarIndicadores(), carregarTimeline(), carregarRelatorioPedagogico()]);
+      await Promise.all([carregarIndicadores(), carregarTimeline(), carregarRelatorioPedagogico(), carregarSubmissoesPython()]);
       executarAnimacoesGSAP();
     };
 
@@ -689,7 +851,7 @@
     };
 
     // Inicialização assíncrona
-    await Promise.all([carregarIndicadores(), carregarTimeline(), carregarRelatorioPedagogico()]);
+    await Promise.all([carregarIndicadores(), carregarTimeline(), carregarRelatorioPedagogico(), carregarSubmissoesPython()]);
     executarAnimacoesGSAP();
   </script>
 </body>

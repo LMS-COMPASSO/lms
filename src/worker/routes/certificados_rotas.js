@@ -150,6 +150,34 @@ export async function emitirCertificado(request, env, db, url) {
 }
 
 /**
+ * Renderiza o Certificado Especial "Explorador Python 3D — BNCC Computação" em HTML/A4
+ * quando o estudante conclui as 6 atividades tridimensionais de lógica em Python.
+ */
+export async function visualizarCertificadoPython3dHtml(request, env, db, url) {
+  const alunoParam = url.searchParams.get('aluno') || 'Estudante Explorador BNCC';
+  const duplaParam = url.searchParams.get('dupla') || '';
+  const codigoParam = url.searchParams.get('codigo') || `PY3D-2026-${Math.abs(alunoParam.length * 7919).toString(16).toUpperCase()}`;
+
+  const tituloTrilha = duplaParam
+    ? `Laboratório 3D de Lógica em Python (Em Dupla Colaborativa com ${duplaParam})`
+    : 'Laboratório 3D de Lógica de Programação em Python (6 Desafios Tridimensionais)';
+
+  const html = gerarHtmlCertificado({
+    aluno_nome: alunoParam,
+    curso_titulo: tituloTrilha,
+    eixo_bncc: 'Pensamento Computacional · Medalha Explorador Python 3D (EF15CO02, EF03CO03, EF69CO02, EF69CO03, EF69CO04)',
+    carga_horaria: 12,
+    codigo_validacao: codigoParam,
+    data_emissao: new Date().toISOString(),
+  });
+
+  return new Response(html, {
+    status: 200,
+    headers: { 'Content-Type': 'text/html; charset=utf-8', ...CORS_HEADERS },
+  });
+}
+
+/**
  * Gera o template visual do certificado escolar em HTML com CSS para impressão A4 paisagem.
  */
 export function gerarHtmlCertificado(cert) {

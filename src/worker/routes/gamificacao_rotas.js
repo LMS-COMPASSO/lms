@@ -70,11 +70,28 @@ export async function garantirTabelasGamificacao(db) {
         )
       `).run();
 
+      await db.prepare(`
+        CREATE TABLE IF NOT EXISTS submissoes_python (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          usuario_id INTEGER NOT NULL,
+          atividade_id TEXT NOT NULL,
+          codigo_python TEXT NOT NULL,
+          sucesso INTEGER NOT NULL DEFAULT 1,
+          tentativas INTEGER NOT NULL DEFAULT 1,
+          estrelas INTEGER NOT NULL DEFAULT 3,
+          parceiro_dupla TEXT,
+          papel_dupla TEXT NOT NULL CHECK(papel_dupla IN ('individual', 'piloto', 'navegador')) DEFAULT 'individual',
+          criado_em TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+        )
+      `).run();
+
       const padroes = [
         ['primeiro_passo', 'Primeiro Passo na Computação', 'Concluiu a primeira atividade interativa ou aula no LMS.', 'Geral', 'rocket_launch', '#3b82f6', 'atividades', 1],
         ['mestre_algoritmos', 'Mestre dos Algoritmos', 'Completou todas as trilhas de sequenciamento e passos lógicos.', 'Pensamento Computacional', 'psychology', '#8b5cf6', 'eixo_pc', 3],
         ['arquiteto_decomposicao', 'Arquiteto da Decomposição', 'Resolveu desafios quebrando problemas complexos em partes menores.', 'Pensamento Computacional', 'account_tree', '#6366f1', 'decomposicao', 2],
         ['programador_blocos', 'Programador em Blocos Jr.', 'Montou e executou com sucesso rotinas de lógica no simulador.', 'Pensamento Computacional', 'terminal', '#0ea5e9', 'blocos', 3],
+        ['explorador_python_3d', 'Explorador Python 3D', 'Concluiu as 6 atividades tridimensionais de lógica de programação em Python.', 'Pensamento Computacional', 'view_in_ar', '#0284c7', 'concluir_python3d', 6],
         ['detetive_hardware_software', 'Detetive de Hardware & Software', 'Compreendeu os componentes de computadores, periféricos e redes.', 'Mundo Digital', 'memory', '#10b981', 'mundo_digital', 2],
         ['guardiao_privacidade', 'Guardião da Privacidade & Ética', 'Dominou práticas de cidadania digital, senhas seguras e direitos na web.', 'Cultura Digital', 'verified_user', '#f59e0b', 'cultura_digital', 2],
         ['trilha_completa', 'Pioneiro da BNCC Computação', 'Concluiu com êxito pelo menos um curso completo da plataforma.', 'Geral', 'workspace_premium', '#ec4899', 'cursos', 1],
@@ -264,6 +281,12 @@ export async function registrarAtividadeConcluida(request, env, db) {
   const habilidades = Array.isArray(body.habilidades) ? body.habilidades : [];
   const pontuacao = Number(body.pontuacao ?? 10.0);
   const cursoId = body.cursoId ? Number(body.cursoId) : null;
+  const codigoPython = typeof body.codigoPython === 'string' ? body.codigoPython : null;
+  const tentativas = Number(body.tentativas || 1);
+  const estrelas = Number(body.estrelas || 3);
+  const parceiroDupla = body.parceiroDupla ? String(body.parceiroDupla).trim() : null;
+  const papelDupla = ['individual', 'piloto', 'navegador'].includes(body.papelDupla) ? body.papelDupla : 'individual';
+  const concluiuTodasPython3d = Boolean(body.concluiuTodasPython3d);
 
   if (!atividadeId) {
     return jsonErro('Identificador da atividade é obrigatório.', 400);
@@ -279,8 +302,23 @@ export async function registrarAtividadeConcluida(request, env, db) {
     `).bind(usuarioId, cursoId, cod, atividadeId, pontuacao, nivelAtingido).run();
   }
 
+  // Se for atividade Python 3D com código enviado, persiste em submissoes_python
+  if (codigoPython) {
+    try {
+      await db.prepare(`
+        INSERT INTO submissoes_python (usuario_id, atividade_id, codigo_python, sucesso, tentativas, estrelas, parceiro_dupla, papel_dupla)
+        VALUES (?, ?, ?, 1, ?, ?, ?, ?)
+      `).bind(usuarioId, atividadeId, codigoPython, tentativas, estrelas, parceiroDupla, papelDupla).run();
+    } catch {
+      // Caso a tabela ainda não exista no ambiente local, tenta criá-la
+      await garantirTabelasGamificacao(db);
+    }
+  }
+
   // Avalia medalhas em decorrência da atividade
   const medalhasNovas = [];
+  let medalhaExploradorPython3d = false;
+
   if (atividadeId.startsWith('ordenar-')) {
     const m = await queryOne(db, 'SELECT id FROM medalhas WHERE codigo = ?', ['mestre_algoritmos']);
     if (m) medalhasNovas.push(m.id);
@@ -290,6 +328,27 @@ export async function registrarAtividadeConcluida(request, env, db) {
   } else if (atividadeId.startsWith('blocos-')) {
     const m = await queryOne(db, 'SELECT id FROM medalhas WHERE codigo = ?', ['programador_blocos']);
     if (m) medalhasNovas.push(m.id);
+  } else if (atividadeId.startsWith('python3d-')) {
+    let totalPythonConcluidas = concluiuTodasPython3d ? 6 : 0;
+    if (!concluiuTodasPython3d) {
+      try {
+        const contagem = await queryOne(
+          db,
+          "SELECT COUNT(DISTINCT atividade_id) AS total FROM submissoes_python WHERE usuario_id = ? AND atividade_id LIKE 'python3d-%' AND sucesso = 1",
+          [usuarioId],
+        );
+        totalPythonConcluidas = Number(contagem?.total || 0);
+      } catch {
+        totalPythonConcluidas = 0;
+      }
+    }
+    if (totalPythonConcluidas >= 6) {
+      const mPy = await queryOne(db, 'SELECT id FROM medalhas WHERE codigo = ?', ['explorador_python_3d']);
+      if (mPy) {
+        medalhasNovas.push(mPy.id);
+        medalhaExploradorPython3d = true;
+      }
+    }
   }
 
   const mPrimeiro = await queryOne(db, 'SELECT id FROM medalhas WHERE codigo = ?', ['primeiro_passo']);
@@ -309,5 +368,6 @@ export async function registrarAtividadeConcluida(request, env, db) {
     sucesso: true,
     habilidadesRegistradas: habilidades.length,
     nivelAtingido,
+    medalhaExploradorPython3d,
   });
 }

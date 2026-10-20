@@ -1,0 +1,234 @@
+{
+  "$schema": "https://lms-compasso.edu.br/schemas/icon-registry-v1.json",
+  "meta": {
+    "bibliotecaBase": "Lucide Vector Icons (SVG Sprite Nativo LMS COMPASSO)",
+    "estiloUnico": "outline-stroke",
+    "viewBox": "0 0 24 24",
+    "espessuraTraco": 2,
+    "linecap": "round",
+    "linejoin": "round",
+    "gradeTamanhosPx": {
+      "xs": 16,
+      "sm": 20,
+      "md": 24,
+      "lg": 32
+    },
+    "regrasAcessibilidade": {
+      "navegacaoPrincipal": "Sempre acompanhado de rótulo de texto visível.",
+      "iconeIsolado": "Permitido apenas para símbolos universais inequívocos (busca, fechar, menu, ajuda, notificações) com aria-label, title (tooltip) e alvo de toque >= 44x44px.",
+      "iconeDecorativo": "Deve conter aria-hidden=\"true\" e focusable=\"false\".",
+      "contrasteMinimo": "3:1 contra o fundo adjacente (WCAG 2.2 AA - 1.4.11 Non-text Contrast)."
+    }
+  },
+  "navegacaoEWayfinding": {
+    "inicio": {
+      "id": "icon-home",
+      "simboloUniversal": "Casa com telhado e porta",
+      "rotuloPadrao": "Início",
+      "perguntaWayfinding": "Onde estou? / Para onde posso ir?",
+      "aliasesLegados": ["home", "cottage"]
+    },
+    "dashboard": {
+      "id": "icon-dashboard",
+      "simboloUniversal": "Painel em grade modular de 4 quadrantes",
+      "rotuloPadrao": "Painel Geral",
+      "perguntaWayfinding": "Onde estou?",
+      "aliasesLegados": ["dashboard", "space_dashboard"]
+    },
+    "buscar": {
+      "id": "icon-search",
+      "simboloUniversal": "Lupa de pesquisa",
+      "rotuloPadrao": "Buscar",
+      "perguntaWayfinding": "Para onde posso ir?",
+      "aliasesLegados": ["search", "travel_explore"]
+    },
+    "configuracoes": {
+      "id": "icon-settings",
+      "simboloUniversal": "Engrenagem mecânica",
+      "rotuloPadrao": "Configurações",
+      "perguntaWayfinding": "Para onde posso ir?",
+      "aliasesLegados": ["settings", "tune"]
+    },
+    "perfil": {
+      "id": "icon-user",
+      "simboloUniversal": "Silhueta de usuário em círculo",
+      "rotuloPadrao": "Meu Perfil",
+      "perguntaWayfinding": "Onde estou? / Para onde posso ir?",
+      "aliasesLegados": ["account_circle", "person"]
+    },
+    "ajuda": {
+      "id": "icon-help-circle",
+      "simboloUniversal": "Ponto de interrogação dentro de círculo",
+      "rotuloPadrao": "Ajuda",
+      "perguntaWayfinding": "Como volto ou avanço? / Onde estou?",
+      "aliasesLegados": ["help", "help_outline", "Quiz"]
+    },
+    "notificacoes": {
+      "id": "icon-bell",
+      "simboloUniversal": "Sino de avisos",
+      "rotuloPadrao": "Notificações",
+      "perguntaWayfinding": "Para onde posso ir?",
+      "aliasesLegados": ["notifications", "notifications_active"]
+    },
+    "sair": {
+      "id": "icon-log-out",
+      "simboloUniversal": "Seta saindo de uma porta à direita",
+      "rotuloPadrao": "Sair",
+      "perguntaWayfinding": "Como volto ou avanço?",
+      "aliasesLegados": ["logout", "exit_to_app"]
+    },
+    "voltar": {
+      "id": "icon-arrow-left",
+      "simboloUniversal": "Seta apontando para a esquerda",
+      "rotuloPadrao": "Voltar",
+      "perguntaWayfinding": "Como volto ou avanço?",
+      "aliasesLegados": ["arrow_back", "chevron_left"]
+    },
+    "proxima_atividade": {
+      "id": "icon-arrow-right",
+      "simboloUniversal": "Seta apontando para a direita",
+      "rotuloPadrao": "Próxima atividade",
+      "perguntaWayfinding": "Como volto ou avanço?",
+      "aliasesLegados": ["arrow_forward", "chevron_right"]
+    },
+    "menu": {
+      "id": "icon-menu",
+      "simboloUniversal": "Três barras horizontais paralelas",
+      "rotuloPadrao": "Menu",
+      "perguntaWayfinding": "Para onde posso ir?",
+      "aliasesLegados": ["menu"]
+    },
+    "fechar": {
+      "id": "icon-close",
+      "simboloUniversal": "X de fechamento",
+      "rotuloPadrao": "Fechar",
+      "perguntaWayfinding": "Como volto ou avanço?",
+      "aliasesLegados": ["close", "cancel"]
+    }
+  },
+  "estadosEFluxo": {
+    "concluido": {
+      "id": "icon-check-circle",
+      "simboloUniversal": "Marca de verificação (check) dentro de círculo",
+      "rotuloPadrao": "Concluído",
+      "corSemantica": "#15803d",
+      "aliasesLegados": ["check_circle", "task_alt", "check"]
+    },
+    "bloqueado": {
+      "id": "icon-lock",
+      "simboloUniversal": "Cadeado fechado",
+      "rotuloPadrao": "Bloqueado",
+      "corSemantica": "#475569",
+      "aliasesLegados": ["lock", "block"]
+    },
+    "em_andamento": {
+      "id": "icon-clock",
+      "simboloUniversal": "Relógio com ponteiros indicando progresso",
+      "rotuloPadrao": "Em andamento",
+      "corSemantica": "#b45309",
+      "aliasesLegados": ["schedule", "timelapse", "hourglass_empty"]
+    },
+    "download": {
+      "id": "icon-download",
+      "simboloUniversal": "Seta apontando para baixo sobre bandeja receptora",
+      "rotuloPadrao": "Baixar arquivo",
+      "aliasesLegados": ["download", "file_download"]
+    },
+    "executar_codigo": {
+      "id": "icon-play",
+      "simboloUniversal": "Triângulo de reprodução (Play) apontando para a direita",
+      "rotuloPadrao": "Executar código",
+      "aliasesLegados": ["play_arrow", "play_circle"]
+    },
+    "pausar": {
+      "id": "icon-pause",
+      "simboloUniversal": "Duas barras verticais de pausa",
+      "rotuloPadrao": "Pausar",
+      "aliasesLegados": ["pause"]
+    },
+    "passo_a_passo": {
+      "id": "icon-step-forward",
+      "simboloUniversal": "Triângulo play seguido de barra vertical de parada",
+      "rotuloPadrao": "Passo a passo",
+      "aliasesLegados": ["skip_next"]
+    },
+    "reiniciar": {
+      "id": "icon-rotate-ccw",
+      "simboloUniversal": "Seta circular anti-horária de reinício",
+      "rotuloPadrao": "Reiniciar",
+      "aliasesLegados": ["restart_alt", "refresh", "sync"]
+    },
+    "imprimir": {
+      "id": "icon-printer",
+      "simboloUniversal": "Impressora com folha de papel",
+      "rotuloPadrao": "Imprimir",
+      "aliasesLegados": ["print"]
+    }
+  },
+  "conceitosComputacaoBNCC": {
+    "algoritmo": {
+      "id": "icon-algorithm",
+      "simboloUniversal": "Lista numerada sequencial (1, 2, 3) com linhas de passos ordenados",
+      "eixoBNCC": "Pensamento Computacional",
+      "justificativaDesambiguacao": "Representa passos finitos e ordenados sem confundir com cérebro/psicologia ou terminal genérico.",
+      "aliasesLegados": ["format_list_numbered", "terminal"]
+    },
+    "laco": {
+      "id": "icon-loop",
+      "simboloUniversal": "Duas setas curvas formando ciclo contínuo de repetição (for/while)",
+      "eixoBNCC": "Pensamento Computacional",
+      "justificativaDesambiguacao": "Diferencia repetição algorítmica do botão de atualizar página (rotate-ccw).",
+      "aliasesLegados": ["repeat", "loop"]
+    },
+    "condicional": {
+      "id": "icon-conditional",
+      "simboloUniversal": "Bifurcação em Y com dois caminhos possíveis (Se / Senão)",
+      "eixoBNCC": "Pensamento Computacional",
+      "justificativaDesambiguacao": "Mostra visualmente uma tomada de decisão com ramificação verdadeira/falsa.",
+      "aliasesLegados": ["alt_route", "call_split", "sensor_door"]
+    },
+    "funcao": {
+      "id": "icon-function",
+      "simboloUniversal": "Símbolo matemático f(x) encapsulado em bloco modular",
+      "eixoBNCC": "Pensamento Computacional",
+      "justificativaDesambiguacao": "Inconfundível para sub-rotinas e abstração funcional em programação.",
+      "aliasesLegados": ["functions"]
+    },
+    "decomposicao": {
+      "id": "icon-decomposition",
+      "simboloUniversal": "Nó superior dividido em três blocos menores conectados em árvore",
+      "eixoBNCC": "Pensamento Computacional",
+      "justificativaDesambiguacao": "Ilustra dividir um problema grande em partes menores gerenciáveis.",
+      "aliasesLegados": ["account_tree", "lan"]
+    },
+    "dados": {
+      "id": "icon-database",
+      "simboloUniversal": "Cilindro em camadas representando armazenamento estruturado e listas",
+      "eixoBNCC": "Mundo Digital",
+      "justificativaDesambiguacao": "Evita usar gráficos de barras de gestão para representar estruturas de dados.",
+      "aliasesLegados": ["database", "storage", "bar_chart", "stacked_bar_chart"]
+    },
+    "hardware": {
+      "id": "icon-cpu",
+      "simboloUniversal": "Microprocessador quadrado com pinos laterais de circuito",
+      "eixoBNCC": "Mundo Digital",
+      "justificativaDesambiguacao": "Unifica o símbolo do Eixo Mundo Digital em toda a plataforma (Sidebar, Cards e Dashboard).",
+      "aliasesLegados": ["memory", "developer_board"]
+    },
+    "rede": {
+      "id": "icon-network",
+      "simboloUniversal": "Três nós computacionais interconectados por linhas de transmissão",
+      "eixoBNCC": "Mundo Digital",
+      "justificativaDesambiguacao": "Distingue redes de pacotes TCP/IP de árvore de decomposição ou globo genérico.",
+      "aliasesLegados": ["router", "hub", "share"]
+    },
+    "seguranca": {
+      "id": "icon-shield-check",
+      "simboloUniversal": "Escudo de proteção com marca de verificação interna",
+      "eixoBNCC": "Cultura Digital",
+      "justificativaDesambiguacao": "Unifica o símbolo do Eixo Cultura Digital e Segurança/Privacidade sem confundir com o cadeado de 'Bloqueado'.",
+      "aliasesLegados": ["verified_user", "security", "gpp_good", "health_and_safety"]
+    }
+  }
+}
+

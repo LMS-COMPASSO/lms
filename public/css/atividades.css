@@ -28,7 +28,11 @@
 .atv-filtro-grupo { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 .atv-filtro-rotulo { margin-right: 4px; color: var(--pub-texto-suave); font-size: 0.85rem; font-weight: 700; }
 .atv-filtro {
-  padding: 8px 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 8px 16px;
   border: 2px solid var(--pub-borda);
   border-radius: 999px;
   background: #fff;
@@ -1405,4 +1409,547 @@
   body.imprimindo { background: #fff; }
   body.imprimindo #folha-impressao { display: block; }
 }
+
+/* ============================================================================
+   FRENTE 2 & FRENTE 3: NAVEGAÇÃO BNCC, MAPA DE HABILIDADES E LABORATÓRIO 3D PYTHON
+   ============================================================================ */
+
+.atv-topo-navegacao {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.atv-breadcrumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  list-style: none;
+  margin: 0 0 10px;
+  padding: 0;
+  font-size: 0.85rem;
+  color: var(--pub-texto-suave);
+}
+.atv-breadcrumbs li + li::before {
+  content: '/';
+  margin-right: 6px;
+  color: #94a3b8;
+}
+.atv-breadcrumbs a {
+  color: var(--pub-azul-700);
+  font-weight: 600;
+}
+.atv-breadcrumbs a:hover {
+  text-decoration: underline;
+}
+
+.atv-nav-sequencial {
+  display: flex;
+  gap: 8px;
+}
+.atv-nav-sequencial .btn {
+  min-height: 44px;
+}
+
+.atv-retomar-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 16px 20px;
+  margin-bottom: 18px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #eff6ff 0%, #f8fafc 100%);
+  border: 1px solid #bfdbfe;
+}
+.atv-retomar-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.atv-retomar-kicker {
+  font-size: 0.74rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #1d4ed8;
+}
+.atv-retomar-meta {
+  font-size: 0.82rem;
+  color: var(--pub-texto-suave);
+}
+
+.atv-barra-busca-hab {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.atv-input-busca,
+.atv-select-habilidade {
+  min-height: 46px;
+  padding: 10px 14px;
+  border: 2px solid var(--pub-borda);
+  border-radius: 12px;
+  background: #ffffff;
+  font-size: 0.92rem;
+}
+
+.atv-badge-eixo {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #eff6ff;
+  color: #1e40af;
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+.atv-meta li.atv-meta-bncc {
+  background: #e0f2fe;
+  color: #075985;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+/* Mapa de Habilidades da Atividade */
+.atv-mapa-hab-box {
+  margin: 22px 0;
+  padding: 20px;
+  border-radius: 16px;
+  background: #ffffff;
+  border: 1px solid var(--pub-borda);
+  box-shadow: var(--sombra);
+}
+.atv-mapa-hab-titulo {
+  margin: 0 0 12px;
+  font-size: 1.05rem;
+  color: var(--pub-azul-900);
+}
+.atv-mapa-hab-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+}
+.atv-hab-card {
+  padding: 14px;
+  border-radius: 12px;
+  background: #f8fafc;
+  border: 1px solid var(--pub-borda);
+}
+.atv-hab-topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.atv-hab-anos {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--pub-texto-suave);
+}
+.atv-hab-dominio {
+  margin-left: auto;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+.dominio-consolidada { background: #dcfce7; color: #166534; }
+.dominio-progresso { background: #fef3c7; color: #92400e; }
+.dominio-disponivel { background: #e2e8f0; color: #334155; }
+.atv-hab-texto {
+  margin: 0;
+  font-size: 0.86rem;
+  line-height: 1.5;
+  color: var(--pub-texto);
+}
+
+/* Laboratório 3D Python (Pyodide + Three.js + GSAP) */
+.py3d-shell {
+  background: #0f172a;
+  color: #f8fafc;
+  border-radius: 18px;
+  padding: 20px;
+  margin-bottom: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.28);
+}
+.py3d-barra-controles {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 14px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.py3d-grupo-botoes,
+.py3d-grupo-opcoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.py3d-grupo-botoes .btn,
+.py3d-grupo-opcoes .btn,
+.py3d-select-velocidade {
+  min-height: 44px;
+}
+.py3d-select-velocidade {
+  width: auto;
+  background: #1e293b;
+  color: #f8fafc;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-weight: 600;
+}
+.py3d-grid-principal {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 18px;
+}
+.py3d-palco-container {
+  position: relative;
+  min-height: 340px;
+  border-radius: 14px;
+  background: #0b132b;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+}
+.py3d-canvas-wrap {
+  width: 100%;
+  height: 340px;
+}
+.py3d-fallback-2d {
+  padding: 20px;
+  width: 100%;
+  place-items: center;
+}
+.py3d-2d-grade {
+  display: grid;
+  gap: 6px;
+}
+.py3d-2d-celula {
+  aspect-ratio: 1;
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: 8px;
+  background: #1e293b;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  display: grid;
+  place-items: center;
+  font-size: 1.35rem;
+}
+.py3d-2d-celula.robo-ativo {
+  background: rgba(37, 99, 235, 0.35);
+  border-color: #60a5fa;
+}
+.py3d-2d-torres {
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  height: 180px;
+  padding: 12px;
+}
+.py3d-2d-torre {
+  width: 48px;
+  background: linear-gradient(180deg, #60a5fa, #2563eb);
+  border-radius: 8px 8px 4px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 4px;
+  color: #fff;
+  font-weight: 700;
+}
+.py3d-2d-torre.destaque {
+  background: linear-gradient(180deg, #fbbf24, #d97706);
+}
+.py3d-2d-hanoi {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  width: 100%;
+  text-align: center;
+}
+.py3d-2d-pino-pilha {
+  min-height: 130px;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 4px;
+  padding-bottom: 6px;
+  border-bottom: 4px solid #64748b;
+}
+.py3d-2d-disco {
+  height: 24px;
+  border-radius: 999px;
+  background: #3b82f6;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+}
+.py3d-log-painel {
+  margin-top: 12px;
+  background: #090d16;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+.py3d-subtitulo {
+  margin: 0 0 8px;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #93c5fd;
+}
+.py3d-log-lista {
+  max-height: 120px;
+  overflow-y: auto;
+  margin: 0;
+  padding-left: 20px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.82rem;
+  color: #cbd5e1;
+}
+.py3d-log-vazio {
+  list-style: none;
+  margin-left: -20px;
+  color: #94a3b8;
+}
+.py3d-coluna-editor {
+  display: flex;
+  flex-direction: column;
+}
+.py3d-editor-topo {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 14px;
+  background: #1e293b;
+  border-radius: 12px 12px 0 0;
+  font-size: 0.78rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  color: #cbd5e1;
+}
+.py3d-editor-corpo {
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  background: #090d16;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-top: none;
+  border-radius: 0 0 12px 12px;
+  overflow: hidden;
+}
+.py3d-editor-linhas {
+  margin: 0;
+  padding: 12px 0;
+  list-style: none;
+  background: #111827;
+  color: #64748b;
+  text-align: center;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  user-select: none;
+}
+.py3d-editor-linhas li.linha-ativa {
+  background: #f59e0b;
+  color: #0f172a;
+  font-weight: 800;
+}
+.py3d-editor-textarea {
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: #f8fafc;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  padding: 12px;
+  resize: vertical;
+  min-height: 260px;
+}
+.py3d-editor-textarea:focus {
+  outline: 2px solid #60a5fa;
+  outline-offset: -2px;
+}
+.py3d-editor-textarea.modo-navegador-bloqueado {
+  background: rgba(15, 23, 42, 0.72);
+  color: #93c5fd;
+  cursor: not-allowed;
+}
+.py3d-editor-linhas li {
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.py3d-editor-linhas li:hover {
+  background: rgba(96, 165, 250, 0.2);
+  color: #e2e8f0;
+}
+.py3d-editor-linhas li.linha-revisao-navegador {
+  background: #38bdf8;
+  color: #0f172a;
+  font-weight: 800;
+  box-shadow: inset 3px 0 0 #0284c7;
+}
+
+/* Modo Desafio Colaborativo (Pair Programming Escolar) */
+.btn-dupla.dupla-ativa {
+  background: #0284c7;
+  color: #ffffff;
+  border-color: #38bdf8;
+}
+.py3d-dupla-painel {
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.55) 0%, rgba(15, 23, 42, 0.85) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+}
+.py3d-dupla-controles {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+.py3d-dupla-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+}
+.py3d-dupla-badge.piloto {
+  background: rgba(34, 197, 94, 0.2);
+  color: #86efac;
+  border: 1px solid rgba(34, 197, 94, 0.45);
+}
+.py3d-dupla-badge.navegador {
+  background: rgba(56, 189, 248, 0.2);
+  color: #7dd3fc;
+  border: 1px solid rgba(56, 189, 248, 0.45);
+}
+.py3d-dupla-campo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  color: #cbd5e1;
+}
+.py3d-dupla-input {
+  background: #090d16;
+  color: #f8fafc;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 0.84rem;
+  min-height: 38px;
+}
+.py3d-dupla-sala {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.76rem;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fde68a;
+  margin-left: auto;
+}
+.py3d-dupla-instrucao {
+  margin: 10px 0 0;
+  font-size: 0.82rem;
+  color: #bae6fd;
+  line-height: 1.45;
+}
+
+/* Card de Insígnia e Certificado "Explorador Python 3D" */
+.atv-explorador-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 22px;
+  margin-bottom: 18px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #0b192c 0%, #1e3a8a 100%);
+  color: #f8fafc;
+  border: 1px solid rgba(96, 165, 250, 0.35);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.16);
+}
+.atv-explorador-banner.conquistado {
+  background: linear-gradient(135deg, #064e3b 0%, #0f172a 100%);
+  border-color: #34d399;
+}
+.atv-explorador-esquerda {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 1;
+  min-width: 260px;
+}
+.atv-explorador-icone {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: rgba(251, 191, 36, 0.16);
+  border: 1px solid rgba(251, 191, 36, 0.45);
+  color: #fbbf24;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.atv-explorador-info h3 {
+  margin: 0 0 4px;
+  font-size: 1.02rem;
+  color: #ffffff;
+}
+.atv-explorador-info p {
+  margin: 0;
+  font-size: 0.84rem;
+  color: #cbd5e1;
+}
+.atv-explorador-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+.atv-chip-py3d {
+  font-size: 0.72rem;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #cbd5e1;
+  font-weight: 600;
+}
+.atv-chip-py3d.ok {
+  background: rgba(52, 211, 153, 0.22);
+  color: #6ee7b7;
+  border: 1px solid rgba(52, 211, 153, 0.4);
+}
+
+@media (max-width: 960px) {
+  .py3d-grid-principal,
+  .atv-barra-busca-hab {
+    grid-template-columns: 1fr;
+  }
+}
+
+
 

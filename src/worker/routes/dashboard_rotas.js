@@ -274,3 +274,33 @@ export async function obterRelatorioPedagogico(request, env, db, url) {
     habilidades: consolidado,
   });
 }
+
+/**
+ * Lista as submissões de código Python 3D dos estudantes da turma para visualização docente.
+ */
+export async function listarSubmissoesPython(request, env, db, url) {
+  const { payload } = await authorizeUser(request, env, db);
+  exigirPerfil(payload, ['administrador', 'instrutor']);
+
+  const atividadeFiltro = url ? url.searchParams.get('atividade_id') : null;
+  let sql = `
+    SELECT sp.id, sp.usuario_id, sp.atividade_id, sp.codigo_python, sp.sucesso,
+      sp.tentativas, sp.estrelas, sp.parceiro_dupla, sp.papel_dupla, sp.criado_em,
+      u.nome AS aluno_nome, u.email AS aluno_email
+    FROM submissoes_python sp
+    JOIN usuarios u ON u.id = sp.usuario_id
+  `;
+  const params = [];
+  if (atividadeFiltro) {
+    sql += ' WHERE sp.atividade_id = ?';
+    params.push(atividadeFiltro);
+  }
+  sql += ' ORDER BY sp.criado_em DESC LIMIT 50';
+
+  try {
+    const submissoes = await queryAll(db, sql, params);
+    return jsonResponse({ total: submissoes.length, submissoes });
+  } catch {
+    return jsonResponse({ total: 0, submissoes: [] });
+  }
+}

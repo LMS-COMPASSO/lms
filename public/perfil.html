@@ -134,6 +134,17 @@
       }
     }
 
+    const iconesMedalhasPadrao = {
+      mestre_algoritmos: 'format_list_numbered',
+      arquiteto_decomposicao: 'account_tree',
+      programador_blocos: 'code_blocks',
+      explorador_python_3d: 'deployed_code',
+      detetive_hardware_software: 'memory',
+      guardiao_privacidade: 'verified_user',
+      primeiro_passo: 'rocket_launch',
+      pioneiro_bncc: 'workspace_premium',
+    };
+
     function renderizarMedalhas(lista) {
       const container = document.getElementById('grade-medalhas');
       if (lista.length === 0) {
@@ -144,12 +155,14 @@
       container.innerHTML = lista.map((m) => {
         const bloqueada = m.conquistada !== 1;
         const dataStr = m.conquistada_em ? formatarData(m.conquistada_em) : null;
+        const iconeMedalha = iconesMedalhasPadrao[m.codigo] || m.icone || 'workspace_premium';
+        const metaEtapas = Number(m.criterio_meta) || 1;
 
         return `
           <div class="card-medalha ${bloqueada ? 'bloqueada' : ''}">
             <div class="card-medalha-topo">
               <div class="card-medalha-icone" style="background: ${m.cor || '#2563eb'}">
-                <span class="material-symbols-outlined">${m.icone || 'military_tech'}</span>
+                <span class="material-symbols-outlined" aria-hidden="true">${iconeMedalha}</span>
               </div>
               <div>
                 <h4 class="card-medalha-titulo">${m.titulo}</h4>
@@ -159,9 +172,12 @@
             <p class="card-medalha-desc">${m.descricao}</p>
             <div class="card-medalha-status">
               ${bloqueada
-                ? '<span class="flex-inline-icon"><span class="material-symbols-outlined icon-xs">lock</span> Bloqueada</span>'
-                : `<span class="badge badge-conquistada flex-inline-icon"><span class="material-symbols-outlined icon-xs">check_circle</span> Conquistada</span>`}
-              <span>${dataStr ? `Em ${dataStr}` : 'Em andamento'}</span>
+                ? '<span class="flex-inline-icon"><span class="material-symbols-outlined icon-xs" aria-hidden="true">lock</span> Bloqueado</span>'
+                : '<span class="badge badge-conquistada flex-inline-icon"><span class="material-symbols-outlined icon-xs" aria-hidden="true">check_circle</span> Concluído</span>'}
+              <span class="flex-inline-icon">
+                <span class="material-symbols-outlined icon-xs" aria-hidden="true">${bloqueada ? 'schedule' : 'workspace_premium'}</span>
+                ${dataStr ? `Em ${dataStr}` : `Meta: ${metaEtapas} etapa(s)`}
+              </span>
             </div>
           </div>
         `;

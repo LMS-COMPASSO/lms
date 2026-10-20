@@ -2,7 +2,8 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { signJwt } from '../src/worker/crypto_seguranca.js';
 import { listarMedalhas, registrarAtividadeConcluida } from '../src/worker/routes/gamificacao_rotas.js';
-import { obterRelatorioPedagogico } from '../src/worker/routes/dashboard_rotas.js';
+import { obterRelatorioPedagogico, listarSubmissoesPython } from '../src/worker/routes/dashboard_rotas.js';
+import { visualizarCertificadoPython3dHtml } from '../src/worker/routes/certificados_rotas.js';
 
 const SEGREDO = 'segredo-de-teste-com-mais-de-32-caracteres!!';
 
@@ -12,7 +13,10 @@ function criarBancoCompleto() {
     { id: 2, codigo: 'detetive_hardware_software', titulo: 'Mundo Digital', descricao: '...', eixo_bncc: 'Mundo Digital', icone: 'memory', cor: '#059669', criterio_tipo: 'concluir_aula', criterio_meta: 1 },
     { id: 3, codigo: 'guardiao_privacidade', titulo: 'Cultura Digital', descricao: '...', eixo_bncc: 'Cultura Digital', icone: 'verified_user', cor: '#d97706', criterio_tipo: 'concluir_aula', criterio_meta: 1 },
     { id: 4, codigo: 'programador_blocos', titulo: 'Programador de Blocos', descricao: '...', eixo_bncc: 'Pensamento Computacional', icone: 'code_blocks', cor: '#7c3aed', criterio_tipo: 'concluir_blocos', criterio_meta: 1 },
+    { id: 10, codigo: 'explorador_python_3d', titulo: 'Explorador Python 3D', descricao: '...', eixo_bncc: 'Pensamento Computacional', icone: 'deployed_code', cor: '#0284c7', criterio_tipo: 'concluir_python3d', criterio_meta: 6 },
   ];
+
+  const submissoesPython = [];
 
   const usuarioMedalhas = [
     { id: 1, usuario_id: 10, medalha_id: 1, conquistada_em: '2026-10-12T10:00:00Z' },
@@ -40,6 +44,7 @@ function criarBancoCompleto() {
     medalhas,
     usuarioMedalhas,
     desempenhoHabilidades,
+    submissoesPython,
     prepare(sql) {
       function criarOperacoes(params = []) {
         return {
@@ -47,6 +52,15 @@ function criarBancoCompleto() {
             if (sql.includes('SELECT id FROM medalhas WHERE codigo = ?')) {
               const med = medalhas.find((m) => m.codigo === params[0]);
               return med ? { id: med.id } : null;
+            }
+            if (sql.includes('SELECT COUNT(DISTINCT atividade_id) AS total FROM submissoes_python')) {
+              const usuarioId = params[0];
+              const distintas = new Set(
+                submissoesPython
+                  .filter((s) => s.usuario_id === usuarioId && s.sucesso === 1 && String(s.atividade_id).startsWith('python3d-'))
+                  .map((s) => s.atividade_id),
+              );
+              return { total: distintas.size };
             }
             if (sql.includes('FROM usuarios WHERE id = ?')) {
               const usr = usuarios.find((u) => u.id === params[0]);
@@ -67,6 +81,20 @@ function criarBancoCompleto() {
               });
               return { results: res };
             }
+            if (sql.includes('FROM submissoes_python sp')) {
+              const filtroAtv = sql.includes('WHERE sp.atividade_id = ?') ? params[0] : null;
+              const res = submissoesPython
+                .filter((sp) => !filtroAtv || sp.atividade_id === filtroAtv)
+                .map((sp) => {
+                  const u = usuarios.find((usr) => usr.id === sp.usuario_id) || { nome: 'Estudante', email: 'a@e.br' };
+                  return {
+                    ...sp,
+                    aluno_nome: u.nome,
+                    aluno_email: u.email,
+                  };
+                });
+              return { results: res };
+            }
             if (sql.includes('FROM desempenho_habilidades dh')) {
               const res = desempenhoHabilidades.map((dh) => {
                 const u = usuarios.find((usr) => usr.id === dh.usuario_id) || { nome: 'Aluno', email: 'a@e.br' };
@@ -85,6 +113,25 @@ function criarBancoCompleto() {
             throw new Error(`Consulta all() não prevista: ${sql}`);
           },
           async run() {
+            if (sql.includes('CREATE TABLE IF NOT EXISTS')) {
+              return { meta: {} };
+            }
+            if (sql.includes('INSERT INTO submissoes_python')) {
+              const [usuarioId, atividadeId, codigoPython, tentativas, estrelas, parceiroDupla, papelDupla] = params;
+              submissoesPython.push({
+                id: submissoesPython.length + 1,
+                usuario_id: usuarioId,
+                atividade_id: atividadeId,
+                codigo_python: codigoPython,
+                sucesso: 1,
+                tentativas: tentativas || 1,
+                estrelas: estrelas || 3,
+                parceiro_dupla: parceiroDupla || null,
+                papel_dupla: papelDupla || null,
+                criado_em: new Date().toISOString(),
+              });
+              return { meta: {} };
+            }
             if (sql.includes('INSERT INTO desempenho_habilidades')) {
               const [usuarioId, cursoId, cod, origemId, pontuacao, nivelAtingido] = params;
               desempenhoHabilidades.push({
@@ -140,11 +187,11 @@ test('listarMedalhas devolve o progresso do aluno por eixo da BNCC', async () =>
   assert.equal(resp.status, 200);
 
   const dados = await resp.json();
-  assert.equal(dados.resumo.total, 4);
+  assert.equal(dados.resumo.total, 5);
   assert.equal(dados.resumo.conquistadas, 1);
   assert.ok(dados.resumo.porEixo['Pensamento Computacional']);
   assert.equal(dados.resumo.porEixo['Pensamento Computacional'].conquistadas, 1);
-  assert.equal(dados.medalhas.length, 4);
+  assert.equal(dados.medalhas.length, 5);
 });
 
 test('registrarAtividadeConcluida computa desempenho de habilidade BNCC e concede medalha', async () => {
@@ -222,4 +269,61 @@ test('obterRelatorioPedagogico com formato CSV gera cabeçalho e dados de diári
   assert.ok(textoCsv.includes('Aluno;Email;Curso;Eixo BNCC;Ano Escolar;Código Habilidade;Origem;Nota;Nível Atingido;Data'));
   assert.ok(textoCsv.includes('"Pedro Santos";"pedro@escola.gov.br"'));
   assert.ok(textoCsv.includes('"EF01CO02"'));
+});
+
+test('registrarAtividadeConcluida persiste código Python em submissoes_python (Pair Programming) e concede medalha Explorador Python 3D', async () => {
+  const db = criarBancoCompleto();
+  const tokenAluno = await signJwt({ id: 10, perfil: 'aluno', email: 'pedro@escola.gov.br' }, SEGREDO);
+
+  const req = new Request('https://lms.test/api/gamificacao/concluir-atividade', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${tokenAluno}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      atividadeId: 'python3d-hanoi',
+      codigoPython: 'def hanoi(n, o, d, a):\n    mover_disco(o, d)',
+      tentativas: 1,
+      estrelas: 3,
+      parceiroDupla: 'Sofia Oliveira',
+      papelDupla: 'piloto',
+      concluiuTodasPython3d: true,
+    }),
+  });
+
+  const resp = await registrarAtividadeConcluida(req, { JWT_SECRET: SEGREDO }, db);
+  assert.equal(resp.status, 200);
+  const dados = await resp.json();
+  assert.equal(dados.sucesso, true);
+  assert.equal(dados.medalhaExploradorPython3d, true);
+  assert.equal(db.submissoesPython.length, 1);
+  assert.equal(db.submissoesPython[0].parceiro_dupla, 'Sofia Oliveira');
+  assert.equal(db.submissoesPython[0].papel_dupla, 'piloto');
+  assert.ok(db.usuarioMedalhas.some((um) => um.usuario_id === 10 && um.medalha_id === 10));
+
+  // Professor lista as submissões Python no dashboard
+  const tokenProf = await signJwt({ id: 1, perfil: 'instrutor', email: 'prof.marina@escola.gov.br' }, SEGREDO);
+  const reqLista = new Request('https://lms.test/api/dashboard/submissoes-python?atividade_id=python3d-hanoi', {
+    method: 'GET',
+    headers: { Authorization: `Bearer ${tokenProf}` },
+  });
+  const respLista = await listarSubmissoesPython(reqLista, { JWT_SECRET: SEGREDO }, db, new URL(reqLista.url));
+  assert.equal(respLista.status, 200);
+  const dadosLista = await respLista.json();
+  assert.equal(dadosLista.total, 1);
+  assert.equal(dadosLista.submissoes[0].aluno_nome, 'Pedro Santos');
+  assert.ok(dadosLista.submissoes[0].codigo_python.includes('mover_disco'));
+});
+
+test('visualizarCertificadoPython3dHtml renderiza o certificado oficial Explorador Python 3D', async () => {
+  const db = criarBancoCompleto();
+  const req = new Request('https://lms.test/api/certificados/python3d?aluno=Pedro%20Santos&dupla=Sofia%20Oliveira');
+  const resp = await visualizarCertificadoPython3dHtml(req, {}, db, new URL(req.url));
+  assert.equal(resp.status, 200);
+  assert.ok(resp.headers.get('Content-Type').includes('text/html'));
+  const html = await resp.text();
+  assert.ok(html.includes('Explorador Python 3D'));
+  assert.ok(html.includes('Pedro Santos'));
+  assert.ok(html.includes('Sofia Oliveira'));
 });

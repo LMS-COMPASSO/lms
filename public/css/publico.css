@@ -360,7 +360,25 @@ a.btn { text-decoration: none; }
   .pub-rodape-grade { grid-template-columns: 1fr; }
 }
 @media (max-width: 860px) {
-  .pub-nav { display: none; }
+  .pub-topo-conteudo {
+    flex-wrap: wrap;
+    padding-block: 10px;
+  }
+  .pub-nav {
+    order: 3;
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    justify-content: flex-start;
+    gap: 6px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .pub-nav a {
+    white-space: nowrap;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
   .pub-acoes { margin-left: auto; }
 }
 @media (max-width: 480px) {
