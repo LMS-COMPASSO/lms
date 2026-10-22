@@ -178,7 +178,7 @@ export function jogadorDecompor(atividade, ctx) {
         'div',
         { class: 'atv-parte-cabecalho' },
         h('h4', { class: 'atv-parte-titulo-flex' }, renderizarIcone(parte.id || parte.emoji, { classe: 'atv-parte-icone' }), h('span', {}, parte.titulo)),
-        h('span', { class: 'atv-parte-count' }, `${ids.length} ${plural(ids.length, 'item', 'itens')}`),
+        h('span', { class: 'atv-parte-count' }, plural(ids.length, 'item', 'itens')),
       ),
       h(
         'button',
@@ -250,7 +250,7 @@ export function jogadorDecompor(atividade, ctx) {
         'div',
         { class: 'atv-telemetria-acoes' },
         estado.tentativas > 0
-          ? h('span', { class: 'atv-badge-tentativas' }, `${estado.tentativas} ${plural(estado.tentativas, 'tentativa', 'tentativas')}`)
+          ? h('span', { class: 'atv-badge-tentativas' }, plural(estado.tentativas, 'tentativa', 'tentativas'))
           : null,
         criarBotaoSom(() => renderizar()),
       ),

@@ -352,11 +352,11 @@ body.pagina-mundo-digital {
 /* Palco da Placa-Mãe com perspectiva 3D */
 .md-placa-container {
   position: relative;
-  min-height: 440px;
+  min-height: 480px;
   perspective: 1000px;
   display: grid;
   place-items: center;
-  padding: 20px 10px;
+  padding: 24px 20px 36px;
   width: 100%;
   max-width: 100%;
   overflow: hidden;
@@ -365,7 +365,7 @@ body.pagina-mundo-digital {
 
 .md-placa-mae-3d {
   width: 100%;
-  max-width: 480px;
+  max-width: 440px;
   aspect-ratio: 1 / 1;
   padding: 16px;
   box-sizing: border-box;
@@ -380,15 +380,15 @@ body.pagina-mundo-digital {
 }
 
 .md-placa-mae-3d.vista-isometrica {
-  transform: rotateX(42deg) rotateZ(-24deg) scale(0.92);
+  transform: rotateX(38deg) rotateZ(-20deg) scale(0.86) translateY(-8px);
 }
 
 .md-placa-mae-3d.vista-topo {
-  transform: rotateX(0deg) rotateZ(0deg) scale(1);
+  transform: rotateX(0deg) rotateZ(0deg) scale(0.96);
 }
 
 .md-placa-mae-3d.vista-lateral {
-  transform: rotateX(65deg) rotateZ(-10deg) scale(1.05);
+  transform: rotateX(65deg) rotateZ(-10deg) scale(0.86);
 }
 
 /* Componentes Interativos dentro da Placa-Mãe */
@@ -1271,12 +1271,15 @@ button.md-slot-componente {
     padding: 44px 14px 48px;
   }
   .md-placa-container {
-    min-height: 300px;
+    min-height: 320px;
     overflow: hidden;
-    padding: 10px 4px;
+    padding: 12px 6px;
   }
   .md-placa-mae-3d.vista-isometrica {
-    transform: rotateX(32deg) rotateZ(-14deg) scale(0.74);
+    transform: rotateX(32deg) rotateZ(-14deg) scale(0.72) translateY(-4px);
+  }
+  .md-placa-mae-3d.vista-lateral {
+    transform: rotateX(62deg) rotateZ(-8deg) scale(0.78);
   }
   .md-cpu-palco {
     min-height: 240px;
@@ -1350,11 +1353,14 @@ button.md-slot-componente {
     box-sizing: border-box;
   }
   .md-placa-container {
-    min-height: 280px;
-    padding: 6px 2px;
+    min-height: 290px;
+    padding: 8px 4px;
   }
   .md-placa-mae-3d.vista-isometrica {
-    transform: rotateX(26deg) rotateZ(-10deg) scale(0.62);
+    transform: rotateX(26deg) rotateZ(-10deg) scale(0.60) translateY(-2px);
+  }
+  .md-placa-mae-3d.vista-lateral {
+    transform: rotateX(60deg) rotateZ(-6deg) scale(0.68);
   }
   .md-hero-cta {
     flex-direction: column;
@@ -1397,11 +1403,14 @@ button.md-slot-componente {
     font-size: 0.82rem;
   }
   .md-placa-mae-3d.vista-isometrica {
-    transform: rotateX(22deg) rotateZ(-8deg) scale(0.52);
+    transform: rotateX(22deg) rotateZ(-8deg) scale(0.50);
+  }
+  .md-placa-mae-3d.vista-lateral {
+    transform: rotateX(58deg) rotateZ(-4deg) scale(0.58);
   }
   .md-placa-container {
-    min-height: 240px;
-    padding: 2px;
+    min-height: 250px;
+    padding: 4px;
   }
   .md-hero {
     padding: 32px 8px 36px;

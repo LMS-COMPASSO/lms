@@ -75,8 +75,26 @@
 .atv-voltar:hover .material-symbols-outlined {
   transform: translateX(-3px);
 }
-.atv-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 10px; padding: 0; list-style: none; }
-.atv-chip { padding: 4px 12px; border-radius: 999px; background: var(--pub-azul-100); color: var(--pub-azul-700); font-size: 0.78rem; font-weight: 700; }
+.atv-chips { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 10px; padding: 0; list-style: none; }
+.atv-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 28px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: var(--pub-azul-100);
+  color: var(--pub-azul-700);
+  font-size: 0.78rem;
+  font-weight: 700;
+  border: 1px solid transparent;
+}
+.atv-chip-eixo {
+  background: var(--cor-secao-ativa-fundo, #eff6ff);
+  color: var(--cor-secao-ativa, #1d4ed8);
+  border: 1.5px solid var(--cor-secao-ativa, #1d4ed8);
+  font-weight: 800;
+}
 .atv-instrucao { margin: 0 0 18px; padding: 14px 18px; border: 1px solid var(--pub-borda); border-radius: 12px; background: #fff; box-shadow: var(--sombra); line-height: 1.55; }
 .atv-painel { margin-bottom: 18px; padding: 20px; border-radius: 16px; background: #fff; box-shadow: var(--sombra); }
 .atv-painel h3,

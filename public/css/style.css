@@ -1592,11 +1592,19 @@ lms-icon,
   color: #334155;
 }
 
+.wf-breadcrumb-lista li {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+}
+
 .wf-breadcrumb-lista li + li::before {
   content: '/';
   margin-right: 6px;
   color: #64748b;
   font-weight: 700;
+  display: inline-flex;
+  align-items: center;
 }
 
 .wf-breadcrumb-link {
@@ -1613,9 +1621,18 @@ lms-icon,
   text-decoration: underline;
 }
 
+.wf-breadcrumb-eixo {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  font-weight: 600;
+  color: #475569;
+}
+
 .wf-breadcrumb-atual {
   display: inline-flex;
   align-items: center;
+  min-height: 32px;
   gap: 5px;
   color: #0f172a;
 }
@@ -2049,10 +2066,17 @@ body[data-secao="config"] {
   font-size: 0.85rem;
   color: var(--pub-texto-suave, #4a5568);
 }
+.atv-breadcrumbs ol li {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+}
 .atv-breadcrumbs li + li::before {
   content: '/';
   margin-right: 6px;
   color: #94a3b8;
+  display: inline-flex;
+  align-items: center;
 }
 .atv-breadcrumbs ol a {
   color: var(--pub-azul-700, #2c5282);
@@ -2095,6 +2119,10 @@ body[data-secao="config"] {
 
 .wf-breadcrumb-atual,
 .atv-breadcrumbs li[aria-current="page"] {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 4px 6px;
   font-weight: 800;
   color: var(--cor-secao-ativa);
   text-decoration: none;
@@ -2282,7 +2310,7 @@ details[open] > summary::after {
 }
 
 /* 4. Previsibilidade, Estados de Interação e Distinção Links vs. Botões */
-a:not(.btn):not(.nav-item):not(.atalho-card):not(.logo):not(.pub-logo):not(.md-logo):not(.cd-logo):not(.bv-logo):not(.topbar-usuario-link):not(.sidebar-usuario-card):not(.marco-etapa):not(.mapa-orientacao-card):not(.wf-breadcrumb-mobile-voltar) {
+a:not(.btn):not(.nav-item):not(.atalho-card):not(.logo):not(.pub-logo):not(.md-logo):not(.cd-logo):not(.bv-logo):not(.topbar-usuario-link):not(.sidebar-usuario-card):not(.marco-etapa):not(.mapa-orientacao-card):not(.wf-breadcrumb-mobile-voltar):not(.wf-breadcrumb-link):not(.atv-breadcrumbs ol a) {
   text-decoration: underline;
   text-underline-offset: 3px;
   text-decoration-thickness: 1.5px;

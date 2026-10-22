@@ -199,7 +199,7 @@ export function jogadorOrdenar(atividade, ctx) {
         'div',
         { class: 'atv-telemetria-acoes' },
         estado.tentativas > 0
-          ? h('span', { class: 'atv-badge-tentativas' }, `${estado.tentativas} ${plural(estado.tentativas, 'tentativa', 'tentativas')}`)
+          ? h('span', { class: 'atv-badge-tentativas' }, plural(estado.tentativas, 'tentativa', 'tentativas'))
           : null,
         criarBotaoSom(() => renderizar()),
       ),
