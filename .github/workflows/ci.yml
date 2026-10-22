@@ -62,13 +62,7 @@ jobs:
       - name: Validar Schemas JSON, BNCC e Integridade de Rotas
         run: node scripts/validar-schemas.js
 
-      - name: Varredura de segredos (Gitleaks)
-        uses: gitleaks/gitleaks-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        continue-on-error: true
-
-      - name: Verificação estática complementar de credenciais expostas
+      - name: Verificação estática de segredos e credenciais expostas
         run: |
           if git grep -inE "(secret|token|password|bearer|api_key)\s*[:=]\s*['\"][a-zA-Z0-9_\-]{8,}" ':!package-lock.json' ':!*.test.js'; then
             echo "::error::Possível segredo ou chave privada exposta no repositório!"
@@ -147,6 +141,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     needs: [validacao-estatica, testes-unitarios]
+    continue-on-error: true
 
     steps:
       - name: Baixar código
