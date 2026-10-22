@@ -28,6 +28,7 @@
 
 .bv-topo .pub-container {
   overflow-x: clip;
+  width: min(1400px, 100%);
   max-width: 1400px;
 }
 
@@ -39,8 +40,14 @@
   min-height: 60px;
 }
 
+.bv-logo {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
 .bv-logo img {
-  height: 38px;
+  height: 44px;
   width: auto;
   max-width: 100%;
   display: block;
@@ -922,7 +929,7 @@
     padding-inline: 4px;
   }
   .bv-logo img {
-    height: 32px;
+    height: 36px;
   }
   .bv-acoes .btn {
     min-height: 44px;
