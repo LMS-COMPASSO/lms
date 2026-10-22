@@ -24,43 +24,57 @@ body.pagina-cultura-digital {
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  overflow-x: clip;
+}
+
+.cd-topo .pub-container {
+  overflow-x: clip;
+  max-width: 1200px;
 }
 
 .cd-topo-conteudo {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 20px;
+  padding: 12px 20px;
   max-width: 1200px;
   margin: 0 auto;
+  gap: 12px;
+  min-height: 60px;
 }
 
 .cd-logo img {
   height: 38px;
+  width: auto;
+  max-width: 100%;
   display: block;
 }
 
 .cd-nav {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 4px;
+  margin-left: auto;
+  min-width: 0;
 }
 
 .cd-nav a {
   color: #94a3b8;
   text-decoration: none;
-  font-size: 0.92rem;
+  font-size: 0.88rem;
   font-weight: 500;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
+  gap: 4px;
+  padding: 6px 10px;
   border-radius: 8px;
+  min-height: 44px;
+  white-space: nowrap;
   transition: all 0.2s ease;
 }
 
 .cd-nav a:hover {
-  color: #38bdf8;
+  color: #fbbf24;
   background: rgba(255, 255, 255, 0.04);
 }
 
@@ -73,7 +87,8 @@ body.pagina-cultura-digital {
 .cd-acoes {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
+  flex-shrink: 0;
 }
 
 /* ---------- Hero Section ---------- */
@@ -207,6 +222,8 @@ body.pagina-cultura-digital {
   padding: 64px 20px;
   max-width: 1200px;
   margin: 0 auto;
+  box-sizing: border-box;
+  min-width: 0;
 }
 
 .cd-secao-cabecalho {
@@ -350,12 +367,14 @@ body.pagina-cultura-digital {
 }
 
 .cd-conversa-previa {
+  display: block;
   font-size: 0.78rem;
   color: #94a3b8;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   margin: 0;
+  max-width: 100%;
 }
 
 /* Área Principal do Chat */
@@ -776,25 +795,57 @@ body.pagina-cultura-digital {
 }
 
 /* ---------- Responsividade ---------- */
+@media (max-width: 1440px) {
+  .cd-topo-conteudo {
+    flex-wrap: wrap;
+    padding-block: 8px;
+    gap: 12px;
+  }
+  .cd-nav {
+    order: 3;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    justify-content: flex-start;
+    gap: 8px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .cd-nav::-webkit-scrollbar {
+    display: none;
+  }
+  .cd-acoes {
+    margin-left: auto;
+  }
+}
+
 @media (max-width: 960px) {
   .cd-chat-app {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     height: auto;
   }
   .cd-chat-sidebar {
-    max-height: 200px;
+    max-height: 220px;
   }
   .cd-cofre-grid,
   .cd-pegada-grid,
   .cd-rodape-grade {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
-  .cd-nav {
-    display: none;
+  .cd-cofre-painel,
+  .cd-cofre-dicas {
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 }
 
 @media (max-width: 640px) {
+  .cd-secao {
+    padding: 44px 14px;
+  }
   .cd-container {
     padding-inline: 14px;
   }
@@ -802,7 +853,7 @@ body.pagina-cultura-digital {
     padding: 44px 14px 48px;
   }
   .cd-chat-sidebar {
-    max-height: 160px;
+    max-height: 180px;
     padding: 10px;
   }
   .cd-chat-input-area {
@@ -820,13 +871,37 @@ body.pagina-cultura-digital {
   .cd-mensagem {
     max-width: 90%;
   }
+  .cd-cofre-painel,
+  .cd-cofre-dicas,
   .cd-cofre-card,
   .cd-pegada-card {
-    padding: 16px 14px;
+    padding: 20px 14px;
+    border-radius: 14px;
   }
 }
 
 @media (max-width: 480px) {
+  .cd-secao {
+    padding: 32px 10px;
+  }
+  .cd-topo-conteudo {
+    padding-inline: 10px;
+  }
+  .cd-logo img {
+    height: 32px;
+  }
+  .cd-acoes .btn {
+    min-height: 44px;
+    padding: 8px 10px;
+    font-size: 0.82rem;
+  }
+  .cd-requisitos-lista {
+    grid-template-columns: 1fr;
+  }
+  .cd-status-senha-txt {
+    flex-direction: column;
+    gap: 4px;
+  }
   .cd-mensagem {
     max-width: 95%;
     font-size: 0.88rem;
@@ -834,5 +909,33 @@ body.pagina-cultura-digital {
   .cd-barra-forca-wrap {
     flex-direction: column;
     align-items: stretch;
+  }
+  .cd-cofre-painel,
+  .cd-cofre-dicas {
+    padding: 16px 12px;
+  }
+  .cd-input-senha {
+    font-size: max(16px, 1rem);
+    padding: 12px 14px;
+  }
+}
+
+@media (max-width: 360px) {
+  .cd-secao {
+    padding: 24px 8px;
+  }
+  .cd-topo-conteudo {
+    padding-inline: 8px;
+  }
+  .cd-acoes {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  .cd-hero {
+    padding: 32px 8px 36px;
+  }
+  .cd-cofre-painel,
+  .cd-cofre-dicas {
+    padding: 14px 10px;
   }
 }

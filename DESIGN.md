@@ -9,15 +9,24 @@ colors:
   secondary-light: "#38a169"
   warning: "#b7791f"
   danger: "#c53030"
+  success: "#15803d"
+  info: "#0369a1"
   neutral-bg: "#f4f6fa"
   card-bg: "#ffffff"
   text-main: "#1a202c"
   text-muted: "#475569"
   border: "#e2e8f0"
+  border-subtle: "#cbd5e1"
   focus-ring: "#dd6b20"
   axis-pensamento: "#1d4ed8"
+  axis-pensamento-bg: "#eff6ff"
+  axis-pensamento-border: "#93c5fd"
   axis-mundo: "#047857"
+  axis-mundo-bg: "#ecfdf5"
+  axis-mundo-border: "#6ee7b7"
   axis-cultura: "#b45309"
+  axis-cultura-bg: "#fffbeb"
+  axis-cultura-border: "#fcd34d"
 typography:
   display:
     fontFamily: "Segoe UI, Roboto, system-ui, sans-serif"
@@ -43,6 +52,18 @@ typography:
     fontWeight: 400
     lineHeight: 1.55
     letterSpacing: "normal"
+  small:
+    fontFamily: "Segoe UI, Roboto, system-ui, sans-serif"
+    fontSize: "clamp(0.8rem, 0.77rem + 0.15vw, 0.88rem)"
+    fontWeight: 400
+    lineHeight: 1.45
+    letterSpacing: "normal"
+  micro:
+    fontFamily: "Segoe UI, Roboto, system-ui, sans-serif"
+    fontSize: "0.6875rem"
+    fontWeight: 700
+    lineHeight: 1.4
+    letterSpacing: "0.04em"
   code:
     fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
     fontSize: "0.88rem"
@@ -53,6 +74,7 @@ rounded:
   sm: "6px"
   md: "10px"
   lg: "16px"
+  xl: "20px"
   full: "9999px"
 spacing:
   space-1: "4px"
@@ -78,106 +100,197 @@ components:
     backgroundColor: "{colors.card-bg}"
     rounded: "{rounded.md}"
     padding: "20px"
+  breadcrumb-link:
+    textColor: "{colors.primary-accent}"
+    height: "28px"
+    padding: "4px 6px"
+    rounded: "{rounded.sm}"
+  likert-option:
+    rounded: "{rounded.sm}"
+    height: "48px"
+    width: "44px"
+    padding: "6px 4px"
 ---
 
-# Diretrizes Visuais e Sistema de Design — LMS COMPASSO
+# Diretrizes Visuais e Sistema de Design Consolidado — LMS COMPASSO
 
 ## Overview
 
-O **LMS COMPASSO** adota uma linguagem visual sóbria, institucional, altamente legível e acessível (WCAG 2.2 nível AA), desenvolvida sob medida para a Educação Básica pública brasileira. A interface prioriza clareza pedagógica, respeito à carga cognitiva infantil e docente, foco em baixo consumo de banda e excelente ergonomia táctil em celulares modestos (320px–360px), notebooks escolares e monitores desktop.
+O **LMS COMPASSO** adota uma linguagem visual sóbria, pedagógica, altamente legível e estritamente acessível (**WCAG 2.2 Nível AA**), desenvolvida sob medida para a Educação Básica pública brasileira (Ensino Fundamental II e Médio). A interface prioriza:
 
-Este documento formaliza as decisões de design de acordo com o padrão Impeccable/Stitch, servindo como fonte única da verdade para tipografia, espaçamento, cores, componentes e responsividade fluida.
+1. **Baixa Sobrecarga Cognitiva:** Design previsível, agrupamento semântico por cartões e sinalização inequívoca de wayfinding ("Você está aqui").
+2. **Resiliência a Dispositivos de Entrada:** Excelente ergonomia e performance comprovada em smartphones Android modestos (**Samsung Galaxy A03 / Galaxy A05 a 360px** com proporção 20:9 HD+), notebooks escolares (**1366x768**) e monitores desktop (**1080p a 1440p**).
+3. **Eficiência sob Redes Concorridas (3G Escolar):** Ativos vetoriais SVG, tipografia de sistema (evitando bloqueio de renderização por fontes web pesadas), carregamento sob demanda do Three.js e fallback bidimensional automático.
+4. **Alinhamento Curricular BNCC:** Sistema cromático e iconográfico dedicado aos 3 eixos da BNCC Computação:
+   - **Pensamento Computacional** (Algoritmos, Decomposição, Reconhecimento de Padrões)
+   - **Mundo Digital** (Hardware, Arquitetura da CPU, Circuitos e Redes TCP/IP)
+   - **Cultura Digital** (Segurança, Cidadania, Ética, Privacidade e IA)
+
+Este documento segue a especificação canônica do **Impeccable** (`pbakaus/impeccable`) e atua como fonte da verdade para design tokens, componentes, regras espaciais e testes de usabilidade com turmas piloto (ISO 9241-11 e escala psicométrica SUS).
+
+---
 
 ## Colors
 
-A paleta cromática estrutura-se em torno de pilares semânticos claros e identificadores cromáticos dedicados para os 3 eixos da BNCC Computação:
+A paleta de cores estrutura-se em pilares funcionais rigorosamente contrastados, com contraste superior a `4.5:1` para texto comum e superior a `7:1` para superfícies de leitura:
 
-- **Primária Institucional (`#2c5282` / `#1a365d`):** Azul sóbrio e confiável para títulos, navegação principal e botões primários.
-- **Eixo 1 — Pensamento Computacional (`#1d4ed8`):** Azul índigo para algoritmos, decomposição, lógica e simulação de blocos. Fundo contextual: `#eff6ff`, borda: `#93c5fd`.
-- **Eixo 2 — Mundo Digital (`#047857`):** Verde esmeralda escuro para hardware, circuitos, computadores e redes. Fundo contextual: `#ecfdf5`, borda: `#6ee7b7`.
-- **Eixo 3 — Cultura Digital (`#b45309`):** Âmbar e ocre profundo para segurança na internet, ética, IA e cidadania digital. Fundo contextual: `#fffbeb`, borda: `#fcd34d`.
-- **Alerta e Perigo (`#b7791f` / `#c53030`):** Para avisos de validação e remoção de registros.
-- **Foco Acessível (`#dd6b20` / `#1d4ed8`):** Anel de foco de alto contraste visível em navegação por teclado (3px sólido com offset de 2px).
-- **Superfícies Neutras (`#f4f6fa` fundo / `#ffffff` cartão):** Proporcionam contraste superior a 7:1 para leitura contínua.
+### 1. Paleta Semântica e Institucional
+- **Primária Institucional (`#2c5282` / `#1a365d`):** Azul corporativo educacional utilizado em títulos institucionais, cabeçalhos, botões principais e elementos de marca.
+- **Destaque Interativo (`#2563eb`):** Azul vibrante para links visitáveis, indicadores de seleção e estados ativos.
+- **Sucesso Pedagógico (`#15803d` / `#22c55e`):** Verde seguro para badges de conclusão, POST de hardware aprovado e requisitos atendidos.
+- **Aviso e Atenção (`#b7791f` / `#f59e0b`):** Âmbar para dicas de atenção, senhas moderadas e passos pendentes.
+- **Perigo e Erro (`#c53030` / `#dc2626`):** Vermelho com fundo rosado (`#fef2f2`) para validações de formulário inválidas (`aria-invalid="true"`).
+- **Foco Acessível (`#dd6b20` / `#1d4ed8`):** Anel de foco de alto contraste visível em navegação por teclado (`3px` sólido com `2px` de offset).
+- **Superfícies Neutras (`#f4f6fa` fundo / `#ffffff` cartões):** Contraste calibrado contra o texto principal (`#1a202c`) com índice de contraste de `11.8:1`.
+
+### 2. Identificadores Cromáticos dos Eixos BNCC
+| Eixo BNCC | Cor de Acento | Fundo Contextual | Borda de Contenção | Pista Visual |
+| :--- | :---: | :---: | :---: | :---: |
+| **Pensamento Computacional** | `#1d4ed8` | `#eff6ff` | `#93c5fd` | Indicador lateral e crachá azul |
+| **Mundo Digital** | `#047857` | `#ecfdf5` | `#6ee7b7` | Indicador lateral e crachá verde |
+| **Cultura Digital** | `#b45309` | `#fffbeb` | `#fcd34d` | Indicador lateral e crachá âmbar |
+
+### 3. Modo de Alto Contraste (`.a11y-alto-contraste`)
+Ativado explicitamente pelo usuário ou quando o sistema operacional reporta `prefers-contrast: more`:
+- Fundo escuro absoluto (`#000000`) com texto em branco total (`#ffffff`).
+- Bordas sólidas amarelas (`#ffff00`) ou ciano (`#00ffff`) em cartões e botões.
+- Contraste medido: `21:1` (nível AAA).
+
+---
 
 ## Typography
 
-A tipografia utiliza a pilha do sistema nativo (`'Segoe UI', Roboto, system-ui, sans-serif`), complementada pelos símbolos vetoriais do **Google Material Symbols Outlined** e fonte monoespaçada em snippets de código Python e códigos da BNCC:
+A tipografia do LMS COMPASSO combina a pilha nativa do sistema operacional com a escala tipográfica fluida `clamp()`:
 
-- **Escala Fluida com `clamp()`:** Nenhum tamanho de fonte é fixo em pixels rígidos. Os títulos adaptam-se suavemente entre a tela de 320px de um smartphone e a de 1920px de um monitor.
-  - `--fonte-h1`: `clamp(1.6rem, 1.2rem + 1.8vw, 2.4rem)`
-  - `--fonte-h2`: `clamp(1.3rem, 1.05rem + 1.2vw, 1.85rem)`
-  - `--fonte-h3`: `clamp(1.1rem, 0.95rem + 0.7vw, 1.35rem)`
-  - `--fonte-corpo`: `clamp(0.92rem, 0.88rem + 0.25vw, 1.05rem)`
-  - `--fonte-pequena`: `clamp(0.8rem, 0.77rem + 0.15vw, 0.88rem)`
-- **Comprimento de Linha (Measure):** Textos descritivos e parágrafos explicativos são mantidos em `65ch` a `75ch` de largura máxima (`max-width: 70ch`), evitando fadiga visual.
-- **Entradas de Texto sem Zoom em iOS:** Campos `input`, `select` e `textarea` possuem tamanho de fonte mínimo de `16px` em dispositivos móveis, impedindo o zoom involuntário do Safari no iOS.
+### 1. Pilhas Tipográficas
+- **Interface e Conteúdo Geral:** `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif` (zero download de fontes, renderização imediata sem FOUT/FOIT).
+- **Código, Endereços IP e BNCC:** `ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace`.
+- **Ícones Vetoriais:** `Material Symbols Outlined` via sprite SVG universal (`icons-sprite.svg`), garantindo renderização nítida em qualquer densidade de pixels (DPI 1.5x a 3x).
+
+### 2. Escala Fluida com `clamp()`
+Nenhuma tipografia de cabeçalho possui valor fixo em pixels:
+- **H1 (Título da Página):** `clamp(1.6rem, 1.2rem + 1.8vw, 2.4rem)` — escala de 25.6px em 320px até 38.4px em 1920px.
+- **H2 (Títulos de Seção):** `clamp(1.3rem, 1.05rem + 1.2vw, 1.85rem)`.
+- **H3 (Títulos de Módulo / Card):** `clamp(1.1rem, 0.95rem + 0.7vw, 1.35rem)`.
+- **Corpo de Texto:** `clamp(0.92rem, 0.88rem + 0.25vw, 1.05rem)`.
+- **Texto Pequeno / Legendas:** `clamp(0.8rem, 0.77rem + 0.15vw, 0.88rem)`.
+- **Micro-rótulos:** `0.6875rem` (`11px`) com peso `700` e caixa-alta.
+
+### 3. Regras de Ergonomia de Leitura
+- **Comprimento de Linha (Measure):** Blocos de texto contínuo são limitados a `65ch–75ch` (`max-width: 70ch`), evitando fadiga ocular em telas largas.
+- **Entradas Móveis sem Zoom no iOS:** Todos os elementos interativos de formulário (`input`, `select`, `textarea`) possuem `font-size: max(16px, 1rem)` em telas $\le 640\text{px}$, impedindo o zoom automático agressivo do Safari móvel.
+
+---
 
 ## Layout
 
-O sistema adota o paradigma **Mobile-First Fluido** estruturado em múltiplos de 4px e 8px:
+O sistema segue a arquitetura **Mobile-First Estruturada** baseada na grade de múltiplos de 4px e 8px:
 
-- **Escala de Espaçamento Modular:**
-  - Base 4px / 8px: `var(--espaco-1)` (4px), `var(--espaco-2)` (8px), `var(--espaco-3)` (12px), `var(--espaco-4)` (16px), `var(--espaco-6)` (24px), `var(--espaco-8)` (32px), `var(--espaco-12)` (48px).
-- **Breakpoints Oficiais do Projeto:**
-  - `320px–480px` (Smartphones de entrada): coluna única, menus em gaveta ou barra de rolagem horizontal tocável, botões esticados ou alinhados com quebra fluida, alvos de toque $\ge 44\times 44\text{px}$.
-  - `481px–768px` (Tablets retrato): colunas duplas balanceadas, painéis de navegação responsivos.
-  - `769px–1024px` (Notebooks escolares 1366x768 e tablets paisagem): gaveta lateral colapsável com backdrop, grelhas de 2 a 3 colunas auto-ajustáveis.
-  - `1025px–1920px` (Desktops e monitores amplos): layout com barra lateral fixa, limites máximos de conteúdo (`max-width: 1120px` a `1200px`) centralizados com `margin-inline: auto`.
-- **Proteção Absoluta contra Rolagem Horizontal (`overflow-x: clip / auto`):**
-  - Grelhas usam `repeat(auto-fit, minmax(min(100%, 280px), 1fr))`, impedindo estouro de container.
-  - Tabelas de dados pedagógicos e listas administrativas são encapsuladas em `.tabela-scroll` com `overflow-x: auto` e `-webkit-overflow-scrolling: touch`.
-  - O Laboratório 3D Python reorganiza-se de 2 colunas lado a lado para pilha vertical em telas $\le 960\text{px}$.
+### 1. Escala Espacial Modular
+- `--espaco-1`: `4px` (micro-espaçamentos de ícones e badges)
+- `--espaco-2`: `8px` (gaps de botões compactos e margens internas)
+- `--espaco-3`: `12px` (gaps entre cartões em telas compactas)
+- `--espaco-4`: `16px` (padding padrão de cartões móveis)
+- `--espaco-5`: `20px` (padding de cartões desktop)
+- `--espaco-6`: `24px` (gaps de grid e separação de seções)
+- `--espaco-8`: `32px` (respiro entre blocos de conteúdo)
+- `--espaco-12`: `48px` (margem entre seções pedagógicas)
+- `--espaco-16`: `64px` (padding vertical das seções principais)
+
+### 2. Breakpoints Oficiais
+| Classe | Intervalo | Características de Layout |
+| :--- | :---: | :--- |
+| **Mobile Entrada** (Galaxy A03/A05) | `320px–480px` | Coluna única (`1fr`), cabeçalho com wrap e navegação com rolagem horizontal touch (`-webkit-overflow-scrolling: touch`), botões esticados para 100% de largura, padding de seção reduzido para 24–32px. |
+| **Tablet Retrato** | `481px–768px` | Grades duplas balanceadas (`grid-template-columns: minmax(0, 1fr) minmax(0, 1fr)`), menus condensados. |
+| **Notebook Escolar** | `769px–1024px` | Grades de 2 a 3 colunas, painéis de inspeção laterais ativos, tabelas largas com `.tabela-scroll`. |
+| **Desktop / Monitores** | `1025px–1920px` | Limite máximo centralizado em 1120px ou 1200px (`margin-inline: auto`), visualização lado a lado no laboratório 3D. |
+
+### 3. Regra Inviolável de Zero Rolagem Horizontal
+Em nenhuma circunstância o documento principal deve permitir `scrollWidth > clientWidth`. As regras protetivas universais são:
+1. `overflow-x: clip` no cabeçalho sticky e contêineres superiores.
+2. Todas as grelhas flexíveis utilizam `minmax(min(100%, 280px), 1fr)`.
+3. Contêineres flex ou grid que contenham texto longo ou itens dinâmicos declaram explicitamente `min-width: 0; box-sizing: border-box;`.
+4. Tabelas pedagógicas usam contêiner `.tabela-scroll` com `overflow-x: auto` e `max-width: 100%`.
+
+---
 
 ## Elevation & Depth
 
-- **Sombras Funcionais:** Sombras leves e suaves com difusão orgânica:
-  - Cartão em repouso: `0 2px 8px rgba(15, 23, 42, 0.06)`
-  - Cartão em foco / hover: `0 8px 20px rgba(15, 23, 42, 0.12)`
-- **Camadas (Z-Index):**
-  - Conteúdo padrão: `1`
-  - Sticky Headers: `40`
-  - Sidebar: `50`
-  - Backdrop móvel: `95`
-  - Modais: `100`
-  - Skip link (Acessibilidade): `120`
+O design utiliza profundidade funcional sutil para hierarquia e foco:
+
+### 1. Camadas de Sombra (Tiers)
+- **Repouso (`--sombra-card`):** `0 2px 8px rgba(15, 23, 42, 0.06)` — cartões de atividades e painéis estáticos.
+- **Elevação Táctil / Hover (`--sombra-hover`):** `0 8px 20px rgba(15, 23, 42, 0.12)` acompanhado de `transform: translateY(-2px)`.
+- **Holográfico Escuro (Mundo Digital):** `0 16px 36px rgba(0, 0, 0, 0.6)` com borda fina translúcida `rgba(255, 255, 255, 0.1)`.
+
+### 2. Perspectiva Tridimensional Isolada
+- Palcos 3D utilizam `perspective: 1000px` encapsulado em contêiner com `overflow: hidden; box-sizing: border-box;`.
+- Rotações em 3D (`transform-style: preserve-3d`) possuem escalas graduadas por breakpoint:
+  - Desktop: `scale(0.92)`
+  - Tablet: `scale(0.74)`
+  - Mobile (360px): `scale(0.52)` com rotação atenuada (`rotateX(22deg) rotateZ(-8deg)`).
+
+### 3. Hierarquia de Camadas Z-Index
+- Camada base de conteúdo: `z-index: 1`
+- Controles e badges flutuantes: `z-index: 10`
+- Topo Sticky / Barra Superior: `z-index: 100`
+- Gaveta de navegação móvel / Sidebar: `z-index: 150`
+- Modais e Diálogos de Confirmação: `z-index: 500`
+- Skip Link acessível (focado): `z-index: 1000`
+
+---
 
 ## Shapes
 
-- **Raios de Curvatura:**
-  - Controles pequenos e badges: `6px` (`var(--raio-sm)`)
-  - Cartões e painéis: `10px` a `16px` (`var(--raio-md)` / `var(--raio-lg)`)
-  - Pílulas e chips de status: `999px` (`var(--raio-pilula)`)
+- **Bordas Arredondadas (Radius):**
+  - `--raio-sm`: `6px` (badges de habilidade BNCC, links de breadcrumb, inputs pequenos).
+  - `--raio-md`: `10px` (botões padrão, itens de lista de etapas).
+  - `--raio-lg`: `16px` (cartões de atividades, caixas de missões).
+  - `--raio-xl`: `20px` (painéis holográficos e cofre digital).
+  - `--raio-pilula`: `9999px` (chips de status, contadores de progresso e leds).
+
+---
 
 ## Components
 
-1. **Botões (`.btn`):**
-   - Altura mínima e área de toque: $\ge 44\text{px}$ em dispositivos móveis.
-   - Variantes semânticas: `.btn-primario`, `.btn-secundario`, `.btn-neutro`, `.btn-perigo`, `.btn-branco`.
-   - Estados de interação: foco visível via `:focus-visible`, micro-escala ao toque (`:active`), opacidade reduzida em `:disabled`.
-2. **Wayfinding & Navegação (`Breadcrumb`, `NavMenu`, `ProgressTrail`):**
-   - Breadcrumbs com `aria-label="Você está aqui"`, botão compacto de retorno em telas $\le 640\text{px}$ e marcação `aria-current="page"` no último item.
-   - Pistas visuais dos 3 eixos BNCC indicando cor de seção, ícone e padrão de borda.
-3. **Laboratório 3D Python (`jogador-python3d.js` + `cena3d.js`):**
-   - Alternância fluida entre visualização 3D Three.js e grade 2D leve para compatibilidade universal.
-   - Redimensionamento reativo via `ResizeObserver` na camada canvas para evitar distorção de aspecto.
-   - Editor de código monoespaçado com numeração de linhas, trava de cursor no modo navegador (Pair Programming) e `min-width: 0` para evitar estouro de grelha CSS.
-4. **Tabelas de Relatório Pedagógico:**
-   - Headers com escopo semântico (`scope="col"`), células com alinhamento vertical centralizado e rolagem tátil isolada.
+### 1. Botões de Ação (`.btn`)
+- **Ergonomia Táctil:** Altura mínima de `44px` (`min-height: 44px;`) e largura de 100% em telas móveis quando empilhados.
+- **Tipos Semânticos:**
+  - `.btn-primario`: Ação dominante da página (azul institucional `#2c5282`).
+  - `.btn-secundario`: Ações de suporte e navegação intermediária.
+  - `.btn-contorno-claro`: Botões sobre fundos escuros com borda translúcida.
+  - `.btn-perigo`: Exclusão de matrículas ou reset com aviso.
+
+### 2. Wayfinding e Navegação (`Breadcrumb`, `NavMenu`, `ProgressTrail`)
+- **Breadcrumb:** Declara `aria-label="Você está aqui"`, com `aria-current="page"` no último item. Links possuem área de clique $\ge 28\text{px}$ com padding táctil.
+- **Botão de Retorno Mobile:** Em telas $\le 640\text{px}$, exibe botão contextual `← Voltar para [Etapa Anterior]` com tamanho $\ge 44\text{px}$.
+
+### 3. Simulador 3D da Placa-Mãe e Ciclo da CPU (`mundo-digital.html`)
+- **Acessibilidade WCAG 2.5.3 (Label in Name):** Todos os botões interativos de hardware declaram rótulos acessíveis iniciados pelo texto visível (`CPU Processador Central`, `NVMe M.2 Armazenamento SSD`, `PCIe 4.0 x16 (Placa de Vídeo) GPU Dedicada`, `Portas I/O`).
+- **Controles de Perspectiva:** Botões `.btn-vista` reorganizam-se em `flex-direction: column` com largura total no celular.
+
+### 4. Mensageiro e Cofre Digital (`cultura-digital.html`)
+- **Truncamento de Conversas:** `.cd-conversa-previa` declarado como bloco com `text-overflow: ellipsis; white-space: nowrap; max-width: 100%`.
+- **Prevenção de Zoom no iOS:** Campo de senha e inputs de mensagem com `font-size: max(16px, 1rem)`.
+
+### 5. Escala Psicométrica SUS da Turma Piloto (`usabilidade-piloto.html`)
+- **Alvos de Toque:** Cada uma das 5 opções da escala Likert (1 a 5) em todas as 10 perguntas possui `min-height: 48px; min-width: 44px;` com transição visual de toque e anel de foco visível.
+- **Botão de Envio:** Largura de 100% no mobile e altura de 48px para facilidade de envio com o polegar.
+
+---
 
 ## Do's and Don'ts
 
 ### Do's:
-- Sempre usar múltiplos de `var(--espaco-*)` para margens, espaçamentos internos e gaps.
-- Sempre envolver tabelas em contêineres `.tabela-scroll` com largura máxima de 100%.
-- Sempre garantir que qualquer elemento interativo (botão, link, aba, checkbox) tenha área de clique $\ge 44\times 44\text{px}$ em telas móveis.
-- Sempre manter contraste de texto $\ge 4.5:1$ (WCAG AA) e anel de foco bem definido em `:focus-visible`.
-- Sempre testar o comportamento em `320px`, `360px`, `768px`, `1024px` e `1366px`.
+- **Faça:** Sempre respeite alvos de toque mínimos de `44x44px` para botões principais e `48px` em formulários móveis.
+- **Faça:** Sempre utilize a escala fluida com `clamp()` e espaçamento modular em múltiplos de 4/8px.
+- **Faça:** Sempre envolva tabelas de diário de classe e dados pedagógicos em contêineres `.tabela-scroll`.
+- **Faça:** Sempre mantenha o anel de foco `:focus-visible` bem definido (`3px` com offset `2px`).
+- **Faça:** Sempre teste layouts no perfil de smartphone modesto Android (360x800 a 3G lento).
 
 ### Don'ts:
-- Nunca utilizar larguras fixas em pixels (`width: 500px`) sem `max-width: 100%`.
-- Nunca remover o `outline` de foco sem fornecer substituto de alto contraste equivalente.
-- Nunca aplicar `overflow-x: hidden` no `body` como paliativo para esconder elementos quebrados; conserte a raiz do elemento que ultrapassa o viewport.
-- Nunca usar tamanhos de fonte estáticos menores que 16px em campos de formulário móveis.
-- Nunca ignorar o suporte a `prefers-reduced-motion` em animações GSAP ou transições 3D.
-
+- **Não faça:** Nunca utilize larguras fixas em pixels (`width: 400px`) sem declarar `max-width: 100%`.
+- **Não faça:** Nunca aplique `overflow-x: hidden` no elemento `body` para disfarçar elementos transbordando; corrija a causa raiz no contêiner afetado.
+- **Não faça:** Nunca use fontes estáticas menores que 16px em inputs móveis.
+- **Não faça:** Nunca crie botões interativos cujo `aria-label` não contenha o texto visível impresso na tela (WCAG 2.5.3).
+- **Não faça:** Nunca remova transições suaves quando o usuário não tiver habilitado `prefers-reduced-motion`.

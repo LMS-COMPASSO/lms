@@ -1442,6 +1442,11 @@
 .atv-breadcrumbs a {
   color: var(--pub-azul-700);
   font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 6px;
+  min-height: 28px;
+  border-radius: 4px;
 }
 .atv-breadcrumbs a:hover {
   text-decoration: underline;

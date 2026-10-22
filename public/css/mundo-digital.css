@@ -24,38 +24,52 @@ body.pagina-mundo-digital {
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  overflow-x: clip;
+}
+
+.md-topo .pub-container {
+  overflow-x: clip;
+  max-width: 1200px;
 }
 
 .md-topo-conteudo {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 20px;
+  padding: 12px 20px;
   max-width: 1200px;
   margin: 0 auto;
+  gap: 12px;
+  min-height: 60px;
 }
 
 .md-logo img {
   height: 38px;
+  width: auto;
+  max-width: 100%;
   display: block;
 }
 
 .md-nav {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 4px;
+  margin-left: auto;
+  min-width: 0;
 }
 
 .md-nav a {
   color: #94a3b8;
   text-decoration: none;
-  font-size: 0.92rem;
+  font-size: 0.88rem;
   font-weight: 500;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
+  gap: 4px;
+  padding: 6px 10px;
   border-radius: 8px;
+  min-height: 44px;
+  white-space: nowrap;
   transition: all 0.2s ease;
 }
 
@@ -73,7 +87,8 @@ body.pagina-mundo-digital {
 .md-acoes {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
+  flex-shrink: 0;
 }
 
 /* ---------- Hero Section ---------- */
@@ -207,6 +222,8 @@ body.pagina-mundo-digital {
   padding: 64px 20px;
   max-width: 1200px;
   margin: 0 auto;
+  box-sizing: border-box;
+  min-width: 0;
 }
 
 .md-secao-cabecalho {
@@ -249,6 +266,8 @@ body.pagina-mundo-digital {
 
 .md-laboratorio-palco {
   position: relative;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .md-palco-topo {
@@ -260,6 +279,8 @@ body.pagina-mundo-digital {
   margin-bottom: 20px;
   padding-bottom: 16px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  min-width: 0;
+  max-width: 100%;
 }
 
 .md-status-post {
@@ -296,7 +317,9 @@ body.pagina-mundo-digital {
 
 .md-controles-vista {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
+  min-width: 0;
 }
 
 .btn-vista {
@@ -308,6 +331,7 @@ body.pagina-mundo-digital {
   font-size: 0.82rem;
   font-weight: 600;
   cursor: pointer;
+  min-height: 44px;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -333,6 +357,10 @@ body.pagina-mundo-digital {
   display: grid;
   place-items: center;
   padding: 20px 10px;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .md-placa-mae-3d {
@@ -758,6 +786,14 @@ button.md-slot-componente {
   font-size: 0.9rem;
   color: #cbd5e1;
   transition: all 0.2s ease;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.md-etapa-item > span:not(.md-etapa-icone) {
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .md-etapa-item.concluida {
@@ -777,6 +813,7 @@ button.md-slot-componente {
 
 .md-acoes-montagem {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
 }
 
@@ -948,6 +985,7 @@ button.md-slot-componente {
 
 .md-controles-ciclo {
   display: flex;
+  flex-wrap: wrap;
   gap: 12px;
   margin-top: 10px;
 }
@@ -1159,24 +1197,61 @@ button.md-slot-componente {
 }
 
 /* ---------- Responsividade ---------- */
+@media (max-width: 1440px) {
+  .md-topo-conteudo {
+    flex-wrap: wrap;
+    padding-block: 8px;
+    gap: 12px;
+  }
+  .md-nav {
+    order: 3;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    justify-content: flex-start;
+    gap: 8px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .md-nav::-webkit-scrollbar {
+    display: none;
+  }
+  .md-acoes {
+    margin-left: auto;
+  }
+}
+
 @media (max-width: 960px) {
   .md-laboratorio-grid,
   .md-cpu-simulador-grid,
   .md-inspecao-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .md-laboratorio-palco,
+  .md-painel-lateral,
+  .md-cpu-arquitetura,
+  .md-cpu-explicacao,
+  .md-rede-simulador {
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .md-rodape-grade {
     grid-template-columns: 1fr;
   }
 
-  .md-nav {
-    display: none; /* Em telas móveis reduz para visualização limpa */
-  }
-
   .md-rede-mapa {
     flex-direction: column;
     gap: 24px;
+  }
+
+  .md-no-rede {
+    width: 100%;
+    max-width: 240px;
   }
 
   .md-linha-conexao {
@@ -1186,19 +1261,22 @@ button.md-slot-componente {
 }
 
 @media (max-width: 640px) {
+  .md-secao {
+    padding: 44px 14px;
+  }
   .md-container {
     padding-inline: 14px;
   }
   .md-hero {
     padding: 44px 14px 48px;
   }
-  .md-placa-mae-viewport {
-    min-height: 320px;
+  .md-placa-container {
+    min-height: 300px;
     overflow: hidden;
     padding: 10px 4px;
   }
   .md-placa-mae-3d.vista-isometrica {
-    transform: rotateX(36deg) rotateZ(-18deg) scale(0.82);
+    transform: rotateX(32deg) rotateZ(-14deg) scale(0.74);
   }
   .md-cpu-palco {
     min-height: 240px;
@@ -1213,8 +1291,81 @@ button.md-slot-componente {
 }
 
 @media (max-width: 480px) {
+  .md-secao {
+    padding: 32px 10px;
+  }
+  .md-topo-conteudo {
+    padding-inline: 10px;
+  }
+  .md-logo img {
+    height: 32px;
+  }
+  .md-acoes .btn {
+    min-height: 44px;
+    padding: 8px 10px;
+    font-size: 0.82rem;
+  }
+  .md-palco-topo {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .md-status-post {
+    width: 100%;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+  .md-controles-vista {
+    width: 100%;
+  }
+  .btn-vista {
+    flex: 1 1 auto;
+    justify-content: center;
+    padding: 8px 10px;
+    font-size: 0.78rem;
+    min-height: 44px;
+  }
+  .md-card-holografico,
+  .md-card-missao {
+    padding: 16px 12px;
+    border-radius: 14px;
+    box-sizing: border-box;
+  }
+  .md-card-missao .md-acoes-montagem {
+    flex-direction: column;
+  }
+  .btn-acao-montar,
+  .btn-reset-montar {
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .md-lista-specs {
+    grid-template-columns: 1fr;
+  }
+  .md-controles-ciclo {
+    flex-direction: column;
+  }
+  .md-controles-ciclo .btn-md-primario,
+  .md-controles-ciclo .btn-md-contorno {
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .md-placa-container {
+    min-height: 280px;
+    padding: 6px 2px;
+  }
   .md-placa-mae-3d.vista-isometrica {
-    transform: rotateX(30deg) rotateZ(-12deg) scale(0.72);
+    transform: rotateX(26deg) rotateZ(-10deg) scale(0.62);
+  }
+  .md-hero-cta {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .btn-md-primario,
+  .btn-md-contorno {
+    width: 100%;
+    justify-content: center;
+    min-height: 44px;
+    box-sizing: border-box;
   }
   .md-painel-controles {
     padding: 14px 10px;
@@ -1226,5 +1377,33 @@ button.md-slot-componente {
   .md-slot-ssd {
     width: min(100%, 90px);
     font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .md-secao {
+    padding: 24px 8px;
+  }
+  .md-topo-conteudo {
+    padding-inline: 8px;
+  }
+  .md-acoes {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  .md-etapa-item {
+    padding: 8px 10px;
+    gap: 8px;
+    font-size: 0.82rem;
+  }
+  .md-placa-mae-3d.vista-isometrica {
+    transform: rotateX(22deg) rotateZ(-8deg) scale(0.52);
+  }
+  .md-placa-container {
+    min-height: 240px;
+    padding: 2px;
+  }
+  .md-hero {
+    padding: 32px 8px 36px;
   }
 }
