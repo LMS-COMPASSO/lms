@@ -1,0 +1,9 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 🚨 Reportar Falha de Segurança
+    url: https://github.com/LMS-COMPASSO/lms/security/advisories/new
+    about: Utilize este canal para relatar vulnerabilidades de forma privada e responsável.
+  - name: 💬 Dúvidas e Sugestões da Comunidade
+    url: https://github.com/LMS-COMPASSO/lms/discussions
+    about: Converse com outros educadores, desenvolvedores e pesquisadores da BNCC Computação.
+

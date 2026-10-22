@@ -1,0 +1,81 @@
+name: CD — Publicação Segura na Produção (Cloudflare Workers + D1)
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  deployments: write
+
+concurrency:
+  group: deploy-producao
+  cancel-in-progress: false
+
+jobs:
+  deploy-producao:
+    name: Publicar no Cloudflare Workers & D1
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: production
+      url: https://lms-compasso.workers.dev
+
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Executar validação pré-deploy (npm test)
+        run: npm test
+
+      - name: Detectar se houve alterações no schema SQL do D1
+        id: check-d1
+        run: |
+          if git diff --name-only HEAD~1 HEAD | grep -q "^d1/schema.sql$"; then
+            echo "schema_alterado=true" >> "$GITHUB_OUTPUT"
+            echo "Detectada alteração em d1/schema.sql — Migração D1 será executada."
+          else
+            echo "schema_alterado=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Aplicar migrações remotas no Cloudflare D1
+        if: steps.check-d1.outputs.schema_alterado == 'true'
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: d1 execute lms_prod --remote --file=./d1/schema.sql
+
+      - name: Publicar Worker e Ativos Estáticos
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy
+
+      - name: Health check pós-deploy (verificação de integridade da API)
+        run: |
+          echo "Aguardando propagação da borda..."
+          sleep 5
+          for i in {1..5}; do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://lms-compasso.workers.dev/api/health || true)
+            if [ "$STATUS" = "200" ]; then
+              echo "✔ Health check passou com sucesso! API online e operacional."
+              exit 0
+            fi
+            echo "Tentativa $i falhou (Status: $STATUS). Aguardando nova tentativa..."
+            sleep 4
+          done
+          echo "::warning::Health check não respondeu 200 no tempo esperado. Verifique o dashboard da Cloudflare."
+

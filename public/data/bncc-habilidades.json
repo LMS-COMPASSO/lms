@@ -1,0 +1,125 @@
+{
+  "versao": "BNCC Computação - Resolução CNE/CP nº 1/2022",
+  "eixos": [
+    "Pensamento Computacional",
+    "Mundo Digital",
+    "Cultura Digital"
+  ],
+  "habilidades": [
+    {
+      "codigo": "EF01CO02",
+      "anos": "1º ano",
+      "texto": "Identificar e seguir sequências de passos aplicados no dia a dia para resolver problemas.",
+      "eixo": "Pensamento Computacional"
+    },
+    {
+      "codigo": "EF01CO03",
+      "anos": "1º ano",
+      "texto": "Reorganizar e criar sequências de passos em meios físicos ou digitais, relacionando essas sequências à palavra ‘Algoritmos’.",
+      "eixo": "Pensamento Computacional"
+    },
+    {
+      "codigo": "EF01CO04",
+      "anos": "1º ano",
+      "texto": "Reconhecer e utilizar componentes e periféricos básicos de dispositivos computacionais (mouse, teclado, tela, impressora).",
+      "eixo": "Mundo Digital"
+    },
+    {
+      "codigo": "EF01CO05",
+      "anos": "1º ano",
+      "texto": "Compreender o uso ético, seguro e equilibrado das tecnologias digitais no cotidiano e respeitar os limites de uso.",
+      "eixo": "Cultura Digital"
+    },
+    {
+      "codigo": "EF02CO03",
+      "anos": "2º ano",
+      "texto": "Identificar componentes de um dispositivo computacional e diferenciá-los entre entrada, processamento, armazenamento e saída.",
+      "eixo": "Mundo Digital"
+    },
+    {
+      "codigo": "EF02CO04",
+      "anos": "2º ano",
+      "texto": "Compreender a importância da privacidade e proteção de dados pessoais, criando senhas seguras e não compartilhando dados com estranhos.",
+      "eixo": "Cultura Digital"
+    },
+    {
+      "codigo": "EF03CO03",
+      "anos": "3º ano",
+      "texto": "Aplicar a estratégia de decomposição para resolver problemas complexos, dividindo esse problema em partes menores, resolvendo-as e combinando suas soluções.",
+      "eixo": "Pensamento Computacional"
+    },
+    {
+      "codigo": "EF03CO04",
+      "anos": "3º ano",
+      "texto": "Analisar criticamente conteúdos e mensagens digitais, checando fontes e diferenciando fatos de boatos ou desinformação (Fake News).",
+      "eixo": "Cultura Digital"
+    },
+    {
+      "codigo": "EF04CO03",
+      "anos": "4º ano",
+      "texto": "Compreender que as informações no computador são representadas em formato binário e como os dados trafegam em redes de computadores.",
+      "eixo": "Mundo Digital"
+    },
+    {
+      "codigo": "EF04CO04",
+      "anos": "4º ano",
+      "texto": "Reconhecer práticas de cidadania digital, prevenindo riscos de engenharia social (phishing) e combatendo ativamente o cyberbullying.",
+      "eixo": "Cultura Digital"
+    },
+    {
+      "codigo": "EF05CO03",
+      "anos": "5º ano",
+      "texto": "Compreender a arquitetura básica de computadores (CPU, memória RAM, armazenamento e barramentos) e o ciclo de busca, decodificação e execução.",
+      "eixo": "Mundo Digital"
+    },
+    {
+      "codigo": "EF05CO04",
+      "anos": "5º ano",
+      "texto": "Analisar o impacto social, ético e ambiental das tecnologias digitais, compreendendo a pegada digital e o descarte de lixo eletrônico.",
+      "eixo": "Cultura Digital"
+    },
+    {
+      "codigo": "EF15CO02",
+      "anos": "1º ao 5º ano",
+      "texto": "Construir e simular algoritmos, de forma independente ou em colaboração, que resolvam problemas simples e do cotidiano com uso de sequências, seleções condicionais e repetições de instruções.",
+      "eixo": "Pensamento Computacional"
+    },
+    {
+      "codigo": "EF15CO04",
+      "anos": "1º ao 5º ano",
+      "texto": "Aplicar a estratégia de decomposição para resolver problemas complexos, dividindo esse problema em partes menores, resolvendo-as e combinando suas soluções.",
+      "eixo": "Pensamento Computacional"
+    },
+    {
+      "codigo": "EF69CO02",
+      "anos": "6º ao 9º ano",
+      "texto": "Reconhecer, formular e modelar padrões para criar soluções algorítmicas reutilizáveis.",
+      "eixo": "Pensamento Computacional"
+    },
+    {
+      "codigo": "EF69CO03",
+      "anos": "6º ao 9º ano",
+      "texto": "Desenvolver algoritmos usando estruturas de sequenciação, seleção e repetição para solucionar problemas computacionais.",
+      "eixo": "Pensamento Computacional"
+    },
+    {
+      "codigo": "EF69CO04",
+      "anos": "6º ao 9º ano",
+      "texto": "Construir soluções de problemas usando a técnica de decomposição e automatizar tais soluções usando uma linguagem de programação.",
+      "eixo": "Pensamento Computacional"
+    },
+    {
+      "codigo": "EF69CO05",
+      "anos": "6º ao 9º ano",
+      "texto": "Descrever e simular os elementos da infraestrutura da Internet: roteadores, servidores, pacotes de dados, endereçamento IP e DNS.",
+      "eixo": "Mundo Digital"
+    },
+    {
+      "codigo": "EF69CO07",
+      "anos": "6º ao 9º ano",
+      "texto": "Debater sobre direitos autorais, licenças livres de software e conteúdo digital e segurança da informação.",
+      "eixo": "Cultura Digital"
+    }
+  ]
+}
+

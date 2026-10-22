@@ -1,0 +1,37 @@
+name: Gestão de Atividades Ociosas (Stale)
+
+on:
+  schedule:
+    # Executa diariamente às 04:00 UTC
+    - cron: '0 4 * * *'
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  stale:
+    name: Gerenciar Issues e PRs Ociosos
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/stale@v9
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          days-before-stale: 45
+          days-before-close: 14
+          stale-issue-label: 'ocioso'
+          stale-pr-label: 'ocioso'
+          exempt-issue-labels: 'segurança,impedimento,planejamento'
+          exempt-pr-labels: 'em-revisao,dependencias'
+          stale-issue-message: >
+            Olá! Esta issue não recebe novas mensagens há 45 dias.
+
+            Para manter o repositório do **LMS COMPASSO** organizado, ela foi marcada como **ociosa**.
+            Caso o problema ainda persista ou haja novidades, responda aqui para mantê-la ativa!
+          stale-pr-message: >
+            Olá! Este Pull Request está sem atualizações há 45 dias e foi marcado como **ocioso**.
+            Se as alterações ainda forem pertinentes, por favor envie novos commits ou comente para reativá-lo.
+          close-issue-message: 'Esta issue foi encerrada automaticamente após 14 dias sem resposta.'
+          close-pr-message: 'Este Pull Request foi encerrado automaticamente por inatividade.'
+

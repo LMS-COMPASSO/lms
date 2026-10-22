@@ -1,0 +1,122 @@
+name: Monitoramento Periódico — Links e Segurança de Dependências
+
+on:
+  schedule:
+    # Executa toda segunda-feira às 06:00 UTC (03:00 Horário de Brasília)
+    - cron: '0 6 * * 1'
+  workflow_dispatch: # Permite disparo manual sob demanda pela UI do GitHub
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  # ============================================================================
+  # 1. VERIFICAÇÃO DE VULNERABILIDADES EM DEPENDÊNCIAS (NPM AUDIT)
+  # ============================================================================
+  auditoria-dependencias:
+    name: Auditoria de Vulnerabilidades npm
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Checagem de vulnerabilidades conhecidas (npm audit)
+        id: npm-audit
+        run: |
+          npm audit --audit-level=high || echo "audit_failed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Abrir Issue automática em caso de vulnerabilidades altas/críticas
+        if: steps.npm-audit.outputs.audit_failed == 'true'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const titulo = '🚨 [Segurança] Vulnerabilidades identificadas em dependências (npm audit)';
+            const corpo = `
+            O monitoramento semanal detectou vulnerabilidades com nível **high** ou **critical** nas dependências do projeto.
+
+            ### Ações Recomendadas:
+            1. Executar localmente: \`npm audit\` para inspecionar os pacotes afetados.
+            2. Executar: \`npm audit fix\` ou atualizar manualmente as versões no \`package.json\`.
+            3. Validar se há updates pendentes abertos pelo Dependabot.
+            `;
+
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: ['segurança'],
+            });
+
+            const jaExiste = issues.some(i => i.title.includes('[Segurança] Vulnerabilidades identificadas'));
+            if (!jaExiste) {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: titulo,
+                body: corpo.trim(),
+                labels: ['segurança', 'manutenção'],
+              });
+            }
+
+  # ============================================================================
+  # 2. VERIFICAÇÃO DE LINKS QUEBRADOS (LYCHEE)
+  # ============================================================================
+  verificar-links:
+    name: Verificação de Links Quebrados (Lychee)
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v4
+
+      - name: Checagem de integridade de links internos e externos
+        id: lychee
+        uses: lycheeverse/lychee-action@v2
+        with:
+          # Ignora links de exemplo locais/privados ou portas de desenvolvimento
+          args: >-
+            --verbose
+            --no-progress
+            --exclude-mail
+            --exclude '^http://localhost'
+            --exclude '^http://127.0.0.1'
+            --exclude '^https://lms-compasso.workers.dev'
+            public/**/*.html *.md docs/**/*.md
+          fail: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Notificar em Issue se houver links quebrados
+        if: steps.lychee.outputs.exit_code != 0
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const report = process.env.LYCHEE_REPORT || 'Links com erro encontrados nos arquivos do repositório.';
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: ['bug', 'documentação'],
+            });
+
+            const jaExiste = issues.some(i => i.title.includes('[Monitoramento] Links quebrados detectados'));
+            if (!jaExiste) {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: '🔗 [Monitoramento] Links quebrados detectados no projeto',
+                body: `### Relatório Semanal de Links Quebrados\n\nForam identificados links inacessíveis ou quebrados nos arquivos HTML/Markdown do LMS.\n\n\`\`\`\n${report.slice(0, 3000)}\n\`\`\``,
+                labels: ['bug', 'documentação'],
+              });
+            }

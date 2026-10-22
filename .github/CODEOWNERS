@@ -1,0 +1,30 @@
+# ==============================================================================
+# LMS COMPASSO - DEFINIÇÃO DE CODEOWNERS (GOVERNANÇA E REVISÃO OBRIGATÓRIA)
+# ==============================================================================
+# Define revisores padrão por domínio do projeto para aprovação de Pull Requests.
+# ==============================================================================
+
+# Padrão para todo o repositório
+* @LMS-COMPASSO/mantenedores
+
+# 1. Banco de Dados Cloudflare D1 e Migrações de Esquema
+/d1/ @LMS-COMPASSO/mantenedores
+
+# 2. Backend Cloudflare Workers, Criptografia e Autenticação
+/src/worker/ @LMS-COMPASSO/mantenedores
+/wrangler.jsonc @LMS-COMPASSO/mantenedores
+/SECURITY.md @LMS-COMPASSO/mantenedores
+
+# 3. Design System, Wayfinding Digital e Acessibilidade (WCAG 2.2 AA)
+/public/css/ @LMS-COMPASSO/mantenedores
+/public/js/layout.js @LMS-COMPASSO/mantenedores
+/public/js/componentes-ui.js @LMS-COMPASSO/mantenedores
+/public/js/icones-universais.js @LMS-COMPASSO/mantenedores
+/public/data/ @LMS-COMPASSO/mantenedores
+/public/img/icons-sprite.svg @LMS-COMPASSO/mantenedores
+
+# 4. Pipelines de Integração Contínua (CI/CD) e Governança do Repositório
+/.github/ @LMS-COMPASSO/mantenedores
+/package.json @LMS-COMPASSO/mantenedores
+/package-lock.json @LMS-COMPASSO/mantenedores
+

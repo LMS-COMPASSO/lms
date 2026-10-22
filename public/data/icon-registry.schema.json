@@ -1,0 +1,72 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "IconRegistrySchema",
+  "description": "Schema de validação para o Registro Oficial de Ícones do LMS COMPASSO",
+  "type": "object",
+  "required": ["meta", "navegacaoEWayfinding", "estadosEFluxo", "conceitosComputacaoBNCC"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "meta": {
+      "type": "object",
+      "required": ["bibliotecaBase", "estiloUnico", "viewBox", "espessuraTraco", "gradeTamanhosPx"],
+      "properties": {
+        "bibliotecaBase": { "type": "string" },
+        "estiloUnico": { "type": "string" },
+        "viewBox": { "type": "string" },
+        "espessuraTraco": { "type": "number", "minimum": 1, "maximum": 3 },
+        "gradeTamanhosPx": {
+          "type": "object",
+          "required": ["xs", "sm", "md", "lg"],
+          "properties": {
+            "xs": { "type": "integer", "const": 16 },
+            "sm": { "type": "integer", "const": 20 },
+            "md": { "type": "integer", "const": 24 },
+            "lg": { "type": "integer", "const": 32 }
+          }
+        }
+      }
+    },
+    "navegacaoEWayfinding": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["id", "simboloUniversal", "rotuloPadrao"],
+        "properties": {
+          "id": { "type": "string" },
+          "simboloUniversal": { "type": "string" },
+          "rotuloPadrao": { "type": "string" },
+          "perguntaWayfinding": { "type": "string" },
+          "aliasesLegados": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "estadosEFluxo": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["id", "rotuloPadrao", "icone"],
+        "properties": {
+          "id": { "type": "string" },
+          "rotuloPadrao": { "type": "string" },
+          "icone": { "type": "string" }
+        }
+      }
+    },
+    "conceitosComputacaoBNCC": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["id", "rotuloPadrao", "habilidadeBNCCExemplo"],
+        "properties": {
+          "id": { "type": "string" },
+          "rotuloPadrao": { "type": "string" },
+          "habilidadeBNCCExemplo": { "type": "string" }
+        }
+      }
+    }
+  }
+}
+

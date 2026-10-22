@@ -1,0 +1,18 @@
+# Configuração Gitleaks para LMS COMPASSO
+title = "Gitleaks config para LMS COMPASSO"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Arquivos de teste e mocks de autenticação"
+paths = [
+  '''tests/.*''',
+  '''package-lock\.json''',
+  '''\.wrangler/.*'''
+]
+regexes = [
+  '''exemplo_jwt_secret.*''',
+  '''minha-chave-secreta-de-teste.*'''
+]
+

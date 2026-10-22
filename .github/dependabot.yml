@@ -1,0 +1,68 @@
+version: 2
+updates:
+  # 1. Dependências do Node.js (npm)
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/Sao_Paulo"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencias"
+      - "automacao"
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
+    groups:
+      dependencias-desenvolvimento:
+        patterns:
+          - "@*"
+          - "wrangler"
+          - "shadcn"
+        update-types:
+          - "minor"
+          - "patch"
+
+  # 2. Dependências de QA Python (pip)
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/Sao_Paulo"
+    open-pull-requests-limit: 3
+    labels:
+      - "dependencias-python"
+      - "automacao"
+    commit-message:
+      prefix: "chore(python-deps)"
+      include: "scope"
+    groups:
+      ferramentas-qa-python:
+        patterns:
+          - "pytest*"
+          - "ruff*"
+          - "black*"
+        update-types:
+          - "minor"
+          - "patch"
+
+  # 3. Ações do GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/Sao_Paulo"
+    open-pull-requests-limit: 3
+    labels:
+      - "ci-cd"
+      - "automacao"
+    commit-message:
+      prefix: "ci(actions)"
+      include: "scope"
+

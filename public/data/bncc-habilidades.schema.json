@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "BNCCHabilidadesSchema",
+  "description": "Schema de validação para o catálogo oficial de Habilidades da BNCC Computação no LMS COMPASSO",
+  "type": "object",
+  "required": ["versao", "eixos", "habilidades"],
+  "properties": {
+    "versao": { "type": "string" },
+    "eixos": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "habilidades": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["codigo", "anos", "texto", "eixo"],
+        "properties": {
+          "codigo": {
+            "type": "string",
+            "pattern": "^EF[0-9]{2}CO[0-9]{2}$"
+          },
+          "anos": { "type": "string" },
+          "texto": { "type": "string", "minLength": 10 },
+          "eixo": {
+            "type": "string",
+            "enum": [
+              "Pensamento Computacional",
+              "Mundo Digital",
+              "Cultura Digital"
+            ]
+          }
+        }
+      }
+    }
+  }
+}
+

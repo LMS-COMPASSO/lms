@@ -1,0 +1,37 @@
+frontend:
+  - changed-files:
+      - any-glob-to-any-file: ['public/**/*.html', 'public/**/*.css', 'public/js/**/*.js']
+
+atividades-3d:
+  - changed-files:
+      - any-glob-to-any-file: ['public/js/atividades/**/*', 'tests/python/**/*']
+
+bncc-dados:
+  - changed-files:
+      - any-glob-to-any-file: ['public/data/bncc-*.json', 'public/js/atividades/catalogo.js']
+
+acessibilidade:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'public/js/layout.js'
+          - 'public/js/componentes-ui.js'
+          - 'public/js/icones-universais.js'
+          - 'public/data/icon-registry.json'
+          - 'public/img/icons-sprite.svg'
+          - 'tests/e2e/acessibilidade-axe.spec.js'
+
+backend-worker:
+  - changed-files:
+      - any-glob-to-any-file: ['src/worker/**/*.js', 'wrangler.jsonc']
+
+d1-database:
+  - changed-files:
+      - any-glob-to-any-file: ['d1/**/*.sql']
+
+ci-cd:
+  - changed-files:
+      - any-glob-to-any-file: ['.github/**/*', 'scripts/**/*']
+
+documentacao:
+  - changed-files:
+      - any-glob-to-any-file: ['docs/**/*', '*.md']
