@@ -3,8 +3,7 @@ import { defineConfig, devices } from '@playwright/test';
 /**
  * Configuração Playwright E2E para LMS COMPASSO
  * Testes de Acessibilidade (axe-core), Regressão Visual e Wayfinding
- * Motores: Chromium, Firefox e WebKit
- * Resoluções: 360px, 768px, 1024px e 1366px
+ * Resoluções: 360px (mobile), 768px (tablet), 1024px (notebook) e 1366px (desktop)
  */
 export default defineConfig({
   testDir: './tests/e2e',
@@ -25,7 +24,7 @@ export default defineConfig({
   },
   projects: [
     {
-      name: 'Mobile Chromium (360x640)',
+      name: 'Mobile (360x640)',
       use: {
         ...devices['Pixel 5'],
         viewport: { width: 360, height: 640 },
@@ -33,22 +32,22 @@ export default defineConfig({
       },
     },
     {
-      name: 'Tablet WebKit (768x1024)',
+      name: 'Tablet (768x1024)',
       use: {
         ...devices['iPad Mini'],
         viewport: { width: 768, height: 1024 },
-        browserName: 'webkit',
+        browserName: 'chromium',
       },
     },
     {
-      name: 'Notebook Firefox (1024x768)',
+      name: 'Notebook (1024x768)',
       use: {
         viewport: { width: 1024, height: 768 },
-        browserName: 'firefox',
+        browserName: 'chromium',
       },
     },
     {
-      name: 'Desktop Chromium (1366x768)',
+      name: 'Desktop (1366x768)',
       use: {
         viewport: { width: 1366, height: 768 },
         browserName: 'chromium',

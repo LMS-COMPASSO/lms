@@ -165,9 +165,8 @@ jobs:
           path: ~/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ hashFiles('package-lock.json') }}
 
-      - name: Instalar navegadores Playwright se não estiverem em cache
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: npx playwright install --with-deps chromium firefox webkit
+      - name: Instalar navegador Chromium do Playwright
+        run: npx playwright install chromium
 
       - name: Iniciar servidor local e executar suíte E2E
         run: npx playwright test
