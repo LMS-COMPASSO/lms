@@ -15,8 +15,10 @@ const ROTAS_PUBLICAS = [
 test.describe('Acessibilidade Automatizada (axe-core WCAG 2.2 AA)', () => {
   for (const rota of ROTAS_PUBLICAS) {
     test(`Auditoria axe-core em ${rota.nome} (${rota.url}) sem violações críticas/sérias`, async ({ page }) => {
+      await page.emulateMedia({ reducedMotion: 'reduce' });
       await page.goto(rota.url);
-      await page.waitForLoadState('domcontentloaded');
+      await page.waitForLoadState('networkidle');
+      await page.waitForTimeout(300);
 
       const resultados = await new AxeBuilder({ page })
         .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])

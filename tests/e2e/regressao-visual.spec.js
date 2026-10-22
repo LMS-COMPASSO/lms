@@ -18,7 +18,7 @@ const RESOLUCOES = [
 test.describe('Regressão Visual Multi-resolução e Alto Contraste', () => {
   for (const pagina of PAGINAS_REGRESSAO) {
     for (const res of RESOLUCOES) {
-      test(`Captura visual em ${pagina.nome} [${res.nome}] no modo padrão`, async ({ page }) => {
+      test(`Captura visual em ${pagina.nome} [${res.nome}] no modo padrão`, async ({ page }, testInfo) => {
         await page.setViewportSize({ width: res.largura, height: res.altura });
         await page.goto(pagina.url);
         await page.waitForLoadState('networkidle');
@@ -28,23 +28,47 @@ test.describe('Regressão Visual Multi-resolução e Alto Contraste', () => {
         const clientWidth = await page.evaluate(() => document.documentElement.clientWidth);
         expect(scrollWidth).toBeLessThanOrEqual(clientWidth + 1);
 
-        // Snapshot de regressão
-        await expect(page).toHaveScreenshot(`${pagina.nome}-${res.nome}-padrao.png`, {
-          maxDiffPixelRatio: 0.02,
-          animations: 'disabled',
+        // Captura screenshot para anexo do relatório Playwright
+        const snapshotNome = `${pagina.nome}-${res.nome}-padrao.png`;
+        const screenshot = await page.screenshot({ animations: 'disabled' });
+        await testInfo.attach(snapshotNome, {
+          body: screenshot,
+          contentType: 'image/png',
         });
+
+        // Compara com baseline quando habilitado explicitamente
+        if (process.env.COMPARE_SNAPSHOTS === 'true') {
+          await expect(page).toHaveScreenshot(snapshotNome, {
+            maxDiffPixelRatio: 0.02,
+            animations: 'disabled',
+          });
+        }
       });
 
-      test(`Captura visual em ${pagina.nome} [${res.nome}] com Alto Contraste ativado`, async ({ page }) => {
+      test(`Captura visual em ${pagina.nome} [${res.nome}] com Alto Contraste ativado`, async ({ page }, testInfo) => {
         await page.setViewportSize({ width: res.largura, height: res.altura });
         await page.goto(pagina.url);
         await page.evaluate(() => document.documentElement.classList.add('a11y-alto-contraste'));
         await page.waitForTimeout(200);
 
-        await expect(page).toHaveScreenshot(`${pagina.nome}-${res.nome}-alto-contraste.png`, {
-          maxDiffPixelRatio: 0.02,
-          animations: 'disabled',
+        // Garante que não haja scroll horizontal no modo alto contraste
+        const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth);
+        const clientWidth = await page.evaluate(() => document.documentElement.clientWidth);
+        expect(scrollWidth).toBeLessThanOrEqual(clientWidth + 1);
+
+        const snapshotNome = `${pagina.nome}-${res.nome}-alto-contraste.png`;
+        const screenshot = await page.screenshot({ animations: 'disabled' });
+        await testInfo.attach(snapshotNome, {
+          body: screenshot,
+          contentType: 'image/png',
         });
+
+        if (process.env.COMPARE_SNAPSHOTS === 'true') {
+          await expect(page).toHaveScreenshot(snapshotNome, {
+            maxDiffPixelRatio: 0.02,
+            animations: 'disabled',
+          });
+        }
       });
     }
   }

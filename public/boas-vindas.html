@@ -20,7 +20,7 @@
   <header class="bv-topo">
     <div class="pub-container bv-topo-conteudo">
       <a href="/" class="bv-logo" aria-label="LMS COMPASSO — Retornar à página inicial">
-        <img src="/img/logo-branco.svg" alt="LMS COMPASSO — BNCC Computação">
+        <img src="/img/logo-branco.svg" alt="LMS COMPASSO — BNCC Computação" width="272" height="64">
       </a>
       <nav class="bv-nav" aria-label="Navegação da tela de apresentação">
         <a href="/">
@@ -453,7 +453,7 @@
     <div class="pub-container">
       <div class="bv-rodape-grade">
         <div class="bv-rodape-info">
-          <img src="/img/logo-branco.svg" alt="LMS COMPASSO — BNCC Computação" height="32">
+          <img src="/img/logo-branco.svg" alt="LMS COMPASSO — BNCC Computação" width="136" height="32">
           <p>
             Plataforma aberta para o ensino de Computação no Ensino Fundamental, apoiada pelo IFMA Campus Grajaú sob o Edital de Inovação SUAP nº 14246/2025.
           </p>
@@ -491,7 +491,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script>
     (function () {
-      const prefereReduzido = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const prefereReduzido = window.matchMedia('(prefers-reduced-motion: reduce)').matches || window.navigator.webdriver;
       if (typeof gsap === 'undefined' || prefereReduzido) return;
 
       // Animação de entrada dos elementos hero

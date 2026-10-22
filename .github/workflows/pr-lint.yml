@@ -32,5 +32,5 @@ jobs:
             revert
           requireScope: false
           subjectPattern: ^[a-z0-9].+$
-          subjectPatternError: O título do PR deve iniciar com letra minúscula após o tipo/escopo. Exemplo: 'feat(atividades): adicionar labirinto 3d'.
+          subjectPatternError: "O título do PR deve iniciar com letra minúscula após o tipo/escopo. Exemplo: 'feat(atividades): adicionar labirinto 3d'."
 
