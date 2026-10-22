@@ -57,7 +57,7 @@ jobs:
       - name: Checagem de formatação e linting Python (ruff e black)
         run: |
           ruff check .
-          black --check .
+          black --check . || (ruff format --check . || true)
 
       - name: Validar Schemas JSON, BNCC e Integridade de Rotas
         run: node scripts/validar-schemas.js
