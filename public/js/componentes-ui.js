@@ -51,7 +51,7 @@ export function Breadcrumb({ itens = [], mobileVoltar = null }) {
     <nav class="comp-breadcrumb atv-breadcrumbs" aria-label="Você está aqui">
       <a href="${escapeHtml(itemVoltar.href || '/')}" class="wf-breadcrumb-mobile-voltar seta-voltar" title="Voltar para ${escapeHtml(itemVoltar.rotulo)}">
         <span class="material-symbols-outlined icon-xs" aria-hidden="true">arrow_back</span>
-        <span>← Voltar para ${escapeHtml(itemVoltar.rotulo)}</span>
+        <span>Voltar para ${escapeHtml(itemVoltar.rotulo)}</span>
       </a>
       <ol class="wf-breadcrumb-lista">
         ${itensHtml}

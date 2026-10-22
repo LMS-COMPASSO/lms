@@ -74,6 +74,7 @@ select:focus-visible {
   background: rgba(255, 255, 255, 0.97);
   border-bottom: 1px solid var(--pub-borda);
 }
+.pub-topo .pub-container { width: min(1360px, 100%); }
 .pub-topo-conteudo {
   display: flex;
   align-items: center;
@@ -84,16 +85,22 @@ select:focus-visible {
 .pub-logo { display: inline-flex; align-items: center; }
 .pub-logo img { display: block; height: 44px; width: auto; }
 
-.pub-nav { display: flex; align-items: center; gap: 4px; margin-left: auto; }
+.pub-nav { display: flex; align-items: center; gap: 4px; margin-left: auto; min-width: 0; }
 .pub-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 44px;
   padding: 10px 12px;
   border-radius: 8px;
   color: var(--pub-texto-suave);
   font-size: 0.92rem;
   font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 .pub-nav a:hover { background: var(--pub-fundo-alt); color: var(--pub-azul-900); }
-.pub-acoes { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.pub-acoes { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; flex-shrink: 0; }
 
 /* ---------- Botões extras ---------- */
 .btn-grande { padding: 14px 24px; font-size: 1rem; border-radius: 10px; }
@@ -359,7 +366,7 @@ a.btn { text-decoration: none; }
   .pub-colunas { grid-template-columns: 1fr; }
   .pub-rodape-grade { grid-template-columns: 1fr; }
 }
-@media (max-width: 860px) {
+@media (max-width: 1440px) {
   .pub-topo-conteudo {
     flex-wrap: wrap;
     padding-block: 10px;

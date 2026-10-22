@@ -2018,8 +2018,16 @@ body[data-secao="config"] {
   padding-bottom: 4px;
 }
 
-/* Breadcrumbs Responsivos (Desktop: trilha completa | Mobile: "← Voltar para...") */
-.wf-breadcrumb-mobile-voltar {
+.pub-nav a,
+.md-nav a,
+.cd-nav a,
+.bv-nav a {
+  text-decoration: none !important;
+}
+
+/* Breadcrumbs Responsivos (Desktop: trilha completa | Mobile: "Voltar para...") */
+.wf-breadcrumb-mobile-voltar,
+.wf-breadcrumb-mobile-voltar.seta-voltar {
   display: none;
   align-items: center;
   gap: 6px;
@@ -2028,6 +2036,61 @@ body[data-secao="config"] {
   color: var(--cor-secao-ativa);
   text-decoration: none;
   min-height: 44px;
+}
+
+.atv-breadcrumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  list-style: none;
+  margin: 0 0 10px;
+  padding: 0;
+  font-size: 0.85rem;
+  color: var(--pub-texto-suave, #4a5568);
+}
+.atv-breadcrumbs li + li::before {
+  content: '/';
+  margin-right: 6px;
+  color: #94a3b8;
+}
+.atv-breadcrumbs ol a {
+  color: var(--pub-azul-700, #2c5282);
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 6px;
+  min-height: 28px;
+  border-radius: 4px;
+}
+.atv-breadcrumbs ol a:hover {
+  text-decoration: underline;
+}
+
+/* Variantes para heros escuros (Mundo Digital e Cultura Digital) */
+.md-hero .atv-breadcrumbs,
+.cd-hero .atv-breadcrumbs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.md-hero .atv-breadcrumbs ol,
+.cd-hero .atv-breadcrumbs ol {
+  justify-content: center;
+  color: #94a3b8;
+}
+.md-hero .atv-breadcrumbs ol a,
+.cd-hero .atv-breadcrumbs ol a {
+  color: #cbd5e1;
+}
+.md-hero .atv-breadcrumbs li[aria-current="page"],
+.md-hero .wf-breadcrumb-mobile-voltar {
+  color: #38bdf8;
+}
+.cd-hero .atv-breadcrumbs li[aria-current="page"],
+.cd-hero .wf-breadcrumb-mobile-voltar {
+  color: #fbbf24;
 }
 
 .wf-breadcrumb-atual,
@@ -2039,7 +2102,8 @@ body[data-secao="config"] {
 }
 
 @media (max-width: 640px) {
-  .wf-breadcrumb-mobile-voltar {
+  .wf-breadcrumb-mobile-voltar,
+  .wf-breadcrumb-mobile-voltar.seta-voltar {
     display: inline-flex;
   }
   .wf-breadcrumb-lista,

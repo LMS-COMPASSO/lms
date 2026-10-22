@@ -54,17 +54,19 @@ test.describe('Piloto de Alunos — Simulação de Campo em Android de Entrada (
     const clientWidthAtv = await page.evaluate(() => window.innerWidth);
     expect(scrollWidthAtv).toBeLessThanOrEqual(clientWidthAtv);
 
-    // Verifica que o breadcrumb possui tamanho adequado e não vaza
-    const breadcrumb = page.locator('.atv-breadcrumbs ol');
-    await expect(breadcrumb).toBeVisible();
-
-    const breadcrumbLinks = page.locator('.atv-breadcrumbs a');
-    const count = await breadcrumbLinks.count();
-    for (let i = 0; i < count; i++) {
-      const box = await breadcrumbLinks.nth(i).boundingBox();
+    // Até 640px a trilha completa é ocultada e o link "Voltar para..." compacto é exibido;
+    // acima disso acontece o inverso.
+    const voltarMobile = page.locator('.atv-breadcrumbs .wf-breadcrumb-mobile-voltar');
+    if (clientWidthAtv <= 640) {
+      await expect(page.locator('.atv-breadcrumbs ol')).toBeHidden();
+      await expect(voltarMobile).toBeVisible();
+      const box = await voltarMobile.boundingBox();
       expect(box).not.toBeNull();
-      // Alvo de toque mínimo com padding
-      expect(box.height).toBeGreaterThanOrEqual(24);
+      // Alvo de toque mínimo recomendado para o link de retorno
+      expect(box.height).toBeGreaterThanOrEqual(44);
+    } else {
+      await expect(page.locator('.atv-breadcrumbs ol')).toBeVisible();
+      await expect(voltarMobile).toBeHidden();
     }
   });
 

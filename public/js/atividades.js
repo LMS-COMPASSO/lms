@@ -442,7 +442,7 @@ function renderCatalogo() {
         'a',
         { class: 'wf-breadcrumb-mobile-voltar seta-voltar', href: '/cursos.html' },
         h('span', { class: 'material-symbols-outlined icon-xs', 'aria-hidden': 'true' }, 'arrow_back'),
-        '← Voltar para Trilhas',
+        'Voltar para Trilhas',
       ),
       h(
         'ol',
@@ -458,8 +458,8 @@ function renderCatalogo() {
       { class: 'atv-intro' },
       'Explore desafios de Pensamento Computacional: algoritmos do cotidiano, decomposição lógica, blocos visuais e o Laboratório 3D animado com código Python no navegador.',
     ),
-    bannerRetomar(),
-    bannerExploradorPython3d(),
+    bannerRetomar() || '',
+    bannerExploradorPython3d() || '',
     h('div', { class: 'atv-resumo-progresso' }, textoProgresso, barra),
     h(
       'div',
@@ -618,7 +618,7 @@ function painelDoProfessor(atividade) {
         h('dt', {}, `${codigo} · ${HABILIDADES[codigo].anos}`),
         h('dd', {}, HABILIDADES[codigo].texto),
       ])),
-      h('p', { class: 'atv-aviso' }, 'Alinhamento pedagógico fundamentado no Complemento à BNCC Computação (Resolução CNE/CP nº 1/2022).'),
+      h('p', { class: 'atv-aviso' }, 'Alinhamento pedagógico fundamentado no Complemento à BNCC Computação.'),
       professor.observacao ? h('p', { class: 'atv-aviso' }, professor.observacao) : null,
       h('h3', {}, 'Versão desplugada (sem tela)'),
       h('p', {}, professor.desplugada),
@@ -747,7 +747,7 @@ function renderAtividade(atividade) {
           'a',
           { class: 'wf-breadcrumb-mobile-voltar seta-voltar', href: '/atividades.html' },
           h('span', { class: 'material-symbols-outlined icon-xs', 'aria-hidden': 'true' }, 'arrow_back'),
-          '← Voltar para Trilhas',
+          'Voltar para Trilhas',
         ),
         h(
           'ol',
@@ -811,7 +811,7 @@ function renderNaoEncontrada() {
         'a',
         { class: 'wf-breadcrumb-mobile-voltar seta-voltar', href: '/atividades.html' },
         h('span', { class: 'material-symbols-outlined icon-xs', 'aria-hidden': 'true' }, 'arrow_back'),
-        '← Voltar para Trilhas',
+        'Voltar para Trilhas',
       ),
       h(
         'ol',

@@ -50,7 +50,7 @@ const MAPA_WAYFINDING_PAGINAS = {
     icone: 'menu_book',
     etapaAtual: 2,
     totalEtapas: 6,
-    voltar: { href: '/cursos.html', rotulo: 'Voltar para Trilhas' },
+    voltar: { href: '/cursos.html', rotulo: 'Trilhas' },
     avancar: { href: '/atividades.html', rotulo: 'Praticar Atividades' },
     ajuda: 'Você está dentro de um Curso. Avance pelas aulas dos módulos, acompanhe o Mapa do Curso e marque cada etapa como Concluída.',
   },
@@ -62,7 +62,7 @@ const MAPA_WAYFINDING_PAGINAS = {
     icone: 'format_list_numbered',
     etapaAtual: 2,
     totalEtapas: 6,
-    voltar: { href: '/cursos.html', rotulo: 'Voltar para Trilhas' },
+    voltar: { href: '/cursos.html', rotulo: 'Trilhas' },
     avancar: { href: '/mundo-digital.html', rotulo: 'Avançar: Mundo Digital' },
     ajuda: 'Você está no Catálogo de Atividades e Laboratório 3D Python. Escolha um desafio por ano escolar ou código BNCC para praticar algoritmos.',
   },
@@ -74,7 +74,7 @@ const MAPA_WAYFINDING_PAGINAS = {
     icone: 'memory',
     etapaAtual: 3,
     totalEtapas: 6,
-    voltar: { href: '/atividades.html', rotulo: 'Voltar: Atividades' },
+    voltar: { href: '/atividades.html', rotulo: 'Atividades' },
     avancar: { href: '/cultura-digital.html', rotulo: 'Avançar: Cultura Digital' },
     ajuda: 'Você está no laboratório do Eixo Mundo Digital. Inspecione a placa-mãe em 3D, simule o ciclo da CPU e acompanhe pacotes na rede.',
   },
@@ -86,7 +86,7 @@ const MAPA_WAYFINDING_PAGINAS = {
     icone: 'verified_user',
     etapaAtual: 4,
     totalEtapas: 6,
-    voltar: { href: '/mundo-digital.html', rotulo: 'Voltar: Mundo Digital' },
+    voltar: { href: '/mundo-digital.html', rotulo: 'Mundo Digital' },
     avancar: { href: '/certificados.html', rotulo: 'Avançar: Certificados' },
     ajuda: 'Você está no laboratório do Eixo Cultura Digital. Pratique decisões seguras no simulador de chat, cofre de senhas e pegada digital.',
   },
@@ -98,7 +98,7 @@ const MAPA_WAYFINDING_PAGINAS = {
     icone: 'how_to_reg',
     etapaAtual: 5,
     totalEtapas: 6,
-    voltar: { href: '/cursos.html', rotulo: 'Voltar para Trilhas' },
+    voltar: { href: '/cursos.html', rotulo: 'Trilhas' },
     avancar: { href: '/certificados.html', rotulo: 'Ir para Certificados' },
     ajuda: 'Você está em Matrículas. Acompanhe o percentual de progresso em cada curso e emita o certificado ao atingir 100%.',
   },
@@ -110,7 +110,7 @@ const MAPA_WAYFINDING_PAGINAS = {
     icone: 'workspace_premium',
     etapaAtual: 6,
     totalEtapas: 6,
-    voltar: { href: '/matriculas.html', rotulo: 'Voltar às Matrículas' },
+    voltar: { href: '/matriculas.html', rotulo: 'Matrículas' },
     avancar: { href: '/perfil.html', rotulo: 'Ver Minhas Medalhas' },
     ajuda: 'Você está em Certificados. Baixe seus certificados em PDF/A4 ou valide o código de autenticidade.',
   },
@@ -122,7 +122,7 @@ const MAPA_WAYFINDING_PAGINAS = {
     icone: 'group',
     etapaAtual: 1,
     totalEtapas: 6,
-    voltar: { href: '/dashboard.html', rotulo: 'Voltar ao Painel' },
+    voltar: { href: '/dashboard.html', rotulo: 'Painel' },
     avancar: { href: '/perfil.html', rotulo: 'Ir para Meu Perfil' },
     ajuda: 'Você está na gestão de Usuários. Cadastre ou edite contas de estudantes, professores e administradores.',
   },
@@ -134,7 +134,7 @@ const MAPA_WAYFINDING_PAGINAS = {
     icone: 'account_circle',
     etapaAtual: 6,
     totalEtapas: 6,
-    voltar: { href: '/certificados.html', rotulo: 'Voltar: Certificados' },
+    voltar: { href: '/certificados.html', rotulo: 'Certificados' },
     avancar: { href: '/atividades.html', rotulo: 'Praticar Atividades' },
     ajuda: 'Você está em Meu Perfil. Consulte seus dados, altere sua senha e acompanhe suas medalhas conquistadas nos 3 eixos da BNCC.',
   },
@@ -663,7 +663,7 @@ function montarLayout(paginaAtiva) {
       <div class="wf-onde-estou">
         <a href="${linkVoltar.href}" class="wf-breadcrumb-mobile-voltar seta-voltar" title="Voltar para ${linkVoltar.rotulo}">
           <span class="material-symbols-outlined icon-xs" aria-hidden="true">arrow_back</span>
-          <span>← Voltar para ${linkVoltar.rotulo}</span>
+          <span>Voltar para ${linkVoltar.rotulo}</span>
         </a>
         <span class="wf-pergunta-tag">Onde estou:</span>
         <ol class="wf-breadcrumb-lista">
