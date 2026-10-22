@@ -175,6 +175,40 @@ CREATE TABLE IF NOT EXISTS submissoes_python (
   FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS preferencias_usuario (
+  usuario_id INTEGER PRIMARY KEY,
+  alto_contraste INTEGER NOT NULL DEFAULT 0,
+  fonte_ampliada INTEGER NOT NULL DEFAULT 0,
+  reduzir_movimento INTEGER NOT NULL DEFAULT 0,
+  tema TEXT NOT NULL DEFAULT 'claro',
+  atualizado_em TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS avaliacoes_usabilidade_sus (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  usuario_id INTEGER,
+  nome_participante TEXT,
+  participante_tipo TEXT NOT NULL CHECK(participante_tipo IN ('aluno', 'professor', 'observador')) DEFAULT 'aluno',
+  escola_turma TEXT NOT NULL DEFAULT 'IFMA Campus Grajaú - 5º/6º ano',
+  q1_frequencia INTEGER NOT NULL CHECK(q1_frequencia BETWEEN 1 AND 5),
+  q2_complexidade INTEGER NOT NULL CHECK(q2_complexidade BETWEEN 1 AND 5),
+  q3_facilidade_uso INTEGER NOT NULL CHECK(q3_facilidade_uso BETWEEN 1 AND 5),
+  q4_necessidade_suporte INTEGER NOT NULL CHECK(q4_necessidade_suporte BETWEEN 1 AND 5),
+  q5_integracao_funcoes INTEGER NOT NULL CHECK(q5_integracao_funcoes BETWEEN 1 AND 5),
+  q6_inconsistencia INTEGER NOT NULL CHECK(q6_inconsistencia BETWEEN 1 AND 5),
+  q7_aprendizado_rapido INTEGER NOT NULL CHECK(q7_aprendizado_rapido BETWEEN 1 AND 5),
+  q8_sistema_pesado INTEGER NOT NULL CHECK(q8_sistema_pesado BETWEEN 1 AND 5),
+  q9_confianca INTEGER NOT NULL CHECK(q9_confianca BETWEEN 1 AND 5),
+  q10_esforco_previo INTEGER NOT NULL CHECK(q10_esforco_previo BETWEEN 1 AND 5),
+  sus_score REAL NOT NULL,
+  tempo_segundos INTEGER DEFAULT 0,
+  tarefas_concluidas INTEGER DEFAULT 4,
+  comentarios TEXT,
+  criado_em TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE SET NULL
+);
+
 CREATE INDEX IF NOT EXISTS idx_cursos_instrutor ON cursos(instrutor_id);
 CREATE INDEX IF NOT EXISTS idx_cursos_status ON cursos(status);
 CREATE INDEX IF NOT EXISTS idx_cursos_eixo ON cursos(eixo_bncc);

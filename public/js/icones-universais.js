@@ -39,6 +39,11 @@ export const SVG_ICON_PATHS = {
   'arrow-right': '<line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>',
   'arrow-up': '<line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/>',
   'arrow-down': '<line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/>',
+  'chevron-down': '<polyline points="6 9 12 15 18 9"/>',
+  'chevron-up': '<polyline points="18 15 12 9 6 15"/>',
+  'external-link': '<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>',
+  'circle-dashed': '<path d="M10.1 2.18a9.93 9.93 0 0 1 3.8 0"/><path d="M17.6 3.71a9.95 9.95 0 0 1 2.69 2.7"/><path d="M21.82 10.1a9.93 9.93 0 0 1 0 3.8"/><path d="M20.29 17.6a9.95 9.95 0 0 1-2.7 2.69"/><path d="M13.9 21.82a9.94 9.94 0 0 1-3.8 0"/><path d="M6.4 20.29a9.95 9.95 0 0 1-2.69-2.7"/><path d="M2.18 13.9a9.93 9.93 0 0 1 0-3.8"/><path d="M3.71 6.4a9.95 9.95 0 0 1 2.7-2.69"/>',
+  map: '<polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/>',
   'check-circle': '<circle cx="12" cy="12" r="9"/><path d="m9 12 2 2 4-4"/>',
   lock: '<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
   clock: '<circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/>',
@@ -118,6 +123,11 @@ export const MAPA_ALIASES_ICONES = {
   arrow_forward: 'arrow-right',
   arrow_upward: 'arrow-up',
   arrow_downward: 'arrow-down',
+  expand_more: 'chevron-down',
+  expand_less: 'chevron-up',
+  open_in_new: 'external-link',
+  radio_button_unchecked: 'circle-dashed',
+  map: 'map',
   menu: 'menu',
   close: 'close',
   add: 'plus',
@@ -275,6 +285,22 @@ export function hidratarIconesUniversaisNoDom(raiz = document) {
     span.setAttribute('data-svg-hidratado', chaveUniversal);
     span.setAttribute('aria-hidden', 'true');
     span.innerHTML = gerarSvgIconeHtml(chaveUniversal, { tamanho });
+  });
+
+  // Padroniza links que abrem em nova janela (Pilar 2.3: seta 'external-link' sempre à direita)
+  const linksNovaJanela = raiz.querySelectorAll('a[target="_blank"]:not([data-ext-hidratado])');
+  linksNovaJanela.forEach((link) => {
+    link.setAttribute('data-ext-hidratado', '1');
+    if (!link.getAttribute('rel')) link.setAttribute('rel', 'noopener');
+    const iconeSpan = document.createElement('span');
+    iconeSpan.className = 'seta-nova-janela';
+    iconeSpan.setAttribute('aria-hidden', 'true');
+    iconeSpan.innerHTML = gerarSvgIconeHtml('external-link', { tamanho: 16 });
+    const srOnly = document.createElement('span');
+    srOnly.className = 'somente-leitor';
+    srOnly.textContent = ' (abre em nova janela)';
+    link.appendChild(iconeSpan);
+    link.appendChild(srOnly);
   });
 }
 

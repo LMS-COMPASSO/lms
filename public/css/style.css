@@ -1722,6 +1722,637 @@ html.a11y-reduzir-movimento *::after {
   }
 }
 
+/* ============================================================================
+   PILAR 3: CONSISTÊNCIA VISUAL, PADRONIZAÇÃO DE IMAGENS E COMPONENTES
+   ============================================================================ */
+
+/* Tokens de Escala Espaçamento 4/8px e Tipografia Fluida clamp() */
+:root {
+  --espaco-1: 4px;
+  --espaco-2: 8px;
+  --espaco-3: 12px;
+  --espaco-4: 16px;
+  --espaco-5: 20px;
+  --espaco-6: 24px;
+  --espaco-8: 32px;
+  --espaco-10: 40px;
+  --espaco-12: 48px;
+  --espaco-16: 64px;
+
+  --fonte-h1: clamp(1.6rem, 1.2rem + 1.8vw, 2.4rem);
+  --fonte-h2: clamp(1.3rem, 1.05rem + 1.2vw, 1.85rem);
+  --fonte-h3: clamp(1.1rem, 0.95rem + 0.7vw, 1.35rem);
+  --fonte-corpo: clamp(0.92rem, 0.88rem + 0.25vw, 1.05rem);
+  --fonte-pequena: clamp(0.8rem, 0.77rem + 0.15vw, 0.88rem);
+  --fonte-micro: 0.75rem;
+
+  --raio-sm: 6px;
+  --raio-md: 10px;
+  --raio-lg: 16px;
+  --raio-pilula: 999px;
+
+  --sombra-card: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+  --sombra-flutuante: 0 10px 25px -5px rgba(15, 23, 42, 0.1), 0 8px 10px -6px rgba(15, 23, 42, 0.08);
+}
+
+/* Padronização de Imagens, Ilustrações e Miniaturas (WCAG 1.1.1) */
+.img-proporcao-16-9 {
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  object-fit: cover;
+  border-radius: var(--raio-md);
+}
+
+.img-proporcao-1-1 {
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: var(--raio-md);
+}
+
+.img-proporcao-4-3 {
+  aspect-ratio: 4 / 3;
+  width: 100%;
+  object-fit: cover;
+  border-radius: var(--raio-md);
+}
+
+.img-ilustracao-padrao {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--raio-md);
+  border: 1px solid #cbd5e1;
+  background-color: #f8fafc;
+  box-shadow: var(--sombra-card);
+}
+
+/* Miniaturas de Atividades com formato uniforme */
+.miniatura-atividade {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--raio-md);
+  background: var(--cor-secao-ativa-fundo);
+  border: 1.5px solid var(--cor-secao-ativa-borda);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--cor-secao-ativa);
+  flex-shrink: 0;
+}
+
+/* Estilização dos Componentes Reutilizáveis */
+.comp-breadcrumb {
+  margin-bottom: var(--espaco-3);
+}
+
+.comp-section-header {
+  margin-bottom: var(--espaco-4);
+  padding-bottom: var(--espaco-3);
+  border-bottom: 2px var(--padrao-borda-secao, solid) var(--cor-secao-ativa-borda, #e2e8f0);
+}
+
+.comp-section-header h1 {
+  color: var(--cor-secao-ativa, #0f172a);
+}
+
+.comp-nav-menu {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-1);
+}
+
+.comp-back-next-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espaco-2);
+}
+
+.comp-empty-state {
+  margin: var(--espaco-6) auto;
+}
+
+
+:root {
+  /* 1. Tokens de Cor por Seção e Eixo BNCC (Contraste WCAG 2.2 AA >= 4.5:1 e Daltonismo Seguro) */
+  --cor-secao-pensamento: #1d4ed8;       /* Azul Índigo — Eixo 1: Pensamento Computacional */
+  --cor-secao-pensamento-fundo: #eff6ff;
+  --cor-secao-pensamento-borda: #93c5fd;
+
+  --cor-secao-mundo: #047857;            /* Verde Esmeralda Escuro — Eixo 2: Mundo Digital */
+  --cor-secao-mundo-fundo: #ecfdf5;
+  --cor-secao-mundo-borda: #6ee7b7;
+
+  --cor-secao-cultura: #b45309;          /* Âmbar Escuro — Eixo 3: Cultura Digital */
+  --cor-secao-cultura-fundo: #fffbeb;
+  --cor-secao-cultura-borda: #fcd34d;
+
+  --cor-secao-aluno: #6d28d9;            /* Violeta — Área do Estudante (Cursos/Matrículas/Certificados) */
+  --cor-secao-aluno-fundo: #f5f3ff;
+  --cor-secao-aluno-borda: #c4b5fd;
+
+  --cor-secao-professor: #0f766e;        /* Azul-Petróleo (Teal) — Área do Professor & Gestão */
+  --cor-secao-professor-fundo: #f0fdfa;
+  --cor-secao-professor-borda: #5eead4;
+
+  --cor-secao-config: #334155;           /* Ardósia Escuro — Configurações & Perfil */
+  --cor-secao-config-fundo: #f8fafc;
+  --cor-secao-config-borda: #94a3b8;
+
+  /* Variáveis dinâmicas da seção ativa (herdadas pelo body[data-secao]) */
+  --cor-secao-ativa: var(--cor-secao-pensamento);
+  --cor-secao-ativa-fundo: var(--cor-secao-pensamento-fundo);
+  --cor-secao-ativa-borda: var(--cor-secao-pensamento-borda);
+  --padrao-borda-secao: solid;
+}
+
+/* Mapeamento de seção ativa + padrão de borda distinto (WCAG 1.4.1: cor nunca sozinha) */
+body[data-secao="pensamento"] {
+  --cor-secao-ativa: var(--cor-secao-pensamento);
+  --cor-secao-ativa-fundo: var(--cor-secao-pensamento-fundo);
+  --cor-secao-ativa-borda: var(--cor-secao-pensamento-borda);
+  --padrao-borda-secao: solid;
+}
+body[data-secao="mundo"] {
+  --cor-secao-ativa: var(--cor-secao-mundo);
+  --cor-secao-ativa-fundo: var(--cor-secao-mundo-fundo);
+  --cor-secao-ativa-borda: var(--cor-secao-mundo-borda);
+  --padrao-borda-secao: double;
+}
+body[data-secao="cultura"] {
+  --cor-secao-ativa: var(--cor-secao-cultura);
+  --cor-secao-ativa-fundo: var(--cor-secao-cultura-fundo);
+  --cor-secao-ativa-borda: var(--cor-secao-cultura-borda);
+  --padrao-borda-secao: dashed;
+}
+body[data-secao="aluno"] {
+  --cor-secao-ativa: var(--cor-secao-aluno);
+  --cor-secao-ativa-fundo: var(--cor-secao-aluno-fundo);
+  --cor-secao-ativa-borda: var(--cor-secao-aluno-borda);
+  --padrao-borda-secao: solid;
+}
+body[data-secao="professor"] {
+  --cor-secao-ativa: var(--cor-secao-professor);
+  --cor-secao-ativa-fundo: var(--cor-secao-professor-fundo);
+  --cor-secao-ativa-borda: var(--cor-secao-professor-borda);
+  --padrao-borda-secao: double;
+}
+body[data-secao="config"] {
+  --cor-secao-ativa: var(--cor-secao-config);
+  --cor-secao-ativa-fundo: var(--cor-secao-config-fundo);
+  --cor-secao-ativa-borda: var(--cor-secao-config-borda);
+  --padrao-borda-secao: dotted;
+}
+
+/* 2. Indicador de localização: h1, cabeçalho de seção e item ativo do menu */
+#titulo-pagina,
+.atv-titulo-pagina {
+  color: var(--cor-secao-ativa);
+}
+
+.topbar {
+  border-top: 4px var(--padrao-borda-secao) var(--cor-secao-ativa);
+}
+
+.wayfinding-bar {
+  background: var(--cor-secao-ativa-fundo);
+  border: 2px var(--padrao-borda-secao) var(--cor-secao-ativa-borda);
+}
+
+.secao-pista-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: var(--cor-secao-ativa-fundo);
+  color: var(--cor-secao-ativa);
+  border: 1.5px var(--padrao-borda-secao) var(--cor-secao-ativa);
+}
+.secao-pista-badge[data-secao="pensamento"] {
+  background: var(--cor-secao-pensamento-fundo);
+  color: var(--cor-secao-pensamento);
+  border: 1.5px solid var(--cor-secao-pensamento);
+}
+.secao-pista-badge[data-secao="mundo"] {
+  background: var(--cor-secao-mundo-fundo);
+  color: var(--cor-secao-mundo);
+  border: 3px double var(--cor-secao-mundo);
+}
+.secao-pista-badge[data-secao="cultura"] {
+  background: var(--cor-secao-cultura-fundo);
+  color: var(--cor-secao-cultura);
+  border: 1.5px dashed var(--cor-secao-cultura);
+}
+.secao-pista-badge[data-secao="aluno"] {
+  background: var(--cor-secao-aluno-fundo);
+  color: var(--cor-secao-aluno);
+  border: 1.5px solid var(--cor-secao-aluno);
+}
+.secao-pista-badge[data-secao="professor"] {
+  background: var(--cor-secao-professor-fundo);
+  color: var(--cor-secao-professor);
+  border: 3px double var(--cor-secao-professor);
+}
+.secao-pista-badge[data-secao="config"] {
+  background: var(--cor-secao-config-fundo);
+  color: var(--cor-secao-config);
+  border: 1.5px dotted var(--cor-secao-config);
+}
+
+/* Destaque do item ativo em menus (Cor + Peso 800 + Marcador) */
+.sidebar-nav .nav-item.ativo,
+.sidebar-nav .nav-item[aria-current="page"] {
+  font-weight: 800;
+  background: rgba(37, 99, 235, 0.24);
+  border: 1px solid rgba(96, 165, 250, 0.45);
+  box-shadow: inset 4px 0 0 #60a5fa;
+}
+
+.pub-nav a[aria-current="page"],
+.md-nav a[aria-current="page"],
+.cd-nav a[aria-current="page"],
+.bv-nav a[aria-current="page"] {
+  font-weight: 800;
+  text-decoration: none !important;
+  border-bottom: 3px solid currentColor;
+  padding-bottom: 4px;
+}
+
+/* Breadcrumbs Responsivos (Desktop: trilha completa | Mobile: "← Voltar para...") */
+.wf-breadcrumb-mobile-voltar {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--cor-secao-ativa);
+  text-decoration: none;
+  min-height: 44px;
+}
+
+.wf-breadcrumb-atual,
+.atv-breadcrumbs li[aria-current="page"] {
+  font-weight: 800;
+  color: var(--cor-secao-ativa);
+  text-decoration: none;
+  pointer-events: none;
+}
+
+@media (max-width: 640px) {
+  .wf-breadcrumb-mobile-voltar {
+    display: inline-flex;
+  }
+  .wf-breadcrumb-lista,
+  .atv-breadcrumbs ol {
+    display: none;
+  }
+}
+
+/* 3. Setas Direcionais Padronizadas */
+.seta-voltar {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: transform 0.15s ease;
+}
+.btn:hover .seta-voltar,
+a:hover.seta-voltar {
+  transform: translateX(-2px);
+}
+
+.seta-proximo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: transform 0.15s ease;
+}
+.btn:hover .seta-proximo,
+a:hover.seta-proximo {
+  transform: translateX(2px);
+}
+
+.seta-expandir {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.seta-expandir .icone-chevron,
+details > summary .icone-chevron {
+  transition: transform 0.2s ease;
+}
+.seta-expandir[aria-expanded="true"] .icone-chevron,
+details[open] > summary .icone-chevron {
+  transform: rotate(180deg);
+}
+
+.seta-nova-janela {
+  display: inline-flex;
+  margin-left: 4px;
+  opacity: 0.85;
+}
+
+details > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  list-style: none;
+}
+details > summary::-webkit-details-marker {
+  display: none;
+}
+details > summary::after {
+  content: '▾';
+  font-size: 1rem;
+  font-weight: 800;
+  transition: transform 0.2s ease;
+  color: var(--cor-secao-ativa);
+}
+details[open] > summary::after {
+  transform: rotate(180deg);
+}
+
+/* Indicadores de Progresso ("Etapa X de Y") e Trilha com Marcos (4 Estados Claros) */
+.progresso-etapas-box {
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 14px;
+  padding: 14px 18px;
+  margin-bottom: 18px;
+}
+
+.progresso-etapas-topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.progresso-etapas-contador,
+.progresso-etapas-contagem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: var(--cor-secao-ativa);
+  background: var(--cor-secao-ativa-fundo);
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--cor-secao-ativa-borda);
+}
+
+.progresso-etapas-barra {
+  width: 100%;
+  height: 10px;
+  background: #e2e8f0;
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid #cbd5e1;
+}
+
+.progresso-etapas-preenchimento {
+  height: 100%;
+  background: var(--cor-secao-ativa);
+  border-radius: 999px;
+  transition: width 0.25s ease;
+}
+
+.trilha-marcos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+}
+
+.trilha-marco-item,
+.estado-progresso-pill,
+.marco-etapa {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* Estado 1: Concluído (Verde + Sólida + Check) */
+.estado-concluido {
+  background: #f0fdf4;
+  border: 2px solid #15803d;
+  color: #14532d;
+}
+
+/* Estado 2: Em andamento (Âmbar + Dupla + Relógio) */
+.estado-em-andamento {
+  background: #fffbeb;
+  border: 3px double #b45309;
+  color: #78350f;
+}
+
+/* Estado 3: Não iniciado (Azul/Cinza + Tracejada + Círculo) */
+.estado-nao-iniciado {
+  background: #f8fafc;
+  border: 2px dashed #475569;
+  color: #1e293b;
+}
+
+/* Estado 4: Bloqueado (Hachurado sutil + Pontilhada + Cadeado) */
+.estado-bloqueado {
+  background: repeating-linear-gradient(
+    -45deg,
+    #f1f5f9,
+    #f1f5f9 8px,
+    #e2e8f0 8px,
+    #e2e8f0 16px
+  );
+  border: 2px dotted #64748b;
+  color: #475569;
+}
+
+/* 4. Previsibilidade, Estados de Interação e Distinção Links vs. Botões */
+a:not(.btn):not(.nav-item):not(.atalho-card):not(.logo):not(.pub-logo):not(.md-logo):not(.cd-logo):not(.bv-logo):not(.topbar-usuario-link):not(.sidebar-usuario-card):not(.marco-etapa):not(.mapa-orientacao-card):not(.wf-breadcrumb-mobile-voltar) {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1.5px;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible {
+  outline: 3px solid var(--cor-secao-ativa, #1d4ed8) !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.9);
+}
+
+.btn:active:not(:disabled),
+.wf-tool-btn:active:not(:disabled) {
+  transform: translateY(1px) scale(0.99);
+}
+
+.btn:disabled,
+.btn[aria-disabled="true"],
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.is-loading,
+[aria-busy="true"] {
+  position: relative;
+  opacity: 0.8;
+  cursor: progress !important;
+}
+
+input[aria-invalid="true"],
+select[aria-invalid="true"],
+textarea[aria-invalid="true"],
+.input-erro {
+  border: 2px solid #dc2626 !important;
+  background-color: #fef2f2 !important;
+}
+
+/* Estado 404 / Vazio com Rota de Saída Clara (Botão Início + Busca) */
+.estado-saida-404 {
+  background: #ffffff;
+  border: 2px dashed #94a3b8;
+  border-radius: 16px;
+  padding: 28px 24px;
+  text-align: center;
+  max-width: 640px;
+  margin: 24px auto;
+}
+.estado-saida-icone {
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  margin: 0 auto 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--cor-secao-ativa-fundo);
+  color: var(--cor-secao-ativa);
+  border: 2px solid var(--cor-secao-ativa-borda);
+}
+.estado-saida-404 h1,
+.estado-saida-404 h2,
+.estado-saida-404 h3 {
+  margin: 8px 0;
+  color: #0f172a;
+}
+.estado-saida-busca,
+.estado-saida-404-busca {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin: 16px 0;
+}
+.estado-saida-busca input,
+.estado-saida-404-busca input {
+  flex: 1;
+  min-width: 220px;
+  max-width: 380px;
+  min-height: 44px;
+}
+.estado-saida-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+/* 5. Mapa de Orientação ("Mapa do Curso e da Trilha Completa") */
+.mapa-orientacao-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.mapa-orientacao-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px;
+  border-radius: 12px;
+  background: #f8fafc;
+  border: 1.5px solid #cbd5e1;
+  color: #0f172a;
+  text-decoration: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.mapa-orientacao-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+}
+.mapa-orientacao-card.voce-esta-aqui {
+  background: var(--cor-secao-ativa-fundo);
+  border: 2.5px solid var(--cor-secao-ativa);
+  box-shadow: 0 4px 12px rgba(29, 78, 216, 0.12);
+}
+.mapa-orientacao-card.proximo-passo {
+  background: #fffbeb;
+  border: 2px dashed #b45309;
+}
+.mapa-orientacao-card h4 {
+  margin: 2px 0;
+  font-size: 0.94rem;
+  color: #0f172a;
+}
+.mapa-orientacao-card p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #475569;
+}
+
+.mapa-tag-aqui {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  background: var(--cor-secao-ativa);
+  color: #ffffff;
+}
+
+.mapa-tag-proximo {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #f59e0b;
+}
+
+
 
 
 

@@ -174,3 +174,56 @@ export async function redefinirSenhaUsuario(request, env, db, targetId) {
 
   return jsonResponse({ mensagem: 'Senha redefinida com sucesso pelo administrador.' });
 }
+
+/**
+ * Consulta as preferências de acessibilidade e tema do usuário autenticado no D1.
+ */
+export async function obterPreferencias(request, env, db) {
+  const { payload } = await authorizeUser(request, env, db);
+  const prefs = await db.prepare(
+    'SELECT alto_contraste, fonte_ampliada, reduzir_movimento, tema FROM preferencias_usuario WHERE usuario_id = ?'
+  ).bind(payload.id).first();
+
+  return jsonResponse(prefs || {
+    alto_contraste: 0,
+    fonte_ampliada: 0,
+    reduzir_movimento: 0,
+    tema: 'claro',
+  });
+}
+
+/**
+ * Salva ou atualiza as preferências de acessibilidade e tema do usuário autenticado no D1.
+ */
+export async function salvarPreferencias(request, env, db) {
+  const { payload } = await authorizeUser(request, env, db);
+  const body = await readJsonBody(request);
+
+  const altoContraste = body.alto_contraste ? 1 : 0;
+  const fonteAmpliada = body.fonte_ampliada ? 1 : 0;
+  const reduzirMovimento = body.reduzir_movimento ? 1 : 0;
+  const tema = String(body.tema || 'claro');
+
+  await db.prepare(`
+    INSERT INTO preferencias_usuario (usuario_id, alto_contraste, fonte_ampliada, reduzir_movimento, tema, atualizado_em)
+    VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+    ON CONFLICT(usuario_id) DO UPDATE SET
+      alto_contraste = excluded.alto_contraste,
+      fonte_ampliada = excluded.fonte_ampliada,
+      reduzir_movimento = excluded.reduzir_movimento,
+      tema = excluded.tema,
+      atualizado_em = CURRENT_TIMESTAMP
+  `).bind(payload.id, altoContraste, fonteAmpliada, reduzirMovimento, tema).run();
+
+  return jsonResponse({
+    sucesso: true,
+    mensagem: 'Preferências de acessibilidade sincronizadas no banco D1.',
+    preferencias: {
+      alto_contraste: altoContraste,
+      fonte_ampliada: fonteAmpliada,
+      reduzir_movimento: reduzirMovimento,
+      tema,
+    },
+  });
+}
+

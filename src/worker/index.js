@@ -32,6 +32,7 @@ import * as certificateRoutes from './routes/certificados_rotas.js';
 import * as userRoutes from './routes/usuarios_rotas.js';
 import * as dashboardRoutes from './routes/dashboard_rotas.js';
 import * as gamificationRoutes from './routes/gamificacao_rotas.js';
+import * as usabilityRoutes from './routes/usabilidade_rotas.js';
 
 /**
  * Roteia requisições do domínio de Autenticação (/api/auth/*)
@@ -300,6 +301,16 @@ async function despacharRotaApi(partes, metodo, request, env, db, url) {
       return rotearDashboard(partes, metodo, request, env, db, url);
     case 'gamificacao':
       return rotearGamificacao(partes, metodo, request, env, db, url);
+    case 'preferencias':
+      if (metodo === 'GET') return userRoutes.obterPreferencias(request, env, db);
+      if (metodo === 'PUT' || metodo === 'POST') return userRoutes.salvarPreferencias(request, env, db);
+      return jsonErro('Método não permitido.', 405);
+    case 'usabilidade':
+      if (partes.length === 3 && partes[2] === 'sus') {
+        if (metodo === 'GET') return usabilityRoutes.obterRelatorioUsabilidadeSus(request, env, db);
+        if (metodo === 'POST') return usabilityRoutes.submeterAvaliacaoSus(request, env, db);
+      }
+      return jsonErro('Endpoint de usabilidade não encontrado.', 404);
     default:
       return jsonErro('Endpoint não encontrado.', 404);
   }

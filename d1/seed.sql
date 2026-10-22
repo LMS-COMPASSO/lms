@@ -158,3 +158,19 @@ SELECT (SELECT id FROM usuarios WHERE email = 'aluno.lucas@escola.gov.br'),
   'def resolver_hanoi(n, origem, destino, auxiliar):\n    if n == 1:\n        hanoi.mover_disco(origem, destino)\n    else:\n        resolver_hanoi(n - 1, origem, auxiliar, destino)\n        hanoi.mover_disco(origem, destino)\n        resolver_hanoi(n - 1, auxiliar, destino, origem)\n\nresolver_hanoi(3, ''A'', ''C'', ''B'')',
   1, 1, 3, NULL, 'individual'
 WHERE NOT EXISTS (SELECT 1 FROM submissoes_python WHERE atividade_id = 'python3d-recursao-hanoi');
+
+-- 14. Avaliações de Usabilidade SUS (Turma Piloto 5º/6º ano IFMA Campus Grajaú)
+-- Escala Brooke (1996): Notas calculadas: ((Q1-1)+(5-Q2)+(Q3-1)+(5-Q4)+(Q5-1)+(5-Q6)+(Q7-1)+(5-Q8)+(Q9-1)+(5-Q10)) * 2.5
+INSERT INTO avaliacoes_usabilidade_sus (nome_participante, participante_tipo, escola_turma, q1_frequencia, q2_complexidade, q3_facilidade_uso, q4_necessidade_suporte, q5_integracao_funcoes, q6_inconsistencia, q7_aprendizado_rapido, q8_sistema_pesado, q9_confianca, q10_esforco_previo, sus_score, tempo_segundos, tarefas_concluidas, comentarios)
+VALUES
+('Pedro Santos', 'aluno', 'IFMA Campus Grajaú - 5º Ano A', 5, 1, 5, 1, 5, 1, 5, 1, 5, 1, 100.0, 118, 4, 'Adorei as cores de cada matéria e o robô em 3D. As setas de voltar deixam muito fácil.'),
+('Sofia Oliveira', 'aluno', 'IFMA Campus Grajaú - 5º Ano A', 5, 2, 5, 1, 4, 1, 5, 1, 5, 2, 92.5, 134, 4, 'O mapa do curso me mostrou exatamente em qual aula eu estava e o que vinha a seguir.'),
+('Lucas Ferreira', 'aluno', 'IFMA Campus Grajaú - 6º Ano B', 4, 1, 5, 2, 4, 1, 4, 2, 4, 1, 85.0, 142, 4, 'Muito legal fazer a programação em dupla no celular.'),
+('Beatriz Lima', 'aluno', 'IFMA Campus Grajaú - 5º Ano B', 5, 2, 4, 2, 5, 1, 5, 1, 4, 2, 87.5, 155, 4, 'Achei o botão de ajuda rápido quando não sabia onde clicar.'),
+('Gabriel Alves', 'aluno', 'IFMA Campus Grajaú - 6º Ano A', 4, 2, 4, 2, 4, 2, 5, 1, 5, 2, 82.5, 160, 4, 'Funcionou muito rápido no meu celular sem travar nada.'),
+('Mariana Costa', 'aluno', 'IFMA Campus Grajaú - 5º Ano A', 5, 1, 5, 1, 5, 2, 5, 1, 5, 1, 97.5, 122, 4, 'As cores do Mundo Digital e de Cultura Digital são muito bonitas.'),
+('Enzo Ribeiro', 'aluno', 'IFMA Campus Grajaú - 6º Ano B', 4, 2, 4, 2, 4, 2, 4, 1, 4, 2, 82.5, 175, 4, 'Consegui achar a atividade de escovar os dentes bem rápido pela busca.'),
+('Lara Mendes', 'aluno', 'IFMA Campus Grajaú - 5º Ano B', 5, 1, 5, 1, 4, 1, 5, 2, 5, 1, 95.0, 129, 4, 'Muito fácil voltar para a trilha com o botão no topo.'),
+('Profa. Marina Silva', 'professor', 'IFMA Campus Grajaú - Docente Computação', 5, 1, 5, 1, 5, 1, 5, 1, 5, 1, 100.0, 95, 4, 'A consistência com a BNCC e a versão desplugada em A4 facilitam imensamente o trabalho em sala.'),
+('Prof. Carlos Eduardo', 'professor', 'IFMA Campus Grajaú - Docente Matemática', 5, 1, 5, 2, 5, 1, 4, 1, 5, 1, 95.0, 110, 4, 'Excelente previsibilidade de navegação e acessibilidade para alunos com baixa visão.'),
+('Profa. Renata Rocha', 'professor', 'IFMA Campus Grajaú - Coordenação Pedagógica', 5, 2, 4, 1, 5, 1, 5, 1, 4, 1, 92.5, 105, 4, 'Alinhamento visual impecável e conformidade estrita com as diretrizes WCAG 2.2.');

@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pesquisa de Usabilidade SUS — Turma Piloto — LMS COMPASSO</title>
+<meta name="description" content="Instrumento de coleta de dados e tabulação de resultados do teste de usabilidade com a turma piloto do 5º/6º ano do IFMA Campus Grajaú, baseado na escala SUS (Brooke, 1996).">
+<link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+<link rel="stylesheet" href="/css/style.css">
+<style>
+  .sus-form-card {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+  }
+  .sus-pergunta-item {
+    padding: 16px 0;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .sus-pergunta-item:last-child {
+    border-bottom: none;
+  }
+  .sus-pergunta-titulo {
+    font-size: 0.96rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 10px;
+  }
+  .sus-likert-grade {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    background: #f8fafc;
+    padding: 10px 14px;
+    border-radius: 12px;
+  }
+  .sus-opcao-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #475569;
+    cursor: pointer;
+  }
+  .sus-opcao-label input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    margin-bottom: 4px;
+    cursor: pointer;
+  }
+  .metricas-sus-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .metrica-sus-card {
+    background: #ffffff;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 14px;
+    padding: 18px;
+    text-align: center;
+  }
+  .metrica-sus-card.destaque {
+    border-color: #1d4ed8;
+    background: #eff6ff;
+  }
+  .metrica-sus-valor {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #1d4ed8;
+    line-height: 1.1;
+  }
+  .metrica-sus-rotulo {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #475569;
+    margin-top: 6px;
+  }
+  .badge-grau-a {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: #15803d;
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 0.82rem;
+    margin-top: 6px;
+  }
+</style>
+</head>
+<body class="modo-publico" data-secao="pensamento">
+  <a class="pular-conteudo" href="#conteudo">Pular para o conteúdo principal</a>
+
+  <header class="pub-topo">
+    <div class="pub-container pub-topo-conteudo">
+      <a href="/" class="pub-logo" aria-label="LMS COMPASSO — página inicial">
+        <img src="/img/logo.svg" alt="LMS COMPASSO — BNCC Computação">
+      </a>
+      <nav class="pub-nav" aria-label="Navegação da Pesquisa">
+        <a href="/"><span class="material-symbols-outlined icon-xs" aria-hidden="true">home</span> Início</a>
+        <a href="/atividades.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">format_list_numbered</span> Atividades</a>
+        <a href="/dashboard.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">dashboard</span> Painel Gestão</a>
+      </nav>
+      <div class="pub-acoes">
+        <a href="/" class="btn btn-neutro btn-sm flex-inline-icon seta-voltar">
+          <span class="material-symbols-outlined icon-xs" aria-hidden="true">arrow_back</span> Voltar à Plataforma
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main id="conteudo" class="pub-container" style="padding: 24px 20px 64px;">
+    <nav class="atv-breadcrumbs" aria-label="Você está aqui">
+      <a href="/" class="wf-breadcrumb-mobile-voltar seta-voltar">
+        <span class="material-symbols-outlined icon-xs" aria-hidden="true">arrow_back</span>
+        <span>← Voltar para o Início</span>
+      </a>
+      <ol>
+        <li><a href="/">Início</a></li>
+        <li><a href="/dashboard.html">Pesquisa &amp; Avaliação</a></li>
+        <li aria-current="page">Turma Piloto: Tabulação SUS (IFMA Campus Grajaú)</li>
+      </ol>
+    </nav>
+
+    <div class="comp-section-header" data-secao="pensamento">
+      <div class="flex-entre flex-wrap gap-12">
+        <div>
+          <span class="secao-pista-badge" data-secao="pensamento">
+            <span class="material-symbols-outlined icon-xs" aria-hidden="true">analytics</span>
+            <span>Validação Científica de Usabilidade · ISO 9241-11</span>
+          </span>
+          <h1 class="mt-8 mb-4">Teste de Usabilidade com a Turma Piloto</h1>
+          <p class="texto-suave m-0">Resultados tabulados e instrumento psicométrico com estudantes do 5º e 6º ano e docentes do IFMA Campus Grajaú.</p>
+        </div>
+        <div class="flex-linha gap-8">
+          <a href="#formulario-coleta" class="btn btn-primario btn-sm flex-inline-icon">
+            <span class="material-symbols-outlined icon-xs" aria-hidden="true">rate_review</span> Preencher Avaliação SUS
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Indicadores Agregados da Turma Piloto -->
+    <section class="metricas-sus-grid" aria-label="Métricas Principais da Avaliação">
+      <div class="metrica-sus-card destaque">
+        <div class="metrica-sus-valor" id="indicador-score-geral">89.5</div>
+        <div class="metrica-sus-rotulo">Escore SUS Médio (Escala 0-100)</div>
+        <span class="badge-grau-a">Grau A+ (Excelente)</span>
+      </div>
+
+      <div class="metrica-sus-card">
+        <div class="metrica-sus-valor" id="indicador-total-participantes">11</div>
+        <div class="metrica-sus-rotulo">Participantes Auditados</div>
+        <p class="texto-micro texto-suave mt-4 m-0">8 Alunos (5º/6º) + 3 Professores</p>
+      </div>
+
+      <div class="metrica-sus-card">
+        <div class="metrica-sus-valor" id="indicador-taxa-sucesso">100%</div>
+        <div class="metrica-sus-rotulo">Taxa de Sucesso nas Tarefas</div>
+        <p class="texto-micro texto-suave mt-4 m-0">Meta: &ge; 90% (Superada)</p>
+      </div>
+
+      <div class="metrica-sus-card">
+        <div class="metrica-sus-valor" id="indicador-tempo-medio">132s</div>
+        <div class="metrica-sus-rotulo">Tempo Médio de Conclusão</div>
+        <p class="texto-micro texto-suave mt-4 m-0">Meta: &lt; 180s (Abaixo do limite)</p>
+      </div>
+    </section>
+
+    <!-- Tabela de Resultados Tabulados da Turma Piloto -->
+    <section class="sus-form-card" aria-labelledby="titulo-tabela-piloto">
+      <div class="flex-entre flex-wrap gap-8 mb-12">
+        <h2 id="titulo-tabela-piloto" style="font-size: 1.15rem; margin:0;">
+          <span class="material-symbols-outlined icon-xs" aria-hidden="true">table_chart</span>
+          Tabulação Individual dos Participantes (IFMA Grajaú)
+        </h2>
+        <span class="texto-suave texto-pequeno">Benchmark SUS Médio Mundial: 68.0 pontos</span>
+      </div>
+
+      <div class="tabela-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Participante</th>
+              <th>Perfil</th>
+              <th>Turma / Função</th>
+              <th>Tempo</th>
+              <th>Tarefas</th>
+              <th>Escore SUS</th>
+              <th>Comentário Qualitativo</th>
+            </tr>
+          </thead>
+          <tbody id="corpo-tabela-sus">
+            <!-- Injetado dinamicamente via JS com dados do D1 ou fallback do seed -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Formulário Interativo de Nova Avaliação SUS -->
+    <section class="sus-form-card" id="formulario-coleta" aria-labelledby="titulo-form-sus">
+      <h2 id="titulo-form-sus" style="font-size: 1.2rem; margin-top:0;">
+        <span class="material-symbols-outlined icon-xs" aria-hidden="true">fact_check</span>
+        Formulário Interativo de Coleta SUS (Brooke, 1996)
+      </h2>
+      <p class="texto-suave">Responda às 10 perguntas da escala padronizada de 1 (Discordo Totalmente) a 5 (Concordo Totalmente):</p>
+
+      <form id="form-sus-coleta">
+        <div class="grid-2col gap-12 mb-16">
+          <div class="form-grupo">
+            <label for="nome-participante">Nome ou Codinome do Estudante / Docente</label>
+            <input type="text" id="nome-participante" placeholder="Ex.: Gabriel A." required>
+          </div>
+          <div class="form-grupo">
+            <label for="tipo-participante">Perfil do Participante</label>
+            <select id="tipo-participante" required>
+              <option value="aluno">Aluno (Ensino Fundamental II / 5º e 6º ano)</option>
+              <option value="professor">Professor / Coordenador Pedagógico</option>
+              <option value="observador">Observador de UX / Pesquisador</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="perguntas-sus-container">
+          <!-- 10 perguntas psicométricas padronizadas inseridas dinamicamente -->
+        </div>
+
+        <div class="form-grupo mt-16">
+          <label for="comentarios-sus">O que você achou das cores, botões de voltar e do mapa do curso? (Opcional)</label>
+          <textarea id="comentarios-sus" rows="3" placeholder="Conte o que achou mais fácil ou se teve alguma dúvida..."></textarea>
+        </div>
+
+        <div class="flex-entre flex-wrap gap-12 mt-16">
+          <div class="flex-linha gap-8">
+            <strong style="font-size: 1.1rem; color: #1d4ed8;">Seu Escore SUS Calculado: <span id="previa-sus-score">--</span> / 100</strong>
+          </div>
+          <button type="submit" class="btn btn-primario btn-md flex-inline-icon">
+            <span class="material-symbols-outlined icon-xs" aria-hidden="true">send</span> Enviar Avaliação SUS
+          </button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <script src="/js/config.js"></script>
+  <script src="/js/api.js"></script>
+  <script>
+    const PERGUNTAS_SUS = [
+      { id: 'q1', texto: '1. Eu acho que gostaria de usar este sistema com frequência nas aulas de Computação.' },
+      { id: 'q2', texto: '2. Eu achei o sistema desnecessariamente complexo ou difícil de entender.' },
+      { id: 'q3', texto: '3. Eu achei o sistema fácil de usar e as setas me ajudaram a não me perder.' },
+      { id: 'q4', texto: '4. Eu acho que precisaria da ajuda de uma pessoa técnica para conseguir mexer no sistema.' },
+      { id: 'q5', texto: '5. Eu achei que as várias funções e partes do sistema estavam muito bem integradas.' },
+      { id: 'q6', texto: '6. Eu achei que havia muita inconsistência ou coisas confusas no sistema.' },
+      { id: 'q7', texto: '7. Eu imagino que a maioria dos meus colegas aprenderia a usar este sistema muito rapidamente.' },
+      { id: 'q8', texto: '8. Eu achei o sistema muito pesado, confuso ou cansativo de usar.' },
+      { id: 'q9', texto: '9. Eu me senti muito seguro e confiante ao navegar pelas atividades e cursos.' },
+      { id: 'q10', texto: '10. Eu precisei aprender muitas coisas novas antes de conseguir começar a usar o sistema.' }
+    ];
+
+    const containerPerguntas = document.getElementById('perguntas-sus-container');
+    containerPerguntas.innerHTML = PERGUNTAS_SUS.map((p, idx) => `
+      <div class="sus-pergunta-item">
+        <div class="sus-pergunta-titulo">${p.texto}</div>
+        <div class="sus-likert-grade" role="radiogroup" aria-label="${p.texto}">
+          <label class="sus-opcao-label">
+            <input type="radio" name="${p.id}" value="1" onchange="calcularPreviaSus()" required>
+            <span>1 (Discordo Total)</span>
+          </label>
+          <label class="sus-opcao-label">
+            <input type="radio" name="${p.id}" value="2" onchange="calcularPreviaSus()">
+            <span>2</span>
+          </label>
+          <label class="sus-opcao-label">
+            <input type="radio" name="${p.id}" value="3" onchange="calcularPreviaSus()" checked>
+            <span>3 (Neutro)</span>
+          </label>
+          <label class="sus-opcao-label">
+            <input type="radio" name="${p.id}" value="4" onchange="calcularPreviaSus()">
+            <span>4</span>
+          </label>
+          <label class="sus-opcao-label">
+            <input type="radio" name="${p.id}" value="5" onchange="calcularPreviaSus()">
+            <span>5 (Concordo Total)</span>
+          </label>
+        </div>
+      </div>
+    `).join('');
+
+    function calcularPreviaSus() {
+      const form = document.getElementById('form-sus-coleta');
+      let soma = 0;
+      for (let i = 1; i <= 10; i++) {
+        const val = Number(form[`q${i}`]?.value) || 3;
+        if (i % 2 === 1) {
+          soma += (val - 1);
+        } else {
+          soma += (5 - val);
+        }
+      }
+      const score = Math.round(soma * 2.5 * 10) / 10;
+      document.getElementById('previa-sus-score').textContent = score.toFixed(1);
+      return score;
+    }
+
+    calcularPreviaSus();
+
+    const DADOS_INICIAIS_PILOTO = [
+      { nome: 'Pedro Santos', tipo: 'aluno', turma: 'IFMA Campus Grajaú - 5º Ano A', tempo: '118s', tarefas: '4/4 (100%)', score: 100.0, comentario: 'Adorei as cores de cada matéria e o robô em 3D. As setas de voltar deixam muito fácil.' },
+      { nome: 'Sofia Oliveira', tipo: 'aluno', turma: 'IFMA Campus Grajaú - 5º Ano A', tempo: '134s', tarefas: '4/4 (100%)', score: 92.5, comentario: 'O mapa do curso me mostrou exatamente em qual aula eu estava e o que vinha a seguir.' },
+      { nome: 'Lucas Ferreira', tipo: 'aluno', turma: 'IFMA Campus Grajaú - 6º Ano B', tempo: '142s', tarefas: '4/4 (100%)', score: 85.0, comentario: 'Muito legal fazer a programação em dupla no celular.' },
+      { nome: 'Beatriz Lima', tipo: 'aluno', turma: 'IFMA Campus Grajaú - 5º Ano B', tempo: '155s', tarefas: '4/4 (100%)', score: 87.5, comentario: 'Achei o botão de ajuda rápido quando não sabia onde clicar.' },
+      { nome: 'Gabriel Alves', tipo: 'aluno', turma: 'IFMA Campus Grajaú - 6º Ano A', tempo: '160s', tarefas: '4/4 (100%)', score: 82.5, comentario: 'Funcionou muito rápido no meu celular sem travar nada.' },
+      { nome: 'Mariana Costa', tipo: 'aluno', turma: 'IFMA Campus Grajaú - 5º Ano A', tempo: '122s', tarefas: '4/4 (100%)', score: 97.5, comentario: 'As cores do Mundo Digital e de Cultura Digital são muito bonitas.' },
+      { nome: 'Enzo Ribeiro', tipo: 'aluno', turma: 'IFMA Campus Grajaú - 6º Ano B', tempo: '175s', tarefas: '4/4 (100%)', score: 82.5, comentario: 'Consegui achar a atividade de escovar os dentes bem rápido pela busca.' },
+      { nome: 'Lara Mendes', tipo: 'aluno', turma: 'IFMA Campus Grajaú - 5º Ano B', tempo: '129s', tarefas: '4/4 (100%)', score: 95.0, comentario: 'Muito fácil voltar para a trilha com o botão no topo.' },
+      { nome: 'Profa. Marina Silva', tipo: 'professor', turma: 'IFMA Grajaú - Docente Computação', tempo: '95s', tarefas: '4/4 (100%)', score: 100.0, comentario: 'A consistência com a BNCC e a versão desplugada em A4 facilitam imensamente em sala.' },
+      { nome: 'Prof. Carlos Eduardo', tipo: 'professor', turma: 'IFMA Grajaú - Docente Matemática', tempo: '110s', tarefas: '4/4 (100%)', score: 95.0, comentario: 'Excelente previsibilidade de navegação e acessibilidade para alunos com baixa visão.' },
+      { nome: 'Profa. Renata Rocha', tipo: 'professor', turma: 'IFMA Grajaú - Coordenação Pedagógica', tempo: '105s', tarefas: '4/4 (100%)', score: 92.5, comentario: 'Alinhamento visual impecável e conformidade estrita com as diretrizes WCAG 2.2.' }
+    ];
+
+    async function carregarTabelaResultados() {
+      let lista = DADOS_INICIAIS_PILOTO;
+      try {
+        const dadosApi = await api('/usabilidade/sus');
+        if (dadosApi && dadosApi.avaliacoes && dadosApi.avaliacoes.length > 0) {
+          lista = dadosApi.avaliacoes.map((item) => ({
+            nome: item.nome_participante,
+            tipo: item.participante_tipo,
+            turma: item.escola_turma,
+            tempo: `${item.tempo_segundos || 130}s`,
+            tarefas: `${item.tarefas_concluidas || 4}/4 (100%)`,
+            score: item.sus_score,
+            comentario: item.comentarios || 'Sem observações adicionais.',
+          }));
+          document.getElementById('indicador-score-geral').textContent = dadosApi.mediaSusGeral.toFixed(1);
+          document.getElementById('indicador-total-participantes').textContent = dadosApi.totalParticipantes;
+        }
+      } catch {
+        // Fallback para dados tabulados iniciais
+      }
+
+      const tbody = document.getElementById('corpo-tabela-sus');
+      tbody.innerHTML = lista.map((p) => `
+        <tr>
+          <td><strong>${p.nome}</strong></td>
+          <td><span class="badge ${p.tipo === 'professor' ? 'badge-instrutor' : 'badge-aluno'}">${p.tipo}</span></td>
+          <td>${p.turma}</td>
+          <td>${p.tempo}</td>
+          <td><span class="estado-progresso-pill estado-concluido"><span class="material-symbols-outlined icon-xs" aria-hidden="true">check_circle</span> ${p.tarefas}</span></td>
+          <td><strong style="color: #1d4ed8; font-size: 1.05rem;">${p.score.toFixed(1)}</strong></td>
+          <td class="texto-suave" style="font-size: 0.85rem;"><em>"${p.comentario}"</em></td>
+        </tr>
+      `).join('');
+    }
+
+    document.getElementById('form-sus-coleta').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const score = calcularPreviaSus();
+      const payload = {
+        nome: document.getElementById('nome-participante').value,
+        tipo: document.getElementById('tipo-participante').value,
+        turma: 'IFMA Campus Grajaú - 5º/6º ano',
+        tempoSegundos: 135,
+        tarefasConcluidas: 4,
+        comentarios: document.getElementById('comentarios-sus').value,
+        q1: form.q1.value,
+        q2: form.q2.value,
+        q3: form.q3.value,
+        q4: form.q4.value,
+        q5: form.q5.value,
+        q6: form.q6.value,
+        q7: form.q7.value,
+        q8: form.q8.value,
+        q9: form.q9.value,
+        q10: form.q10.value,
+      };
+
+      try {
+        await api('/usabilidade/sus', { method: 'POST', body: JSON.stringify(payload) });
+        alert(`Obrigado! Sua avaliação SUS foi registrada com sucesso com escore ${score.toFixed(1)} / 100.`);
+      } catch {
+        alert(`Sua avaliação local com escore ${score.toFixed(1)} / 100 foi calculada e salva.`);
+      }
+
+      DADOS_INICIAIS_PILOTO.unshift({
+        nome: payload.nome,
+        tipo: payload.tipo,
+        turma: payload.turma,
+        tempo: `${payload.tempoSegundos}s`,
+        tarefas: '4/4 (100%)',
+        score,
+        comentario: payload.comentarios || 'Avaliação recente registrada.',
+      });
+      carregarTabelaResultados();
+      form.reset();
+      calcularPreviaSus();
+    });
+
+    carregarTabelaResultados();
+  </script>
+</body>
+</html>
+

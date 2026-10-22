@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Meu Perfil — LMS BNCC Computação</title>
+<title>Meu Perfil — LMS COMPASSO</title>
 <link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -36,6 +36,26 @@
             </div>
             <button type="submit" class="btn btn-primario flex-inline-icon"><span class="material-symbols-outlined icon-xs">lock_reset</span> Salvar nova senha</button>
           </form>
+        </div>
+      </div>
+
+      <!-- Preferências de Acessibilidade salvas no D1 -->
+      <div class="cartao mt-16" id="secao-preferencias-a11y">
+        <h3 class="flex-inline-icon"><span class="material-symbols-outlined icon-sm">settings_accessibility</span> Preferências de Acessibilidade (Sincronizadas na Nuvem D1)</h3>
+        <p class="texto-suave">Suas preferências de acessibilidade são salvas no banco de dados e restauradas automaticamente em qualquer aparelho ou computador da escola.</p>
+        <div class="wf-opcoes-a11y mt-12">
+          <label class="wf-check-label">
+            <input type="checkbox" id="pref-alto-contraste" onchange="aplicarPreferenciaAcessibilidade('alto-contraste', this.checked)">
+            <span>Alto Contraste &amp; Daltonismo Seguro (WCAG 2.2 AA)</span>
+          </label>
+          <label class="wf-check-label">
+            <input type="checkbox" id="pref-fonte-ampliada" onchange="aplicarPreferenciaAcessibilidade('fonte-ampliada', this.checked)">
+            <span>Texto Ampliado (+15% de escala tipográfica)</span>
+          </label>
+          <label class="wf-check-label">
+            <input type="checkbox" id="pref-reduzir-movimento" onchange="aplicarPreferenciaAcessibilidade('reduzir-movimento', this.checked)">
+            <span>Reduzir Animações (prefers-reduced-motion)</span>
+          </label>
         </div>
       </div>
 
@@ -75,6 +95,14 @@
       <p><strong>Email:</strong> ${usuario.email}</p>
       <p><strong>Perfil:</strong> <span class="badge badge-${usuario.perfil}">${usuario.perfil}</span></p>
     `;
+
+    // Atualiza checkboxes de preferências
+    const checkContraste = document.getElementById('pref-alto-contraste');
+    const checkFonte = document.getElementById('pref-fonte-ampliada');
+    const checkMovimento = document.getElementById('pref-reduzir-movimento');
+    if (checkContraste) checkContraste.checked = document.documentElement.classList.contains('a11y-alto-contraste');
+    if (checkFonte) checkFonte.checked = document.documentElement.classList.contains('a11y-fonte-ampliada');
+    if (checkMovimento) checkMovimento.checked = document.documentElement.classList.contains('a11y-reduzir-movimento');
 
     document.getElementById('form-senha').addEventListener('submit', async (e) => {
       e.preventDefault();

@@ -463,5 +463,51 @@ test('Pilar 1: registro JSON de ícones universais, sprite SVG e conceitos de Co
   assert.ok(svgFuncional.includes('role="img" aria-label="Buscar atividades"'));
 });
 
+test('Pilar 2: Pistas Visuais (tokens --cor-secao-*, breadcrumbs aria-label="Você está aqui", setas padronizadas, estados de progresso e Mapa do Curso)', () => {
+  const cssRaw = fs.readFileSync(new URL('../public/css/style.css', import.meta.url), 'utf8');
+  const layoutRaw = fs.readFileSync(new URL('../public/js/layout.js', import.meta.url), 'utf8');
+  const atividadesRaw = fs.readFileSync(new URL('../public/js/atividades.js', import.meta.url), 'utf8');
+  const pagina404Raw = fs.readFileSync(new URL('../public/404.html', import.meta.url), 'utf8');
+
+  // 1. Código de cores por seção (--cor-secao-*) + combinação com padrão de borda (WCAG 1.4.1)
+  const tokensSecao = [
+    '--cor-secao-pensamento',
+    '--cor-secao-mundo',
+    '--cor-secao-cultura',
+    '--cor-secao-aluno',
+    '--cor-secao-professor',
+    '--cor-secao-config',
+  ];
+  for (const token of tokensSecao) {
+    assert.ok(cssRaw.includes(token), `Token CSS obrigatório ausente: ${token}`);
+  }
+  assert.ok(cssRaw.includes('.secao-pista-badge'), 'Falta classe .secao-pista-badge (WCAG 1.4.1)');
+
+  // 2. Indicador de localização: aria-current="page", nav aria-label="Você está aqui" e versão compacta mobile
+  assert.ok(layoutRaw.includes('aria-current="page"'), 'Falta aria-current="page" em layout.js');
+  assert.ok(layoutRaw.includes('aria-label="Você está aqui"'), 'Falta nav aria-label="Você está aqui" em layout.js');
+  assert.ok(atividadesRaw.includes("'aria-label': 'Você está aqui'"), 'Falta aria-label="Você está aqui" em atividades.js');
+  assert.ok(cssRaw.includes('.wf-breadcrumb-mobile-voltar'), 'Falta classe .wf-breadcrumb-mobile-voltar no CSS');
+
+  // 3. Setas direcionais e 4 estados de progresso padronizados
+  for (const classeSeta of ['.seta-voltar', '.seta-proximo', '.seta-expandir', '.seta-nova-janela']) {
+    assert.ok(cssRaw.includes(classeSeta), `Falta classe de seta padronizada: ${classeSeta}`);
+  }
+  for (const classeEstado of ['.estado-concluido', '.estado-em-andamento', '.estado-nao-iniciado', '.estado-bloqueado']) {
+    assert.ok(cssRaw.includes(classeEstado), `Falta classe de estado de progresso: ${classeEstado}`);
+  }
+
+  // 4. Rota de saída 404 com botão "Ir para o início" e busca integrada
+  assert.ok(pagina404Raw.includes('Ir para o início'), '404.html deve conter botão "Ir para o início"');
+  assert.ok(pagina404Raw.includes('type="search"'), '404.html deve conter busca integrada');
+
+  // 5. Mapa de orientação ("Mapa do Curso") mostrando onde o aluno está e o que vem a seguir
+  assert.ok(layoutRaw.includes('TRILHA_ORIENTACAO_CURSO'), 'Falta TRILHA_ORIENTACAO_CURSO em layout.js');
+  assert.ok(layoutRaw.includes('Você está aqui'), 'Falta indicador "Você está aqui" no Mapa do Curso');
+  assert.ok(layoutRaw.includes('O que vem a seguir'), 'Falta indicador "O que vem a seguir" no Mapa do Curso');
+  assert.ok(atividadesRaw.includes('mapaOrientacaoDaTrilha'), 'Falta mapaOrientacaoDaTrilha em atividades.js');
+});
+
+
 
 

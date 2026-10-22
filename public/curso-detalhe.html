@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Detalhe do Curso — LMS BNCC Computação</title>
+<title>Detalhe do Curso — LMS COMPASSO</title>
 <link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,6 +17,9 @@
       <div id="topbar-container"></div>
 
       <div class="cartao" id="cabecalho-curso"></div>
+
+      <!-- Mapa de Orientação do Curso (Pilar 2: Mostra a trilha completa, onde o aluno está e o que vem a seguir) -->
+      <section class="cartao" id="mapa-orientacao-curso" aria-label="Mapa do curso: progresso por etapa"></section>
 
       <div class="cartao oculto-aluno" id="area-novo-modulo">
         <h3>Adicionar Módulo</h3>
@@ -77,23 +80,125 @@
       return botao + descricao;
     }
 
+    function mapearEixoParaSecao(eixoBncc) {
+      const val = String(eixoBncc || '').toLowerCase();
+      if (val.includes('mundo')) return { secao: 'mundo', rotulo: 'Eixo 2: Mundo Digital', icone: 'memory' };
+      if (val.includes('cultura')) return { secao: 'cultura', rotulo: 'Eixo 3: Cultura Digital', icone: 'verified_user' };
+      return { secao: 'pensamento', rotulo: 'Eixo 1: Pensamento Computacional', icone: 'format_list_numbered' };
+    }
+
+    function renderizarMapaOrientacaoCurso(curso, infoSecao) {
+      const mapaEl = document.getElementById('mapa-orientacao-curso');
+      if (!mapaEl) return;
+
+      const todasAulas = (curso.modulos || []).flatMap((m) => (m.aulas || []).map((a) => ({ ...a, moduloTitulo: m.titulo })));
+      const totalEtapas = todasAulas.length;
+      if (totalEtapas === 0) {
+        mapaEl.innerHTML = `
+          <div class="progresso-etapas-topo">
+            <span class="progresso-etapas-contador"><span class="material-symbols-outlined icon-xs" aria-hidden="true">map</span> Mapa do Curso: 0 etapas cadastradas</span>
+          </div>
+          <p class="texto-suave m-0">Adicione módulos e aulas para visualizar a trilha de marcos do curso.</p>
+        `;
+        return;
+      }
+
+      const concluidas = todasAulas.filter((a) => Boolean(a.concluida)).length;
+      const indiceAtual = todasAulas.findIndex((a) => !a.concluida);
+      const etapaExibida = indiceAtual === -1 ? totalEtapas : indiceAtual + 1;
+      const percentual = Math.round((concluidas / totalEtapas) * 100);
+      const aulaAtual = indiceAtual >= 0 ? todasAulas[indiceAtual] : todasAulas[totalEtapas - 1];
+      const proximaAula = (indiceAtual >= 0 && indiceAtual + 1 < totalEtapas) ? todasAulas[indiceAtual + 1] : null;
+
+      const marcosHtml = todasAulas.map((aula, idx) => {
+        const ehConcluida = Boolean(aula.concluida);
+        const ehAqui = idx === indiceAtual || (indiceAtual === -1 && idx === totalEtapas - 1);
+        const ehBloqueada = indiceAtual !== -1 && idx > indiceAtual + 1;
+
+        let classeEstado = 'estado-nao-iniciado';
+        let iconeEstado = 'circle-dashed';
+        let rotuloEstado = 'Não iniciado';
+
+        if (ehConcluida) {
+          classeEstado = 'estado-concluido';
+          iconeEstado = 'check_circle';
+          rotuloEstado = 'Concluído';
+        } else if (ehAqui) {
+          classeEstado = 'estado-em-andamento';
+          iconeEstado = 'schedule';
+          rotuloEstado = 'Em andamento (Você está aqui)';
+        } else if (ehBloqueada) {
+          classeEstado = 'estado-bloqueado';
+          iconeEstado = 'lock';
+          rotuloEstado = 'Bloqueado (Conclua a etapa anterior)';
+        }
+
+        return `
+          <li class="trilha-marco-item ${classeEstado}" ${ehAqui ? 'aria-current="step"' : ''} title="Etapa ${idx + 1} de ${totalEtapas}: ${escaparHtml(aula.titulo)} — ${rotuloEstado}">
+            <span class="material-symbols-outlined icon-xs" aria-hidden="true">${iconeEstado}</span>
+            <span>Etapa ${idx + 1}: ${escaparHtml(aula.titulo)}</span>
+          </li>
+        `;
+      }).join('');
+
+      mapaEl.innerHTML = `
+        <div class="progresso-etapas-topo">
+          <span class="progresso-etapas-contador">
+            <span class="material-symbols-outlined icon-xs" aria-hidden="true">map</span>
+            <span>Mapa do Curso — Etapa ${etapaExibida} de ${totalEtapas} (${concluidas}/${totalEtapas} concluídas · ${percentual}%)</span>
+          </span>
+          <div class="flex-linha flex-wrap gap-8">
+            <span class="mapa-tag-aqui"><span class="material-symbols-outlined icon-xs" aria-hidden="true">explore</span> Você está aqui: ${escaparHtml(aulaAtual.titulo)}</span>
+            ${proximaAula ? `<span class="mapa-tag-proximo">O que vem a seguir: ${escaparHtml(proximaAula.titulo)} →</span>` : '<span class="estado-progresso-pill estado-concluido"><span class="material-symbols-outlined icon-xs" aria-hidden="true">check_circle</span> Curso Concluído!</span>'}
+          </div>
+        </div>
+        <div class="progresso-etapas-barra" role="progressbar" aria-label="Progresso nas etapas do curso" aria-valuenow="${concluidas}" aria-valuemin="0" aria-valuemax="${totalEtapas}">
+          <div class="progresso-etapas-preenchimento" style="width: ${percentual}%"></div>
+        </div>
+        <ol class="trilha-marcos" aria-label="Etapas e estados das aulas do curso">
+          ${marcosHtml}
+        </ol>
+      `;
+    }
+
     async function carregarCurso() {
       try {
         const curso = await api(`/cursos/${cursoId}`);
+        const infoSecao = mapearEixoParaSecao(curso.eixo_bncc);
+        document.body.setAttribute('data-secao', infoSecao.secao);
+        document.getElementById('titulo-pagina').textContent = curso.titulo;
 
         document.getElementById('cabecalho-curso').innerHTML = `
-          <span class="badge badge-${curso.status}">${curso.status}</span>
-          <h2 class="mt-8 mb-10">${curso.titulo}</h2>
-          <p class="texto-suave">${curso.descricao || ''}</p>
+          <div class="flex-linha flex-wrap gap-8">
+            <span class="secao-pista-badge" data-secao="${infoSecao.secao}">
+              <span class="material-symbols-outlined icon-xs" aria-hidden="true">${infoSecao.icone}</span>
+              <span>${infoSecao.rotulo}</span>
+            </span>
+            <span class="badge badge-${curso.status}">${curso.status}</span>
+          </div>
+          <h2 class="mt-8 mb-10">${escaparHtml(curso.titulo)}</h2>
+          <p class="texto-suave">${escaparHtml(curso.descricao || '')}</p>
           <div class="curso-meta-info texto-suave">
-            <div><span class="material-symbols-outlined icon-xs">category</span> <span>${curso.eixo_bncc}</span> · <span class="material-symbols-outlined icon-xs">school</span> <span>${curso.ano_escolar}</span></div>
-            <div><span class="material-symbols-outlined icon-xs">schedule</span> <span>${curso.carga_horaria}h</span> · <span class="material-symbols-outlined icon-xs">person</span> <span>${curso.instrutor_nome}</span></div>
+            <div><span class="material-symbols-outlined icon-xs">category</span> <span>${escaparHtml(curso.eixo_bncc)}</span> · <span class="material-symbols-outlined icon-xs">school</span> <span>${escaparHtml(curso.ano_escolar)}</span></div>
+            <div><span class="material-symbols-outlined icon-xs">schedule</span> <span>${curso.carga_horaria}h</span> · <span class="material-symbols-outlined icon-xs">person</span> <span>${escaparHtml(curso.instrutor_nome)}</span></div>
           </div>
         `;
 
+        renderizarMapaOrientacaoCurso(curso, infoSecao);
+
         const container = document.getElementById('lista-modulos');
         if (curso.modulos.length === 0) {
-          container.innerHTML = '<div class="cartao">Nenhum módulo cadastrado ainda.</div>';
+          container.innerHTML = `
+            <div class="estado-saida-404">
+              <div class="estado-saida-icone" aria-hidden="true"><span class="material-symbols-outlined icon-lg">menu_book</span></div>
+              <h3>Nenhum módulo cadastrado neste curso ainda</h3>
+              <p>Explore as atividades práticas da BNCC Computação ou retorne ao catálogo de cursos.</p>
+              <div class="estado-saida-acoes">
+                <a href="/cursos.html" class="btn btn-neutro seta-voltar"><span class="material-symbols-outlined icon-xs" aria-hidden="true">arrow_back</span> Voltar para Trilhas</a>
+                <a href="/atividades.html" class="btn btn-primario seta-proximo">Ir para Atividades <span class="material-symbols-outlined icon-xs" aria-hidden="true">arrow_forward</span></a>
+              </div>
+            </div>
+          `;
           return;
         }
 
@@ -187,6 +292,7 @@
     async function marcarProgresso(aulaId, concluida) {
       try {
         await api(`/aulas/${aulaId}/progresso`, { method: 'POST', body: JSON.stringify({ concluida }) });
+        await carregarCurso();
       } catch (err) { alert(err.message); }
     }
 

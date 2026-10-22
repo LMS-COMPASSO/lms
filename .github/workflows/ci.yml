@@ -38,3 +38,38 @@ jobs:
       # Valida que o Worker compila e empacota (sem publicar nada e sem credenciais Cloudflare).
       - name: Validar build do Worker (dry-run)
         run: npx wrangler deploy --dry-run --outdir .wrangler/dryrun
+
+  e2e-playwright:
+    name: Testes E2E, Acessibilidade (axe-core) e Regressão Visual
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: testes
+
+    steps:
+      - name: Baixar o código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Instalar navegadores do Playwright e dependências do sistema
+        run: npx playwright install --with-deps chromium
+
+      - name: Executar testes Playwright E2E e axe-core
+        run: npx playwright test
+        env:
+          CI: 'true'
+
+      - name: Publicar relatório Playwright
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 14

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Página não encontrada (404) — LMS COMPASSO</title>
+<meta name="description" content="Página não encontrada no LMS COMPASSO. Use a busca integrada ou retorne para o início da plataforma BNCC Computação.">
+<link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/publico.css">
+</head>
+<body class="modo-publico" data-secao="pensamento">
+  <a class="pular-conteudo" href="#conteudo">Pular para o conteúdo principal</a>
+
+  <header class="pub-topo">
+    <div class="pub-container pub-topo-conteudo">
+      <a href="/" class="pub-logo" aria-label="LMS COMPASSO — página inicial">
+        <img src="/img/logo.svg" alt="LMS COMPASSO — BNCC Computação">
+      </a>
+      <nav class="pub-nav" aria-label="Principal">
+        <a href="/"><span class="material-symbols-outlined icon-xs" aria-hidden="true">home</span> Início</a>
+        <a href="/atividades.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">format_list_numbered</span> Atividades</a>
+        <a href="/mundo-digital.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">memory</span> Mundo Digital</a>
+        <a href="/cultura-digital.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">verified_user</span> Cultura Digital</a>
+      </nav>
+      <div class="pub-acoes">
+        <a href="/" class="btn btn-primario btn-sm flex-inline-icon">
+          <span class="material-symbols-outlined icon-xs" aria-hidden="true">home</span> Ir para o início
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main id="conteudo" class="pub-container" style="padding: 36px 20px 64px;">
+    <nav class="atv-breadcrumbs" aria-label="Você está aqui">
+      <a href="/" class="wf-breadcrumb-mobile-voltar seta-voltar">
+        <span class="material-symbols-outlined icon-xs" aria-hidden="true">arrow_back</span>
+        <span>← Voltar para o Início</span>
+      </a>
+      <ol>
+        <li><a href="/">Início</a></li>
+        <li aria-current="page">Erro 404 — Página não encontrada</li>
+      </ol>
+    </nav>
+
+    <section class="estado-saida-404" aria-labelledby="titulo-404">
+      <div class="estado-saida-icone" aria-hidden="true">
+        <span class="material-symbols-outlined icon-lg">explore</span>
+      </div>
+      <h1 id="titulo-404">Página não encontrada (Erro 404)</h1>
+      <p>
+        O endereço que você tentou acessar não existe ou mudou de lugar.
+        Você pode buscar uma atividade ou código da BNCC Computação abaixo, ou retornar diretamente para o início.
+      </p>
+
+      <form class="estado-saida-busca" action="/atividades.html" method="get" onsubmit="event.preventDefault(); const q = this.busca.value.trim(); window.location.href = q ? '/atividades.html?busca=' + encodeURIComponent(q) : '/atividades.html';">
+        <input type="search" name="busca" placeholder="Buscar por código BNCC (ex.: EF05CO01) ou tema (ex.: Python, Robô)..." aria-label="Buscar atividades ou habilidades da BNCC Computação">
+        <button type="submit" class="btn btn-primario flex-inline-icon">
+          <span class="material-symbols-outlined icon-xs" aria-hidden="true">search</span>
+          <span>Buscar</span>
+        </button>
+      </form>
+
+      <div class="estado-saida-acoes">
+        <a href="/" class="btn btn-primario flex-inline-icon">
+          <span class="material-symbols-outlined icon-xs" aria-hidden="true">home</span>
+          <span>Ir para o início</span>
+        </a>
+        <a href="/atividades.html" class="btn btn-neutro seta-proximo">
+          <span>Explorar Trilhas de Atividades</span>
+          <span class="material-symbols-outlined icon-xs" aria-hidden="true">arrow_forward</span>
+        </a>
+        <a href="/cursos.html" class="btn btn-neutro seta-proximo">
+          <span>Ver Catálogo de Cursos</span>
+          <span class="material-symbols-outlined icon-xs" aria-hidden="true">arrow_forward</span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="/js/icones-universais.js"></script>
+</body>
+</html>
+

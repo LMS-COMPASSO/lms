@@ -200,23 +200,58 @@ function nivelDominioHabilidade(codigo) {
  * Catálogo com Busca, Filtros BNCC e Retomar de Onde Parou
  * ------------------------------------------------------------------------ */
 
+function obterSecaoPorEixo(eixo) {
+  if (eixo === 'mundo-digital') return 'mundo';
+  if (eixo === 'cultura-digital') return 'cultura';
+  return 'pensamento';
+}
+
 function cartaoDaAtividade(atividade) {
   const concluida = Boolean(progresso[atividade.id]?.concluida);
+  const emAndamento = !concluida && lerUltimaVisitada() === atividade.id;
   const eixoInfo = EIXOS_BNCC[atividade.eixo] || EIXOS_BNCC['pensamento-computacional'];
+  const secaoEixo = obterSecaoPorEixo(atividade.eixo);
+
+  let estadoBadge;
+  if (concluida) {
+    estadoBadge = h(
+      'span',
+      { class: 'estado-progresso-pill estado-concluido' },
+      h('span', { class: 'material-symbols-outlined icon-xs', 'aria-hidden': 'true' }, 'check_circle'),
+      'Concluído',
+    );
+  } else if (emAndamento) {
+    estadoBadge = h(
+      'span',
+      { class: 'estado-progresso-pill estado-em-andamento' },
+      h('span', { class: 'material-symbols-outlined icon-xs', 'aria-hidden': 'true' }, 'schedule'),
+      'Em andamento',
+    );
+  } else {
+    estadoBadge = h(
+      'span',
+      { class: 'estado-progresso-pill estado-nao-iniciado' },
+      h('span', { class: 'material-symbols-outlined icon-xs', 'aria-hidden': 'true' }, 'circle-dashed'),
+      'Não iniciado',
+    );
+  }
 
   return h(
     'li',
     {},
     h(
       'article',
-      { class: 'atv-card' },
+      { class: 'atv-card', 'data-secao': secaoEixo },
       h(
         'div',
         { class: 'atv-card-topo' },
         h('div', { class: 'pub-icone', 'aria-hidden': 'true' }, renderizarIcone(atividade.id)),
-        concluida
-          ? h('span', { class: 'atv-concluida flex-inline-icon' }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'check_circle'), ' Concluída')
-          : h('span', { class: 'atv-badge-eixo' }, eixoInfo.rotulo),
+        h(
+          'div',
+          { class: 'flex-linha flex-wrap gap-8' },
+          h('span', { class: 'secao-pista-badge', 'data-secao': secaoEixo }, eixoInfo.rotulo),
+          estadoBadge,
+        ),
       ),
       h(TituloCartao, {}, atividade.titulo),
       h('p', {}, atividade.resumo),
@@ -236,9 +271,10 @@ function cartaoDaAtividade(atividade) {
         { class: 'atv-card-acao' },
         h(
           'a',
-          { class: `btn ${concluida ? 'btn-neutro' : 'btn-primario'}`, href: `/atividades.html?id=${encodeURIComponent(atividade.id)}` },
+          { class: `btn ${concluida ? 'btn-neutro' : 'btn-primario'} seta-proximo`, href: `/atividades.html?id=${encodeURIComponent(atividade.id)}` },
           concluida ? 'Jogar de novo' : 'Começar',
           h('span', { class: 'somente-leitor' }, `: ${atividade.titulo}`),
+          h('span', { class: 'material-symbols-outlined icon-xs', 'aria-hidden': 'true' }, 'arrow_forward'),
         ),
       ),
     ),
@@ -278,17 +314,20 @@ function bannerRetomar() {
     ),
     h(
       'a',
-      { class: 'btn btn-primario flex-inline-icon', href: `/atividades.html?id=${encodeURIComponent(atv.id)}` },
+      { class: 'btn btn-primario seta-proximo', href: `/atividades.html?id=${encodeURIComponent(atv.id)}` },
       h('span', { class: 'material-symbols-outlined icon-sm', 'aria-hidden': 'true' }, 'play_circle'),
       'Retomar atividade',
+      h('span', { class: 'material-symbols-outlined icon-xs', 'aria-hidden': 'true' }, 'arrow_forward'),
     ),
   );
 }
 
 function renderCatalogo() {
   document.title = 'Atividades dinâmicas e Laboratório 3D Python — LMS COMPASSO';
+  document.body.setAttribute('data-secao', 'pensamento');
+
   const filtro = {
-    busca: '',
+    busca: (parametros.get('busca') || '').trim().toLowerCase(),
     tipo: parametros.get('tipo') || 'todos',
     conceito: 'todos',
     faixa: parametros.get('faixa') || 'todas',
@@ -302,6 +341,7 @@ function renderCatalogo() {
   const inputBusca = h('input', {
     type: 'search',
     class: 'atv-input-busca',
+    value: filtro.busca,
     placeholder: 'Buscar por título, tema ou código BNCC (ex.: EF69CO03, Python, Hanói)...',
     'aria-label': 'Buscar atividades por nome ou código de habilidade BNCC',
     oninput: (e) => {
@@ -342,21 +382,75 @@ function renderCatalogo() {
       return bateTipo && bateConceito && bateFaixa && bateHab && bateBusca;
     });
 
-    lista.replaceChildren(...(visiveis.length
-      ? visiveis.map(cartaoDaAtividade)
-      : [h('li', { class: 'atv-vazio-lista' }, 'Nenhuma atividade encontrada para esse filtro.')]));
+    if (visiveis.length > 0) {
+      lista.replaceChildren(...visiveis.map(cartaoDaAtividade));
+    } else {
+      lista.replaceChildren(
+        h(
+          'li',
+          { class: 'atv-vazio-lista' },
+          h(
+            'div',
+            { class: 'estado-saida-404' },
+            h(
+              'div',
+              { class: 'estado-saida-icone', 'aria-hidden': 'true' },
+              h('span', { class: 'material-symbols-outlined icon-lg' }, 'search'),
+            ),
+            h('h3', {}, 'Nenhuma atividade encontrada para esse filtro'),
+            h('p', {}, 'Tente limpar os filtros ativos ou voltar para a página inicial da plataforma.'),
+            h(
+              'div',
+              { class: 'estado-saida-acoes' },
+              h(
+                'button',
+                {
+                  type: 'button',
+                  class: 'btn btn-primario',
+                  onclick: () => {
+                    filtro.busca = '';
+                    filtro.tipo = 'todos';
+                    filtro.conceito = 'todos';
+                    filtro.faixa = 'todas';
+                    filtro.habilidade = 'todas';
+                    inputBusca.value = '';
+                    selectHabilidade.value = 'todas';
+                    atualizar();
+                  },
+                },
+                'Mostrar todas as atividades',
+              ),
+              h('a', { class: 'btn btn-neutro seta-voltar', href: '/' }, h('span', { class: 'material-symbols-outlined icon-xs', 'aria-hidden': 'true' }, 'home'), 'Ir para o início'),
+            ),
+          ),
+        ),
+      );
+    }
+
     if (avisar) anunciar(`${visiveis.length} ${visiveis.length === 1 ? 'atividade encontrada' : 'atividades encontradas'}.`);
 
     const concluidas = contarConcluidas(progresso, ATIVIDADES);
-    textoProgresso.textContent = `Você concluiu ${concluidas} de ${ATIVIDADES.length} atividades (${Math.round((concluidas / ATIVIDADES.length) * 100)}%).`;
+    textoProgresso.textContent = `Etapa ${concluidas} de ${ATIVIDADES.length} atividades concluídas (${Math.round((concluidas / ATIVIDADES.length) * 100)}%).`;
     barra.firstChild.style.width = `${Math.round((concluidas / ATIVIDADES.length) * 100)}%`;
   }
 
   raiz.replaceChildren(
     h(
       'nav',
-      { class: 'atv-breadcrumbs', 'aria-label': 'Trilha de navegação (Breadcrumb)' },
-      h('ol', {}, h('li', {}, h('a', { href: '/' }, 'Início')), h('li', { 'aria-current': 'page' }, 'Atividades & Laboratório 3D BNCC')),
+      { class: 'atv-breadcrumbs', 'aria-label': 'Você está aqui' },
+      h(
+        'a',
+        { class: 'wf-breadcrumb-mobile-voltar seta-voltar', href: '/cursos.html' },
+        h('span', { class: 'material-symbols-outlined icon-xs', 'aria-hidden': 'true' }, 'arrow_back'),
+        '← Voltar para Trilhas',
+      ),
+      h(
+        'ol',
+        {},
+        h('li', {}, h('a', { href: '/' }, 'Início')),
+        h('li', {}, h('a', { href: '/cursos.html' }, 'Pensamento Computacional')),
+        h('li', { 'aria-current': 'page' }, 'Atividades & Laboratório 3D BNCC'),
+      ),
     ),
     h(TituloPagina, { class: 'atv-titulo-pagina' }, 'Atividades Dinâmicas e Laboratório 3D Python'),
     h(
@@ -398,6 +492,82 @@ function renderCatalogo() {
     lista,
   );
   atualizar(false);
+}
+
+/* ---------------------------------------------------------------------------
+ * Mapa de Orientação da Trilha (Etapa X de Y + Estados + "Você está aqui")
+ * ------------------------------------------------------------------------ */
+
+function mapaOrientacaoDaTrilha(atividadeAtual) {
+  const indiceAtual = ATIVIDADES.findIndex((item) => item.id === atividadeAtual.id);
+  const etapaNumero = indiceAtual + 1;
+  const totalEtapas = ATIVIDADES.length;
+  const percentual = Math.round((etapaNumero / totalEtapas) * 100);
+  const proxima = indiceAtual < totalEtapas - 1 ? ATIVIDADES[indiceAtual + 1] : null;
+
+  const marcos = ATIVIDADES.map((item, idx) => {
+    const concluida = Boolean(progresso[item.id]?.concluida);
+    const ehAtual = item.id === atividadeAtual.id;
+    let classeEstado = 'estado-nao-iniciado';
+    let iconeEstado = 'circle-dashed';
+    let rotuloEstado = 'Não iniciado';
+
+    if (concluida) {
+      classeEstado = 'estado-concluido';
+      iconeEstado = 'check_circle';
+      rotuloEstado = 'Concluído';
+    } else if (ehAtual) {
+      classeEstado = 'estado-em-andamento';
+      iconeEstado = 'schedule';
+      rotuloEstado = 'Em andamento (Você está aqui)';
+    }
+
+    return h(
+      'li',
+      { class: `trilha-marco-item ${classeEstado}`, 'aria-current': ehAtual ? 'step' : null },
+      h(
+        'a',
+        {
+          href: `/atividades.html?id=${encodeURIComponent(item.id)}`,
+          title: `Etapa ${idx + 1}: ${item.titulo} (${rotuloEstado})`,
+          style: 'text-decoration:none; color:inherit; display:inline-flex; align-items:center; gap:6px;',
+        },
+        h('span', { class: 'material-symbols-outlined icon-xs', 'aria-hidden': 'true' }, iconeEstado),
+        h('span', {}, `${idx + 1}. ${item.titulo.replace('Python 3D: ', '')}`),
+      ),
+    );
+  });
+
+  return h(
+    'section',
+    { class: 'progresso-etapas-box', 'aria-label': 'Mapa do curso e progresso na trilha de atividades' },
+    h(
+      'div',
+      { class: 'progresso-etapas-topo' },
+      h(
+        'span',
+        { class: 'progresso-etapas-contador' },
+        h('span', { class: 'material-symbols-outlined icon-xs', 'aria-hidden': 'true' }, 'map'),
+        `Mapa da Trilha: Etapa ${etapaNumero} de ${totalEtapas}`,
+      ),
+      proxima
+        ? h('span', { class: 'mapa-tag-proximo' }, `O que vem a seguir: ${proxima.titulo}`)
+        : h('span', { class: 'mapa-tag-aqui' }, 'Última etapa da trilha!'),
+    ),
+    h(
+      'div',
+      {
+        class: 'progresso-etapas-barra',
+        role: 'progressbar',
+        'aria-label': `Etapa ${etapaNumero} de ${totalEtapas}`,
+        'aria-valuenow': String(etapaNumero),
+        'aria-valuemin': '1',
+        'aria-valuemax': String(totalEtapas),
+      },
+      h('div', { class: 'progresso-etapas-preenchimento', style: `width: ${percentual}%` }),
+    ),
+    h('ol', { class: 'trilha-marcos', 'aria-label': 'Marcos da trilha de atividades' }, marcos),
+  );
 }
 
 /* ---------------------------------------------------------------------------
@@ -461,11 +631,15 @@ function painelDoProfessor(atividade) {
 
 function renderAtividade(atividade) {
   document.title = `${atividade.titulo} — LMS COMPASSO`;
+  const secaoEixo = obterSecaoPorEixo(atividade.eixo);
+  const eixoInfo = EIXOS_BNCC[atividade.eixo] || EIXOS_BNCC['pensamento-computacional'];
+  document.body.setAttribute('data-secao', secaoEixo);
   salvarUltimaVisitada(atividade.id);
 
   const indiceAtual = ATIVIDADES.findIndex((item) => item.id === atividade.id);
   const anterior = indiceAtual > 0 ? ATIVIDADES[indiceAtual - 1] : null;
   const proxima = indiceAtual < ATIVIDADES.length - 1 ? ATIVIDADES[indiceAtual + 1] : null;
+  const codigoHabPrincipal = atividade.habilidades[0] || 'BNCC';
 
   const areaConclusao = h('div', { class: 'atv-conclusao' });
   let aulaSincronizada = false;
@@ -480,7 +654,7 @@ function renderAtividade(atividade) {
 
     const acoes = [
       proxima
-        ? h('a', { class: 'btn btn-primario flex-inline-icon', href: `/atividades.html?id=${encodeURIComponent(proxima.id)}` }, 'Próxima atividade', h('span', { class: 'material-symbols-outlined icon-xs' }, 'arrow_forward'))
+        ? h('a', { class: 'btn btn-primario seta-proximo', href: `/atividades.html?id=${encodeURIComponent(proxima.id)}` }, 'Próxima atividade', h('span', { class: 'material-symbols-outlined icon-xs' }, 'arrow_forward'))
         : null,
       atividade.tipo === 'python3d'
         ? h(
@@ -495,7 +669,7 @@ function renderAtividade(atividade) {
             concluiuTodasPython3d ? 'Emitir Certificado Explorador Python 3D' : 'Visualizar Certificado Python 3D',
           )
         : null,
-      h('a', { class: 'btn btn-neutro', href: '/atividades.html' }, 'Ver todas as atividades'),
+      h('a', { class: 'btn btn-neutro seta-voltar', href: '/atividades.html' }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'arrow_back'), 'Ver todas as atividades'),
     ];
 
     const avisos = [];
@@ -554,7 +728,7 @@ function renderAtividade(atividade) {
       }
     }
     if (usuario && cursoId) {
-      acoes.unshift(h('a', { class: 'btn btn-secundario', href: `/curso-detalhe.html?id=${cursoId}` }, 'Voltar ao curso'));
+      acoes.unshift(h('a', { class: 'btn btn-secundario seta-voltar', href: `/curso-detalhe.html?id=${cursoId}` }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'arrow_back'), 'Voltar ao curso'));
     }
 
     areaConclusao.replaceChildren(...avisos, h('div', { class: 'atv-acoes' }, acoes));
@@ -568,13 +742,19 @@ function renderAtividade(atividade) {
       { class: 'atv-topo-navegacao' },
       h(
         'nav',
-        { class: 'atv-breadcrumbs', 'aria-label': 'Trilha de navegação (Breadcrumb)' },
+        { class: 'atv-breadcrumbs', 'aria-label': 'Você está aqui' },
+        h(
+          'a',
+          { class: 'wf-breadcrumb-mobile-voltar seta-voltar', href: '/atividades.html' },
+          h('span', { class: 'material-symbols-outlined icon-xs', 'aria-hidden': 'true' }, 'arrow_back'),
+          '← Voltar para Trilhas',
+        ),
         h(
           'ol',
           {},
           h('li', {}, h('a', { href: '/' }, 'Início')),
-          h('li', {}, h('a', { href: '/atividades.html' }, 'Atividades')),
-          h('li', {}, h('a', { href: `/atividades.html?faixa=${atividade.faixa}` }, FAIXAS[atividade.faixa])),
+          h('li', {}, h('a', { href: '/atividades.html' }, eixoInfo.rotulo)),
+          h('li', {}, h('a', { href: `/atividades.html?hab=${encodeURIComponent(codigoHabPrincipal)}` }, codigoHabPrincipal)),
           h('li', { 'aria-current': 'page' }, atividade.titulo),
         ),
       ),
@@ -582,18 +762,26 @@ function renderAtividade(atividade) {
         'div',
         { class: 'atv-nav-sequencial' },
         anterior
-          ? h('a', { class: 'btn btn-neutro btn-sm flex-inline-icon', href: `/atividades.html?id=${encodeURIComponent(anterior.id)}`, title: `Anterior: ${anterior.titulo}` }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'arrow_back'), 'Anterior')
+          ? h('a', { class: 'btn btn-neutro btn-sm seta-voltar', href: `/atividades.html?id=${encodeURIComponent(anterior.id)}`, title: `Voltar para: ${anterior.titulo}` }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'arrow_back'), 'Voltar')
           : null,
         proxima
-          ? h('a', { class: 'btn btn-neutro btn-sm flex-inline-icon', href: `/atividades.html?id=${encodeURIComponent(proxima.id)}`, title: `Próxima: ${proxima.titulo}` }, 'Próxima', h('span', { class: 'material-symbols-outlined icon-xs' }, 'arrow_forward'))
+          ? h('a', { class: 'btn btn-neutro btn-sm seta-proximo', href: `/atividades.html?id=${encodeURIComponent(proxima.id)}`, title: `Próximo: ${proxima.titulo}` }, 'Próximo', h('span', { class: 'material-symbols-outlined icon-xs' }, 'arrow_forward'))
           : null,
       ),
     ),
+    mapaOrientacaoDaTrilha(atividade),
     h(
       'ul',
       { class: 'atv-chips' },
-      [CONCEITOS[atividade.conceito].rotulo, TIPOS[atividade.tipo].rotulo, atividade.anos, NIVEIS[atividade.nivel], `${atividade.duracaoMin} min`, ...atividade.habilidades]
-        .map((rotulo) => h('li', { class: 'atv-chip' }, rotulo)),
+      [
+        eixoInfo.rotulo,
+        CONCEITOS[atividade.conceito].rotulo,
+        TIPOS[atividade.tipo].rotulo,
+        atividade.anos,
+        NIVEIS[atividade.nivel],
+        `${atividade.duracaoMin} min`,
+        ...atividade.habilidades,
+      ].map((rotulo) => h('li', { class: 'atv-chip' }, rotulo)),
     ),
     h(TituloPagina, { class: 'atv-titulo-pagina' }, atividade.titulo),
     h('p', { class: 'atv-instrucao' }, atividade.instrucao),
@@ -605,11 +793,64 @@ function renderAtividade(atividade) {
 }
 
 function renderNaoEncontrada() {
-  document.title = 'Atividade não encontrada — LMS COMPASSO';
+  document.title = 'Atividade não encontrada (404) — LMS COMPASSO';
+  document.body.setAttribute('data-secao', 'pensamento');
+
+  const inputBusca404 = h('input', {
+    type: 'search',
+    name: 'q',
+    placeholder: 'Buscar por código BNCC (ex.: EF05CO01) ou tema (ex.: Robô, Python)...',
+    'aria-label': 'Buscar atividade ou habilidade BNCC',
+  });
+
   raiz.replaceChildren(
-    h(TituloPagina, { class: 'atv-titulo-pagina' }, 'Atividade não encontrada'),
-    h('p', { class: 'atv-intro' }, 'Não encontramos a atividade pedida. Ela pode ter mudado de endereço.'),
-    h('a', { class: 'btn btn-primario', href: '/atividades.html' }, 'Ver todas as atividades'),
+    h(
+      'nav',
+      { class: 'atv-breadcrumbs', 'aria-label': 'Você está aqui' },
+      h(
+        'a',
+        { class: 'wf-breadcrumb-mobile-voltar seta-voltar', href: '/atividades.html' },
+        h('span', { class: 'material-symbols-outlined icon-xs', 'aria-hidden': 'true' }, 'arrow_back'),
+        '← Voltar para Trilhas',
+      ),
+      h(
+        'ol',
+        {},
+        h('li', {}, h('a', { href: '/' }, 'Início')),
+        h('li', {}, h('a', { href: '/atividades.html' }, 'Atividades')),
+        h('li', { 'aria-current': 'page' }, 'Página não encontrada (404)'),
+      ),
+    ),
+    h(
+      'section',
+      { class: 'estado-saida-404', 'aria-labelledby': 'titulo-erro-404' },
+      h(
+        'div',
+        { class: 'estado-saida-icone', 'aria-hidden': 'true' },
+        h('span', { class: 'material-symbols-outlined icon-lg' }, 'explore'),
+      ),
+      h(TituloPagina, { id: 'titulo-erro-404' }, 'Atividade não encontrada (Erro 404)'),
+      h('p', {}, 'Não encontramos a atividade solicitada. Ela pode ter mudado de endereço ou o código informado não existe. Use a busca abaixo ou volte para o início.'),
+      h(
+        'form',
+        {
+          class: 'estado-saida-busca',
+          onsubmit: (e) => {
+            e.preventDefault();
+            const q = inputBusca404.value.trim();
+            window.location.href = q ? `/atividades.html?busca=${encodeURIComponent(q)}` : '/atividades.html';
+          },
+        },
+        inputBusca404,
+        h('button', { type: 'submit', class: 'btn btn-primario flex-inline-icon' }, h('span', { class: 'material-symbols-outlined icon-xs', 'aria-hidden': 'true' }, 'search'), 'Buscar'),
+      ),
+      h(
+        'div',
+        { class: 'estado-saida-acoes' },
+        h('a', { class: 'btn btn-primario flex-inline-icon', href: '/' }, h('span', { class: 'material-symbols-outlined icon-xs', 'aria-hidden': 'true' }, 'home'), 'Ir para o início'),
+        h('a', { class: 'btn btn-neutro seta-voltar', href: '/atividades.html' }, h('span', { class: 'material-symbols-outlined icon-xs', 'aria-hidden': 'true' }, 'arrow_back'), 'Voltar para Trilhas de Atividades'),
+      ),
+    ),
   );
 }
 
