@@ -158,9 +158,7 @@ robo.mover()
 """
         exec(codigo, {"robo": robo})
         self.assertTrue(robo.chegou_meta, "Robô deve alcançar o portal (M).")
-        self.assertEqual(
-            robo.itens_coletados, 1, "Robô deve coletar o cristal (I)."
-        )
+        self.assertEqual(robo.itens_coletados, 1, "Robô deve coletar o cristal (I).")
 
     def test_02_condicionais_portas(self):
         grade = ["R.P.I", "####.", "....M"]
@@ -179,9 +177,7 @@ robo.mover()
 """
         exec(codigo, {"robo": robo, "range": range})
         self.assertTrue(robo.chegou_meta, "Robô deve alcançar o portal (M).")
-        self.assertEqual(
-            robo.itens_coletados, 1, "Robô deve coletar o cristal (I)."
-        )
+        self.assertEqual(robo.itens_coletados, 1, "Robô deve coletar o cristal (I).")
 
     def test_03_lacos_repeticao(self):
         grade = ["R.I.I", "####.", "####I", "####M"]
@@ -200,9 +196,7 @@ for i in range(3):
 """
         exec(codigo, {"robo": robo, "range": range})
         self.assertTrue(robo.chegou_meta, "Robô deve alcançar o portal (M).")
-        self.assertEqual(
-            robo.itens_coletados, 3, "Robô deve coletar todos os 3 cristais."
-        )
+        self.assertEqual(robo.itens_coletados, 3, "Robô deve coletar todos os 3 cristais.")
 
     def test_04_funcoes_decomposicao(self):
         grade = ["R.I##", "##.I#", "###.M"]
@@ -226,9 +220,7 @@ avancar_e_coletar(1)
 """
         exec(codigo, {"robo": robo, "range": range})
         self.assertTrue(robo.chegou_meta, "Robô deve alcançar o portal (M).")
-        self.assertEqual(
-            robo.itens_coletados, 2, "Robô deve coletar todos os cristais."
-        )
+        self.assertEqual(robo.itens_coletados, 2, "Robô deve coletar todos os cristais.")
 
     def test_05_listas_ordenacao_bubble_sort(self):
         lista = ListaTorres([4, 2, 5, 1, 3])
@@ -245,9 +237,7 @@ for i in range(n - 1):
             [1, 2, 3, 4, 5],
             "A lista de torres 3D deve ficar em ordem crescente.",
         )
-        self.assertTrue(
-            lista.trocas > 0, "Devem ocorrer trocas de blocos na cena 3D."
-        )
+        self.assertTrue(lista.trocas > 0, "Devem ocorrer trocas de blocos na cena 3D.")
 
     def test_06_recursao_torre_hanoi(self):
         hanoi = TorreHanoi(num_discos=3)

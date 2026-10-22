@@ -17,3 +17,15 @@ Thumbs.db
 # Impeccable
 .impeccable/config.local.json
 **/skills/impeccable/scripts/bin/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.ruff_cache/
+
+# Testes e Relatórios E2E
+playwright-report/
+test-results/
+.lhci/

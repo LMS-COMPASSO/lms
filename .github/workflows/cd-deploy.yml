@@ -39,6 +39,14 @@ jobs:
       - name: Executar validação pré-deploy (npm test)
         run: npm test
 
+      - name: Validar presença das credenciais Cloudflare
+        run: |
+          if [ -z "${{ secrets.CLOUDFLARE_API_TOKEN }}" ]; then
+            echo "::error::O segredo CLOUDFLARE_API_TOKEN está vazio ou não configurado nas Secrets do repositório/ambiente no GitHub!"
+            echo "::notice::Configure em: GitHub > Settings > Secrets and variables > Actions > New repository secret (CLOUDFLARE_API_TOKEN)"
+            exit 1
+          fi
+
       - name: Detectar se houve alterações no schema SQL do D1
         id: check-d1
         run: |
