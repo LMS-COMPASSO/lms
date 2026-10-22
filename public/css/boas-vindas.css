@@ -833,6 +833,12 @@
 }
 
 @media (max-width: 640px) {
+  .bv-container {
+    padding-inline: 14px;
+  }
+  .bv-hero {
+    padding: 44px 0 52px;
+  }
   .bv-nav {
     display: none;
   }
@@ -840,12 +846,47 @@
     flex-direction: column;
     align-items: stretch;
   }
+  .bv-cta-grupo .btn,
+  .bv-cta-botoes .btn {
+    width: 100%;
+    justify-content: center;
+    min-height: 44px;
+  }
   .bv-parceiros-grade {
     grid-template-columns: 1fr;
   }
+  .bv-palco-visual {
+    min-height: 340px;
+    overflow: hidden;
+  }
+  .bv-grid-flutuante {
+    max-width: 100%;
+    height: 340px;
+  }
+  .bv-card-robo {
+    width: min(100%, 200px);
+    left: 0;
+  }
   .bv-card-codigo {
-    width: 220px;
+    width: min(100%, 220px);
     font-size: 0.72rem;
+    right: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .bv-card-flutuante {
+    padding: 12px;
+  }
+  .bv-card-icone {
+    width: 40px;
+    height: 40px;
+  }
+  .bv-card-titulo {
+    font-size: 0.88rem;
+  }
+  .bv-metricas-rapidas {
+    gap: 16px;
   }
 }
 

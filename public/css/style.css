@@ -122,6 +122,7 @@ a { text-decoration: none; color: inherit; }
 .app-shell {
   display: flex;
   min-height: 100vh;
+  min-height: 100dvh;
   background: var(--cor-fundo);
 }
 
@@ -610,8 +611,9 @@ input, select, textarea {
   padding: 10px 12px;
   border: 1px solid var(--cor-borda);
   border-radius: 6px;
-  font-size: 0.95rem;
+  font-size: max(16px, 0.95rem);
   font-family: inherit;
+  box-sizing: border-box;
 }
 input:focus, select:focus, textarea:focus {
   outline: none;
@@ -641,8 +643,8 @@ input:focus, select:focus, textarea:focus {
 .btn:hover { opacity: 0.92; }
 .btn-bloco { width: 100%; justify-content: center; }
 
-/* ---------- Tabelas ---------- */
-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+/* ---------- Tabelas com Rolagem Isolada ---------- */
+table { width: 100%; max-width: 100%; border-collapse: collapse; font-size: 0.9rem; }
 thead th {
   text-align: left;
   padding: 10px;
@@ -650,10 +652,15 @@ thead th {
   color: var(--cor-texto-suave);
   font-size: 0.78rem;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 tbody td { padding: 10px; border-bottom: 1px solid var(--cor-borda); vertical-align: middle; }
 tbody tr:hover { background: #f9fbfd; }
-.tabela-scroll { overflow-x: auto; }
+.tabela-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+}
 
 /* ---------- Badges ---------- */
 .badge {
@@ -713,6 +720,7 @@ tbody tr:hover { background: #f9fbfd; }
 /* ---------- Login ---------- */
 .pagina-login {
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -793,8 +801,18 @@ tbody tr:hover { background: #f9fbfd; }
 
 @media (max-width: 768px) {
   .conteudo { padding: 16px 12px; }
-  .cartao { padding: 16px 14px; }
+  .cartao { padding: 16px 12px; }
   .topbar-usuario strong { display: none; }
+  .btn-sm {
+    min-height: 40px;
+    padding: 8px 14px;
+    font-size: 0.85rem;
+  }
+  .btn-xs {
+    min-height: 36px;
+    padding: 6px 10px;
+    font-size: 0.8rem;
+  }
 }
 
 @media (max-width: 480px) {
@@ -816,7 +834,10 @@ tbody tr:hover { background: #f9fbfd; }
     max-height: 95vh;
   }
   .caixa-login {
-    padding: 24px 18px;
+    padding: 24px 16px;
+  }
+  .btn-bloco {
+    min-height: 44px;
   }
 }
 
@@ -843,16 +864,29 @@ tbody tr:hover { background: #f9fbfd; }
   overflow: auto;
 }
 
+.flex { display: flex; }
+.flex-col { display: flex; flex-direction: column; }
 .flex-linha { display: flex; gap: 10px; align-items: center; }
 .flex-entre { display: flex; justify-content: space-between; align-items: center; }
 .flex-topo { display: flex; justify-content: space-between; align-items: flex-start; }
 .flex-wrap { flex-wrap: wrap; }
 .flex-1 { flex: 1; }
-.min-w-160 { min-width: 160px; }
-.min-w-200 { min-width: 200px; }
+.min-w-0 { min-width: 0; }
+.min-w-160 { min-width: min(100%, 160px); }
+.min-w-200 { min-width: min(100%, 200px); }
 .max-w-220 { max-width: 220px; }
 .max-w-420 { max-width: 420px; }
 .max-w-480 { max-width: 480px; }
+.w-100 { width: 100%; }
+.max-w-100 { max-width: 100%; }
+.gap-2 { gap: 8px; }
+.gap-3 { gap: 12px; }
+.gap-4 { gap: 16px; }
+.gap-6 { gap: 24px; }
+.gap-8 { gap: 8px; }
+.gap-10 { gap: 10px; }
+.gap-12 { gap: 12px; }
+.gap-16 { gap: 16px; }
 .grid-cursos { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); gap: 16px; margin-bottom: 20px; }
 .btn-sm { font-size: 0.8rem; padding: 6px 12px; }
 .btn-xs { font-size: 0.75rem; padding: 4px 8px; }

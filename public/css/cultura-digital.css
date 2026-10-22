@@ -793,3 +793,46 @@ body.pagina-cultura-digital {
     display: none;
   }
 }
+
+@media (max-width: 640px) {
+  .cd-container {
+    padding-inline: 14px;
+  }
+  .cd-hero {
+    padding: 44px 14px 48px;
+  }
+  .cd-chat-sidebar {
+    max-height: 160px;
+    padding: 10px;
+  }
+  .cd-chat-input-area {
+    padding: 10px;
+    gap: 8px;
+  }
+  .cd-chat-input-area input {
+    font-size: max(16px, 0.95rem);
+    min-height: 44px;
+  }
+  .cd-chat-input-area button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  .cd-mensagem {
+    max-width: 90%;
+  }
+  .cd-cofre-card,
+  .cd-pegada-card {
+    padding: 16px 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .cd-mensagem {
+    max-width: 95%;
+    font-size: 0.88rem;
+  }
+  .cd-barra-forca-wrap {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

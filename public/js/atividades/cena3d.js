@@ -198,6 +198,21 @@ export function criarControladorCena3D(container, cena3dConfig, { reduzirMovimen
         grupoRaiz.rotation.y += delta;
       });
 
+      // Observador de redimensionamento para adaptação fluida em tablets e celulares
+      if (typeof ResizeObserver !== 'undefined') {
+        const ro = new ResizeObserver((entries) => {
+          for (const entry of entries) {
+            const cr = entry.contentRect;
+            if (cr.width > 0 && cr.height > 0 && objetosCena.renderer && objetosCena.camera) {
+              objetosCena.camera.aspect = cr.width / cr.height;
+              objetosCena.camera.updateProjectionMatrix();
+              objetosCena.renderer.setSize(cr.width, cr.height);
+            }
+          }
+        });
+        ro.observe(camada3D);
+      }
+
       const renderLoop = () => {
         animacaoFrameId = requestAnimationFrame(renderLoop);
         renderer.render(cena, camera);

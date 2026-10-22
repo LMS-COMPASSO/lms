@@ -1184,3 +1184,47 @@ button.md-slot-componente {
     height: 30px;
   }
 }
+
+@media (max-width: 640px) {
+  .md-container {
+    padding-inline: 14px;
+  }
+  .md-hero {
+    padding: 44px 14px 48px;
+  }
+  .md-placa-mae-viewport {
+    min-height: 320px;
+    overflow: hidden;
+    padding: 10px 4px;
+  }
+  .md-placa-mae-3d.vista-isometrica {
+    transform: rotateX(36deg) rotateZ(-18deg) scale(0.82);
+  }
+  .md-cpu-palco {
+    min-height: 240px;
+    padding: 12px;
+  }
+  .md-linha-conexao {
+    height: 20px;
+  }
+  .md-roteador-bloco {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .md-placa-mae-3d.vista-isometrica {
+    transform: rotateX(30deg) rotateZ(-12deg) scale(0.72);
+  }
+  .md-painel-controles {
+    padding: 14px 10px;
+  }
+  .md-slot-gpu {
+    width: min(100%, 180px);
+    font-size: 0.7rem;
+  }
+  .md-slot-ssd {
+    width: min(100%, 90px);
+    font-size: 0.7rem;
+  }
+}

@@ -93,7 +93,7 @@ select:focus-visible {
   font-weight: 600;
 }
 .pub-nav a:hover { background: var(--pub-fundo-alt); color: var(--pub-azul-900); }
-.pub-acoes { display: flex; align-items: center; gap: 8px; }
+.pub-acoes { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 
 /* ---------- Botões extras ---------- */
 .btn-grande { padding: 14px 24px; font-size: 1rem; border-radius: 10px; }
@@ -382,13 +382,23 @@ a.btn { text-decoration: none; }
   .pub-acoes { margin-left: auto; }
 }
 @media (max-width: 480px) {
-  .pub-logo img { height: 38px; }
-  .pub-topo-conteudo { min-height: 60px; }
-  .pub-acoes .btn { padding: 9px 12px; font-size: 0.85rem; }
-  .pub-hero { padding: 48px 16px 56px; }
-  .pub-secao { padding: 56px 16px; }
-  .pub-banda { padding: 48px 16px; }
-  .pub-rodape { padding: 36px 16px 24px; }
+  .pub-container { padding-inline: 16px; }
+  .pub-logo img { height: 36px; max-width: 100%; }
+  .pub-topo-conteudo { min-height: 56px; }
+  .pub-acoes { gap: 6px; }
+  .pub-acoes .btn { min-height: 44px; padding: 8px 12px; font-size: 0.85rem; }
+  .pub-hero { padding: 44px 14px 50px; }
+  .pub-cta { flex-direction: column; align-items: stretch; gap: 10px; }
+  .pub-cta .btn { width: 100%; justify-content: center; min-height: 44px; }
+  .pub-secao { padding: 48px 14px; }
+  .pub-banda { padding: 44px 14px; }
+  .pub-rodape { padding: 32px 14px 20px; }
+}
+
+@media (max-width: 360px) {
+  .pub-container { padding-inline: 12px; }
+  .pub-acoes { width: 100%; justify-content: flex-start; }
+  .pub-acoes .btn { flex: 1 1 auto; text-align: center; justify-content: center; }
 }
 
 @media (prefers-reduced-motion: reduce) {

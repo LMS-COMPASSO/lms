@@ -31,7 +31,20 @@
       flex-direction: column;
       align-items: center;
       min-height: 100vh;
+      min-height: 100dvh;
       padding: 20px 0;
+      overflow-x: hidden;
+    }
+
+    /* Container de Rolagem Tátil para a Folha A4 no Navegador */
+    .folha-a4-wrapper {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 0 10px;
+      box-sizing: border-box;
     }
 
     /* Barra de Ações Web (Oculta na Impressão e no PDF) */
@@ -81,6 +94,30 @@
     .btn-baixar { background: #047857; color: #ffffff; }
     .btn-voltar { background: #334155; color: #ffffff; }
 
+    @media screen and (max-width: 820px) {
+      body {
+        padding: 12px 0;
+      }
+      .barra-acoes-tela {
+        width: 100%;
+        max-width: calc(100vw - 20px);
+        flex-direction: column;
+        gap: 12px;
+        align-items: stretch;
+        padding: 14px 16px;
+      }
+      .botoes-acao {
+        flex-wrap: wrap;
+        justify-content: stretch;
+        gap: 8px;
+      }
+      .btn-acao {
+        flex: 1 1 calc(50% - 6px);
+        min-height: 44px;
+        justify-content: center;
+      }
+    }
+
     @media print {
       body {
         background: #ffffff;
@@ -88,6 +125,10 @@
       }
       .barra-acoes-tela, .no-print {
         display: none !important;
+      }
+      .folha-a4-wrapper {
+        padding: 0;
+        overflow: visible;
       }
     }
 
@@ -530,7 +571,8 @@
     </div>
   </div>
 
-  <div class="pagina-a4">
+  <div class="folha-a4-wrapper">
+    <div class="pagina-a4">
     <!-- 1. Topo com Logo Oficial e Metadados -->
     <header class="topo-compartilhamento">
       <div class="topo-logo-wrap">
@@ -712,6 +754,7 @@
         <div>Repositório: github.com/LMS-COMPASSO/lms</div>
       </div>
     </footer>
+  </div>
   </div>
 </body>
 </html>

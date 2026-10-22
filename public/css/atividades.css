@@ -1629,9 +1629,13 @@
   height: 340px;
 }
 .py3d-fallback-2d {
-  padding: 20px;
+  padding: 20px 10px;
   width: 100%;
+  max-width: 100%;
   place-items: center;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  box-sizing: border-box;
 }
 .py3d-2d-grade {
   display: grid;
@@ -1777,11 +1781,13 @@
   background: transparent;
   color: #f8fafc;
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 0.9rem;
+  font-size: max(16px, 0.9rem);
   line-height: 1.55;
   padding: 12px;
   resize: vertical;
   min-height: 260px;
+  min-width: 0;
+  box-sizing: border-box;
 }
 .py3d-editor-textarea:focus {
   outline: 2px solid #60a5fa;
@@ -1948,6 +1954,58 @@
   .py3d-grid-principal,
   .atv-barra-busca-hab {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .py3d-shell {
+    padding: 16px 12px;
+    border-radius: 14px;
+  }
+  .py3d-barra-controles {
+    gap: 10px;
+  }
+  .py3d-grupo-botoes,
+  .py3d-grupo-opcoes {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  .py3d-palco-container {
+    min-height: 280px;
+  }
+  .py3d-canvas-wrap {
+    height: 280px;
+  }
+  .py3d-editor-corpo {
+    grid-template-columns: 36px 1fr;
+  }
+  .py3d-dupla-painel {
+    padding: 12px;
+  }
+  .py3d-dupla-controles {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .atv-grade {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .atv-banco {
+    grid-template-columns: 1fr;
+  }
+  .atv-card {
+    padding: 18px 14px;
+  }
+  .py3d-shell {
+    padding: 12px 10px;
+  }
+  .py3d-editor-textarea {
+    min-height: 200px;
+    padding: 8px;
   }
 }
 
