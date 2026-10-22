@@ -172,7 +172,7 @@ jobs:
 
       - name: Instalar navegadores Playwright se não estiverem em cache
         if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: npx playwright install --with-deps chromium firefox
+        run: npx playwright install --with-deps chromium firefox webkit
 
       - name: Iniciar servidor local e executar suíte E2E
         run: npx playwright test

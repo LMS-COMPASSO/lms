@@ -13,9 +13,15 @@ jobs:
   release-please:
     name: Gerar Release e Changelog
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
-      - uses: googleapis/release-please-action@v4
+      - name: Baixar código
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Executar Release Please
+        uses: googleapis/release-please-action@v4
         with:
           release-type: node
-          package-name: lms-bncc-computacao
-
+          token: ${{ secrets.GITHUB_TOKEN }}
