@@ -16,10 +16,10 @@
     <main class="conteudo">
       <div id="topbar-container"></div>
       <div class="cartao tabela-scroll">
-        <table>
+        <table aria-label="Lista de matrículas de estudantes">
           <thead>
             <tr>
-              <th>Aluno</th><th>Curso</th><th>Status</th><th>Progresso</th><th>Data</th><th></th>
+              <th scope="col">Aluno</th><th scope="col">Curso</th><th scope="col">Status</th><th scope="col">Progresso</th><th scope="col">Data</th><th scope="col" class="texto-direita">Ações</th>
             </tr>
           </thead>
           <tbody id="corpo-tabela"></tbody>
@@ -56,14 +56,14 @@
               <small>${m.progresso_percentual}%</small>
             </td>
             <td>${formatarData(m.data_matricula)}</td>
-            <td>
-              ${m.status !== 'cancelada' ? `<button type="button" class="btn btn-perigo btn-xs" onclick="cancelar(${m.id})">Cancelar</button>` : ''}
-              ${m.status === 'concluida' ? `<button type="button" class="btn btn-secundario btn-xs" onclick="emitirCertificado(${m.id})">Certificado</button>` : ''}
+            <td class="texto-direita">
+              ${m.status !== 'cancelada' ? `<button type="button" class="btn btn-perigo btn-xs" aria-label="Cancelar matrícula de ${m.aluno_nome}" onclick="cancelar(${m.id})">Cancelar</button>` : ''}
+              ${m.status === 'concluida' ? `<button type="button" class="btn btn-secundario btn-xs" aria-label="Emitir certificado para ${m.aluno_nome}" onclick="emitirCertificado(${m.id})">Certificado</button>` : ''}
             </td>
           </tr>
         `).join('');
       } catch (err) {
-        alert(err.message);
+        mostrarNotificacao(err.message, 'erro');
       }
     }
 
@@ -71,15 +71,17 @@
       if (!confirm('Cancelar esta matrícula?')) return;
       try {
         await api(`/matriculas/${id}/cancelar`, { method: 'PATCH' });
+        mostrarNotificacao('Matrícula cancelada.', 'info');
         carregar();
-      } catch (err) { alert(err.message); }
+      } catch (err) { mostrarNotificacao(err.message, 'erro'); }
     }
 
     async function emitirCertificado(matriculaId) {
       try {
         const cert = await api('/certificados/emitir', { method: 'POST', body: JSON.stringify({ matricula_id: matriculaId }) });
+        mostrarNotificacao('Certificado emitido com sucesso!', 'sucesso');
         window.open(cert.url_arquivo, '_blank');
-      } catch (err) { alert(err.message); }
+      } catch (err) { mostrarNotificacao(err.message, 'erro'); }
     }
 
     Object.assign(window, {

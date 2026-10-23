@@ -245,7 +245,7 @@
           </div>
         `).join('');
       } catch (err) {
-        alert(err.message);
+        mostrarNotificacao(err.message, 'erro');
       }
     }
 
@@ -259,16 +259,18 @@
       try {
         await api(`/modulos/curso/${cursoId}`, { method: 'POST', body: JSON.stringify({ titulo }) });
         document.getElementById('novo-modulo-titulo').value = '';
+        mostrarNotificacao('Módulo criado com sucesso!', 'sucesso');
         carregarCurso();
-      } catch (err) { alert(err.message); }
+      } catch (err) { mostrarNotificacao(err.message, 'erro'); }
     }
 
     async function excluirModulo(id) {
       if (!confirm('Excluir este módulo e todo seu conteúdo?')) return;
       try {
         await api(`/modulos/${id}`, { method: 'DELETE' });
+        mostrarNotificacao('Módulo excluído.', 'info');
         carregarCurso();
-      } catch (err) { alert(err.message); }
+      } catch (err) { mostrarNotificacao(err.message, 'erro'); }
     }
 
     async function criarAula(moduloId) {
@@ -277,23 +279,25 @@
       if (!titulo) return;
       try {
         await api(`/aulas/modulo/${moduloId}`, { method: 'POST', body: JSON.stringify({ titulo, tipo }) });
+        mostrarNotificacao('Aula adicionada com sucesso!', 'sucesso');
         carregarCurso();
-      } catch (err) { alert(err.message); }
+      } catch (err) { mostrarNotificacao(err.message, 'erro'); }
     }
 
     async function excluirAula(id) {
       if (!confirm('Excluir esta aula?')) return;
       try {
         await api(`/aulas/${id}`, { method: 'DELETE' });
+        mostrarNotificacao('Aula excluída.', 'info');
         carregarCurso();
-      } catch (err) { alert(err.message); }
+      } catch (err) { mostrarNotificacao(err.message, 'erro'); }
     }
 
     async function marcarProgresso(aulaId, concluida) {
       try {
         await api(`/aulas/${aulaId}/progresso`, { method: 'POST', body: JSON.stringify({ concluida }) });
         await carregarCurso();
-      } catch (err) { alert(err.message); }
+      } catch (err) { mostrarNotificacao(err.message, 'erro'); }
     }
 
     Object.assign(window, {

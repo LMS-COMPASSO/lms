@@ -167,7 +167,7 @@
           `;
         }).join('');
       } catch (err) {
-        alert(err.message);
+        mostrarNotificacao(err.message, 'erro');
       }
     }
 
@@ -204,13 +204,15 @@
       try {
         if (id) {
           await api(`/cursos/${id}`, { method: 'PUT', body: JSON.stringify(corpo) });
+          mostrarNotificacao('Curso atualizado com sucesso!', 'sucesso');
         } else {
           await api('/cursos', { method: 'POST', body: JSON.stringify(corpo) });
+          mostrarNotificacao('Curso criado com sucesso!', 'sucesso');
         }
         fecharModalCurso();
         carregarCursos();
       } catch (err) {
-        alert(err.message);
+        mostrarNotificacao(err.message, 'erro');
       }
     });
 
@@ -218,24 +220,28 @@
       const novo = statusAtual === 'publicado' ? 'rascunho' : 'publicado';
       try {
         await api(`/cursos/${id}/status`, { method: 'PATCH', body: JSON.stringify({ status: novo }) });
+        mostrarNotificacao(`Status alterado para ${novo}.`, 'info');
         carregarCursos();
-      } catch (err) { alert(err.message); }
+      } catch (err) { mostrarNotificacao(err.message, 'erro'); }
     }
 
     async function excluirCurso(id) {
       if (!confirm('Tem certeza que deseja excluir este curso? Esta ação não pode ser desfeita.')) return;
       try {
         await api(`/cursos/${id}`, { method: 'DELETE' });
+        mostrarNotificacao('Curso excluído.', 'info');
         carregarCursos();
-      } catch (err) { alert(err.message); }
+      } catch (err) { mostrarNotificacao(err.message, 'erro'); }
     }
 
     async function matricular(cursoId) {
       try {
         await api('/matriculas', { method: 'POST', body: JSON.stringify({ curso_id: cursoId }) });
-        alert('Matrícula realizada com sucesso!');
-        window.location.href = `/curso-detalhe.html?id=${cursoId}`;
-      } catch (err) { alert(err.message); }
+        mostrarNotificacao('Matrícula realizada com sucesso!', 'sucesso');
+        setTimeout(() => {
+          window.location.href = `/curso-detalhe.html?id=${cursoId}`;
+        }, 600);
+      } catch (err) { mostrarNotificacao(err.message, 'erro'); }
     }
 
     document.getElementById('filtro-eixo').addEventListener('change', carregarCursos);

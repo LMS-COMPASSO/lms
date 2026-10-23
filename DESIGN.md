@@ -27,6 +27,12 @@ colors:
   axis-cultura: "#b45309"
   axis-cultura-bg: "#fffbeb"
   axis-cultura-border: "#fcd34d"
+  dark-bg: "#0b1120"
+  dark-card-bg: "#111827"
+  dark-border: "#1e293b"
+  dark-text-main: "#f1f5f9"
+  dark-text-muted: "#94a3b8"
+  dark-primary-link: "#93c5fd"
 typography:
   display:
     fontFamily: "Segoe UI, Roboto, system-ui, sans-serif"
@@ -69,6 +75,12 @@ typography:
     fontSize: "0.88rem"
     fontWeight: 500
     lineHeight: 1.5
+    letterSpacing: "normal"
+  icons:
+    fontFamily: "Material Symbols Outlined, sans-serif"
+    fontSize: "24px"
+    fontWeight: 400
+    lineHeight: 1
     letterSpacing: "normal"
 rounded:
   sm: "6px"

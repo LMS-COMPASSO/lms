@@ -417,7 +417,7 @@ function montarLayout(paginaAtiva) {
       <div class="sidebar-header">
         <a href="${rotaInicio}" class="logo" title="LMS COMPASSO — Início da Plataforma">
           <div class="logo-icone-wrapper">
-            <img src="/img/logo-icone-branco.svg" alt="Logo LMS COMPASSO">
+            <img src="/img/logo-icone-branco.svg" alt="Logo LMS COMPASSO" width="32" height="32">
           </div>
           <div class="logo-texto">
             <span class="logo-titulo">LMS COMPASSO</span>
@@ -704,3 +704,64 @@ function montarLayout(paginaAtiva) {
   if (sidebarContainer) sidebarContainer.innerHTML = sidebarHtml;
   if (topbarContainer) topbarContainer.innerHTML = topbarHtml;
 }
+
+/**
+ * Exibe notificação acessível (Toast/Banner) com role="alert" e aria-live="polite".
+ * Substitui chamadas síncronas a alert() de forma não-bloqueante e estilizada.
+ * @param {string} mensagem Texto da notificação
+ * @param {'info'|'sucesso'|'erro'|'alerta'} [tipo='info'] Tipo visual e semântico
+ * @param {number} [duracao=4000] Duração em ms
+ */
+function mostrarNotificacao(mensagem, tipo = 'info', duracao = 4000) {
+  let container = document.getElementById('lms-toast-container');
+  if (!container) {
+    container = document.createElement('div');
+    container.id = 'lms-toast-container';
+    container.className = 'toast-container-global';
+    container.setAttribute('aria-live', 'polite');
+    container.setAttribute('aria-atomic', 'true');
+    document.body.appendChild(container);
+  }
+
+  const toast = document.createElement('div');
+  toast.className = `toast-item toast-${tipo}`;
+  toast.setAttribute('role', tipo === 'erro' ? 'alert' : 'status');
+
+  const icones = {
+    sucesso: 'check_circle',
+    erro: 'error',
+    alerta: 'warning',
+    info: 'info',
+  };
+  const iconeNome = icones[tipo] || 'info';
+
+  const textoSeguro = String(mensagem || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+
+  toast.innerHTML = `
+    <span class="material-symbols-outlined icon-xs toast-icone" aria-hidden="true">${iconeNome}</span>
+    <span class="toast-mensagem">${textoSeguro}</span>
+    <button type="button" class="toast-fechar" aria-label="Fechar aviso">
+      <span class="material-symbols-outlined icon-xs" aria-hidden="true">close</span>
+    </button>
+  `;
+
+  const fecharBtn = toast.querySelector('.toast-fechar');
+  const fechar = () => {
+    toast.classList.add('toast-saindo');
+    setTimeout(() => toast.remove(), 250);
+  };
+  fecharBtn.addEventListener('click', fechar);
+
+  container.appendChild(toast);
+  if (duracao > 0) {
+    setTimeout(fechar, duracao);
+  }
+}
+
+if (typeof window !== 'undefined') {
+  window.mostrarNotificacao = mostrarNotificacao;
+}
+

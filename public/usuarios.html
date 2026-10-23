@@ -27,13 +27,13 @@
             </select>
             <input type="text" id="busca" placeholder="Buscar por nome/email" title="Buscar por nome ou email" aria-label="Buscar por nome ou email">
           </div>
-          <button type="button" class="btn btn-primario flex-inline-icon" onclick="abrirModalUsuario()"><span class="material-symbols-outlined icon-xs">person_add</span> Novo Usuário</button>
+          <button type="button" class="btn btn-primario flex-inline-icon" onclick="abrirModalUsuario()"><span class="material-symbols-outlined icon-xs" aria-hidden="true">person_add</span> Novo Usuário</button>
         </div>
       </div>
 
       <div class="cartao tabela-scroll">
-        <table>
-          <thead><tr><th>Nome</th><th>Email</th><th>Perfil</th><th>Status</th><th>Criado em</th><th></th></tr></thead>
+        <table aria-label="Lista de usuários cadastrados">
+          <thead><tr><th scope="col">Nome</th><th scope="col">Email</th><th scope="col">Perfil</th><th scope="col">Status</th><th scope="col">Criado em</th><th scope="col" class="texto-direita">Ações</th></tr></thead>
           <tbody id="corpo-tabela"></tbody>
         </table>
       </div>
@@ -105,19 +105,19 @@
             <td><span class="badge badge-${u.perfil}">${u.perfil}</span></td>
             <td>
               <span class="badge ${u.ativo ? 'badge-ativo' : 'badge-inativo'} flex-inline-icon">
-                <span class="material-symbols-outlined icon-xs">${u.ativo ? 'check_circle' : 'block'}</span>
+                <span class="material-symbols-outlined icon-xs" aria-hidden="true">${u.ativo ? 'check_circle' : 'block'}</span>
                 ${u.ativo ? 'Ativo' : 'Inativo'}
               </span>
             </td>
             <td>${formatarData(u.criado_em)}</td>
-            <td>
-              <button type="button" class="btn btn-neutro btn-xs" onclick='editarUsuario(${JSON.stringify(u)})'>Editar</button>
-              ${u.ativo ? `<button type="button" class="btn btn-perigo btn-xs" onclick="desativar(${u.id})">Desativar</button>` : ''}
+            <td class="texto-direita">
+              <button type="button" class="btn btn-neutro btn-xs" aria-label="Editar usuário ${u.nome}" onclick='editarUsuario(${JSON.stringify(u)})'>Editar</button>
+              ${u.ativo ? `<button type="button" class="btn btn-perigo btn-xs" aria-label="Desativar usuário ${u.nome}" onclick="desativar(${u.id})">Desativar</button>` : ''}
             </td>
           </tr>
         `).join('');
       } catch (err) {
-        alert(err.message);
+        mostrarNotificacao(err.message, 'erro');
       }
     }
 
@@ -153,20 +153,23 @@
       try {
         if (id) {
           await api(`/usuarios/${id}`, { method: 'PUT', body: JSON.stringify({ nome, email, perfil }) });
+          mostrarNotificacao('Usuário atualizado com sucesso!', 'sucesso');
         } else {
           await api('/usuarios', { method: 'POST', body: JSON.stringify({ nome, email, perfil, senha }) });
+          mostrarNotificacao('Usuário cadastrado com sucesso!', 'sucesso');
         }
         fecharModalUsuario();
         carregar();
-      } catch (err) { alert(err.message); }
+      } catch (err) { mostrarNotificacao(err.message, 'erro'); }
     });
 
     async function desativar(id) {
       if (!confirm('Desativar este usuário?')) return;
       try {
         await api(`/usuarios/${id}`, { method: 'DELETE' });
+        mostrarNotificacao('Usuário desativado com sucesso.', 'info');
         carregar();
-      } catch (err) { alert(err.message); }
+      } catch (err) { mostrarNotificacao(err.message, 'erro'); }
     }
 
     document.getElementById('filtro-perfil').addEventListener('change', carregar);

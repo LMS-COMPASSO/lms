@@ -16,8 +16,8 @@
     <main class="conteudo">
       <div id="topbar-container"></div>
       <div class="cartao tabela-scroll">
-        <table>
-          <thead><tr><th>Aluno</th><th>Curso</th><th>Código</th><th>Emitido em</th><th></th></tr></thead>
+        <table aria-label="Lista de certificados emitidos">
+          <thead><tr><th scope="col">Aluno</th><th scope="col">Curso</th><th scope="col">Código</th><th scope="col">Emitido em</th><th scope="col" class="texto-direita">Arquivo</th></tr></thead>
           <tbody id="corpo-tabela"></tbody>
         </table>
       </div>
@@ -26,7 +26,7 @@
         <h3>Validar Certificado</h3>
         <div class="flex-linha flex-wrap">
           <input type="text" id="codigo-validar" placeholder="Código de validação" title="Código de validação do certificado" aria-label="Código de validação do certificado" class="flex-1 min-w-200">
-          <button type="button" class="btn btn-primario flex-inline-icon" onclick="validar()"><span class="material-symbols-outlined icon-xs">verified</span> Validar</button>
+          <button type="button" class="btn btn-primario flex-inline-icon" onclick="validar()"><span class="material-symbols-outlined icon-xs" aria-hidden="true">verified</span> Validar</button>
         </div>
         <div id="resultado-validacao" class="mt-12"></div>
       </div>
@@ -55,11 +55,11 @@
             <td>${c.curso_titulo}</td>
             <td><code>${c.codigo_validacao}</code></td>
             <td>${formatarData(c.data_emissao)}</td>
-            <td><a href="${c.url_arquivo}" target="_blank" class="btn btn-neutro btn-xs flex-inline-icon"><span class="material-symbols-outlined icon-xs">download</span> Baixar PDF</a></td>
+            <td class="texto-direita"><a href="${c.url_arquivo}" target="_blank" rel="noopener" class="btn btn-neutro btn-xs flex-inline-icon" aria-label="Baixar PDF do certificado de ${c.aluno_nome}"><span class="material-symbols-outlined icon-xs" aria-hidden="true">download</span> Baixar PDF</a></td>
           </tr>
         `).join('');
       } catch (err) {
-        alert(err.message);
+        mostrarNotificacao(err.message, 'erro');
       }
     }
 

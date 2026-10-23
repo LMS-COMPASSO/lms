@@ -23,6 +23,7 @@ export function carregarThreeSobDemanda() {
     promessaThree = new Promise((resolve, reject) => {
       const script = document.createElement('script');
       script.src = THREE_CDN_URL;
+      script.crossOrigin = 'anonymous';
       script.async = true;
       script.onload = () => resolve(window.THREE);
       script.onerror = () => reject(new Error('Não foi possível carregar Three.js'));

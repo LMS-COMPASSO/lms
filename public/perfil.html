@@ -148,12 +148,12 @@
       } catch (err) {
         console.warn('Erro ao carregar medalhas:', err);
         grade.innerHTML = `
-          <div style="grid-column: 1 / -1; background: #f8fafc; border: 1px dashed var(--cor-borda); border-radius: var(--raio-medio); padding: 24px; text-align: center;">
-            <span class="material-symbols-outlined" style="font-size: 36px; color: var(--cor-texto-suave);">military_tech</span>
+          <div style="grid-column: 1 / -1; background: var(--cor-fundo); border: 1px dashed var(--cor-borda); border-radius: var(--raio); padding: 24px; text-align: center;">
+            <span class="material-symbols-outlined" style="font-size: var(--text-3xl); color: var(--cor-texto-suave);" aria-hidden="true">military_tech</span>
             <p style="margin: 8px 0 4px; font-weight: 600; color: var(--cor-texto);">Conquistas e Selos da BNCC</p>
-            <p class="texto-suave" style="font-size: 0.875rem; margin-bottom: 14px;">As medalhas ainda estão sendo sincronizadas com o banco de dados.</p>
+            <p class="texto-suave" style="font-size: var(--text-sm); margin-bottom: 14px;">As medalhas ainda estão sendo sincronizadas com o banco de dados.</p>
             <button type="button" class="btn btn-sm btn-primario" onclick="carregarMedalhas()">
-              <span class="material-symbols-outlined icon-xs">refresh</span> Sincronizar Agora
+              <span class="material-symbols-outlined icon-xs" aria-hidden="true">refresh</span> Sincronizar Agora
             </button>
           </div>
         `;

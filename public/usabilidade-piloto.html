@@ -12,17 +12,17 @@
 <link rel="stylesheet" href="/css/style.css">
 <style>
   .sus-form-card {
-    background: #ffffff;
-    border: 1px solid #cbd5e1;
-    border-radius: 16px;
+    background: var(--cor-cartao, #ffffff);
+    border: 1px solid var(--cor-borda, #cbd5e1);
+    border-radius: var(--radius-lg, 16px);
     padding: 24px;
     margin-bottom: 24px;
-    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+    box-shadow: var(--sombra, 0 4px 12px rgba(15, 23, 42, 0.05));
   }
   #form-sus-coleta button[type="submit"] {
     min-height: 48px;
     padding: 12px 24px;
-    font-size: 1rem;
+    font-size: var(--text-base, 1rem);
   }
   @media (max-width: 640px) {
     #form-sus-coleta button[type="submit"] {
@@ -32,15 +32,15 @@
   }
   .sus-pergunta-item {
     padding: 16px 0;
-    border-bottom: 1px solid #e2e8f0;
+    border-bottom: 1px solid var(--cor-borda, #e2e8f0);
   }
   .sus-pergunta-item:last-child {
     border-bottom: none;
   }
   .sus-pergunta-titulo {
-    font-size: 0.96rem;
+    font-size: var(--text-sm, 0.95rem);
     font-weight: 600;
-    color: #1e293b;
+    color: var(--cor-texto, #1a202c);
     margin-bottom: 10px;
   }
   .sus-likert-grade {
@@ -48,31 +48,31 @@
     justify-content: space-between;
     align-items: center;
     gap: 4px;
-    background: #f8fafc;
+    background: var(--cor-fundo, #f8fafc);
     padding: 10px 8px;
-    border-radius: 12px;
+    border-radius: var(--radius-md, 10px);
   }
   .sus-opcao-label {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-size: 0.78rem;
+    font-size: var(--text-xs, 0.8rem);
     font-weight: 600;
-    color: #475569;
+    color: var(--cor-texto-suave, #475569);
     cursor: pointer;
     min-height: 48px;
     min-width: 44px;
     padding: 6px 4px;
-    border-radius: 8px;
+    border-radius: var(--radius-sm, 6px);
     transition: background 0.2s ease;
     box-sizing: border-box;
   }
   .sus-opcao-label:hover {
-    background: rgba(29, 78, 216, 0.06);
+    background: rgba(44, 82, 130, 0.08);
   }
   .sus-opcao-label:focus-within {
-    outline: 2px solid var(--cor-foco, #1d4ed8);
+    outline: 2px solid var(--cor-foco, #dd6b20);
     outline-offset: 2px;
   }
   .sus-opcao-label input[type="radio"] {
@@ -88,37 +88,42 @@
     margin-bottom: 24px;
   }
   .metrica-sus-card {
-    background: #ffffff;
-    border: 1.5px solid #cbd5e1;
-    border-radius: 14px;
+    background: var(--cor-cartao, #ffffff);
+    border: 1px solid var(--cor-borda, #cbd5e1);
+    border-radius: var(--radius-lg, 16px);
     padding: 18px;
     text-align: center;
   }
   .metrica-sus-card.destaque {
-    border-color: #1d4ed8;
-    background: #eff6ff;
+    border-color: var(--cor-primaria, #2c5282);
+    background: rgba(44, 82, 130, 0.08);
   }
   .metrica-sus-valor {
-    font-size: 2.2rem;
+    font-size: var(--text-2xl, 2rem);
     font-weight: 800;
-    color: #1d4ed8;
+    color: var(--cor-primaria-texto, var(--cor-primaria));
     line-height: 1.1;
   }
   .metrica-sus-rotulo {
-    font-size: 0.85rem;
+    font-size: var(--text-sm, 0.85rem);
     font-weight: 600;
-    color: #475569;
+    color: var(--cor-texto, #1a202c);
     margin-top: 6px;
   }
   .badge-grau-a {
     display: inline-block;
     padding: 4px 12px;
-    border-radius: 999px;
-    background: #15803d;
+    border-radius: var(--radius-full, 9999px);
+    background: var(--cor-secundaria, #276749);
     color: #ffffff;
     font-weight: 800;
-    font-size: 0.82rem;
+    font-size: var(--text-xs, 0.8rem);
     margin-top: 6px;
+  }
+  .texto-score-destaque {
+    color: var(--cor-primaria-texto, var(--cor-primaria));
+    font-size: var(--text-base, 1rem);
+    font-weight: 700;
   }
 </style>
 </head>
@@ -204,7 +209,7 @@
     <!-- Tabela de Resultados Tabulados da Turma Piloto -->
     <section class="sus-form-card" aria-labelledby="titulo-tabela-piloto">
       <div class="flex-entre flex-wrap gap-8 mb-12">
-        <h2 id="titulo-tabela-piloto" style="font-size: 1.15rem; margin:0;">
+        <h2 id="titulo-tabela-piloto" style="font-size: var(--text-lg); margin:0;">
           <span class="material-symbols-outlined icon-xs" aria-hidden="true">table_chart</span>
           Tabulação Individual dos Participantes (IFMA Grajaú)
         </h2>
@@ -212,16 +217,16 @@
       </div>
 
       <div class="tabela-scroll">
-        <table>
+        <table aria-label="Tabulação das respostas do teste de usabilidade SUS">
           <thead>
             <tr>
-              <th>Participante</th>
-              <th>Perfil</th>
-              <th>Turma / Função</th>
-              <th>Tempo</th>
-              <th>Tarefas</th>
-              <th>Escore SUS</th>
-              <th>Comentário Qualitativo</th>
+              <th scope="col">Participante</th>
+              <th scope="col">Perfil</th>
+              <th scope="col">Turma / Função</th>
+              <th scope="col">Tempo</th>
+              <th scope="col">Tarefas</th>
+              <th scope="col">Escore SUS</th>
+              <th scope="col">Comentário Qualitativo</th>
             </tr>
           </thead>
           <tbody id="corpo-tabela-sus">
@@ -233,7 +238,7 @@
 
     <!-- Formulário Interativo de Nova Avaliação SUS -->
     <section class="sus-form-card" id="formulario-coleta" aria-labelledby="titulo-form-sus">
-      <h2 id="titulo-form-sus" style="font-size: 1.2rem; margin-top:0;">
+      <h2 id="titulo-form-sus" style="font-size: var(--text-lg); margin-top:0;">
         <span class="material-symbols-outlined icon-xs" aria-hidden="true">fact_check</span>
         Formulário Interativo de Coleta SUS (Brooke, 1996)
       </h2>
@@ -266,7 +271,7 @@
 
         <div class="flex-entre flex-wrap gap-12 mt-16">
           <div class="flex-linha gap-8">
-            <strong style="font-size: 1.1rem; color: #1d4ed8;">Seu Escore SUS Calculado: <span id="previa-sus-score">--</span> / 100</strong>
+            <strong class="texto-score-destaque">Seu Escore SUS Calculado: <span id="previa-sus-score">--</span> / 100</strong>
           </div>
           <button type="submit" class="btn btn-primario btn-md flex-inline-icon">
             <span class="material-symbols-outlined icon-xs" aria-hidden="true">send</span> Enviar Avaliação SUS
@@ -278,6 +283,7 @@
 
   <script src="/js/config.js"></script>
   <script src="/js/api.js"></script>
+  <script src="/js/layout.js"></script>
   <script>
     const PERGUNTAS_SUS = [
       { id: 'q1', texto: '1. Eu acho que gostaria de usar este sistema com frequência nas aulas de Computação.' },
@@ -382,7 +388,7 @@
           <td>${p.turma}</td>
           <td>${p.tempo}</td>
           <td><span class="estado-progresso-pill estado-concluido"><span class="material-symbols-outlined icon-xs" aria-hidden="true">check_circle</span> ${p.tarefas}</span></td>
-          <td><strong style="color: #1d4ed8; font-size: 1.05rem;">${p.score.toFixed(1)}</strong></td>
+          <td><strong class="texto-score-destaque">${p.score.toFixed(1)}</strong></td>
           <td class="texto-suave" style="font-size: 0.85rem;"><em>"${p.comentario}"</em></td>
         </tr>
       `).join('');
@@ -413,9 +419,9 @@
 
       try {
         await api('/usabilidade/sus', { method: 'POST', body: JSON.stringify(payload) });
-        alert(`Obrigado! Sua avaliação SUS foi registrada com sucesso com escore ${score.toFixed(1)} / 100.`);
+        mostrarNotificacao(`Obrigado! Sua avaliação SUS foi registrada com sucesso com escore ${score.toFixed(1)} / 100.`, 'sucesso');
       } catch {
-        alert(`Sua avaliação local com escore ${score.toFixed(1)} / 100 foi calculada e salva.`);
+        mostrarNotificacao(`Sua avaliação local com escore ${score.toFixed(1)} / 100 foi calculada e salva.`, 'info');
       }
 
       DADOS_INICIAIS_PILOTO.unshift({
