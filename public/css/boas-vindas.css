@@ -13,86 +13,7 @@
   overflow-x: hidden;
 }
 
-/* ---------- Topo / Header Futurista ---------- */
-.bv-topo {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  background: rgba(11, 17, 32, 0.85);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 12px 0;
-  overflow-x: clip;
-}
-
-.bv-topo .pub-container {
-  overflow-x: clip;
-  width: min(1400px, 100%);
-  max-width: 1400px;
-}
-
-.bv-topo-conteudo {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  min-height: 60px;
-}
-
-.bv-logo {
-  display: inline-flex;
-  align-items: center;
-  flex-shrink: 0;
-}
-
-.bv-logo img {
-  height: 44px;
-  width: auto;
-  max-width: 100%;
-  display: block;
-}
-
-.bv-nav {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  margin-left: auto;
-  min-width: 0;
-  flex-shrink: 0;
-}
-
-.bv-nav a {
-  color: #94a3b8;
-  font-weight: 600;
-  font-size: 0.88rem;
-  text-decoration: none;
-  transition: color 0.2s ease, background 0.2s ease;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 6px 10px;
-  border-radius: 8px;
-  min-height: 40px;
-  white-space: nowrap;
-}
-
-.bv-nav a:hover,
-.bv-nav a[aria-current='page'] {
-  color: #38bdf8;
-  background: rgba(56, 189, 248, 0.08);
-}
-
-.bv-nav a[aria-current='page'] {
-  font-weight: 700;
-}
-
-.bv-acoes {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-shrink: 0;
-}
+/* Topo de Navegação Universal provido por publico.css (.pub-topo) */
 
 /* ---------- Hero Section (Palco Wishlabs) ---------- */
 .bv-hero {
@@ -841,31 +762,6 @@
 }
 
 /* ---------- Responsividade ---------- */
-@media (max-width: 1200px) {
-  .bv-topo-conteudo {
-    flex-wrap: wrap;
-    padding-block: 8px;
-    gap: 12px;
-  }
-  .bv-nav {
-    order: 3;
-    width: 100%;
-    min-width: 0;
-    max-width: 100%;
-    overflow-x: auto;
-    padding-bottom: 4px;
-    justify-content: flex-start;
-    gap: 8px;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-  }
-  .bv-nav::-webkit-scrollbar {
-    display: none;
-  }
-  .bv-acoes {
-    margin-left: auto;
-  }
-}
 
 @media (max-width: 960px) {
   .bv-hero-grade {
@@ -925,17 +821,6 @@
 }
 
 @media (max-width: 480px) {
-  .bv-topo-conteudo {
-    padding-inline: 4px;
-  }
-  .bv-logo img {
-    height: 36px;
-  }
-  .bv-acoes .btn {
-    min-height: 44px;
-    padding: 8px 10px;
-    font-size: 0.82rem;
-  }
   .bv-parceiro-card {
     padding: 16px 14px;
     gap: 12px;

@@ -15,88 +15,7 @@ body.pagina-mundo-digital {
   overflow-x: hidden;
 }
 
-/* ---------- Topo de Navegação ---------- */
-.md-topo {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: rgba(11, 17, 32, 0.88);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  overflow-x: clip;
-}
-
-.md-topo .pub-container {
-  overflow-x: clip;
-  width: min(1400px, 100%);
-  max-width: 1400px;
-}
-
-.md-topo-conteudo {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 20px;
-  max-width: 1400px;
-  margin: 0 auto;
-  gap: 16px;
-  min-height: 60px;
-}
-
-.md-logo {
-  display: inline-flex;
-  align-items: center;
-  flex-shrink: 0;
-}
-
-.md-logo img {
-  height: 44px;
-  width: auto;
-  max-width: 100%;
-  display: block;
-}
-
-.md-nav {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  margin-left: auto;
-  min-width: 0;
-}
-
-.md-nav a {
-  color: #94a3b8;
-  text-decoration: none;
-  font-size: 0.88rem;
-  font-weight: 500;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 6px 10px;
-  border-radius: 8px;
-  min-height: 44px;
-  white-space: nowrap;
-  transition: all 0.2s ease;
-}
-
-.md-nav a:hover {
-  color: #38bdf8;
-  background: rgba(255, 255, 255, 0.04);
-}
-
-.md-nav a[aria-current="page"] {
-  color: #38bdf8;
-  background: rgba(56, 189, 248, 0.12);
-  font-weight: 600;
-}
-
-.md-acoes {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-shrink: 0;
-}
+/* Topo de Navegação Universal provido por publico.css (.pub-topo) */
 
 /* ---------- Hero Section ---------- */
 .md-hero {
@@ -1204,31 +1123,6 @@ button.md-slot-componente {
 }
 
 /* ---------- Responsividade ---------- */
-@media (max-width: 1440px) {
-  .md-topo-conteudo {
-    flex-wrap: wrap;
-    padding-block: 8px;
-    gap: 12px;
-  }
-  .md-nav {
-    order: 3;
-    width: 100%;
-    min-width: 0;
-    max-width: 100%;
-    overflow-x: auto;
-    padding-bottom: 4px;
-    justify-content: flex-start;
-    gap: 8px;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-  }
-  .md-nav::-webkit-scrollbar {
-    display: none;
-  }
-  .md-acoes {
-    margin-left: auto;
-  }
-}
 
 @media (max-width: 960px) {
   .md-laboratorio-grid,
@@ -1396,13 +1290,6 @@ button.md-slot-componente {
 @media (max-width: 360px) {
   .md-secao {
     padding: 24px 8px;
-  }
-  .md-topo-conteudo {
-    padding-inline: 8px;
-  }
-  .md-acoes {
-    width: 100%;
-    justify-content: flex-start;
   }
   .md-etapa-item {
     padding: 8px 10px;

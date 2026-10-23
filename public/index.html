@@ -25,18 +25,17 @@
         <img src="/img/logo.svg" alt="LMS COMPASSO — BNCC Computação" width="272" height="64" class="logo-tema-claro">
         <img src="/img/logo-branco.svg" alt="LMS COMPASSO — BNCC Computação" width="272" height="64" class="logo-tema-escuro">
       </a>
-      <nav class="pub-nav" aria-label="Principal">
+      <nav class="pub-nav" aria-label="Navegação principal">
         <a href="/" aria-current="page"><span class="material-symbols-outlined icon-xs" aria-hidden="true">home</span> Início</a>
         <a href="/boas-vindas.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">rocket_launch</span> Boas-vindas</a>
         <a href="/atividades.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">format_list_numbered</span> Atividades</a>
         <a href="/mundo-digital.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">memory</span> Mundo Digital</a>
         <a href="/cultura-digital.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">verified_user</span> Cultura Digital</a>
-        <a href="#eixos">Eixos da BNCC</a>
       </nav>
       <div class="pub-acoes">
         <a href="/atividades.html" class="btn btn-contorno-escuro btn-sm flex-inline-icon" title="Buscar atividades BNCC" aria-label="Buscar atividades"><span class="material-symbols-outlined icon-xs" aria-hidden="true">search</span> Buscar</a>
         <a href="/login.html" class="btn btn-contorno-escuro btn-sm flex-inline-icon" id="acao-entrar"><span class="material-symbols-outlined icon-xs" aria-hidden="true">account_circle</span> Entrar</a>
-        <a href="/registrar.html" class="btn btn-primario btn-sm" id="acao-cadastrar">Criar conta</a>
+        <a href="/registrar.html" class="btn btn-primario btn-sm flex-inline-icon" id="acao-cadastrar"><span class="material-symbols-outlined icon-xs" aria-hidden="true">person_add</span> Criar conta</a>
       </div>
     </div>
   </header>
@@ -313,18 +312,17 @@
   <script src="/js/config.js"></script>
   <script src="/js/api.js"></script>
   <script type="module" src="/js/icones-universais.js"></script>
+  <script type="module" src="/js/menu-universal.js"></script>
   <script>
-    // Quem já tem sessão vai direto para a plataforma, sem passar pela tela de login.
-    const usuarioLogado = obterToken() ? obterUsuario() : null;
+    // Quem já tem sessão ativa atualiza o CTA do Hero
+    const usuarioLogado = typeof obterToken === 'function' && obterToken() ? obterUsuario() : null;
     if (usuarioLogado) {
       const destino = usuarioLogado.perfil === 'aluno' ? '/cursos.html' : '/dashboard.html';
-      const entrar = document.getElementById('acao-entrar');
-      entrar.href = destino;
-      entrar.textContent = 'Ir para a plataforma';
-      document.getElementById('acao-cadastrar').classList.add('oculto');
       const cta = document.getElementById('cta-plataforma');
-      cta.href = destino;
-      cta.textContent = 'Ir para a plataforma';
+      if (cta) {
+        cta.href = destino;
+        cta.textContent = 'Ir para a plataforma';
+      }
     }
   </script>
 </body>

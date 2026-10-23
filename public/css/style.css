@@ -6,14 +6,14 @@
   --cor-secundaria-suave: #38a169;
   --cor-alerta: #b7791f;
   --cor-perigo: #c53030;
-  --cor-fundo: #f4f6fa;
+  --cor-fundo: #f8fafc;
   --cor-cartao: #ffffff;
-  --cor-texto: #1a202c;
+  --cor-texto: #0f172a;
   --cor-texto-suave: #475569;
   --cor-borda: #e2e8f0;
-  --cor-foco: #dd6b20;
-  --cor-link: #2c5282;
-  --cor-primaria-texto: #2c5282;
+  --cor-foco: #0369a1;
+  --cor-link: #0369a1;
+  --cor-primaria-texto: #0369a1;
 
   /* Escala de Espaçamento (Base 4px / 8px) */
   --space-1: 0.25rem;  /* 4px */
@@ -41,8 +41,8 @@
   --radius-lg: 16px;
   --radius-full: 9999px;
   --raio: var(--radius-md);
-  --sombra: 0 2px 8px rgba(15, 23, 42, 0.06);
-  --sombra-hover: 0 8px 20px rgba(15, 23, 42, 0.12);
+  --sombra: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
+  --sombra-hover: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
   --z-sticky: 40;
   --z-sidebar: 50;
   --z-backdrop: 95;

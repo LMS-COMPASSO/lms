@@ -15,88 +15,7 @@ body.pagina-cultura-digital {
   overflow-x: hidden;
 }
 
-/* ---------- Topo de Navegação ---------- */
-.cd-topo {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: rgba(11, 17, 32, 0.88);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  overflow-x: clip;
-}
-
-.cd-topo .pub-container {
-  overflow-x: clip;
-  width: min(1400px, 100%);
-  max-width: 1400px;
-}
-
-.cd-topo-conteudo {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 20px;
-  max-width: 1400px;
-  margin: 0 auto;
-  gap: 16px;
-  min-height: 60px;
-}
-
-.cd-logo {
-  display: inline-flex;
-  align-items: center;
-  flex-shrink: 0;
-}
-
-.cd-logo img {
-  height: 44px;
-  width: auto;
-  max-width: 100%;
-  display: block;
-}
-
-.cd-nav {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  margin-left: auto;
-  min-width: 0;
-}
-
-.cd-nav a {
-  color: #94a3b8;
-  text-decoration: none;
-  font-size: 0.88rem;
-  font-weight: 500;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 6px 10px;
-  border-radius: 8px;
-  min-height: 44px;
-  white-space: nowrap;
-  transition: all 0.2s ease;
-}
-
-.cd-nav a:hover {
-  color: #fbbf24;
-  background: rgba(255, 255, 255, 0.04);
-}
-
-.cd-nav a[aria-current="page"] {
-  color: #fbbf24;
-  background: rgba(251, 191, 36, 0.12);
-  font-weight: 600;
-}
-
-.cd-acoes {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-shrink: 0;
-}
+/* Topo de Navegação Universal provido por publico.css (.pub-topo) */
 
 /* ---------- Hero Section ---------- */
 .cd-hero {
@@ -802,31 +721,6 @@ body.pagina-cultura-digital {
 }
 
 /* ---------- Responsividade ---------- */
-@media (max-width: 1440px) {
-  .cd-topo-conteudo {
-    flex-wrap: wrap;
-    padding-block: 8px;
-    gap: 12px;
-  }
-  .cd-nav {
-    order: 3;
-    width: 100%;
-    min-width: 0;
-    max-width: 100%;
-    overflow-x: auto;
-    padding-bottom: 4px;
-    justify-content: flex-start;
-    gap: 8px;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-  }
-  .cd-nav::-webkit-scrollbar {
-    display: none;
-  }
-  .cd-acoes {
-    margin-left: auto;
-  }
-}
 
 @media (max-width: 960px) {
   .cd-chat-app {
@@ -891,17 +785,6 @@ body.pagina-cultura-digital {
   .cd-secao {
     padding: 32px 10px;
   }
-  .cd-topo-conteudo {
-    padding-inline: 10px;
-  }
-  .cd-logo img {
-    height: 36px;
-  }
-  .cd-acoes .btn {
-    min-height: 44px;
-    padding: 8px 10px;
-    font-size: 0.82rem;
-  }
   .cd-requisitos-lista {
     grid-template-columns: 1fr;
   }
@@ -930,13 +813,6 @@ body.pagina-cultura-digital {
 @media (max-width: 360px) {
   .cd-secao {
     padding: 24px 8px;
-  }
-  .cd-topo-conteudo {
-    padding-inline: 8px;
-  }
-  .cd-acoes {
-    width: 100%;
-    justify-content: flex-start;
   }
   .cd-hero {
     padding: 32px 8px 36px;
