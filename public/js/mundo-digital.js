@@ -4,77 +4,81 @@
  * ============================================================================
  * Gerencia a inspeção de componentes da placa-mãe, montagem interativa (PC Builder),
  * ciclo da CPU (Busca-Decodifica-Executa) e envio de pacotes de rede TCP/IP.
+ * Suporta internacionalização (i18n) em tempo real via i18n.js.
  * ============================================================================
  */
+import { t } from '/js/i18n.js';
 
 // Informações Didáticas e BNCC dos Componentes de Hardware
-const DADOS_HARDWARE = {
-  cpu: {
-    nome: "Processador Central (CPU)",
-    categoria: "Unidade de Processamento (Cérebro do Computador)",
-    icone: "memory",
-    cor: "#38bdf8",
-    descricao: "A CPU (Central Processing Unit) executa as instruções de todos os programas. Ela interpreta cálculos matemáticos e lógicos através de bilhões de ciclos elétricos por segundo.",
-    analogia: "É como o Chef de Cozinha de um restaurante: recebe os pedidos (instruções), prepara as receitas e comanda a equipe.",
-    specs: {
-      "Velocidade Típica": "3.2 a 5.0 GHz (Bilhões de ciclos/s)",
-      "Unidades Internas": "ULA (Cálculos), UC (Controle), Registradores",
-      "BNCC Computação": "EF05CO03 (Arquitetura e Ciclo de Execução)"
-    }
-  },
-  ram: {
-    nome: "Memória Principal (RAM DDR5)",
-    categoria: "Armazenamento Primário Volátil de Alta Velocidade",
-    icone: "storage",
-    cor: "#38bdf8",
-    descricao: "A RAM (Random Access Memory) armazena os dados que a CPU precisa ler imediatamente. É ultrarrápida, porém volátil: ao desligar o computador, tudo que está nela se apaga.",
-    analogia: "É a mesa de estudos do aluno: enquanto você estuda, seus cadernos ficam abertos nela. Quando a aula acaba, a mesa é limpa.",
-    specs: {
-      "Tecnologia Atual": "DDR5 a 5600 MT/s",
-      "Volatilidade": "Sim (Apaga sem energia elétrica)",
-      "BNCC Computação": "EF02CO03 (Diferença entre RAM e Armazenamento)"
-    }
-  },
-  ssd: {
-    nome: "Armazenamento Secundário (SSD NVMe M.2)",
-    categoria: "Armazenamento Permanente Não-Volátil",
-    icone: "save",
-    cor: "#a855f7",
-    descricao: "O SSD (Solid State Drive) armazena permanentemente o sistema operacional, fotos, jogos e documentos em chips de memória flash que não dependem de energia para reter informações.",
-    analogia: "É a mochila escolar ou a estante de livros: mesmo depois que você vai dormir, seus livros continuam guardados com segurança.",
-    specs: {
-      "Interface": "PCIe 4.0 NVMe (Até 7.000 MB/s)",
-      "Volatilidade": "Não-volátil (Permanente)",
-      "BNCC Computação": "EF02CO03 (Armazenamento de Dados)"
-    }
-  },
-  gpu: {
-    nome: "Placa de Vídeo Dedicada (GPU)",
-    categoria: "Processamento Gráfico e Paralelo",
-    icone: "videogame_asset",
-    cor: "#f59e0b",
-    descricao: "A GPU possui milhares de pequenos núcleos projetados para calcular simultaneamente milhões de polígonos, texturas e efeitos de iluminação em tempo real para o monitor.",
-    analogia: "Se a CPU é um único cientista genial, a GPU é um batalhão de 5.000 desenhistas desenhando cada detalhe do jogo ao mesmo tempo.",
-    specs: {
-      "Memória": "VRAM GDDR6 Dedicada",
-      "Saídas de Vídeo": "HDMI 2.1 e DisplayPort 1.4",
-      "BNCC Computação": "EF01CO04 (Periféricos e Saída Visual)"
-    }
-  },
-  io: {
-    nome: "Painel Traseiro de Conexões (Portas I/O)",
-    categoria: "Interface de Entrada e Saída (Input / Output)",
-    icone: "usb",
-    cor: "#10b981",
-    descricao: "Central de conexões físicas que conecta o computador ao mundo: portas USB para periféricos de entrada (teclado/mouse), HDMI para saída visual e conector RJ-45 para cabos de rede.",
-    analogia: "São as portas e janelas de uma casa: por onde as cartas entram (dados) e por onde os moradores conversam com o exterior.",
-    specs: {
-      "Entradas": "USB (Teclado, Mouse, Microfone)",
-      "Saídas": "HDMI (Tela/Monitor), Áudio (Caixas de som)",
-      "BNCC Computação": "EF01CO04 / EF02CO03 (Classificação I/O)"
-    }
-  }
-};
+function obterDadosHardware() {
+  return {
+    cpu: {
+      nome: t('md.cpu.nome'),
+      categoria: t('md.cpu.categoria'),
+      icone: 'memory',
+      cor: '#38bdf8',
+      descricao: t('md.cpu.desc'),
+      analogia: t('md.cpu.analogia'),
+      specs: {
+        [t('md.spec.velTipica')]: t('md.cpu.spec1'),
+        [t('md.spec.unidInternas')]: t('md.cpu.spec2'),
+        [t('md.spec.bncc')]: t('md.cpu.spec3'),
+      },
+    },
+    ram: {
+      nome: t('md.ram.nome'),
+      categoria: t('md.ram.categoria'),
+      icone: 'storage',
+      cor: '#38bdf8',
+      descricao: t('md.ram.desc'),
+      analogia: t('md.ram.analogia'),
+      specs: {
+        [t('md.spec.tecAtual')]: t('md.ram.spec1'),
+        [t('md.spec.volatilidade')]: t('md.ram.spec2'),
+        [t('md.spec.bncc')]: t('md.ram.spec3'),
+      },
+    },
+    ssd: {
+      nome: t('md.ssd.nome'),
+      categoria: t('md.ssd.categoria'),
+      icone: 'save',
+      cor: '#a855f7',
+      descricao: t('md.ssd.desc'),
+      analogia: t('md.ssd.analogia'),
+      specs: {
+        [t('md.spec.interface')]: t('md.ssd.spec1'),
+        [t('md.spec.volatilidade')]: t('md.ssd.spec2'),
+        [t('md.spec.bncc')]: t('md.ssd.spec3'),
+      },
+    },
+    gpu: {
+      nome: t('md.gpu.nome'),
+      categoria: t('md.gpu.categoria'),
+      icone: 'videogame_asset',
+      cor: '#f59e0b',
+      descricao: t('md.gpu.desc'),
+      analogia: t('md.gpu.analogia'),
+      specs: {
+        [t('md.spec.memoria')]: t('md.gpu.spec1'),
+        [t('md.spec.saidasVideo')]: t('md.gpu.spec2'),
+        [t('md.spec.bncc')]: t('md.gpu.spec3'),
+      },
+    },
+    io: {
+      nome: t('md.io.nome'),
+      categoria: t('md.io.categoria'),
+      icone: 'usb',
+      cor: '#10b981',
+      descricao: t('md.io.desc'),
+      analogia: t('md.io.analogia'),
+      specs: {
+        [t('md.spec.entradas')]: t('md.io.spec1'),
+        [t('md.spec.saidas')]: t('md.io.spec2'),
+        [t('md.spec.bncc')]: t('md.io.spec3'),
+      },
+    },
+  };
+}
 
 // Som suave sintetizado via Web Audio API (sem dependência de arquivos externos)
 function emitirBeep(frequencia = 520, duracao = 0.12, tipo = 'sine') {
@@ -97,12 +101,27 @@ function emitirBeep(frequencia = 520, duracao = 0.12, tipo = 'sine') {
   }
 }
 
+// Estado compartilhado para reatividade de i18n
+let componenteAtivo = 'cpu';
+let atualizarPainelHardware = null;
+let atualizarPCBuilder = null;
+let atualizarCicloCPU = null;
+let atualizarRede = null;
+
 document.addEventListener('DOMContentLoaded', () => {
   inicializarInspecaoHardware();
   inicializarControles3D();
   inicializarPCBuilder();
   inicializarCicloCPU();
   inicializarSimuladorRede();
+});
+
+// Reatividade ao trocar de idioma no menu universal
+window.addEventListener('idiomaAlterado', () => {
+  if (atualizarPainelHardware) atualizarPainelHardware();
+  if (atualizarPCBuilder) atualizarPCBuilder();
+  if (atualizarCicloCPU) atualizarCicloCPU();
+  if (atualizarRede) atualizarRede();
 });
 
 /* ---------------------------------------------------------------------------
@@ -117,8 +136,10 @@ function inicializarInspecaoHardware() {
   const specsGrid = document.getElementById('painel-specs-grid');
   const iconeWrap = document.getElementById('painel-icone-wrap');
 
-  function exibirComponente(chave) {
-    const dados = DADOS_HARDWARE[chave];
+  function exibirComponente(chave, tocarSom = true) {
+    componenteAtivo = chave;
+    const dadosHardware = obterDadosHardware();
+    const dados = dadosHardware[chave];
     if (!dados) return;
 
     slots.forEach((s) => s.classList.remove('selecionado'));
@@ -147,13 +168,14 @@ function inicializarInspecaoHardware() {
       });
     }
 
-    emitirBeep(440, 0.08);
+    if (tocarSom) emitirBeep(440, 0.08);
   }
+
+  atualizarPainelHardware = () => exibirComponente(componenteAtivo, false);
 
   slots.forEach((slot) => {
     slot.addEventListener('click', () => {
-      const comp = slot.dataset.componente;
-      exibirComponente(comp);
+      exibirComponente(slot.dataset.componente);
     });
 
     slot.addEventListener('keydown', (e) => {
@@ -165,7 +187,7 @@ function inicializarInspecaoHardware() {
   });
 
   // Exibe CPU por padrão
-  exibirComponente('cpu');
+  exibirComponente('cpu', false);
 }
 
 /* ---------------------------------------------------------------------------
@@ -194,13 +216,15 @@ function inicializarControles3D() {
  * 3. Desafio Interativo "Monte o Computador" (PC Builder)
  * ------------------------------------------------------------------------ */
 function inicializarPCBuilder() {
-  const etapas = [
-    { id: 'cpu', nome: '1. Encaixar o Processador no Socket', seletor: '.md-slot-cpu' },
-    { id: 'ram', nome: '2. Inserir o Pente de Memória RAM', seletor: '.md-slot-ram' },
-    { id: 'ssd', nome: '3. Conectar a Unidade SSD M.2', seletor: '.md-slot-ssd' },
-    { id: 'gpu', nome: '4. Instalar a Placa de Vídeo no Slot PCIe', seletor: '.md-slot-gpu' },
-    { id: 'ligar', nome: '5. Ligar e Executar o POST de Inicialização', seletor: '#status-post-badge' },
-  ];
+  function obterEtapas() {
+    return [
+      { id: 'cpu', nome: t('md.pcEtapa1'), seletor: '.md-slot-cpu' },
+      { id: 'ram', nome: t('md.pcEtapa2'), seletor: '.md-slot-ram' },
+      { id: 'ssd', nome: t('md.pcEtapa3'), seletor: '.md-slot-ssd' },
+      { id: 'gpu', nome: t('md.pcEtapa4'), seletor: '.md-slot-gpu' },
+      { id: 'ligar', nome: t('md.pcEtapa5'), seletor: '#status-post-badge' },
+    ];
+  }
 
   let indiceEtapaAtual = 0;
   const btnInstalar = document.getElementById('btn-instalar-etapa');
@@ -211,6 +235,7 @@ function inicializarPCBuilder() {
   const statusPost = document.getElementById('status-post-badge');
 
   function renderizarListaEtapas() {
+    const etapas = obterEtapas();
     if (!listaEtapasEl) return;
     listaEtapasEl.innerHTML = '';
 
@@ -227,35 +252,44 @@ function inicializarPCBuilder() {
     });
 
     if (progressoTexto) {
-      progressoTexto.textContent = `${indiceEtapaAtual} / ${etapas.length} Instalados`;
+      progressoTexto.textContent = t('md.pcBuilderProgresso', {
+        instalados: indiceEtapaAtual,
+        total: etapas.length,
+      });
     }
 
     if (btnInstalar) {
       if (indiceEtapaAtual < etapas.length - 1) {
-        btnInstalar.innerHTML = `<span class="material-symbols-outlined">add_circle</span> Encaixar Próximo Componente`;
+        btnInstalar.innerHTML = `<span class="material-symbols-outlined">add_circle</span> ${t('md.btnEncaixar')}`;
         btnInstalar.disabled = false;
       } else if (indiceEtapaAtual === etapas.length - 1) {
-        btnInstalar.innerHTML = `<span class="material-symbols-outlined">power_settings_new</span> Ligar Computador (POST)`;
+        btnInstalar.innerHTML = `<span class="material-symbols-outlined">power_settings_new</span> ${t('md.btnLigar')}`;
         btnInstalar.disabled = false;
       } else {
-        btnInstalar.innerHTML = `<span class="material-symbols-outlined">done_all</span> Computador Montado &amp; Ativo!`;
+        btnInstalar.innerHTML = `<span class="material-symbols-outlined">done_all</span> ${t('md.btnMontado')}`;
         btnInstalar.disabled = true;
       }
     }
+
+    if (statusPost) {
+      const textoPost = statusPost.classList.contains('ligado')
+        ? t('md.statusPostAtivo')
+        : t('md.statusPostEspera');
+      statusPost.innerHTML = `<span class="md-led-status"></span> <span id="texto-status-post">${textoPost}</span>`;
+    }
   }
+
+  atualizarPCBuilder = renderizarListaEtapas;
 
   if (btnInstalar) {
     btnInstalar.addEventListener('click', () => {
+      const etapas = obterEtapas();
       if (indiceEtapaAtual >= etapas.length) return;
 
       const etapaAtual = etapas[indiceEtapaAtual];
       if (etapaAtual.id === 'ligar') {
-        // Ligar placa e executar POST
         if (placa) placa.classList.add('ligada');
-        if (statusPost) {
-          statusPost.classList.add('ligado');
-          statusPost.innerHTML = `<span class="md-led-status"></span> POST Concluído (Sistema Operacional Ativo)`;
-        }
+        if (statusPost) statusPost.classList.add('ligado');
         emitirBeep(880, 0.25);
         setTimeout(() => emitirBeep(1320, 0.3), 150);
       } else {
@@ -276,10 +310,7 @@ function inicializarPCBuilder() {
         slot.classList.remove('instalado');
       });
       if (placa) placa.classList.remove('ligada');
-      if (statusPost) {
-        statusPost.classList.remove('ligado');
-        statusPost.innerHTML = `<span class="md-led-status"></span> Em Espera (Desligado)`;
-      }
+      if (statusPost) statusPost.classList.remove('ligado');
       renderizarListaEtapas();
       emitirBeep(330, 0.1);
     });
@@ -292,38 +323,40 @@ function inicializarPCBuilder() {
  * 4. Simulador do Ciclo da CPU (Busca - Decodificação - Execução)
  * ------------------------------------------------------------------------ */
 function inicializarCicloCPU() {
-  const passos = [
-    {
-      id: 'busca',
-      fase: '1. Busca (Fetch)',
-      titulo: 'Leitura da Memória RAM',
-      descricao: 'O Registrador de Endereço busca a instrução na memória RAM através do barramento de dados e a traz para dentro do Registrador de Instrução (IR) da CPU.',
-      blocoAtivo: 'cpu-bloco-ir',
-      pulso: true,
-      valorIR: 'OP_SOMAR [0x01]',
-      valorULA: 'Aguardando Operandos...'
-    },
-    {
-      id: 'decodifica',
-      fase: '2. Decodificação (Decode)',
-      titulo: 'Interpretação pela Unidade de Controle (UC)',
-      descricao: 'A Unidade de Controle decodifica o código binário da instrução, identifica a operação matemática (SOMA) e prepara os operandos dos registradores R1 (5) e R2 (3).',
-      blocoAtivo: 'cpu-bloco-uc',
-      pulso: false,
-      valorIR: 'OP_SOMAR (R1, R2)',
-      valorULA: 'Carregado: 5 e 3'
-    },
-    {
-      id: 'executa',
-      fase: '3. Execução (Execute)',
-      titulo: 'Cálculo na Unidade Lógica e Aritmética (ULA)',
-      descricao: 'A ULA executa o cálculo aritmético: 5 + 3 = 8. O resultado final é imediatamente gravado no Registrador Acumulador, pronto para o próximo ciclo!',
-      blocoAtivo: 'cpu-bloco-ula',
-      pulso: true,
-      valorIR: 'Instrução Concluída',
-      valorULA: 'Resultado: 8 (00001000₂)'
-    }
-  ];
+  function obterPassos() {
+    return [
+      {
+        id: 'busca',
+        fase: `${t('md.cpuFase1')} ${t('md.cpuBuscaTitulo')}`,
+        titulo: t('md.cpuBuscaTitulo'),
+        descricao: t('md.cpuBuscaDesc'),
+        blocoAtivo: 'cpu-bloco-ir',
+        pulso: true,
+        valorIR: 'OP_SOMAR [0x01]',
+        valorULA: t('md.cpuAguardandoOperandos'),
+      },
+      {
+        id: 'decodifica',
+        fase: `${t('md.cpuFase2')} ${t('md.cpuDecodificaTitulo')}`,
+        titulo: t('md.cpuDecodificaTitulo'),
+        descricao: t('md.cpuDecodificaDesc'),
+        blocoAtivo: 'cpu-bloco-uc',
+        pulso: false,
+        valorIR: 'OP_SOMAR (R1, R2)',
+        valorULA: t('md.cpuCarregadoValores'),
+      },
+      {
+        id: 'executa',
+        fase: `${t('md.cpuFase3')} ${t('md.cpuExecutaTitulo')}`,
+        titulo: t('md.cpuExecutaTitulo'),
+        descricao: t('md.cpuExecutaDesc'),
+        blocoAtivo: 'cpu-bloco-ula',
+        pulso: true,
+        valorIR: t('md.cpuInstrucaoConcluida'),
+        valorULA: t('md.cpuResultado'),
+      },
+    ];
+  }
 
   let passoAtual = 0;
   let timerCiclo = null;
@@ -336,7 +369,8 @@ function inicializarCicloCPU() {
   const passosEl = document.querySelectorAll('.md-passo-ciclo');
   const blocosEl = document.querySelectorAll('.md-cpu-bloco');
 
-  function renderizarPasso(indice) {
+  function renderizarPasso(indice, tocarSom = true) {
+    const passos = obterPassos();
     const dadosPasso = passos[indice];
     if (!dadosPasso) return;
 
@@ -359,16 +393,28 @@ function inicializarCicloCPU() {
       }
     }
 
-    emitirBeep(520 + indice * 120, 0.1);
+    if (tocarSom) emitirBeep(520 + indice * 120, 0.1);
   }
+
+  atualizarCicloCPU = () => {
+    renderizarPasso(passoAtual, false);
+    if (btnAuto) {
+      if (timerCiclo) {
+        btnAuto.innerHTML = `<span class="material-symbols-outlined">pause</span> ${t('md.btnCpuPausar')}`;
+      } else {
+        btnAuto.innerHTML = `<span class="material-symbols-outlined">play_arrow</span> ${t('md.btnCpuAuto')}`;
+      }
+    }
+  };
 
   if (btnPasso) {
     btnPasso.addEventListener('click', () => {
       if (timerCiclo) {
         clearInterval(timerCiclo);
         timerCiclo = null;
-        if (btnAuto) btnAuto.innerHTML = `<span class="material-symbols-outlined">play_arrow</span> Ciclo Automático`;
+        if (btnAuto) btnAuto.innerHTML = `<span class="material-symbols-outlined">play_arrow</span> ${t('md.btnCpuAuto')}`;
       }
+      const passos = obterPassos();
       passoAtual = (passoAtual + 1) % passos.length;
       renderizarPasso(passoAtual);
     });
@@ -379,10 +425,11 @@ function inicializarCicloCPU() {
       if (timerCiclo) {
         clearInterval(timerCiclo);
         timerCiclo = null;
-        btnAuto.innerHTML = `<span class="material-symbols-outlined">play_arrow</span> Ciclo Automático`;
+        btnAuto.innerHTML = `<span class="material-symbols-outlined">play_arrow</span> ${t('md.btnCpuAuto')}`;
       } else {
-        btnAuto.innerHTML = `<span class="material-symbols-outlined">pause</span> Pausar Ciclo`;
+        btnAuto.innerHTML = `<span class="material-symbols-outlined">pause</span> ${t('md.btnCpuPausar')}`;
         timerCiclo = setInterval(() => {
+          const passos = obterPassos();
           passoAtual = (passoAtual + 1) % passos.length;
           renderizarPasso(passoAtual);
         }, 1800);
@@ -390,7 +437,7 @@ function inicializarCicloCPU() {
     });
   }
 
-  renderizarPasso(0);
+  renderizarPasso(0, false);
 }
 
 /* ---------------------------------------------------------------------------
@@ -405,21 +452,32 @@ function inicializarSimuladorRede() {
   const statusEl = document.getElementById('pacote-status-txt');
 
   let simularPerdaAtiva = false;
+  let emEnvio = false;
+
+  atualizarRede = () => {
+    if (btnPerda) {
+      btnPerda.textContent = simularPerdaAtiva ? t('md.btnPerdaAtivada') : t('md.btnSimularPerda');
+    }
+    if (!emEnvio && statusEl) {
+      statusEl.textContent = t('md.redeStatusPronto');
+    }
+  };
 
   if (btnPerda) {
     btnPerda.addEventListener('click', () => {
       simularPerdaAtiva = !simularPerdaAtiva;
       btnPerda.classList.toggle('ativo', simularPerdaAtiva);
-      btnPerda.textContent = simularPerdaAtiva ? '⚠️ Perda de Pacote: Ativada' : 'Simular Perda de Pacote';
+      btnPerda.textContent = simularPerdaAtiva ? t('md.btnPerdaAtivada') : t('md.btnSimularPerda');
       emitirBeep(simularPerdaAtiva ? 300 : 600, 0.1);
     });
   }
 
   if (btnEnviar) {
     btnEnviar.addEventListener('click', () => {
+      emEnvio = true;
       btnEnviar.disabled = true;
       if (pacoteAnim) pacoteAnim.classList.add('viajando');
-      if (statusEl) statusEl.textContent = 'Enviando pacotes TCP via roteadores...';
+      if (statusEl) statusEl.textContent = t('md.redeStatusEnviando');
 
       // Animar nós sequencialmente
       nós.forEach((no, idx) => {
@@ -433,13 +491,14 @@ function inicializarSimuladorRede() {
       setTimeout(() => {
         if (pacoteAnim) pacoteAnim.classList.remove('viajando');
         btnEnviar.disabled = false;
+        emEnvio = false;
 
         if (simularPerdaAtiva) {
-          if (statusEl) statusEl.textContent = '❌ Pacote 2 perdido no caminho! Protocolo TCP retransmitiu com sucesso (ACK 3).';
+          if (statusEl) statusEl.textContent = t('md.redeStatusPerda');
           emitirBeep(280, 0.2);
           setTimeout(() => emitirBeep(700, 0.15), 300);
         } else {
-          if (statusEl) statusEl.textContent = '✅ Pacotes entregues e remontados no Servidor LMS COMPASSO!';
+          if (statusEl) statusEl.textContent = t('md.redeStatusSucesso');
           emitirBeep(880, 0.2);
         }
 

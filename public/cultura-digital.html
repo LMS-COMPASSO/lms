@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="/css/cultura-digital.css">
 </head>
 <body class="pagina-cultura-digital" data-secao="cultura">
-  <a class="pular-conteudo" href="#conteudo">Pular para o conteúdo principal</a>
+  <a class="pular-conteudo" href="#conteudo" data-i18n="cd.pularConteudo">Pular para o conteúdo principal</a>
 
   <!-- Topo de Navegação Universal -->
   <header class="pub-topo">
@@ -42,48 +42,48 @@
     <!-- Hero Section -->
     <section class="cd-hero" aria-labelledby="titulo-cultura-digital">
       <div class="pub-container cd-hero-conteudo">
-        <nav class="atv-breadcrumbs" aria-label="Você está aqui">
+        <nav class="atv-breadcrumbs" aria-label="Você está aqui" data-i18n-aria="wf.voceEstaAqui">
           <a href="/mundo-digital.html" class="wf-breadcrumb-mobile-voltar seta-voltar">
             <span class="material-symbols-outlined icon-xs" aria-hidden="true">arrow_back</span>
-            <span>Voltar para Mundo Digital</span>
+            <span data-i18n="cd.voltarMundoDigital">Voltar para Mundo Digital</span>
           </a>
           <ol>
-            <li><a href="/">Início</a></li>
-            <li><a href="/cursos.html">Eixos BNCC</a></li>
-            <li aria-current="page">Cultura Digital</li>
+            <li><a href="/" data-i18n="nav.inicio">Início</a></li>
+            <li><a href="/cursos.html" data-i18n="wf.eixosBncc">Eixos BNCC</a></li>
+            <li aria-current="page" data-i18n="cd.culturaDigital">Cultura Digital</li>
           </ol>
         </nav>
         <div class="cd-badge-eixo">
           <span class="material-symbols-outlined icon-xs" aria-hidden="true">verified_user</span>
-          <span>Eixo 3 · BNCC Computação</span>
+          <span data-i18n="cd.eixoBncc">Eixo 3 · BNCC Computação</span>
         </div>
-        <h1 id="titulo-cultura-digital" class="cd-titulo">
+        <h1 id="titulo-cultura-digital" class="cd-titulo" data-i18n-html="cd.heroTitulo">
           Cultura Digital: <span>Cidadania &amp; Ética na Rede</span>
         </h1>
-        <p class="cd-descricao">
+        <p class="cd-descricao" data-i18n="cd.heroDesc">
           Como navegar com segurança, discernir verdades de boatos e construir um ambiente de respeito mútuo nas redes?
           Tome decisões em conversas simuladas, descubra golpes de phishing, teste a resistência de senhas e meça sua pegada digital.
         </p>
         <div class="cd-hero-cta">
           <a href="#simulador-mensagens" class="btn-cd-primario">
             <span class="material-symbols-outlined" aria-hidden="true">chat</span>
-            Iniciar Chat Interativo
+            <span data-i18n="cd.ctaChat">Iniciar Chat Interativo</span>
           </a>
           <a href="#cofre-senhas" class="btn-cd-contorno">
             <span class="material-symbols-outlined" aria-hidden="true">lock</span>
-            Cofre de Senhas Seguras
+            <span data-i18n="cd.ctaCofre">Cofre de Senhas Seguras</span>
           </a>
           <a href="#pegada-digital" class="btn-cd-contorno">
             <span class="material-symbols-outlined" aria-hidden="true">fingerprint</span>
-            Medidor de Pegada Digital
+            <span data-i18n="cd.ctaPegada">Medidor de Pegada Digital</span>
           </a>
         </div>
         <div class="cd-tags-habilidades">
-          <span class="cd-tag-hab"><strong>EF01CO05</strong> Ética &amp; Respeito</span>
-          <span class="cd-tag-hab"><strong>EF02CO04</strong> Proteção de Dados</span>
-          <span class="cd-tag-hab"><strong>EF03CO04</strong> Fake News &amp; Fatos</span>
-          <span class="cd-tag-hab"><strong>EF04CO04</strong> Phishing &amp; Cyberbullying</span>
-          <span class="cd-tag-hab"><strong>EF05CO04</strong> Pegada Digital</span>
+          <span class="cd-tag-hab"><strong>EF01CO05</strong> <span data-i18n-html="cd.tagEF01CO05">Ética &amp; Respeito</span></span>
+          <span class="cd-tag-hab"><strong>EF02CO04</strong> <span data-i18n="cd.tagEF02CO04">Proteção de Dados</span></span>
+          <span class="cd-tag-hab"><strong>EF03CO04</strong> <span data-i18n-html="cd.tagEF03CO04">Fake News &amp; Fatos</span></span>
+          <span class="cd-tag-hab"><strong>EF04CO04</strong> <span data-i18n-html="cd.tagEF04CO04">Phishing &amp; Cyberbullying</span></span>
+          <span class="cd-tag-hab"><strong>EF05CO04</strong> <span data-i18n="cd.tagEF05CO04">Pegada Digital</span></span>
         </div>
       </div>
     </section>
@@ -91,8 +91,8 @@
     <!-- Seção 1: Simulador de Mensagens e Diálogo ("ZapCompasso") -->
     <section class="cd-secao" id="simulador-mensagens" aria-labelledby="titulo-chat">
       <div class="cd-secao-cabecalho">
-        <h2 id="titulo-chat" class="cd-titulo-secao">ZapCompasso: Simulador de Diálogo e Cidadania</h2>
-        <p class="cd-desc-secao">
+        <h2 id="titulo-chat" class="cd-titulo-secao" data-i18n="cd.sec1Titulo">ZapCompasso: Simulador de Diálogo e Cidadania</h2>
+        <p class="cd-desc-secao" data-i18n="cd.sec1Desc">
           Escolha um contato na lista lateral, analise as mensagens recebidas e tome a decisão correta para proteger seus dados e combater abusos online.
         </p>
       </div>
@@ -103,19 +103,19 @@
           <div class="cd-sidebar-topo">
             <h3 class="cd-sidebar-titulo">
               <span class="material-symbols-outlined icon-xs" aria-hidden="true">forum</span>
-              Conversas
+              <span data-i18n="cd.conversas">Conversas</span>
             </h3>
             <span class="cd-pontos-cidadania" id="pontos-cidadania-badge">0 Pontos de Cidadania</span>
           </div>
 
-          <div class="cd-lista-conversas" role="tablist" aria-label="Cenários de Diálogo Digital">
+          <div class="cd-lista-conversas" role="tablist" aria-label="Cenários de Diálogo Digital" data-i18n-aria="cd.cenariosAriaLabel">
             <button type="button" class="cd-item-conversa ativo" data-cenario="phishing" role="tab" aria-selected="true">
               <span class="cd-avatar-conversa" aria-hidden="true">
                 <span class="material-symbols-outlined">smart_toy</span>
               </span>
               <span class="cd-conversa-info">
-                <span class="cd-conversa-nome">Leo (Colega)</span>
-                <span class="cd-conversa-previa">Mano, achei um site que dá moedas grátis!</span>
+                <span class="cd-conversa-nome" data-i18n="cd.chat.phishing.nome">Leo (Colega)</span>
+                <span class="cd-conversa-previa" data-i18n="cd.chat.phishing.previa">Mano, achei um site que dá moedas grátis!</span>
               </span>
             </button>
 
@@ -124,8 +124,8 @@
                 <span class="material-symbols-outlined">groups</span>
               </span>
               <span class="cd-conversa-info">
-                <span class="cd-conversa-nome">Turma 5º B</span>
-                <span class="cd-conversa-previa">Olha a foto do Pedro no recreio kkk</span>
+                <span class="cd-conversa-nome" data-i18n="cd.chat.cyberbullying.nome">Turma 5º B</span>
+                <span class="cd-conversa-previa" data-i18n="cd.chat.cyberbullying.previa">Olha a foto do Pedro no recreio kkk</span>
               </span>
             </button>
 
@@ -134,8 +134,8 @@
                 <span class="material-symbols-outlined">person</span>
               </span>
               <span class="cd-conversa-info">
-                <span class="cd-conversa-nome">ShadowGamer_99</span>
-                <span class="cd-conversa-previa">Onde você mora? Passa seu Whats!</span>
+                <span class="cd-conversa-nome" data-i18n="cd.chat.privacidade.nome">ShadowGamer_99</span>
+                <span class="cd-conversa-previa" data-i18n="cd.chat.privacidade.previa">Onde você mora? Passa seu Whats!</span>
               </span>
             </button>
 
@@ -144,8 +144,8 @@
                 <span class="material-symbols-outlined">family_restroom</span>
               </span>
               <span class="cd-conversa-info">
-                <span class="cd-conversa-nome">Tia Cláudia</span>
-                <span class="cd-conversa-previa">URGENTE! Repassem para todos!</span>
+                <span class="cd-conversa-nome" data-i18n="cd.chat.fakenews.nome">Tia Cláudia</span>
+                <span class="cd-conversa-previa" data-i18n="cd.chat.fakenews.previa">URGENTE! Repassem para todos!</span>
               </span>
             </button>
           </div>
@@ -157,7 +157,7 @@
             <div class="cd-chat-contato">
               <div>
                 <h3 class="cd-contato-nome" id="chat-contato-nome">Leo (Colega de Jogo)</h3>
-                <span class="cd-contato-status" id="chat-contato-status">Online agora</span>
+                <span class="cd-contato-status" id="chat-contato-status" data-i18n="cd.onlineAgora">Online agora</span>
               </div>
             </div>
             <span class="cd-badge-tema" id="chat-badge-tema">Phishing &amp; Engenharia Social</span>
@@ -171,7 +171,7 @@
           <div class="cd-chat-decisao">
             <div class="cd-decisao-rotulo">
               <span class="material-symbols-outlined icon-xs" aria-hidden="true">psychology_alt</span>
-              Qual é a melhor atitude como cidadão digital?
+              <span data-i18n="cd.decisaoRotulo">Qual é a melhor atitude como cidadão digital?</span>
             </div>
             <div class="cd-opcoes-decisao" id="chat-opcoes-container">
               <!-- Botões inseridos via JS -->
@@ -184,8 +184,8 @@
     <!-- Seção 2: Laboratório de Senhas Seguras ("Cofre Digital") -->
     <section class="cd-secao" id="cofre-senhas" aria-labelledby="titulo-senhas">
       <div class="cd-secao-cabecalho">
-        <h2 id="titulo-senhas" class="cd-titulo-secao">Cofre Digital: Testador de Senhas Seguras</h2>
-        <p class="cd-desc-secao">
+        <h2 id="titulo-senhas" class="cd-titulo-secao" data-i18n="cd.sec2Titulo">Cofre Digital: Testador de Senhas Seguras</h2>
+        <p class="cd-desc-secao" data-i18n="cd.sec2Desc">
           Aprenda a construir chaves digitais invioláveis. Veja em tempo real quanto tempo um computador levaria para adivinhar sua senha.
         </p>
       </div>
@@ -193,35 +193,35 @@
       <div class="cd-cofre-grid">
         <div class="cd-cofre-painel">
           <div class="cd-campo-senha-wrap">
-            <label for="input-teste-senha" class="cd-label-senha">Digite uma senha para testar a força:</label>
-            <input type="text" id="input-teste-senha" class="cd-input-senha" placeholder="Ex: MinhaEscola#2026!" autocomplete="off">
+            <label for="input-teste-senha" class="cd-label-senha" data-i18n="cd.senhaLabel">Digite uma senha para testar a força:</label>
+            <input type="text" id="input-teste-senha" class="cd-input-senha" placeholder="Ex: MinhaEscola#2026!" autocomplete="off" data-i18n-attr="placeholder:cd.senhaPlaceholder">
 
             <div class="cd-termometro-forca" aria-hidden="true">
               <div class="cd-barra-forca" id="barra-forca-senha"></div>
             </div>
 
             <div class="cd-status-senha-txt">
-              <span id="status-senha-txt">Digite uma senha para testar</span>
-              <span class="cd-tempo-quebra" id="tempo-quebra-txt">Tempo para quebrar: —</span>
+              <span id="status-senha-txt" data-i18n="cd.senhaStatusPadrao">Digite uma senha para testar</span>
+              <span class="cd-tempo-quebra" id="tempo-quebra-txt" data-i18n="cd.tempoQuebraPadrao">Tempo para quebrar: —</span>
             </div>
           </div>
 
-          <ul class="cd-requisitos-lista" aria-label="Requisitos para senha forte">
+          <ul class="cd-requisitos-lista" aria-label="Requisitos para senha forte" data-i18n-aria="cd.reqAriaLabel">
             <li class="cd-req-item" id="req-tamanho">
               <span class="material-symbols-outlined cd-req-icone" aria-hidden="true">check_circle</span>
-              <span>Pelo menos 8 caracteres</span>
+              <span data-i18n="cd.req8Char">Pelo menos 8 caracteres</span>
             </li>
             <li class="cd-req-item" id="req-maiuscula">
               <span class="material-symbols-outlined cd-req-icone" aria-hidden="true">check_circle</span>
-              <span>Letras maiúsculas e minúsculas</span>
+              <span data-i18n="cd.reqMaiusc">Letras maiúsculas e minúsculas</span>
             </li>
             <li class="cd-req-item" id="req-numero">
               <span class="material-symbols-outlined cd-req-icone" aria-hidden="true">check_circle</span>
-              <span>Pelo menos um número</span>
+              <span data-i18n="cd.reqNum">Pelo menos um número</span>
             </li>
             <li class="cd-req-item" id="req-simbolo">
               <span class="material-symbols-outlined cd-req-icone" aria-hidden="true">check_circle</span>
-              <span>Símbolos (@, #, $, !, %)</span>
+              <span data-i18n="cd.reqSimb">Símbolos (@, #, $, !, %)</span>
             </li>
           </ul>
         </div>
@@ -230,9 +230,9 @@
           <div class="cd-dica-bloco">
             <h3 class="cd-dica-titulo">
               <span class="material-symbols-outlined icon-xs" aria-hidden="true">shield</span>
-              A Regra dos 4 Elementos (EF02CO04)
+              <span data-i18n="cd.dica1Titulo">A Regra dos 4 Elementos (EF02CO04)</span>
             </h3>
-            <p class="cd-dica-texto">
+            <p class="cd-dica-texto" data-i18n="cd.dica1Desc">
               Senhas com apenas números (como 123456 ou datas de aniversário) são descobertas em frações de segundo por programas de ataque.
               Misturar palavras com números e símbolos cria trilhões de combinações possíveis.
             </p>
@@ -241,9 +241,9 @@
           <div class="cd-dica-bloco">
             <h3 class="cd-dica-titulo">
               <span class="material-symbols-outlined icon-xs" aria-hidden="true">key</span>
-              Dica Mnemônica para Crianças
+              <span data-i18n="cd.dica2Titulo">Dica Mnemônica para Crianças</span>
             </h3>
-            <p class="cd-dica-texto">
+            <p class="cd-dica-texto" data-i18n-html="cd.dica2Desc">
               Crie frases fáceis de lembrar para você, mas impossíveis para outros adivinharem. Exemplo: <em>"GostoDeAstronomiaNoIFMA#2026!"</em>.
             </p>
           </div>
@@ -254,8 +254,8 @@
     <!-- Seção 3: Medidor de Pegada Digital (Digital Footprint) -->
     <section class="cd-secao" id="pegada-digital" aria-labelledby="titulo-pegada">
       <div class="cd-secao-cabecalho">
-        <h2 id="titulo-pegada" class="cd-titulo-secao">Sua Pegada Digital no Mundo (EF05CO04)</h2>
-        <p class="cd-desc-secao">
+        <h2 id="titulo-pegada" class="cd-titulo-secao" data-i18n="cd.sec3Titulo">Sua Pegada Digital no Mundo (EF05CO04)</h2>
+        <p class="cd-desc-secao" data-i18n="cd.sec3Desc">
           Tudo o que você curte, compartilha e cadastra na internet deixa rastros permanentes. Marque suas ações diárias para ver o estado da sua pegada.
         </p>
       </div>
@@ -265,27 +265,27 @@
           <div class="cd-pegada-icone-grande" id="pegada-icone-wrap" aria-hidden="true">
             <span class="material-symbols-outlined">fingerprint</span>
           </div>
-          <h3 class="cd-pegada-status-titulo" id="pegada-titulo-status">Pegada Digital Limpa &amp; Protegida</h3>
-          <p class="cd-pegada-status-desc" id="pegada-desc-status">
+          <h3 class="cd-pegada-status-titulo" id="pegada-titulo-status" data-i18n-html="cd.pegadaLimpaTitulo">Pegada Digital Limpa &amp; Protegida</h3>
+          <p class="cd-pegada-status-desc" id="pegada-desc-status" data-i18n="cd.pegadaLimpaDesc">
             Você cuida com atenção da sua privacidade, não compartilha dados sensíveis e mantém sua identidade resguardada.
           </p>
         </div>
 
         <div class="cd-pegada-acoes-lista">
           <label class="cd-opcao-pegada">
-            <span>Posto fotos com uniforme da escola ou mostrando a fachada da minha casa</span>
+            <span data-i18n="cd.chkUniforme">Posto fotos com uniforme da escola ou mostrando a fachada da minha casa</span>
             <input type="checkbox" class="cd-chk-pegada" data-peso="risco">
           </label>
           <label class="cd-opcao-pegada">
-            <span>Deixo a localização (GPS) sempre ativada publicamente nas redes sociais</span>
+            <span data-i18n="cd.chkGps">Deixo a localização (GPS) sempre ativada publicamente nas redes sociais</span>
             <input type="checkbox" class="cd-chk-pegada" data-peso="risco">
           </label>
           <label class="cd-opcao-pegada">
-            <span>Aceito termos de uso de jogos e apps sem conferir quais dados eles coletam</span>
+            <span data-i18n="cd.chkTermos">Aceito termos de uso de jogos e apps sem conferir quais dados eles coletam</span>
             <input type="checkbox" class="cd-chk-pegada" data-peso="risco">
           </label>
           <label class="cd-opcao-pegada">
-            <span>Uso a mesma senha simples para o e-mail, jogos e redes sociais</span>
+            <span data-i18n="cd.chkSenhaRepetida">Uso a mesma senha simples para o e-mail, jogos e redes sociais</span>
             <input type="checkbox" class="cd-chk-pegada" data-peso="risco">
           </label>
         </div>
@@ -298,33 +298,33 @@
     <div class="cd-rodape-grade">
       <div class="cd-rodape-info">
         <img src="/img/logo-branco.svg" alt="LMS COMPASSO — BNCC Computação" width="145" height="34">
-        <p>
+        <p data-i18n="rodape.descricao">
           Plataforma aberta para o ensino de Computação no Ensino Fundamental, alinhada à BNCC Computação e desenvolvida com apoio do IFMA Campus Grajaú.
         </p>
       </div>
       <div class="cd-rodape-col">
-        <h3>Eixos Curriculares</h3>
+        <h3 data-i18n="rodape.eixos">Eixos Curriculares</h3>
         <ul>
-          <li><a href="/atividades.html">Pensamento Computacional</a></li>
-          <li><a href="/mundo-digital.html">Mundo Digital (Hardware/Redes)</a></li>
-          <li><a href="/cultura-digital.html">Cultura Digital (Cidadania)</a></li>
+          <li><a href="/atividades.html" data-i18n="nav.atividades">Pensamento Computacional</a></li>
+          <li><a href="/mundo-digital.html" data-i18n="rodape.mundoDigital">Mundo Digital (Hardware/Redes)</a></li>
+          <li><a href="/cultura-digital.html" data-i18n="rodape.culturaDigital">Cultura Digital (Cidadania)</a></li>
         </ul>
       </div>
       <div class="cd-rodape-col">
-        <h3>Acesso Rápido</h3>
+        <h3 data-i18n="rodape.acessoRapido">Acesso Rápido</h3>
         <ul>
-          <li><a href="/boas-vindas.html">Boas-vindas &amp; Parceiros</a></li>
-          <li><a href="/login.html">Entrar na Plataforma</a></li>
-          <li><a href="https://github.com/LMS-COMPASSO/lms" rel="noopener">Código no GitHub (MIT)</a></li>
+          <li><a href="/boas-vindas.html" data-i18n="rodape.boasVindas">Boas-vindas &amp; Parceiros</a></li>
+          <li><a href="/login.html" data-i18n="rodape.entrar">Entrar na Plataforma</a></li>
+          <li><a href="https://github.com/LMS-COMPASSO/lms" rel="noopener" data-i18n="rodape.codigoGithub">Código no GitHub (MIT)</a></li>
         </ul>
       </div>
     </div>
-    <div class="cd-rodape-fim">
+    <div class="cd-rodape-fim" data-i18n="cd.rodapeFim">
       Projeto de Inovação SUAP/IFMA nº 14246/2025 · Startup LMS COMPASSO · Eixo Cultura Digital.
     </div>
   </footer>
 
-  <script src="/js/cultura-digital.js"></script>
+  <script type="module" src="/js/cultura-digital.js"></script>
   <script type="module" src="/js/icones-universais.js"></script>
   <script type="module" src="/js/menu-universal.js"></script>
 </body>

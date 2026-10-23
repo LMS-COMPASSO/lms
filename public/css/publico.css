@@ -116,27 +116,42 @@ select:focus-visible {
   border-bottom: 1px solid var(--pub-borda);
   transition: background 0.2s ease, border-color 0.2s ease;
 }
-.pub-topo .pub-container { width: min(1360px, 100%); }
+.pub-topo .pub-container { width: min(1440px, 100%); }
 .pub-topo-conteudo {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 12px;
   min-height: 68px;
 }
 .pub-logo { display: inline-flex; align-items: center; flex-shrink: 0; }
 .pub-logo img { display: block; height: 42px; width: auto; max-width: 100%; }
 
-.pub-nav { display: flex; align-items: center; gap: 4px; margin-left: auto; min-width: 0; }
+.pub-nav {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: auto;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.pub-nav::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
 .pub-nav a {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  min-height: 44px;
-  padding: 8px 14px;
+  gap: 5px;
+  min-height: 38px;
+  padding: 6px 10px;
   border-radius: 8px;
   color: var(--pub-texto-suave);
-  font-size: 0.92rem;
+  font-size: 0.88rem;
   font-weight: 600;
   white-space: nowrap;
   flex-shrink: 0;
@@ -160,8 +175,8 @@ body.suporta-tema-sistema .pub-nav a[aria-current="page"] {
   background: rgba(2, 132, 199, 0.18);
   box-shadow: inset 0 -2px 0 #38bdf8;
 }
-.pub-acoes { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; flex-shrink: 0; }
-.pub-acoes .btn { display: inline-flex; align-items: center; gap: 6px; }
+.pub-acoes { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; flex-shrink: 0; }
+.pub-acoes .btn { display: inline-flex; align-items: center; gap: 5px; min-height: 38px; padding: 6px 10px; font-size: 0.86rem; white-space: nowrap; }
 
 /* ---------- Botões Extras ---------- */
 .btn-grande { padding: 13px 24px; font-size: 0.98rem; border-radius: 10px; font-weight: 600; }
@@ -172,6 +187,177 @@ body.suporta-tema-sistema .pub-nav a[aria-current="page"] {
 .btn-verde { background: var(--pub-verde-500); color: #fff; }
 a.btn { text-decoration: none; }
 .btn:hover { opacity: 1; filter: brightness(1.04); }
+
+/* ---------- Seletor de Idiomas Acessível (i18n Dropdown Popover) ---------- */
+.seletor-idioma-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.btn-seletor-idioma {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  min-height: 40px;
+  min-width: 44px;
+  padding: 6px 8px;
+  background: transparent;
+  color: var(--pub-texto);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.btn-seletor-idioma:hover,
+.btn-seletor-idioma:focus-visible,
+.btn-seletor-idioma.aberto {
+  background: var(--pub-fundo-alt);
+  border-color: var(--pub-borda);
+  color: var(--pub-azul-700);
+}
+
+.btn-seletor-idioma:focus-visible {
+  outline: 2px solid var(--pub-foco);
+  outline-offset: 2px;
+}
+
+.btn-seletor-idioma .seta-idioma {
+  font-size: 1.15rem;
+  line-height: 1;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-seletor-idioma.aberto .seta-idioma {
+  transform: rotate(180deg);
+}
+
+.dropdown-idiomas-popover {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  min-width: 190px;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 14px;
+  box-shadow: 0 12px 32px -4px rgba(15, 23, 42, 0.16), 0 4px 12px -2px rgba(15, 23, 42, 0.08);
+  z-index: 1000;
+  padding: 8px 0;
+  animation: popoverFadeIn 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes popoverFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-idiomas-seta {
+  position: absolute;
+  top: -6px;
+  right: 18px;
+  width: 12px;
+  height: 12px;
+  background: #ffffff;
+  transform: rotate(45deg);
+  border-left: 1px solid rgba(0, 0, 0, 0.08);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  border-top-left-radius: 2px;
+  z-index: 1001;
+}
+
+.lista-idiomas {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 380px;
+  overflow-y: auto;
+}
+
+.opcao-idioma {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 18px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #1e293b;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.12s ease, color 0.12s ease;
+}
+
+.opcao-idioma:hover,
+.opcao-idioma:focus {
+  background-color: #f1f5f9;
+  color: #0284c7;
+  outline: none;
+}
+
+.opcao-idioma.selecionado {
+  color: #0284c7;
+  font-weight: 600;
+  background-color: rgba(2, 132, 199, 0.06);
+}
+
+.opcao-idioma .check-idioma {
+  font-size: 1.1rem;
+  opacity: 0;
+  color: #0284c7;
+  transition: opacity 0.15s ease;
+}
+
+.opcao-idioma.selecionado .check-idioma {
+  opacity: 1;
+}
+
+/* Suporte ao Modo Escuro */
+:root[data-tema="escuro"] .dropdown-idiomas-popover,
+body.suporta-tema-sistema[data-tema="escuro"] .dropdown-idiomas-popover {
+  background: #0f172a;
+  border-color: #334155;
+  box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.6), 0 4px 12px -2px rgba(0, 0, 0, 0.4);
+}
+
+:root[data-tema="escuro"] .dropdown-idiomas-seta,
+body.suporta-tema-sistema[data-tema="escuro"] .dropdown-idiomas-seta {
+  background: #0f172a;
+  border-left-color: #334155;
+  border-top-color: #334155;
+}
+
+:root[data-tema="escuro"] .opcao-idioma,
+body.suporta-tema-sistema[data-tema="escuro"] .opcao-idioma {
+  color: #f1f5f9;
+}
+
+:root[data-tema="escuro"] .opcao-idioma:hover,
+:root[data-tema="escuro"] .opcao-idioma:focus,
+body.suporta-tema-sistema[data-tema="escuro"] .opcao-idioma:hover,
+body.suporta-tema-sistema[data-tema="escuro"] .opcao-idioma:focus {
+  background-color: #1e293b;
+  color: #38bdf8;
+}
+
+:root[data-tema="escuro"] .opcao-idioma.selecionado,
+body.suporta-tema-sistema[data-tema="escuro"] .opcao-idioma.selecionado {
+  color: #38bdf8;
+  background-color: rgba(56, 189, 248, 0.12);
+}
+
+:root[data-tema="escuro"] .opcao-idioma.selecionado .check-idioma,
+body.suporta-tema-sistema[data-tema="escuro"] .opcao-idioma.selecionado .check-idioma {
+  color: #38bdf8;
+}
+
 
 /* ---------- Hero (Clean & Luminous i-Educar style) ---------- */
 .pub-hero {
@@ -739,10 +925,11 @@ body.suporta-tema-sistema .pub-metrica span {
   .pub-colunas { grid-template-columns: 1fr; }
   .pub-rodape-grade { grid-template-columns: 1fr; }
 }
-@media (max-width: 1080px) {
+@media (max-width: 1320px) {
   .pub-topo-conteudo {
     flex-wrap: wrap;
     padding-block: 10px;
+    gap: 12px;
   }
   .pub-nav {
     order: 3;
@@ -752,21 +939,35 @@ body.suporta-tema-sistema .pub-metrica span {
     justify-content: flex-start;
     gap: 6px;
     -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .pub-nav::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
   }
   .pub-nav a {
     white-space: nowrap;
-    min-height: 44px;
+    min-height: 40px;
+    padding: 6px 12px;
+    font-size: 0.88rem;
     display: inline-flex;
     align-items: center;
   }
   .pub-acoes { margin-left: auto; }
 }
+@media (max-width: 640px) {
+  .pub-acoes a[href="/atividades.html"] {
+    display: none;
+  }
+}
 @media (max-width: 480px) {
-  .pub-container { padding-inline: 16px; }
-  .pub-logo img { height: 36px; max-width: 100%; }
+  .pub-container { padding-inline: 14px; }
+  .pub-logo img { height: 34px; max-width: 100%; }
   .pub-topo-conteudo { min-height: 56px; }
-  .pub-acoes { gap: 6px; }
-  .pub-acoes .btn { min-height: 44px; padding: 8px 12px; font-size: 0.85rem; }
+  .pub-acoes { gap: 6px; flex-wrap: wrap; }
+  .pub-acoes .btn { min-height: 38px; padding: 6px 10px; font-size: 0.82rem; }
   .pub-hero { padding: 44px 14px 50px; }
   .pub-cta { flex-direction: column; align-items: stretch; gap: 10px; }
   .pub-cta .btn { width: 100%; justify-content: center; min-height: 44px; }
@@ -776,9 +977,9 @@ body.suporta-tema-sistema .pub-metrica span {
 }
 
 @media (max-width: 360px) {
-  .pub-container { padding-inline: 12px; }
-  .pub-acoes { width: 100%; justify-content: flex-start; }
-  .pub-acoes .btn { flex: 1 1 auto; text-align: center; justify-content: center; }
+  .pub-container { padding-inline: 10px; }
+  .pub-acoes { width: 100%; justify-content: flex-start; gap: 4px; }
+  .pub-acoes .btn { flex: 1 1 auto; text-align: center; justify-content: center; padding: 6px 8px; font-size: 0.8rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {

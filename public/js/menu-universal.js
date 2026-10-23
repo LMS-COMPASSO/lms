@@ -3,6 +3,7 @@
  * Gerencia a navegação pública, ícones universais e sincronização de sessão em todas as telas.
  */
 import '/js/icones-universais.js';
+import { montarSeletorIdioma, traduzirDocumento } from '/js/i18n.js';
 
 export function inicializarMenuUniversal() {
   const caminhoAtual = window.location.pathname.replace(/\/$/, '') || '/';
@@ -64,6 +65,13 @@ export function inicializarMenuUniversal() {
       }
     }
   } catch {}
+
+  // 4. Montar seletor de idiomas acessível em .pub-acoes (conforme layout de referência)
+  const containerAcoes = document.querySelector('.pub-acoes');
+  if (containerAcoes) {
+    montarSeletorIdioma(containerAcoes);
+  }
+  traduzirDocumento();
 }
 
 // Inicialização automática ao carregar o DOM
