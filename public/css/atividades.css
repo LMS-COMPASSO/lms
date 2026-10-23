@@ -19,7 +19,7 @@
 .atv-intro { max-width: 760px; margin: 0 0 20px; color: var(--pub-texto-suave); font-size: 1rem; line-height: 1.6; }
 
 /* ---------- Catálogo ---------- */
-.atv-resumo-progresso { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 20px; padding: 14px 18px; border-radius: var(--raio); background: #fff; box-shadow: var(--sombra); }
+.atv-resumo-progresso { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 20px; padding: 14px 18px; border-radius: var(--raio); background: var(--cor-cartao, #fff); border: 1px solid var(--pub-borda); box-shadow: var(--sombra); }
 .atv-resumo-progresso strong { color: var(--pub-azul-900); }
 .atv-resumo-progresso .progress-bar { flex: 1; min-width: 140px; height: 10px; }
 .atv-resumo-progresso .progress-bar-fill { background: var(--pub-verde-700); }
@@ -35,7 +35,7 @@
   padding: 8px 16px;
   border: 2px solid var(--pub-borda);
   border-radius: 999px;
-  background: #fff;
+  background: var(--cor-cartao, #fff);
   color: var(--pub-texto);
   font: inherit;
   font-size: 0.88rem;
@@ -46,7 +46,7 @@
 .atv-filtro[aria-pressed='true'] { border-color: var(--pub-azul-700); background: var(--pub-azul-700); color: #fff; }
 
 .atv-grade { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); gap: 18px; padding: 0; margin: 0; list-style: none; }
-.atv-card { display: flex; flex-direction: column; height: 100%; padding: 22px; border: 1px solid var(--pub-borda); border-radius: 16px; background: #fff; box-shadow: var(--sombra); }
+.atv-card { display: flex; flex-direction: column; height: 100%; padding: 22px; border: 1px solid var(--pub-borda); border-radius: 16px; background: var(--cor-cartao, #fff); box-shadow: var(--sombra); }
 .atv-card-topo { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .atv-card .pub-icone { width: 48px; height: 48px; font-size: 1.6rem; }
 .atv-card h2,
@@ -56,7 +56,7 @@
 .atv-meta li { padding: 3px 10px; border-radius: 999px; background: var(--pub-fundo-alt); color: var(--pub-texto-suave); font-size: 0.78rem; font-weight: 600; }
 .atv-card .atv-card-acao { margin-top: auto; }
 .atv-concluida { padding: 4px 10px; border-radius: 999px; background: var(--pub-verde-100); color: var(--pub-verde-700); font-size: 0.76rem; font-weight: 700; }
-.atv-vazio-lista { padding: 24px; border-radius: var(--raio); background: #fff; color: var(--pub-texto-suave); }
+.atv-vazio-lista { padding: 24px; border-radius: var(--raio); background: var(--cor-cartao, #fff); border: 1px solid var(--pub-borda); color: var(--pub-texto-suave); }
 
 /* ---------- Jogador: cabeçalho ---------- */
 .atv-voltar {
@@ -95,8 +95,8 @@
   border: 1.5px solid var(--cor-secao-ativa, #1d4ed8);
   font-weight: 800;
 }
-.atv-instrucao { margin: 0 0 18px; padding: 14px 18px; border: 1px solid var(--pub-borda); border-radius: 12px; background: #fff; box-shadow: var(--sombra); line-height: 1.55; }
-.atv-painel { margin-bottom: 18px; padding: 20px; border-radius: 16px; background: #fff; box-shadow: var(--sombra); }
+.atv-instrucao { margin: 0 0 18px; padding: 14px 18px; border: 1px solid var(--pub-borda); border-radius: 12px; background: var(--cor-cartao, #fff); color: var(--pub-texto); box-shadow: var(--sombra); line-height: 1.55; }
+.atv-painel { margin-bottom: 18px; padding: 20px; border-radius: 16px; background: var(--cor-cartao, #fff); border: 1px solid var(--pub-borda); box-shadow: var(--sombra); }
 .atv-painel h3,
 .atv-painel h4 { margin: 0 0 10px; color: var(--pub-azul-900); }
 .atv-painel h3 { font-size: 1rem; }
@@ -112,7 +112,7 @@
   padding: 10px 14px;
   border: 2px solid var(--pub-borda);
   border-radius: 12px;
-  background: #fff;
+  background: var(--cor-cartao, #fff);
   color: var(--pub-texto);
   font: inherit;
   font-weight: 600;
@@ -127,7 +127,7 @@
 .atv-vazio { margin: 0; padding: 14px; border: 2px dashed var(--pub-borda); border-radius: 12px; color: var(--pub-texto-suave); text-align: center; }
 
 .atv-sequencia { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; counter-reset: passo; }
-.atv-item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: 2px solid var(--pub-borda); border-radius: 12px; background: #fff; counter-increment: passo; }
+.atv-item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: 2px solid var(--pub-borda); border-radius: 12px; background: var(--cor-cartao, #fff); color: var(--pub-texto); counter-increment: passo; }
 .atv-item::before {
   content: counter(passo);
   display: grid;
@@ -150,7 +150,7 @@
   min-height: 44px;
   border: 2px solid var(--pub-borda);
   border-radius: 10px;
-  background: #fff;
+  background: var(--cor-cartao, #fff);
   color: var(--pub-azul-900);
   font: inherit;
   font-size: 1.05rem;
@@ -183,10 +183,10 @@
 .atv-estrelas { font-size: 1.4rem; letter-spacing: 3px; }
 
 /* ---------- Dividir o problema ---------- */
-.atv-problema { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; padding: 16px 18px; border-radius: 12px; background: var(--pub-azul-900); color: #fff; font-size: 1.05rem; }
+.atv-problema { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; padding: 16px 18px; border-radius: 12px; background: var(--cor-primaria-escura, var(--pub-azul-900)); color: #fff; font-size: 1.05rem; }
 .atv-problema .atv-emoji { font-size: 1.8rem; }
 .atv-partes { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
-.atv-parte { display: flex; flex-direction: column; gap: 10px; padding: 14px; border: 2px solid var(--pub-azul-700); border-radius: 14px; background: #fff; }
+.atv-parte { display: flex; flex-direction: column; gap: 10px; padding: 14px; border: 2px solid var(--pub-azul-700); border-radius: 14px; background: var(--cor-cartao, #fff); }
 .atv-parte.descarte { border-style: dashed; border-color: var(--pub-texto-suave); background: var(--pub-fundo-alt); }
 .atv-parte h4 { margin: 0; color: var(--pub-azul-900); font-size: 0.98rem; }
 .atv-parte ul { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
@@ -747,7 +747,7 @@
   border-radius: 14px;
   background: var(--pub-azul-100);
 }
-.atv-celula { display: grid; place-items: center; position: relative; aspect-ratio: 1; border-radius: 10px; background: #fff; font-size: clamp(1.3rem, 5vw, 2rem); line-height: 1; }
+.atv-celula { display: grid; place-items: center; position: relative; aspect-ratio: 1; border-radius: 10px; background: var(--cor-cartao, #fff); color: var(--pub-texto); font-size: clamp(1.3rem, 5vw, 2rem); line-height: 1; }
 .atv-celula.visitada { background: var(--pub-ambar-100); }
 .atv-celula.obstaculo { background: #edf2f7; }
 .atv-celula.meta { box-shadow: inset 0 0 0 3px var(--pub-verde-500); }
@@ -776,7 +776,7 @@
 .atv-comando.atual { background: var(--pub-ambar-500); border-color: var(--pub-ambar-700); color: #1a202c; }
 .atv-comando.erro { background: #fed7d7; border-color: var(--cor-perigo); }
 .atv-paleta { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-bottom: 12px; }
-.atv-direcao { display: grid; place-items: center; gap: 2px; min-height: 64px; padding: 6px; border: 2px solid var(--pub-azul-900); border-radius: 12px; background: var(--pub-azul-900); color: #fff; font: inherit; font-weight: 700; cursor: pointer; }
+.atv-direcao { display: grid; place-items: center; gap: 2px; min-height: 64px; padding: 6px; border: 2px solid var(--cor-primaria-escura, var(--pub-azul-900)); border-radius: 12px; background: var(--cor-primaria-escura, var(--pub-azul-900)); color: #fff; font: inherit; font-weight: 700; cursor: pointer; }
 .atv-direcao span:first-child { font-size: 1.5rem; line-height: 1; }
 .atv-direcao span:last-child { font-size: 0.74rem; }
 .atv-direcao:hover:not(:disabled) { background: var(--pub-azul-700); border-color: var(--pub-azul-700); }
@@ -784,7 +784,7 @@
 .atv-contagem { margin: 0 0 8px; color: var(--pub-texto-suave); font-size: 0.88rem; }
 
 /* ---------- Orientações para o professor ---------- */
-.atv-professor { margin-top: 20px; border: 1px solid var(--pub-borda); border-radius: 14px; background: #fff; }
+.atv-professor { margin-top: 20px; border: 1px solid var(--pub-borda); border-radius: 14px; background: var(--cor-cartao, #fff); }
 .atv-professor summary { padding: 14px 18px; color: var(--pub-azul-900); font-weight: 800; cursor: pointer; }
 .atv-professor-corpo { padding: 0 18px 18px; color: var(--pub-texto); line-height: 1.6; }
 .atv-professor-corpo h3 { margin: 16px 0 6px; color: var(--pub-azul-900); font-size: 0.95rem; }
@@ -1490,7 +1490,8 @@
   padding: 10px 14px;
   border: 2px solid var(--pub-borda);
   border-radius: 12px;
-  background: #ffffff;
+  background: var(--cor-cartao, #ffffff);
+  color: var(--pub-texto);
   font-size: 0.92rem;
 }
 
@@ -1513,7 +1514,7 @@
   margin: 22px 0;
   padding: 20px;
   border-radius: 16px;
-  background: #ffffff;
+  background: var(--cor-cartao, #ffffff);
   border: 1px solid var(--pub-borda);
   box-shadow: var(--sombra);
 }
@@ -1530,7 +1531,7 @@
 .atv-hab-card {
   padding: 14px;
   border-radius: 12px;
-  background: #f8fafc;
+  background: var(--pub-fundo-alt, #f8fafc);
   border: 1px solid var(--pub-borda);
 }
 .atv-hab-topo {
@@ -2002,6 +2003,233 @@
     padding: 8px;
   }
 }
+
+/* ============================================================================
+   TEMA ESCURO — AJUSTES ESPECÍFICOS DE ATIVIDADES
+   ============================================================================ */
+
+:root[data-tema="escuro"],
+body.suporta-tema-sistema {
+  --pub-fundo-alt: #111827;
+  --pub-borda: #334155;
+}
+
+:root[data-tema="escuro"] .atv-card,
+body.suporta-tema-sistema .atv-card {
+  background: #111827;
+  border-color: #1e293b;
+}
+
+:root[data-tema="escuro"] .atv-resumo-progresso,
+body.suporta-tema-sistema .atv-resumo-progresso,
+:root[data-tema="escuro"] .atv-painel,
+body.suporta-tema-sistema .atv-painel,
+:root[data-tema="escuro"] .atv-instrucao,
+body.suporta-tema-sistema .atv-instrucao,
+:root[data-tema="escuro"] .atv-professor,
+body.suporta-tema-sistema .atv-professor,
+:root[data-tema="escuro"] .atv-vazio-lista,
+body.suporta-tema-sistema .atv-vazio-lista,
+:root[data-tema="escuro"] .atv-mapa-hab-box,
+body.suporta-tema-sistema .atv-mapa-hab-box {
+  background: #111827;
+  border-color: #1e293b;
+}
+
+:root[data-tema="escuro"] .atv-passo,
+body.suporta-tema-sistema .atv-passo,
+:root[data-tema="escuro"] .atv-item,
+body.suporta-tema-sistema .atv-item,
+:root[data-tema="escuro"] .atv-parte,
+body.suporta-tema-sistema .atv-parte,
+:root[data-tema="escuro"] .atv-controle,
+body.suporta-tema-sistema .atv-controle {
+  background: #1e293b;
+  border-color: #334155;
+  color: #f1f5f9;
+}
+
+:root[data-tema="escuro"] .atv-filtro,
+body.suporta-tema-sistema .atv-filtro {
+  background: #111827;
+  border-color: #334155;
+  color: #e2e8f0;
+}
+
+:root[data-tema="escuro"] .atv-filtro:hover,
+body.suporta-tema-sistema .atv-filtro:hover {
+  border-color: #60a5fa;
+  color: #60a5fa;
+}
+
+:root[data-tema="escuro"] .atv-filtro[aria-pressed='true'],
+body.suporta-tema-sistema .atv-filtro[aria-pressed='true'] {
+  background: #2563eb;
+  border-color: #3b82f6;
+  color: #ffffff;
+}
+
+:root[data-tema="escuro"] .atv-input-busca,
+body.suporta-tema-sistema .atv-input-busca,
+:root[data-tema="escuro"] .atv-select-habilidade,
+body.suporta-tema-sistema .atv-select-habilidade {
+  background: #111827;
+  border-color: #334155;
+  color: #f1f5f9;
+}
+
+:root[data-tema="escuro"] .atv-badge-eixo,
+body.suporta-tema-sistema .atv-badge-eixo {
+  background: rgba(30, 64, 175, 0.3);
+  color: #93c5fd;
+}
+
+:root[data-tema="escuro"] .atv-meta li.atv-meta-bncc,
+body.suporta-tema-sistema .atv-meta li.atv-meta-bncc {
+  background: rgba(14, 116, 144, 0.3);
+  color: #7dd3fc;
+}
+
+:root[data-tema="escuro"] .atv-hab-card,
+body.suporta-tema-sistema .atv-hab-card {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+:root[data-tema="escuro"] .atv-fora,
+body.suporta-tema-sistema .atv-fora {
+  background: rgba(245, 158, 11, 0.15);
+  border-color: #d97706;
+}
+
+:root[data-tema="escuro"] .atv-intruso,
+body.suporta-tema-sistema .atv-intruso {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: #dc2626;
+}
+
+:root[data-tema="escuro"] .atv-feedback.erro,
+body.suporta-tema-sistema .atv-feedback.erro {
+  background: rgba(180, 83, 9, 0.25);
+  color: #fcd34d;
+  border-color: #d97706;
+}
+
+:root[data-tema="escuro"] .atv-feedback.sucesso,
+body.suporta-tema-sistema .atv-feedback.sucesso {
+  background: rgba(22, 101, 52, 0.3);
+  color: #86efac;
+  border-color: #16a34a;
+}
+
+:root[data-tema="escuro"] .atv-problema,
+body.suporta-tema-sistema .atv-problema {
+  background: #1e293b;
+  border: 1px solid #334155;
+  color: #f1f5f9;
+}
+
+:root[data-tema="escuro"] .atv-direcao,
+body.suporta-tema-sistema .atv-direcao {
+  background: #1e293b;
+  border-color: #3b82f6;
+  color: #f1f5f9;
+}
+
+/* Fallback do media query para tema escuro sem data-tema explícito */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-tema="claro"]) .atv-card,
+  :root:not([data-tema="claro"]) .atv-resumo-progresso,
+  :root:not([data-tema="claro"]) .atv-painel,
+  :root:not([data-tema="claro"]) .atv-instrucao,
+  :root:not([data-tema="claro"]) .atv-professor,
+  :root:not([data-tema="claro"]) .atv-vazio-lista,
+  :root:not([data-tema="claro"]) .atv-mapa-hab-box {
+    background: #111827;
+    border-color: #1e293b;
+  }
+
+  :root:not([data-tema="claro"]) .atv-passo,
+  :root:not([data-tema="claro"]) .atv-item,
+  :root:not([data-tema="claro"]) .atv-parte,
+  :root:not([data-tema="claro"]) .atv-controle {
+    background: #1e293b;
+    border-color: #334155;
+    color: #f1f5f9;
+  }
+
+  :root:not([data-tema="claro"]) .atv-filtro {
+    background: #111827;
+    border-color: #334155;
+    color: #e2e8f0;
+  }
+  :root:not([data-tema="claro"]) .atv-filtro:hover {
+    border-color: #60a5fa;
+    color: #60a5fa;
+  }
+  :root:not([data-tema="claro"]) .atv-filtro[aria-pressed='true'] {
+    background: #2563eb;
+    border-color: #3b82f6;
+    color: #ffffff;
+  }
+
+  :root:not([data-tema="claro"]) .atv-input-busca,
+  :root:not([data-tema="claro"]) .atv-select-habilidade {
+    background: #111827;
+    border-color: #334155;
+    color: #f1f5f9;
+  }
+
+  :root:not([data-tema="claro"]) .atv-badge-eixo {
+    background: rgba(30, 64, 175, 0.3);
+    color: #93c5fd;
+  }
+
+  :root:not([data-tema="claro"]) .atv-meta li.atv-meta-bncc {
+    background: rgba(14, 116, 144, 0.3);
+    color: #7dd3fc;
+  }
+
+  :root:not([data-tema="claro"]) .atv-hab-card {
+    background: #1e293b;
+    border-color: #334155;
+  }
+
+  :root:not([data-tema="claro"]) .atv-fora {
+    background: rgba(245, 158, 11, 0.15);
+    border-color: #d97706;
+  }
+
+  :root:not([data-tema="claro"]) .atv-intruso {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: #dc2626;
+  }
+
+  :root:not([data-tema="claro"]) .atv-feedback.erro {
+    background: rgba(180, 83, 9, 0.25);
+    color: #fcd34d;
+    border-color: #d97706;
+  }
+
+  :root:not([data-tema="claro"]) .atv-feedback.sucesso {
+    background: rgba(22, 101, 52, 0.3);
+    color: #86efac;
+    border-color: #16a34a;
+  }
+
+  :root:not([data-tema="claro"]) .atv-problema {
+    background: #1e293b;
+    border: 1px solid #334155;
+    color: #f1f5f9;
+  }
+
+  :root:not([data-tema="claro"]) .atv-direcao {
+    background: #1e293b;
+    border-color: #3b82f6;
+    color: #f1f5f9;
+  }
+}
+
 
 
 
