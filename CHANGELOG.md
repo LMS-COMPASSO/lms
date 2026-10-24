@@ -1,0 +1,55 @@
+# Changelog
+
+## 1.0.0 (2026-10-24)
+
+
+### Features
+
+* adiciona laboratório 3D Python (D1, dupla e certificado), wayfinding digital e sistema de ícones SVG universais ([6dadfcc](https://github.com/LMS-COMPASSO/lms/commit/6dadfcc561a90d19a1fcd0d2f9b7713d118ad33d))
+* adicionar tela de boas-vindas e parceiros com conceitos Wishlab… ([afd2121](https://github.com/LMS-COMPASSO/lms/commit/afd212167a2f854b110dc2cd8e5c3330a5f1ebaf))
+* adicionar tela de boas-vindas e parceiros com conceitos Wishlabs e GSAP ([d0193a6](https://github.com/LMS-COMPASSO/lms/commit/d0193a6a0faa436c21dbe0f9afb77d6a5adf52e1))
+* **assets:** gerar versoes em png de alta resolucao da logo para canva e compartilhamento ([6ac9c41](https://github.com/LMS-COMPASSO/lms/commit/6ac9c41f995f35f73b065203f19947ce589f1886))
+* **atividades:** corrigir fase 3 do robo e expandir melhorias para todas as atividades ([0515340](https://github.com/LMS-COMPASSO/lms/commit/0515340b5debd02847db808ef1870b1ee9af1b87))
+* **atividades:** implementar ícones vetoriais Material Symbols e remover necessidade de emojis ([e2ed2da](https://github.com/LMS-COMPASSO/lms/commit/e2ed2da9d27905dd91b7a44dbb2b0a3788ebb16c))
+* **atividades:** transformar atividade do robo em simulador de jogos com GSAP e Wishlabs HUD ([573049d](https://github.com/LMS-COMPASSO/lms/commit/573049de801a9ba59d0c462c12444ce6672011b7))
+* **atividades:** transformar atividade do robo em simulador de jogos… ([2294fdc](https://github.com/LMS-COMPASSO/lms/commit/2294fdcf169cfef7742c3b3be6e84cf05332424b))
+* **auth:** add JWT expiration and Cloudflare MCP setup ([d9fe76a](https://github.com/LMS-COMPASSO/lms/commit/d9fe76a0c9669c56ad94ddb91143d3c7763c6ee1))
+* **auth:** implementar suporte completo a login com Google para contas acadêmicas ([6ecb4be](https://github.com/LMS-COMPASSO/lms/commit/6ecb4becbe78cccba3267737c84f468def6bca70))
+* **auth:** suportar secrets do Google na Cloudflare e remover personas de teste ([000a9b8](https://github.com/LMS-COMPASSO/lms/commit/000a9b8461e17f21440b679ac79804c4261e0527))
+* **backend:** migracao para Cloudflare D1 e Workers com suporte a BNCC ([013b7d2](https://github.com/LMS-COMPASSO/lms/commit/013b7d24d85c621a25ecaa73050d6ae71daae41d))
+* **dashboard,bmc:** evoluir dashboard com abas e modularizar funcoes do bmc ([65a3990](https://github.com/LMS-COMPASSO/lms/commit/65a39904ac3e451f46a4180f9d79d325c086c1e0))
+* **dashboard,bmc:** evoluir dashboard com abas e modularizar funcoes… ([ad36f3f](https://github.com/LMS-COMPASSO/lms/commit/ad36f3feaf81f144e39e369ffa9b2d524a2d60bf))
+* **frontend:** atividades dinâmicas de algoritmos, decomposição e ro… ([1ec5c38](https://github.com/LMS-COMPASSO/lms/commit/1ec5c3841cbd9bf55398cfbff4cb005606a3d8fc))
+* **frontend:** atividades dinâmicas de algoritmos, decomposição e robô, com nova página inicial e login ([5d1b55e](https://github.com/LMS-COMPASSO/lms/commit/5d1b55e2d1d8bb0b6cba2d501e475b614ec7948b))
+* **home:** redesenhar página inicial e corrigir contraste nos temas claro/escuro ([f5a5144](https://github.com/LMS-COMPASSO/lms/commit/f5a51440e2d969cdadaa74306d82c39a68f794a5))
+* **i18n:** implementar suporte multilíngue (9 idiomas) nos eixos Mundo Digital e Cultura Digital ([51f2ed0](https://github.com/LMS-COMPASSO/lms/commit/51f2ed0e4e7026d8738376af8de74dc496193e9d))
+* implementar páginas dos eixos Mundo Digital e Cultura Digital com simulações 3D e chat interativo ([92e42cc](https://github.com/LMS-COMPASSO/lms/commit/92e42cca2e3b225604f6e67a6958378195b50c05))
+* **ui:** auditar responsividade e substituir emojis por Google Material Symbols ([4d52571](https://github.com/LMS-COMPASSO/lms/commit/4d525714f88b8aec34262d943742330626823888))
+* **ui:** auditar responsividade e substituir emojis por Google Material Symbols ([a697cdb](https://github.com/LMS-COMPASSO/lms/commit/a697cdb0f63313a7c08b5c8468442d7b904f145b))
+* **ui:** implementar alinhamento visual e responsividade fluida via Impeccable ([1bebb32](https://github.com/LMS-COMPASSO/lms/commit/1bebb320889bb8aefa789c847ce70ad9f5b074e1))
+* **ui:** padronizar responsividade, acessibilidade WCAG 2.2 AA e guia DESIGN.md ([dd9c685](https://github.com/LMS-COMPASSO/lms/commit/dd9c685f4df1fb426a32fd43a8b07aef9ddbe243))
+* **wayfinding:** implementar pilares 2 e 3 de wayfinding, persistencia D1 e testes E2E/SUS ([adbc001](https://github.com/LMS-COMPASSO/lms/commit/adbc00110b9005bcf20ef14caec5babe289ccb4a))
+
+
+### Bug Fixes
+
+* **a11y,ui:** sanar apontamentos da auditoria técnica geral (P1-P3) ([ce5ddce](https://github.com/LMS-COMPASSO/lms/commit/ce5ddce1ec69db3c1f6f953735c89afc1eadc013))
+* **ci:** corrigir sintaxe do pr-lint, dimensoes de logos para CLS e estabilizar axe/snapshots no e2e ([fb3ffaf](https://github.com/LMS-COMPASSO/lms/commit/fb3ffaf1131bf02f09bf0d5cac1fd1590fbe5165))
+* **ci:** flexibilizar black com ruff e isentar dependabot de pr-lint ([15c4e8b](https://github.com/LMS-COMPASSO/lms/commit/15c4e8b6fd18f03092db671d2b4ee990a18c13ee))
+* **ci:** sincronizar package-lock.json com playwright e ajustar action release-please ([039a4e1](https://github.com/LMS-COMPASSO/lms/commit/039a4e15f7485d2029253c7b3acea4bdd3fcdb07))
+* **ci:** unificar assertions do lhci, mover playwright.config para raiz e remover gitleaks comercial ([eff1033](https://github.com/LMS-COMPASSO/lms/commit/eff10335dc40ce44f6fe2ae5222dc332b53c9987))
+* **e2e:** otimizar instalacao do playwright usando chromium leve nas 4 resolucoes ([588b624](https://github.com/LMS-COMPASSO/lms/commit/588b624992821423aecfaa39a605678da04e380a))
+* **frontend:** corrigir tags void HTML5, acessibilidade e migrar estilos inline para CSS ([d399809](https://github.com/LMS-COMPASSO/lms/commit/d3998090f30d6a5d6c78e08c6d1a6bf61ed987c5))
+* **frontend:** resolver avisos de promise chain com top-level await e adicionar GITHUB_PROJECTS.md ([9df4806](https://github.com/LMS-COMPASSO/lms/commit/9df480646aaa7405ae4b80b7ab7d9ff3a713f383))
+* **home:** remover ícone de expansão duplicado nos cards de perguntas frequentes ([660dcc3](https://github.com/LMS-COMPASSO/lms/commit/660dcc3eb5cc4db8a8e0e06ac7a4a107c2416c0d))
+* **qa:** formatar test_atividades_3d com black e validar token cloudflare no deploy ([ab7d051](https://github.com/LMS-COMPASSO/lms/commit/ab7d0515171082a344cd2d313fb6121a82bd4cd6))
+* **security:** senhas com PBKDF2 e salt, remove segredo JWT versionad… ([719b6cc](https://github.com/LMS-COMPASSO/lms/commit/719b6cc2ec63de0591b5d706a684dfb1f949bf8c))
+* **security:** senhas com PBKDF2 e salt, remove segredo JWT versionado e fallback previsível ([cb16b05](https://github.com/LMS-COMPASSO/lms/commit/cb16b05c0b5abe6ff7125b31ffe137ff96233f38))
+* **ui,gamificacao:** modernizar menu lateral responsivo e corrigir ca… ([2e68a59](https://github.com/LMS-COMPASSO/lms/commit/2e68a59f52ba18dd338b5e520d1aaba31006a960))
+* **ui,gamificacao:** modernizar menu lateral responsivo e corrigir carga de medalhas ([5447bbf](https://github.com/LMS-COMPASSO/lms/commit/5447bbf1b8fc125115a94350147375425782a661))
+* **ui:** alinhar navegação, padronizar breadcrumbs e limpar citações normativas ([87fca96](https://github.com/LMS-COMPASSO/lms/commit/87fca9628ce9026c07b1ae39829e9f52b105c35d))
+* **ui:** alinhar visualmente eixos de atividades, corrigir contadores duplicados e enquadrar placa-mãe 3D ([67d9f0b](https://github.com/LMS-COMPASSO/lms/commit/67d9f0b9ee76ab092ba6e020c24ee01f3a83436d))
+* **ui:** atualizado .bv-topo .pub-container de max-width: 1200px para max-width: 1400px, alinhando-se aos monitores modernos e provendo espaço para todos os elementos na horizontal. ([94a93a0](https://github.com/LMS-COMPASSO/lms/commit/94a93a0b8840702085319b79d04bafdd763fd8fa))
+* **ui:** corrigir contraste de fontes, cartões e logos no modo escuro ([bd65119](https://github.com/LMS-COMPASSO/lms/commit/bd65119d2f7ddb5b02a5aec101d4a56dce9166ea))
+* **ui:** padronizar proporção de logos e eliminar sobreposição de menu no cabeçalho ([20ece34](https://github.com/LMS-COMPASSO/lms/commit/20ece34bf0d49f1ed2261a104eb3c002a605843e))
+* **ui:** unificar menu superior, padronizar ícones de ação e aplicar polimento visual clean ([80f5933](https://github.com/LMS-COMPASSO/lms/commit/80f5933a65e80312a56804db204e37719f1561ca))
