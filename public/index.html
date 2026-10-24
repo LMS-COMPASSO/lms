@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LMS COMPASSO — Computação na escola, passo a passo, com a BNCC</title>
-<meta name="description" content="Plataforma aberta e leve para ensinar Computação no Ensino Fundamental, alinhada à BNCC Computação: cursos, atividades dinâmicas e desplugadas, avaliações e certificados.">
+<meta name="description" content="Plataforma aberta e moderna para o ensino de Computação no Ensino Fundamental: atividades interativas, laboratórios 3D, dinâmicas desplugadas e relatórios por habilidades da BNCC.">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:title" content="LMS COMPASSO — Computação na escola, passo a passo">
@@ -15,10 +15,12 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
 <link rel="stylesheet" href="/css/style.css">
 <link rel="stylesheet" href="/css/publico.css">
+<link rel="stylesheet" href="/css/home-sendpulse.css">
 </head>
-<body>
-  <a class="pular-conteudo" href="#conteudo">Pular para o conteúdo</a>
+<body class="pagina-inicio">
+  <a class="pular-conteudo" href="#conteudo">Pular para o conteúdo principal</a>
 
+  <!-- Topo de Navegação Universal -->
   <header class="pub-topo">
     <div class="pub-container pub-topo-conteudo">
       <a href="/" class="pub-logo" aria-label="LMS COMPASSO — página inicial">
@@ -40,241 +42,620 @@
     </div>
   </header>
 
-  <main id="conteudo">
-    <section class="pub-hero" aria-labelledby="titulo-hero">
-      <div class="pub-container pub-hero-grade">
+  <main id="conteudo" tabindex="-1">
+    <!-- 1. Hero Section (Inspirado no SendPulse Edu) -->
+    <section class="sp-hero" aria-labelledby="titulo-hero">
+      <div class="pub-container sp-hero-grid">
         <div>
-          <p class="pub-eyebrow">Projeto de Inovação SUAP/IFMA · Startup LMS COMPASSO</p>
-          <h1 id="titulo-hero">Computação na escola, <em>passo a passo</em>.</h1>
-          <p class="pub-lead">
-            O LMS COMPASSO é uma plataforma aberta e leve que ajuda redes municipais e escolas a ensinar
-            Pensamento Computacional, Mundo Digital e Cultura Digital no Ensino Fundamental, com a BNCC Computação como guia.
-          </p>
-          <div class="pub-cta">
-            <a href="/atividades.html" class="btn btn-claro btn-grande">Experimente uma atividade</a>
-            <a href="/boas-vindas.html" class="btn btn-contorno-claro btn-grande">Boas-vindas &amp; Parceiros</a>
-            <a href="/login.html" class="btn btn-contorno-claro btn-grande" id="cta-plataforma">Entrar na plataforma</a>
+          <div class="sp-kicker-badge">
+            <span class="sp-pulse-dot" aria-hidden="true"></span>
+            <span>Plataforma Educacional Completa · BNCC Computação</span>
           </div>
-          <ul class="pub-confianca">
-            <li>Código aberto (licença MIT)</li>
-            <li>Alinhada à BNCC Computação</li>
-            <li>Leve: HTML, CSS e JavaScript puros</li>
-          </ul>
+          <h1 id="titulo-hero" class="sp-hero-titulo">
+            Ensine, inspire e engaje com a plataforma de Computação <span>mais prática da Educação Básica</span>
+          </h1>
+          <p class="sp-hero-desc">
+            Tudo o que sua escola precisa para aplicar os 3 eixos da BNCC Computação no Ensino Fundamental:
+            atividades interativas no navegador, laboratórios 3D imersivos, dinâmicas desplugadas em papel e relatórios pedagógicos automáticos.
+          </p>
+          <div class="sp-hero-botoes">
+            <a href="/atividades.html" class="btn-sp-primario">
+              <span class="material-symbols-outlined" aria-hidden="true">play_arrow</span>
+              Explorar Atividades Gratuitas
+            </a>
+            <a href="#eixos-showcase" class="btn-sp-contorno">
+              <span class="material-symbols-outlined" aria-hidden="true">explore</span>
+              Ver os 3 Eixos em Ação
+            </a>
+            <a href="/login.html" class="btn-sp-contorno" id="cta-plataforma">
+              <span class="material-symbols-outlined" aria-hidden="true">login</span>
+              Entrar na plataforma
+            </a>
+          </div>
+
+          <div class="sp-confianca-grid" aria-label="Diferenciais da plataforma">
+            <div class="sp-confianca-item">
+              <span class="material-symbols-outlined" aria-hidden="true">verified</span>
+              <span>100% alinhada à BNCC (Res. CNE/MEC 1/2022)</span>
+            </div>
+            <div class="sp-confianca-item">
+              <span class="material-symbols-outlined" aria-hidden="true">code</span>
+              <span>Software livre &amp; aberto (Licença MIT)</span>
+            </div>
+            <div class="sp-confianca-item">
+              <span class="material-symbols-outlined" aria-hidden="true">devices</span>
+              <span>Sem instalação: roda em qualquer computador ou celular</span>
+            </div>
+            <div class="sp-confianca-item">
+              <span class="material-symbols-outlined" aria-hidden="true">translate</span>
+              <span>Acessível com suporte a 9 idiomas nativos</span>
+            </div>
+          </div>
         </div>
 
-        <div class="pub-mock" aria-hidden="true">
-          <div class="pub-mock-cartao pub-mock-atividade">
-            <div class="pub-mock-topo"><span class="pub-mock-tag">Atividade dinâmica</span><span class="material-symbols-outlined">format_list_numbered</span></div>
-            <strong>Monte o algoritmo: escovar os dentes</strong>
-            <ol class="pub-mock-passos">
-              <li class="ok"><span>1</span> Pegar a escova e a pasta</li>
-              <li class="ok"><span>2</span> Colocar a pasta na escova</li>
-              <li class="ok"><span>3</span> Escovar todos os dentes</li>
-              <li class="vazio"><span>4</span> Qual é o próximo passo?</li>
-            </ol>
-            <div class="pub-mock-barra"><i></i></div>
+        <!-- Mockup Visual Interativo da Sala de Aula -->
+        <div class="sp-mockup-janela" aria-hidden="true">
+          <div class="sp-mockup-topo">
+            <div class="sp-mockup-bolinhas">
+              <span></span><span></span><span></span>
+            </div>
+            <span>LMS COMPASSO — Ambiente do Estudante</span>
           </div>
-          <div class="pub-mock-cartao pub-mock-robo">
-            <p>Robô no mapa</p>
-            <div class="pub-mock-mapa">
-              <span><span class="material-symbols-outlined icon-sm item-robo">smart_toy</span></span><span class="trilha">•</span><span class="trilha">•</span><span></span>
-              <span></span><span><span class="material-symbols-outlined icon-sm item-arvore">park</span></span><span class="trilha">•</span><span></span>
-              <span></span><span></span><span class="trilha">•</span><span></span>
-              <span></span><span></span><span class="trilha">•</span><span><span class="material-symbols-outlined icon-sm item-escola">school</span></span>
+          <div class="sp-mockup-corpo">
+            <div class="sp-mockup-aluno-barra">
+              <div class="sp-mockup-aluno-info">
+                <div class="sp-mockup-avatar">LC</div>
+                <div>
+                  <strong style="display:block; font-size:0.92rem; color:var(--pub-texto);">Lucas Carvalho</strong>
+                  <span style="font-size:0.78rem; color:var(--pub-texto-suave);">5º Ano · Turma B</span>
+                </div>
+              </div>
+              <span class="sp-mockup-xp">
+                <span class="material-symbols-outlined icon-xs">military_tech</span> +350 XP
+              </span>
+            </div>
+
+            <div class="sp-mockup-card-destaque">
+              <span class="sp-mockup-tag-curso">
+                <span class="material-symbols-outlined icon-xs">smart_toy</span>
+                Pensamento Computacional
+              </span>
+              <h3 class="sp-mockup-titulo-aula">Missão: O Robô que Desvia de Poças</h3>
+
+              <ul class="sp-mockup-passos">
+                <li class="sp-mockup-passo-item check">
+                  <span class="material-symbols-outlined">check_circle</span>
+                  <span>1. Analisar o mapa com obstáculos</span>
+                </li>
+                <li class="sp-mockup-passo-item check">
+                  <span class="material-symbols-outlined">check_circle</span>
+                  <span>2. Montar sequência com comandos de giro</span>
+                </li>
+                <li class="sp-mockup-passo-item ativo">
+                  <span class="material-symbols-outlined">play_circle</span>
+                  <span>3. Executar o código e validar na cena 3D</span>
+                </li>
+              </ul>
+
+              <div class="sp-mockup-progresso-wrap">
+                <div class="sp-mockup-barra"><i></i></div>
+                <span class="sp-mockup-pct">75% Concluído</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section id="projeto" class="pub-secao" aria-labelledby="titulo-projeto">
+    <!-- 2. Seção de Perfis: "Versátil e prática para qualquer profissional" (SendPulse style) -->
+    <section class="sp-secao sp-secao-alt" id="perfis" aria-labelledby="titulo-perfis">
       <div class="pub-container">
-        <h2 id="titulo-projeto">O que é o LMS COMPASSO?</h2>
-        <p class="pub-intro">
-          É um sistema de gestão de aprendizagem (LMS) criado pela startup educacional COMPASSO, do IFMA Campus Grajaú,
-          no Projeto de Inovação SUAP/IFMA nº 14246/2025. Ele organiza cursos, aulas, atividades, avaliações e certificados
-          para que escolas e redes municipais ensinem Computação conforme a BNCC, sem depender de infraestrutura cara.
-        </p>
-        <div class="pub-grade">
-          <article class="pub-card">
-            <span class="pub-icone" aria-hidden="true"><span class="material-symbols-outlined">menu_book</span></span>
-            <h3>Alinhada à BNCC Computação</h3>
-            <p>Cursos e atividades organizados nos três eixos da BNCC Computação e por ano escolar, do 1º ao 9º ano.</p>
+        <div class="sp-cabecalho-secao">
+          <span class="sp-secao-eyebrow">Solução Completa para a Escola</span>
+          <h2 id="titulo-perfis" class="sp-secao-titulo">Projetada para atender cada momento da Educação Básica</h2>
+          <p class="sp-secao-subtitulo">
+            Professores, gestores e estudantes encontram uma experiência fluida, sem barreiras técnicas e totalmente focada no aprendizado significativo.
+          </p>
+        </div>
+
+        <div class="sp-perfis-grade">
+          <!-- Card 1: Professores -->
+          <article class="sp-perfil-card">
+            <div class="sp-perfil-icone-wrap">
+              <span class="material-symbols-outlined">person_raised_hand</span>
+            </div>
+            <h3 class="sp-perfil-titulo">Para Professores</h3>
+            <p class="sp-perfil-desc">
+              Ensine Computação sem dor de cabeça. Tenha em mãos atividades prontas alinhadas à BNCC e relatórios automáticos.
+            </p>
+            <ul class="sp-perfil-lista">
+              <li>
+                <span class="material-symbols-outlined">check</span>
+                <span>Roteiros didáticos completos para o 1º ao 9º ano</span>
+              </li>
+              <li>
+                <span class="material-symbols-outlined">check</span>
+                <span>Atividades desplugadas prontas para imprimir em A4</span>
+              </li>
+              <li>
+                <span class="material-symbols-outlined">check</span>
+                <span>Diário de notas automático mapeado por código BNCC</span>
+              </li>
+              <li>
+                <span class="material-symbols-outlined">check</span>
+                <span>Exportação fácil de dados pedagógicos em CSV</span>
+              </li>
+            </ul>
+            <a href="/atividades.html" class="sp-perfil-link">
+              <span>Explorar catálogo para professores</span>
+              <span class="material-symbols-outlined icon-xs" aria-hidden="true">arrow_forward</span>
+            </a>
           </article>
-          <article class="pub-card">
-            <span class="pub-icone" aria-hidden="true"><span class="material-symbols-outlined">public</span></span>
-            <h3>Aberta e de baixo custo</h3>
-            <p>Código aberto sob licença MIT, executado na borda da Cloudflare (Workers + D1) e pensado para custo zero em pequenas redes escolares.</p>
+
+          <!-- Card 2: Escolas e Gestores -->
+          <article class="sp-perfil-card">
+            <div class="sp-perfil-icone-wrap">
+              <span class="material-symbols-outlined">account_balance</span>
+            </div>
+            <h3 class="sp-perfil-titulo">Para Escolas &amp; Gestão</h3>
+            <p class="sp-perfil-desc">
+              Implemente a cultura digital na sua rede de ensino com custo zero de infraestrutura e transparência total.
+            </p>
+            <ul class="sp-perfil-lista">
+              <li>
+                <span class="material-symbols-outlined">check</span>
+                <span>Zero custo de licenças: software 100% livre e aberto</span>
+              </li>
+              <li>
+                <span class="material-symbols-outlined">check</span>
+                <span>Acompanhamento consolidado por escola e turma</span>
+              </li>
+              <li>
+                <span class="material-symbols-outlined">check</span>
+                <span>Emissão de certificados oficiais com chave pública</span>
+              </li>
+              <li>
+                <span class="material-symbols-outlined">check</span>
+                <span>Métricas psicométricas de usabilidade educacional (SUS)</span>
+              </li>
+            </ul>
+            <a href="/boas-vindas.html" class="sp-perfil-link">
+              <span>Conhecer a parceria e o projeto</span>
+              <span class="material-symbols-outlined icon-xs" aria-hidden="true">arrow_forward</span>
+            </a>
           </article>
-          <article class="pub-card">
-            <span class="pub-icone" aria-hidden="true"><span class="material-symbols-outlined">extension</span></span>
-            <h3>Com tela e sem tela</h3>
-            <p>Atividades dinâmicas no navegador e versões desplugadas, com papel e movimento, para equilibrar o uso de telas na infância.</p>
+
+          <!-- Card 3: Estudantes -->
+          <article class="sp-perfil-card">
+            <div class="sp-perfil-icone-wrap">
+              <span class="material-symbols-outlined">school</span>
+            </div>
+            <h3 class="sp-perfil-titulo">Para Estudantes</h3>
+            <p class="sp-perfil-desc">
+              Aprenda brincando. Conecte robôs 3D, desvende placas de computador e desenvolva cidadania com desafios reais.
+            </p>
+            <ul class="sp-perfil-lista">
+              <li>
+                <span class="material-symbols-outlined">check</span>
+                <span>Laboratório 3D com robótica e Python interativo</span>
+              </li>
+              <li>
+                <span class="material-symbols-outlined">check</span>
+                <span>Simulador de Hardware e Redes em tempo real</span>
+              </li>
+              <li>
+                <span class="material-symbols-outlined">check</span>
+                <span>Conquista de medalhas e pontos de cidadania</span>
+              </li>
+              <li>
+                <span class="material-symbols-outlined">check</span>
+                <span>Feedback imediato em cada etapa do aprendizado</span>
+              </li>
+            </ul>
+            <a href="/cursos.html" class="sp-perfil-link">
+              <span>Ver cursos e começar a praticar</span>
+              <span class="material-symbols-outlined icon-xs" aria-hidden="true">arrow_forward</span>
+            </a>
           </article>
         </div>
       </div>
     </section>
 
-    <section id="eixos" class="pub-secao pub-secao-alt" aria-labelledby="titulo-eixos">
+    <!-- 3. Bento-Grid de Recursos: "Um único conjunto de ferramentas" (SendPulse style) -->
+    <section class="sp-secao" id="recursos" aria-labelledby="titulo-recursos">
       <div class="pub-container">
-        <h2 id="titulo-eixos">Os três eixos da BNCC Computação</h2>
-        <p class="pub-intro">Todo curso da plataforma pertence a um eixo. Veja o que cada um trabalha com os estudantes.</p>
-        <div class="pub-grade">
-          <article class="pub-card pub-card-eixo">
-            <span class="pub-icone" aria-hidden="true"><span class="material-symbols-outlined">format_list_numbered</span></span>
-            <h3>Pensamento Computacional</h3>
-            <span class="pub-selo">Atividades dinâmicas disponíveis</span>
-            <p>Resolver problemas com lógica e criatividade.</p>
-            <ul>
-              <li>Algoritmos no cotidiano</li>
-              <li>Decomposição lógica</li>
-              <li>Reconhecimento de padrões</li>
-              <li>Abstração</li>
-            </ul>
-            <div class="pub-card-acao"><a class="pub-link" href="/atividades.html">Experimentar as atividades <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span></a></div>
-          </article>
-          <article class="pub-card pub-card-eixo mundo">
-            <span class="pub-icone" aria-hidden="true"><span class="material-symbols-outlined">memory</span></span>
-            <h3>Mundo Digital</h3>
-            <span class="pub-selo">Simulador 3D &amp; Hardware</span>
-            <p>Entender como as tecnologias funcionam por dentro.</p>
-            <ul>
-              <li>Placa-mãe e componentes 3D</li>
-              <li>Ciclo da CPU (Busca-Decodifica-Executa)</li>
-              <li>Internet, roteamento e pacotes TCP/IP</li>
-            </ul>
-            <div class="pub-card-acao"><a class="pub-link" href="/mundo-digital.html">Explorar Hardware 3D <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span></a></div>
-          </article>
-          <article class="pub-card pub-card-eixo cultura">
-            <span class="pub-icone" aria-hidden="true"><span class="material-symbols-outlined">verified_user</span></span>
-            <h3>Cultura Digital</h3>
-            <span class="pub-selo">Chat &amp; Cidadania Interativa</span>
-            <p>Usar a tecnologia com ética, segurança e senso crítico.</p>
-            <ul>
-              <li>Simulador de chat com tomadas de decisão</li>
-              <li>Detecção de phishing e fake news</li>
-              <li>Cofre de senhas e pegada digital</li>
-            </ul>
-            <div class="pub-card-acao"><a class="pub-link" href="/cultura-digital.html">Iniciar Chat e Cidadania <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span></a></div>
-          </article>
+        <div class="sp-cabecalho-secao">
+          <span class="sp-secao-eyebrow">Recursos Integrados</span>
+          <h2 id="titulo-recursos" class="sp-secao-titulo">Da lógica básica ao código: tudo o que você precisa</h2>
+          <p class="sp-secao-subtitulo">
+            Um ecossistema desenhado para unir teoria e prática, atendendo desde alunos do 1º ano até desafios avançados do 9º ano.
+          </p>
         </div>
-        <p class="pub-nota">
-          Quer entender melhor? Leia as
-          <a class="pub-link" href="https://github.com/LMS-COMPASSO/lms/blob/main/docs/bncc-computacao.md" rel="noopener">Diretrizes Pedagógicas da BNCC Computação <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span></a>.
-        </p>
-      </div>
-    </section>
 
-    <section id="atividades" class="pub-secao" aria-labelledby="titulo-atividades">
-      <div class="pub-container">
-        <h2 id="titulo-atividades">Aprender fazendo: atividades dinâmicas</h2>
-        <p class="pub-intro">
-          Algoritmos do cotidiano e decomposição lógica em atividades interativas, direto no navegador e sem cadastro.
-          Cada atividade traz orientações para o professor e uma versão desplugada.
-        </p>
-        <div class="pub-grade">
-          <article class="pub-card">
-            <span class="pub-icone" aria-hidden="true"><span class="material-symbols-outlined">format_list_numbered</span></span>
-            <h3>Monte o algoritmo</h3>
-            <p>Coloque os passos de uma tarefa do dia a dia na ordem certa e descubra quais passos não pertencem a ela.</p>
-            <div class="pub-card-acao"><a class="pub-link" href="/atividades.html?id=ordenar-escovar-dentes" aria-label="Começar atividade: Monte o algoritmo - escovar os dentes">Começar <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span></a></div>
+        <div class="sp-bento-grade">
+          <!-- Card Grande 1: Os 3 Eixos BNCC -->
+          <article class="sp-bento-card destaque">
+            <div class="sp-bento-topo">
+              <div class="sp-bento-icone">
+                <span class="material-symbols-outlined">hub</span>
+              </div>
+              <span class="sp-bento-tag">Cobertura 100% BNCC</span>
+            </div>
+            <h3 class="sp-bento-titulo">Os 3 Eixos da BNCC em Perfeita Sincronia</h3>
+            <p class="sp-bento-desc">
+              Ao contrário de plataformas que cobrem apenas programação básica, o LMS COMPASSO oferece módulos completos para <strong>Pensamento Computacional</strong> (algoritmos e decomposição), <strong>Mundo Digital</strong> (hardware 3D, arquitetura da CPU e internet TCP/IP) e <strong>Cultura Digital</strong> (segurança, ética e cidadania).
+            </p>
+            <div style="display:flex; gap:12px; flex-wrap:wrap;">
+              <a href="/atividades.html" class="sp-perfil-link">Pensamento Computacional →</a>
+              <a href="/mundo-digital.html" class="sp-perfil-link">Mundo Digital (3D) →</a>
+              <a href="/cultura-digital.html" class="sp-perfil-link">Cultura Digital →</a>
+            </div>
           </article>
-          <article class="pub-card">
-            <span class="pub-icone" aria-hidden="true"><span class="material-symbols-outlined">schema</span></span>
-            <h3>Divida o problema</h3>
-            <p>Separe um problema grande em partes menores, como o café da manhã ou uma festa de aniversário.</p>
-            <div class="pub-card-acao"><a class="pub-link" href="/atividades.html?id=decompor-cafe-da-manha" aria-label="Começar atividade: Divida o problema - café da manhã">Começar <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span></a></div>
-          </article>
-          <article class="pub-card">
-            <span class="pub-icone" aria-hidden="true"><span class="material-symbols-outlined">smart_toy</span></span>
-            <h3>Robô a caminho da escola</h3>
-            <p>Escreva os comandos do robô, passo a passo, e depure o programa quando ele errar o caminho.</p>
-            <div class="pub-card-acao"><a class="pub-link" href="/atividades.html?id=robo-caminho-escola" aria-label="Começar atividade: Robô a caminho da escola">Começar <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span></a></div>
-          </article>
-        </div>
-        <p class="mt-18"><a href="/atividades.html" class="btn btn-primario btn-grande">Ver todas as atividades</a></p>
-      </div>
-    </section>
 
-    <section id="para-quem" class="pub-secao pub-secao-alt" aria-labelledby="titulo-para-quem">
-      <div class="pub-container">
-        <h2 id="titulo-para-quem">Para quem é</h2>
-        <p class="pub-intro">Cada perfil encontra na plataforma o que precisa para ensinar, aprender e acompanhar a Computação na escola.</p>
-        <div class="pub-grade">
-          <article class="pub-card">
-            <span class="pub-icone" aria-hidden="true"><span class="material-symbols-outlined">school</span></span>
-            <h3>Estudantes</h3>
-            <p>Escolhem cursos por eixo e ano, estudam por módulos, fazem atividades e recebem certificado com código de validação.</p>
+          <!-- Card 2: 3D & Python sem instalação -->
+          <article class="sp-bento-card">
+            <div class="sp-bento-topo">
+              <div class="sp-bento-icone">
+                <span class="material-symbols-outlined">view_in_ar</span>
+              </div>
+              <span class="sp-bento-tag">WebGL Nativo</span>
+            </div>
+            <h3 class="sp-bento-titulo">Laboratório 3D &amp; Python</h3>
+            <p class="sp-bento-desc">
+              Execute códigos Python diretamente no navegador para controlar robôs virtuais e inspecionar componentes de hardware em 3D, sem instalar compiladores ou drivers pesados.
+            </p>
+            <a href="/atividades.html?id=py3d-labirinto-1" class="sp-perfil-link">Ver laboratório 3D →</a>
           </article>
-          <article class="pub-card">
-            <span class="pub-icone" aria-hidden="true"><span class="material-symbols-outlined">person_raised_hand</span></span>
-            <h3>Professores</h3>
-            <p>Criam cursos, módulos e aulas, levam as atividades para a sala, com ou sem tela, e acompanham as matrículas.</p>
+
+          <!-- Card 3: Híbrido com tela e sem tela -->
+          <article class="sp-bento-card">
+            <div class="sp-bento-topo">
+              <div class="sp-bento-icone">
+                <span class="material-symbols-outlined">print</span>
+              </div>
+              <span class="sp-bento-tag">Equilíbrio Saudável</span>
+            </div>
+            <h3 class="sp-bento-titulo">Com Tela e Sem Tela (Desplugada)</h3>
+            <p class="sp-bento-desc">
+              Equilibre o uso de tecnologia na infância. Todas as atividades possuem guias para aplicação com cartões de papel, jogos espaciais e dinâmicas físicas de sala de aula.
+            </p>
+            <a href="/atividades.html" class="sp-perfil-link">Baixar fichas desplugadas →</a>
           </article>
-          <article class="pub-card">
-            <span class="pub-icone" aria-hidden="true"><span class="material-symbols-outlined">account_balance</span></span>
-            <h3>Gestão e secretarias</h3>
-            <p>Acompanham matrículas, conclusão e a linha do tempo das atividades, com certificados verificáveis publicamente.</p>
+
+          <!-- Card 4: Acompanhamento & Diário de Notas -->
+          <article class="sp-bento-card">
+            <div class="sp-bento-topo">
+              <div class="sp-bento-icone">
+                <span class="material-symbols-outlined">analytics</span>
+              </div>
+              <span class="sp-bento-tag">Gestão Pedagógica</span>
+            </div>
+            <h3 class="sp-bento-titulo">Mapeamento por Habilidade BNCC</h3>
+            <p class="sp-bento-desc">
+              Cada acerto é computado e vinculado a uma competência oficial (ex.: EF01CO01 a EF09CO05). Professores e secretarias geram diários consolidados com um único clique.
+            </p>
+            <a href="/login.html" class="sp-perfil-link">Acessar painel do professor →</a>
+          </article>
+
+          <!-- Card 5: Certificação & Reconhecimento -->
+          <article class="sp-bento-card">
+            <div class="sp-bento-topo">
+              <div class="sp-bento-icone">
+                <span class="material-symbols-outlined">workspace_premium</span>
+              </div>
+              <span class="sp-bento-tag">Validação Pública</span>
+            </div>
+            <h3 class="sp-bento-titulo">Medalhas &amp; Certificados Digitais</h3>
+            <p class="sp-bento-desc">
+              Premie o avanço dos alunos com medalhas por eixo da BNCC e emita certificados oficiais de conclusão com chave de validação pública e impressão formatada em A4.
+            </p>
+            <a href="/certificados.html" class="sp-perfil-link">Validar um certificado →</a>
           </article>
         </div>
       </div>
     </section>
 
-    <section id="estagio" class="pub-secao" aria-labelledby="titulo-estagio">
+    <!-- 4. Showcase Interativo dos 3 Eixos (SendPulse Live Tab Switcher) -->
+    <section class="sp-secao sp-secao-alt" id="eixos-showcase" aria-labelledby="titulo-showcase">
       <div class="pub-container">
-        <h2 id="titulo-estagio">Em que pé estamos</h2>
-        <p class="pub-intro">Transparência sobre o que já funciona hoje e o que está no roadmap do projeto.</p>
-        <div class="pub-colunas">
-          <article class="pub-card pub-pronto">
-            <h3>Já funciona</h3>
-            <ul class="pub-lista-estagio">
-              <li>Acesso por perfil: administrador, professor e aluno</li>
-              <li>Catálogo de cursos por eixo da BNCC e ano escolar</li>
-              <li>Sala de aula com módulos, aulas e progresso</li>
-              <li>Matrículas e certificados com validação pública e impressão em A4</li>
-              <li>Atividades dinâmicas de Pensamento Computacional</li>
-              <li>Painel de indicadores para professores e gestão</li>
-            </ul>
-          </article>
-          <article class="pub-card pub-roadmap">
-            <h3>Em construção</h3>
-            <ul class="pub-lista-estagio">
-              <li>Trilhas de aprendizagem progressivas por etapa</li>
-              <li>Catálogo de habilidades da BNCC Computação ligado às atividades</li>
-              <li>Computação desplugada com indicadores de acompanhamento</li>
-              <li>Planos de aula, avaliação por habilidades e relatórios por turma e rede</li>
-              <li>Modo offline (PWA) para laboratórios com conexão instável</li>
-              <li>Redes, escolas e turmas</li>
-            </ul>
-          </article>
+        <div class="sp-cabecalho-secao">
+          <span class="sp-secao-eyebrow">Experimente Agora Mesmo</span>
+          <h2 id="titulo-showcase" class="sp-secao-titulo">Três eixos para transformar a mente de quem aprende</h2>
+          <p class="sp-secao-subtitulo">
+            Alterne entre as abas e veja como cada ambiente estimula o raciocínio lógico, a compreensão técnica e a responsabilidade digital.
+          </p>
         </div>
 
-        <h3 class="mb-10">Metas do piloto (julho a dezembro de 2026)</h3>
-        <div class="pub-metricas">
-          <div class="pub-metrica"><strong>80%</strong><span>dos estudantes ativos semanalmente</span></div>
-          <div class="pub-metrica"><strong>70%</strong><span>de conclusão das trilhas iniciadas</span></div>
-          <div class="pub-metrica"><strong>60%</strong><span>de participação docente em formação continuada</span></div>
-          <div class="pub-metrica"><strong>100%</strong><span>das turmas com ao menos 1 atividade desplugada por semana</span></div>
+        <div class="sp-showcase-container">
+          <div class="sp-abas-controle" role="tablist" aria-label="Eixos Curriculares">
+            <button type="button" class="sp-btn-aba ativa" data-alvo="painel-pensamento" role="tab" aria-selected="true" id="tab-pensamento">
+              <span class="material-symbols-outlined icon-xs">format_list_numbered</span>
+              <span>1. Pensamento Computacional</span>
+            </button>
+            <button type="button" class="sp-btn-aba" data-alvo="painel-mundo" role="tab" aria-selected="false" id="tab-mundo">
+              <span class="material-symbols-outlined icon-xs">memory</span>
+              <span>2. Mundo Digital (Hardware 3D)</span>
+            </button>
+            <button type="button" class="sp-btn-aba" data-alvo="painel-cultura" role="tab" aria-selected="false" id="tab-cultura">
+              <span class="material-symbols-outlined icon-xs">verified_user</span>
+              <span>3. Cultura Digital (Cidadania)</span>
+            </button>
+          </div>
+
+          <!-- Aba 1: Pensamento Computacional -->
+          <div class="sp-aba-painel ativa" id="painel-pensamento" role="tabpanel" aria-labelledby="tab-pensamento">
+            <div class="sp-painel-grid">
+              <div class="sp-painel-info">
+                <span class="sp-bento-tag" style="margin-bottom:12px; display:inline-block;">Eixo 1 · Raciocínio &amp; Lógica</span>
+                <h3>Resolver problemas reais através de algoritmos</h3>
+                <p>
+                  As crianças aprendem que programar é uma forma de organizar o pensamento. Elas sequenciam passos cotidianos, dividem problemas complexos em partes menores e depuram rotas de robôs.
+                </p>
+                <ul class="sp-painel-topicos">
+                  <li><span class="material-symbols-outlined">check_circle</span> Algoritmos do cotidiano e passos lógicos</li>
+                  <li><span class="material-symbols-outlined">check_circle</span> Decomposição de problemas e abstração</li>
+                  <li><span class="material-symbols-outlined">check_circle</span> Programação com robôs 3D e Python no navegador</li>
+                </ul>
+                <a href="/atividades.html" class="btn-sp-primario">
+                  <span class="material-symbols-outlined" aria-hidden="true">play_arrow</span>
+                  Experimentar Atividades de Pensamento
+                </a>
+              </div>
+              <div class="sp-painel-visual">
+                <div class="sp-micro-demo">
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                    <strong style="color:var(--pub-texto); font-size:0.95rem;">Simulador de Sequência Lógica</strong>
+                    <span class="sp-mockup-tag-curso">EF01CO01</span>
+                  </div>
+                  <p style="font-size:0.86rem; color:var(--pub-texto-suave); margin-bottom:14px;">Qual a ordem correta para preparar um lanche saudável?</p>
+                  <div style="display:flex; flex-direction:column; gap:8px;">
+                    <div class="sp-demo-item-bloco">
+                      <span class="sp-demo-step-num">1.</span> Lavar bem as mãos e higienizar frutas
+                    </div>
+                    <div class="sp-demo-item-bloco">
+                      <span class="sp-demo-step-num">2.</span> Separar o pão e os ingredientes
+                    </div>
+                    <div class="sp-demo-drop-slot">
+                      <span class="material-symbols-outlined icon-xs">drag_indicator</span> Encaixe o próximo passo do algoritmo...
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Aba 2: Mundo Digital -->
+          <div class="sp-aba-painel" id="painel-mundo" role="tabpanel" aria-labelledby="tab-mundo">
+            <div class="sp-painel-grid">
+              <div class="sp-painel-info">
+                <span class="sp-bento-tag" style="margin-bottom:12px; display:inline-block;">Eixo 2 · Hardware &amp; Redes</span>
+                <h3>Como os computadores realmente pensam e se comunicam</h3>
+                <p>
+                  Uma experiência interativa com uma placa-mãe em 3D, inspeção holográfica de processador e memória, simulação visual do ciclo de clock da CPU e tráfego de pacotes TCP/IP na internet.
+                </p>
+                <ul class="sp-painel-topicos">
+                  <li><span class="material-symbols-outlined">check_circle</span> Raio-X 3D de placa-mãe e montagem de PC (PC Builder)</li>
+                  <li><span class="material-symbols-outlined">check_circle</span> Ciclo de instrução da CPU (Busca-Decodifica-Executa)</li>
+                  <li><span class="material-symbols-outlined">check_circle</span> Roteamento de pacotes na internet com simulação de perdas</li>
+                </ul>
+                <a href="/mundo-digital.html" class="btn-sp-primario">
+                  <span class="material-symbols-outlined" aria-hidden="true">memory</span>
+                  Abrir Laboratório 3D de Hardware
+                </a>
+              </div>
+              <div class="sp-painel-visual">
+                <div class="sp-micro-demo">
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                    <strong style="color:var(--pub-texto); font-size:0.95rem;">Inspeção Holográfica 3D</strong>
+                    <span class="sp-mockup-tag-curso">EF05CO03</span>
+                  </div>
+                  <div style="text-align:center; padding:18px 0;">
+                    <span class="material-symbols-outlined sp-demo-chip-icon">memory</span>
+                    <strong style="display:block; margin-top:8px; color:var(--pub-texto);">Processador Central (CPU)</strong>
+                    <span style="font-size:0.82rem; color:var(--pub-texto-suave);">Cérebro lógico do computador · Bilhões de ciclos/s</span>
+                  </div>
+                  <div class="sp-demo-status-pill">
+                    ✓ Simulação de Ciclo de Clock Disponível
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Aba 3: Cultura Digital -->
+          <div class="sp-aba-painel" id="painel-cultura" role="tabpanel" aria-labelledby="tab-cultura">
+            <div class="sp-painel-grid">
+              <div class="sp-painel-info">
+                <span class="sp-bento-tag" style="margin-bottom:12px; display:inline-block;">Eixo 3 · Cidadania &amp; Ética</span>
+                <h3>Navegar com segurança, empatia e senso crítico</h3>
+                <p>
+                  No simulador de chat "ZapCompasso", os estudantes analisam mensagens reais sobre golpes de phishing, boatos de fake news e cyberbullying, tomando decisões éticas para proteger seus dados.
+                </p>
+                <ul class="sp-painel-topicos">
+                  <li><span class="material-symbols-outlined">check_circle</span> Simulador de diálogos ZapCompasso com ramificação ética</li>
+                  <li><span class="material-symbols-outlined">check_circle</span> Cofre digital: testador de força de senhas em tempo real</li>
+                  <li><span class="material-symbols-outlined">check_circle</span> Medidor de pegada digital e privacidade online</li>
+                </ul>
+                <a href="/cultura-digital.html" class="btn-sp-primario">
+                  <span class="material-symbols-outlined" aria-hidden="true">chat</span>
+                  Iniciar Simulador de Cidadania
+                </a>
+              </div>
+              <div class="sp-painel-visual">
+                <div class="sp-micro-demo">
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                    <strong style="color:var(--pub-texto); font-size:0.95rem;">ZapCompasso · Simulação de Golpe</strong>
+                    <span class="sp-mockup-tag-curso">EF04CO04</span>
+                  </div>
+                  <div class="sp-chat-balao">
+                    <strong>Leo (Colega):</strong> Mano, clica rápido aqui pra ganhar 10.000 moedas no jogo!
+                  </div>
+                  <div style="display:flex; gap:8px; flex-direction:column;">
+                    <button type="button" class="sp-chat-opcao-btn">
+                      1. Clicar e colocar a senha agora
+                    </button>
+                    <button type="button" class="sp-chat-opcao-btn destaque">
+                      2. Identificar Phishing e alertar o colega ✓
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <p class="pub-nota">Metas do edital. Os resultados serão divulgados ao final do piloto.</p>
       </div>
     </section>
 
-    <section class="pub-banda" aria-labelledby="titulo-comunidade">
+    <!-- 5. Como Funciona em 4 Passos (SendPulse Workflow) -->
+    <section class="sp-secao" id="como-funciona" aria-labelledby="titulo-passos">
       <div class="pub-container">
-        <h2 id="titulo-comunidade">Projeto aberto: venha construir com a gente</h2>
+        <div class="sp-cabecalho-secao">
+          <span class="sp-secao-eyebrow">Passo a Passo</span>
+          <h2 id="titulo-passos" class="sp-secao-titulo">Comece a ensinar em poucos passos simples</h2>
+          <p class="sp-secao-subtitulo">
+            Sem processos burocráticos ou instalações complexas. A plataforma foi desenhada para a realidade das escolas brasileiras.
+          </p>
+        </div>
+
+        <div class="sp-passos-grade">
+          <article class="sp-passo-card">
+            <div class="sp-passo-numero">01</div>
+            <h3 class="sp-passo-titulo">Escolha o Ano ou Eixo</h3>
+            <p class="sp-passo-desc">
+              Filtre atividades por faixa escolar (1º ao 9º ano), eixos da BNCC ou habilidades específicas do currículo de Computação.
+            </p>
+          </article>
+
+          <article class="sp-passo-card">
+            <div class="sp-passo-numero">02</div>
+            <h3 class="sp-passo-titulo">Pratique com ou sem Tela</h3>
+            <p class="sp-passo-desc">
+              Execute no laboratório de informática ou imprima as folhas de atividades desplugadas para trabalhar em sala de aula comum.
+            </p>
+          </article>
+
+          <article class="sp-passo-card">
+            <div class="sp-passo-numero">03</div>
+            <h3 class="sp-passo-titulo">Feedback Imediato</h3>
+            <p class="sp-passo-desc">
+              O estudante recebe validação automática de acertos e erros, estimulando a depuração e o pensamento crítico sem frustração.
+            </p>
+          </article>
+
+          <article class="sp-passo-card">
+            <div class="sp-passo-numero">04</div>
+            <h3 class="sp-passo-titulo">Certifique &amp; Acompanhe</h3>
+            <p class="sp-passo-desc">
+              Emita certificados oficiais com validação pública e acompanhe o progresso das turmas no painel integrado do professor.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Perguntas Frequentes / FAQ (Acordeão Moderno Estilo SendPulse) -->
+    <section class="sp-secao sp-secao-alt" id="faq" aria-labelledby="titulo-faq">
+      <div class="pub-container">
+        <div class="sp-cabecalho-secao">
+          <span class="sp-secao-eyebrow">Tire suas Dúvidas</span>
+          <h2 id="titulo-faq" class="sp-secao-titulo">Perguntas Frequentes</h2>
+          <p class="sp-secao-subtitulo">
+            Tudo o que você precisa saber sobre a gratuidade, uso em sala de aula e conformidade com o MEC.
+          </p>
+        </div>
+
+        <div class="sp-faq-container">
+          <!-- FAQ 1 -->
+          <details class="sp-faq-item">
+            <summary class="sp-faq-summary">
+              <span>O LMS COMPASSO é realmente 100% gratuito?</span>
+              <span class="material-symbols-outlined sp-faq-icone" aria-hidden="true">expand_more</span>
+            </summary>
+            <p class="sp-faq-resposta">
+              Sim! O LMS COMPASSO é um projeto de inovação educacional apoiado pelo IFMA Campus Grajaú, distribuído como software livre sob a licença de código aberto MIT. Escolas públicas, privadas, professores e estudantes podem utilizar todas as ferramentas e cursos sem qualquer cobrança.
+            </p>
+          </details>
+
+          <!-- FAQ 2 -->
+          <details class="sp-faq-item">
+            <summary class="sp-faq-summary">
+              <span>Preciso instalar programas nos computadores da escola?</span>
+              <span class="material-symbols-outlined sp-faq-icone" aria-hidden="true">expand_more</span>
+            </summary>
+            <p class="sp-faq-resposta">
+              Não. A plataforma funciona 100% no navegador web (Chrome, Firefox, Edge, Safari), inclusive em computadores com hardware modesto, tablets e celulares. Não há necessidade de instalar interpretadores Python, extensões ou softwares administrativos.
+            </p>
+          </details>
+
+          <!-- FAQ 3 -->
+          <details class="sp-faq-item">
+            <summary class="sp-faq-summary">
+              <span>Como a plataforma atende às normas da BNCC Computação?</span>
+              <span class="material-symbols-outlined sp-faq-icone" aria-hidden="true">expand_more</span>
+            </summary>
+            <p class="sp-faq-resposta">
+              Todas as trilhas, cursos e atividades foram estruturados a partir da Resolução CNE/CP nº 1/2022 do Ministério da Educação, que normatiza a Computação na Educação Básica. Cobrimos sistematicamente os três eixos: Pensamento Computacional, Mundo Digital e Cultura Digital, do 1º ao 9º ano.
+            </p>
+          </details>
+
+          <!-- FAQ 4 -->
+          <details class="sp-faq-item">
+            <summary class="sp-faq-summary">
+              <span>Minha escola tem internet instável. É possível usar sem tela?</span>
+              <span class="material-symbols-outlined sp-faq-icone" aria-hidden="true">expand_more</span>
+            </summary>
+            <p class="sp-faq-resposta">
+              Com certeza! O LMS COMPASSO possui a metodologia "Com Tela e Sem Tela". Cada atividade dinâmica possui sua versão desplugada em folha A4 com orientações pedagógicas para aplicação física, com cartões, labirintos no chão e dinâmicas corporais.
+            </p>
+          </details>
+
+          <!-- FAQ 5 -->
+          <details class="sp-faq-item">
+            <summary class="sp-faq-summary">
+              <span>Como os professores avaliam e acompanham os estudantes?</span>
+              <span class="material-symbols-outlined sp-faq-icone" aria-hidden="true">expand_more</span>
+            </summary>
+            <p class="sp-faq-resposta">
+              Os professores têm acesso a um painel com acompanhamento de matrículas, progresso de módulos e consolidação de desempenho por habilidade da BNCC (ex.: EF05CO01). É possível emitir relatórios pedagógicos em formato CSV prontos para o diário escolar.
+            </p>
+          </details>
+
+          <!-- FAQ 6 -->
+          <details class="sp-faq-item">
+            <summary class="sp-faq-summary">
+              <span>Como funciona a validação dos certificados emitidos?</span>
+              <span class="material-symbols-outlined sp-faq-icone" aria-hidden="true">expand_more</span>
+            </summary>
+            <p class="sp-faq-resposta">
+              Cada certificado gerado possui um identificador criptográfico único e link público de verificação. Qualquer secretaria de educação, escola ou família pode consultar a autenticidade do documento instantaneamente na página de validação.
+            </p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Banner Final de Alta Conversão (SendPulse style) -->
+    <section class="pub-container" aria-label="Chamada para ação">
+      <div class="sp-cta-banner">
+        <h2>Pronto para transformar a Computação na sua escola?</h2>
         <p>
-          Professores podem sugerir atividades e planos de aula. Desenvolvedores e designers podem contribuir
-          com código, acessibilidade e testes. Toda ajuda é bem-vinda.
+          Comece agora mesmo a criar um ambiente de aprendizado tecnológico, ético e inspirador para seus estudantes. Sem custos, sem burocracia.
         </p>
-        <div class="pub-cta">
-          <a href="https://github.com/LMS-COMPASSO/lms/blob/main/CONTRIBUTING.md" class="btn btn-claro btn-grande" rel="noopener">Como contribuir</a>
-          <a href="https://github.com/LMS-COMPASSO/lms" class="btn btn-contorno-claro btn-grande" rel="noopener">Repositório no GitHub</a>
+        <div class="sp-cta-banner-botoes">
+          <a href="/registrar.html" class="btn-sp-primario">
+            <span class="material-symbols-outlined" aria-hidden="true">rocket_launch</span>
+            Criar Conta Gratuita
+          </a>
+          <a href="/atividades.html" class="btn-sp-contorno">
+            <span class="material-symbols-outlined" aria-hidden="true">explore</span>
+            Experimentar Sem Cadastro
+          </a>
         </div>
       </div>
     </section>
   </main>
 
+  <!-- Rodapé Institucional -->
   <footer class="pub-rodape">
     <div class="pub-container">
       <div class="pub-rodape-grade">
@@ -286,7 +667,7 @@
           <h3 id="rodape-plataforma">Plataforma</h3>
           <ul>
             <li><a href="/login.html">Entrar</a></li>
-            <li><a href="/registrar.html">Criar conta de aluno</a></li>
+            <li><a href="/registrar.html">Criar conta</a></li>
             <li><a href="/atividades.html">Atividades dinâmicas</a></li>
             <li><a href="/mundo-digital.html">Mundo Digital (Hardware 3D)</a></li>
             <li><a href="/cultura-digital.html">Cultura Digital (Simulador Chat)</a></li>
@@ -296,7 +677,7 @@
         <nav aria-labelledby="rodape-projeto">
           <h3 id="rodape-projeto">Projeto</h3>
           <ul>
-            <li><a href="/boas-vindas.html#parceiros">Parceiros &amp; Apoio</a></li>
+            <li><a href="/boas-vindas.html#parceiros">Parceiros &amp; Apoio Institucional</a></li>
             <li><a href="https://github.com/LMS-COMPASSO/lms" rel="noopener">Código no GitHub</a></li>
             <li><a href="https://github.com/LMS-COMPASSO/lms/tree/main/docs" rel="noopener">Documentação</a></li>
             <li><a href="https://github.com/LMS-COMPASSO/lms/blob/main/LICENSE" rel="noopener">Licença MIT</a></li>
@@ -314,6 +695,32 @@
   <script type="module" src="/js/icones-universais.js"></script>
   <script type="module" src="/js/menu-universal.js"></script>
   <script>
+    // Gerencia o seletor de abas interativo dos 3 Eixos
+    document.addEventListener('DOMContentLoaded', () => {
+      const abas = document.querySelectorAll('.sp-btn-aba');
+      const paineis = document.querySelectorAll('.sp-aba-painel');
+
+      abas.forEach(aba => {
+        aba.addEventListener('click', () => {
+          const alvoId = aba.dataset.alvo;
+
+          abas.forEach(b => {
+            b.classList.remove('ativa');
+            b.setAttribute('aria-selected', 'false');
+          });
+          paineis.forEach(p => p.classList.remove('ativa'));
+
+          aba.classList.add('ativa');
+          aba.setAttribute('aria-selected', 'true');
+
+          const painelAlvo = document.getElementById(alvoId);
+          if (painelAlvo) {
+            painelAlvo.classList.add('ativa');
+          }
+        });
+      });
+    });
+
     // Quem já tem sessão ativa atualiza o CTA do Hero
     const usuarioLogado = typeof obterToken === 'function' && obterToken() ? obterUsuario() : null;
     if (usuarioLogado) {

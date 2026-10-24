@@ -21,8 +21,29 @@
   --pub-foco: #0369a1;
 }
 
+:root[data-tema="claro"],
+body[data-tema="claro"],
+body.suporta-tema-sistema[data-tema="claro"] {
+  --pub-azul-900: #0f172a;
+  --pub-azul-700: #0369a1;
+  --pub-azul-600: #0284c7;
+  --pub-azul-100: #eff6ff;
+  --pub-verde-700: #047857;
+  --pub-verde-500: #059669;
+  --pub-verde-100: #ecfdf5;
+  --pub-ambar-700: #b45309;
+  --pub-ambar-500: #d97706;
+  --pub-ambar-100: #fffbeb;
+  --pub-texto: #0f172a;
+  --pub-texto-suave: #475569;
+  --pub-fundo-alt: #f8fafc;
+  --pub-borda: #e2e8f0;
+  --pub-foco: #0369a1;
+}
+
 :root[data-tema="escuro"],
-body.suporta-tema-sistema {
+body[data-tema="escuro"],
+body.suporta-tema-sistema[data-tema="escuro"] {
   --pub-azul-900: #f8fafc;
   --pub-azul-700: #38bdf8;
   --pub-azul-600: #60a5fa;
@@ -34,7 +55,7 @@ body.suporta-tema-sistema {
   --pub-ambar-500: #fbbf24;
   --pub-ambar-100: rgba(217, 119, 6, 0.2);
   --pub-texto: #f8fafc;
-  --pub-texto-suave: #94a3b8;
+  --pub-texto-suave: #cbd5e1;
   --pub-fundo-alt: #0b1120;
   --pub-borda: #1e293b;
   --pub-foco: #38bdf8;
@@ -170,7 +191,8 @@ select:focus-visible {
   box-shadow: inset 0 -2px 0 var(--pub-azul-700);
 }
 :root[data-tema="escuro"] .pub-nav a[aria-current="page"],
-body.suporta-tema-sistema .pub-nav a[aria-current="page"] {
+body[data-tema="escuro"] .pub-nav a[aria-current="page"],
+body.suporta-tema-sistema[data-tema="escuro"] .pub-nav a[aria-current="page"] {
   color: #38bdf8;
   background: rgba(2, 132, 199, 0.18);
   box-shadow: inset 0 -2px 0 #38bdf8;
@@ -370,7 +392,8 @@ body.suporta-tema-sistema[data-tema="escuro"] .opcao-idioma.selecionado .check-i
 }
 
 :root[data-tema="escuro"] .pub-hero,
-body.suporta-tema-sistema .pub-hero {
+body[data-tema="escuro"] .pub-hero,
+body.suporta-tema-sistema[data-tema="escuro"] .pub-hero {
   background: radial-gradient(85% 65% at 50% -10%, rgba(2, 132, 199, 0.16) 0%, rgba(11, 17, 32, 0) 100%), #0b1120;
   border-bottom-color: #1e293b;
   color: #f1f5f9;
@@ -405,7 +428,8 @@ body.suporta-tema-sistema .pub-hero {
   letter-spacing: 0.02em;
 }
 :root[data-tema="escuro"] .pub-eyebrow,
-body.suporta-tema-sistema .pub-eyebrow {
+body[data-tema="escuro"] .pub-eyebrow,
+body.suporta-tema-sistema[data-tema="escuro"] .pub-eyebrow {
   background: rgba(2, 132, 199, 0.16);
   color: #7dd3fc;
   border-color: rgba(56, 189, 248, 0.28);
@@ -464,13 +488,15 @@ body.suporta-tema-sistema .pub-eyebrow {
 }
 
 :root[data-tema="escuro"] .pub-hero .btn-claro,
-body.suporta-tema-sistema .pub-hero .btn-claro {
+body[data-tema="escuro"] .pub-hero .btn-claro,
+body.suporta-tema-sistema[data-tema="escuro"] .pub-hero .btn-claro {
   background: #0284c7;
   color: #ffffff;
   border-color: #38bdf8;
 }
 :root[data-tema="escuro"] .pub-hero .btn-contorno-claro,
-body.suporta-tema-sistema .pub-hero .btn-contorno-claro {
+body[data-tema="escuro"] .pub-hero .btn-contorno-claro,
+body.suporta-tema-sistema[data-tema="escuro"] .pub-hero .btn-contorno-claro {
   background: rgba(255, 255, 255, 0.06);
   color: #f8fafc;
   border-color: rgba(255, 255, 255, 0.18);
@@ -522,7 +548,8 @@ body.suporta-tema-sistema .pub-hero .btn-contorno-claro {
   box-shadow: 0 12px 32px -4px rgba(15, 23, 42, 0.08), 0 4px 6px -2px rgba(15, 23, 42, 0.03);
 }
 :root[data-tema="escuro"] .pub-mock-cartao,
-body.suporta-tema-sistema .pub-mock-cartao {
+body[data-tema="escuro"] .pub-mock-cartao,
+body.suporta-tema-sistema[data-tema="escuro"] .pub-mock-cartao {
   background: #111827;
   border-color: #1e293b;
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
@@ -793,17 +820,20 @@ body.suporta-tema-sistema .pub-mock-cartao {
   font-weight: 500;
 }
 :root[data-tema="escuro"] .pub-metrica,
-body.suporta-tema-sistema .pub-metrica {
+body[data-tema="escuro"] .pub-metrica,
+body.suporta-tema-sistema[data-tema="escuro"] .pub-metrica {
   background: #111827;
   border-color: #1e293b;
   color: #f1f5f9;
 }
 :root[data-tema="escuro"] .pub-metrica strong,
-body.suporta-tema-sistema .pub-metrica strong {
+body[data-tema="escuro"] .pub-metrica strong,
+body.suporta-tema-sistema[data-tema="escuro"] .pub-metrica strong {
   color: #38bdf8;
 }
 :root[data-tema="escuro"] .pub-metrica span,
-body.suporta-tema-sistema .pub-metrica span {
+body[data-tema="escuro"] .pub-metrica span,
+body.suporta-tema-sistema[data-tema="escuro"] .pub-metrica span {
   color: #94a3b8;
 }
 @media (prefers-color-scheme: dark) {
@@ -913,7 +943,7 @@ body.suporta-tema-sistema .pub-metrica span {
   margin-top: 40px;
   padding-top: 24px;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
-  color: #64748b;
+  color: #94a3b8;
   font-size: 0.85rem;
 }
 

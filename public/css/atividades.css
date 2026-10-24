@@ -2668,218 +2668,218 @@
    ============================================================================ */
 
 :root[data-tema="escuro"],
-body.suporta-tema-sistema {
+body.suporta-tema-sistema[data-tema="escuro"] {
   --pub-fundo-alt: #111827;
   --pub-borda: #334155;
 }
 
 :root[data-tema="escuro"] .atv-card,
-body.suporta-tema-sistema .atv-card {
+body.suporta-tema-sistema[data-tema="escuro"] .atv-card {
   background: #111827;
   border-color: #1e293b;
 }
 
 :root[data-tema="escuro"] .atv-resumo-progresso,
-body.suporta-tema-sistema .atv-resumo-progresso,
+body.suporta-tema-sistema[data-tema="escuro"] .atv-resumo-progresso,
 :root[data-tema="escuro"] .atv-painel,
-body.suporta-tema-sistema .atv-painel,
+body.suporta-tema-sistema[data-tema="escuro"] .atv-painel,
 :root[data-tema="escuro"] .atv-instrucao,
-body.suporta-tema-sistema .atv-instrucao,
+body.suporta-tema-sistema[data-tema="escuro"] .atv-instrucao,
 :root[data-tema="escuro"] .atv-professor,
-body.suporta-tema-sistema .atv-professor,
+body.suporta-tema-sistema[data-tema="escuro"] .atv-professor,
 :root[data-tema="escuro"] .atv-vazio-lista,
-body.suporta-tema-sistema .atv-vazio-lista,
+body.suporta-tema-sistema[data-tema="escuro"] .atv-vazio-lista,
 :root[data-tema="escuro"] .atv-mapa-hab-box,
-body.suporta-tema-sistema .atv-mapa-hab-box {
+body.suporta-tema-sistema[data-tema="escuro"] .atv-mapa-hab-box {
   background: #111827;
   border-color: #1e293b;
 }
 
 :root[data-tema="escuro"] .atv-passo,
-body.suporta-tema-sistema .atv-passo,
+body.suporta-tema-sistema[data-tema="escuro"] .atv-passo,
 :root[data-tema="escuro"] .atv-item,
-body.suporta-tema-sistema .atv-item,
+body.suporta-tema-sistema[data-tema="escuro"] .atv-item,
 :root[data-tema="escuro"] .atv-parte,
-body.suporta-tema-sistema .atv-parte,
+body.suporta-tema-sistema[data-tema="escuro"] .atv-parte,
 :root[data-tema="escuro"] .atv-controle,
-body.suporta-tema-sistema .atv-controle {
+body.suporta-tema-sistema[data-tema="escuro"] .atv-controle {
   background: #1e293b;
   border-color: #334155;
   color: #f1f5f9;
 }
 
 :root[data-tema="escuro"] .atv-toolbar,
-body.suporta-tema-sistema .atv-toolbar,
+body.suporta-tema-sistema[data-tema="escuro"] .atv-toolbar,
 :root[data-tema="escuro"] .atv-gaveta-filtros,
-body.suporta-tema-sistema .atv-gaveta-filtros {
+body.suporta-tema-sistema[data-tema="escuro"] .atv-gaveta-filtros {
   background: #111827;
   border-color: #1e293b;
 }
 
 :root[data-tema="escuro"] .atv-input-busca,
-body.suporta-tema-sistema .atv-input-busca {
+body.suporta-tema-sistema[data-tema="escuro"] .atv-input-busca {
   background: #0f172a;
   border-color: #334155;
   color: #f8fafc;
 }
 
 :root[data-tema="escuro"] .atv-input-busca:focus,
-body.suporta-tema-sistema .atv-input-busca:focus {
+body.suporta-tema-sistema[data-tema="escuro"] .atv-input-busca:focus {
   border-color: #3b82f6;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
 }
 
 :root[data-tema="escuro"] .atv-pill-tab,
-body.suporta-tema-sistema .atv-pill-tab {
+body.suporta-tema-sistema[data-tema="escuro"] .atv-pill-tab {
   background: #1e293b;
   border-color: transparent;
   color: #94a3b8;
 }
 
 :root[data-tema="escuro"] .atv-pill-tab:hover,
-body.suporta-tema-sistema .atv-pill-tab:hover {
+body.suporta-tema-sistema[data-tema="escuro"] .atv-pill-tab:hover {
   background: #334155;
   color: #f8fafc;
 }
 
 :root[data-tema="escuro"] .atv-pill-tab.ativo,
-body.suporta-tema-sistema .atv-pill-tab.ativo {
+body.suporta-tema-sistema[data-tema="escuro"] .atv-pill-tab.ativo {
   background: #2563eb;
   border-color: #3b82f6;
   color: #ffffff;
 }
 
 :root[data-tema="escuro"] .atv-pill-count,
-body.suporta-tema-sistema .atv-pill-count {
+body.suporta-tema-sistema[data-tema="escuro"] .atv-pill-count {
   background: rgba(255, 255, 255, 0.12);
   color: #e2e8f0;
 }
 
 :root[data-tema="escuro"] .atv-pill-tab.ativo .atv-pill-count,
-body.suporta-tema-sistema .atv-pill-tab.ativo .atv-pill-count {
+body.suporta-tema-sistema[data-tema="escuro"] .atv-pill-tab.ativo .atv-pill-count {
   background: #ffffff;
   color: #1e3a8a;
   font-weight: 800;
 }
 
 :root[data-tema="escuro"] .atv-btn-filtros-gaveta,
-body.suporta-tema-sistema .atv-btn-filtros-gaveta {
+body.suporta-tema-sistema[data-tema="escuro"] .atv-btn-filtros-gaveta {
   background: #1e293b;
   border-color: #334155;
   color: #f8fafc;
 }
 
 :root[data-tema="escuro"] .atv-btn-filtros-gaveta:hover,
-body.suporta-tema-sistema .atv-btn-filtros-gaveta:hover,
+body.suporta-tema-sistema[data-tema="escuro"] .atv-btn-filtros-gaveta:hover,
 :root[data-tema="escuro"] .atv-btn-filtros-gaveta.aberto,
-body.suporta-tema-sistema .atv-btn-filtros-gaveta.aberto,
+body.suporta-tema-sistema[data-tema="escuro"] .atv-btn-filtros-gaveta.aberto,
 :root[data-tema="escuro"] .atv-btn-filtros-gaveta.com-filtros,
-body.suporta-tema-sistema .atv-btn-filtros-gaveta.com-filtros {
+body.suporta-tema-sistema[data-tema="escuro"] .atv-btn-filtros-gaveta.com-filtros {
   background: #334155;
   border-color: #60a5fa;
   color: #93c5fd;
 }
 
 :root[data-tema="escuro"] .atv-chip-filtro,
-body.suporta-tema-sistema .atv-chip-filtro {
+body.suporta-tema-sistema[data-tema="escuro"] .atv-chip-filtro {
   background: #1e293b;
   border-color: #334155;
   color: #e2e8f0;
 }
 
 :root[data-tema="escuro"] .atv-chip-filtro:hover,
-body.suporta-tema-sistema .atv-chip-filtro:hover {
+body.suporta-tema-sistema[data-tema="escuro"] .atv-chip-filtro:hover {
   border-color: #60a5fa;
   color: #60a5fa;
 }
 
 :root[data-tema="escuro"] .atv-chip-filtro.ativo,
-body.suporta-tema-sistema .atv-chip-filtro.ativo {
+body.suporta-tema-sistema[data-tema="escuro"] .atv-chip-filtro.ativo {
   background: #2563eb;
   border-color: #3b82f6;
   color: #ffffff;
 }
 
 :root[data-tema="escuro"] .atv-filtro,
-body.suporta-tema-sistema .atv-filtro {
+body.suporta-tema-sistema[data-tema="escuro"] .atv-filtro {
   background: #111827;
   border-color: #334155;
   color: #e2e8f0;
 }
 
 :root[data-tema="escuro"] .atv-filtro:hover,
-body.suporta-tema-sistema .atv-filtro:hover {
+body.suporta-tema-sistema[data-tema="escuro"] .atv-filtro:hover {
   border-color: #60a5fa;
   color: #60a5fa;
 }
 
 :root[data-tema="escuro"] .atv-filtro[aria-pressed='true'],
-body.suporta-tema-sistema .atv-filtro[aria-pressed='true'] {
+body.suporta-tema-sistema[data-tema="escuro"] .atv-filtro[aria-pressed='true'] {
   background: #2563eb;
   border-color: #3b82f6;
   color: #ffffff;
 }
 
 :root[data-tema="escuro"] .atv-select-habilidade,
-body.suporta-tema-sistema .atv-select-habilidade {
+body.suporta-tema-sistema[data-tema="escuro"] .atv-select-habilidade {
   background: #0f172a;
   border-color: #334155;
   color: #f1f5f9;
 }
 
 :root[data-tema="escuro"] .atv-badge-eixo,
-body.suporta-tema-sistema .atv-badge-eixo {
+body.suporta-tema-sistema[data-tema="escuro"] .atv-badge-eixo {
   background: rgba(30, 64, 175, 0.3);
   color: #93c5fd;
 }
 
 :root[data-tema="escuro"] .atv-meta li.atv-meta-bncc,
-body.suporta-tema-sistema .atv-meta li.atv-meta-bncc {
+body.suporta-tema-sistema[data-tema="escuro"] .atv-meta li.atv-meta-bncc {
   background: rgba(14, 116, 144, 0.3);
   color: #7dd3fc;
 }
 
 :root[data-tema="escuro"] .atv-hab-card,
-body.suporta-tema-sistema .atv-hab-card {
+body.suporta-tema-sistema[data-tema="escuro"] .atv-hab-card {
   background: #1e293b;
   border-color: #334155;
 }
 
 :root[data-tema="escuro"] .atv-fora,
-body.suporta-tema-sistema .atv-fora {
+body.suporta-tema-sistema[data-tema="escuro"] .atv-fora {
   background: rgba(245, 158, 11, 0.15);
   border-color: #d97706;
 }
 
 :root[data-tema="escuro"] .atv-intruso,
-body.suporta-tema-sistema .atv-intruso {
+body.suporta-tema-sistema[data-tema="escuro"] .atv-intruso {
   background: rgba(239, 68, 68, 0.15);
   border-color: #dc2626;
 }
 
 :root[data-tema="escuro"] .atv-feedback.erro,
-body.suporta-tema-sistema .atv-feedback.erro {
+body.suporta-tema-sistema[data-tema="escuro"] .atv-feedback.erro {
   background: rgba(180, 83, 9, 0.25);
   color: #fcd34d;
   border-color: #d97706;
 }
 
 :root[data-tema="escuro"] .atv-feedback.sucesso,
-body.suporta-tema-sistema .atv-feedback.sucesso {
+body.suporta-tema-sistema[data-tema="escuro"] .atv-feedback.sucesso {
   background: rgba(22, 101, 52, 0.3);
   color: #86efac;
   border-color: #16a34a;
 }
 
 :root[data-tema="escuro"] .atv-problema,
-body.suporta-tema-sistema .atv-problema {
+body.suporta-tema-sistema[data-tema="escuro"] .atv-problema {
   background: #1e293b;
   border: 1px solid #334155;
   color: #f1f5f9;
 }
 
 :root[data-tema="escuro"] .atv-direcao,
-body.suporta-tema-sistema .atv-direcao {
+body.suporta-tema-sistema[data-tema="escuro"] .atv-direcao {
   background: #1e293b;
   border-color: #3b82f6;
   color: #f1f5f9;

@@ -99,8 +99,30 @@
   }
 }
 
+:root[data-tema="claro"],
+body[data-tema="claro"],
+body.suporta-tema-sistema[data-tema="claro"] {
+  --cor-primaria: #0369a1;
+  --cor-primaria-escura: #025985;
+  --cor-primaria-texto: #ffffff;
+  --cor-secundaria: #059669;
+  --cor-secundaria-suave: #10b981;
+  --cor-alerta: #b45309;
+  --cor-perigo: #dc2626;
+  --cor-fundo: #f8fafc;
+  --cor-cartao: #ffffff;
+  --cor-superficie: #ffffff;
+  --cor-texto: #0f172a;
+  --cor-texto-principal: #0f172a;
+  --cor-texto-suave: #475569;
+  --cor-borda: #e2e8f0;
+  --cor-foco: #0369a1;
+  --cor-link: #0369a1;
+}
+
 :root[data-tema="escuro"],
-body.suporta-tema-sistema {
+body[data-tema="escuro"],
+body.suporta-tema-sistema[data-tema="escuro"] {
   --cor-primaria: #3b82f6;
   --cor-primaria-escura: #1e3a8a;
   --cor-primaria-texto: #93c5fd;
@@ -136,11 +158,13 @@ body.suporta-tema-sistema {
 .logo-tema-claro { display: block !important; }
 
 :root[data-tema="escuro"] .logo-tema-claro,
-body.suporta-tema-sistema .logo-tema-claro {
+body[data-tema="escuro"] .logo-tema-claro,
+body.suporta-tema-sistema[data-tema="escuro"] .logo-tema-claro {
   display: none !important;
 }
 :root[data-tema="escuro"] .logo-tema-escuro,
-body.suporta-tema-sistema .logo-tema-escuro {
+body[data-tema="escuro"] .logo-tema-escuro,
+body.suporta-tema-sistema[data-tema="escuro"] .logo-tema-escuro {
   display: block !important;
 }
 
@@ -156,9 +180,18 @@ body.suporta-tema-sistema .logo-tema-escuro {
 /* Fallback de substituição automática para img em cabeçalhos e telas de autenticação */
 :root[data-tema="escuro"] .pub-logo img:not(.logo-tema-claro):not(.logo-tema-escuro),
 :root[data-tema="escuro"] .login-logo img:not(.logo-tema-claro):not(.logo-tema-escuro),
-body.suporta-tema-sistema .pub-logo img:not(.logo-tema-claro):not(.logo-tema-escuro),
-body.suporta-tema-sistema .login-logo img:not(.logo-tema-claro):not(.logo-tema-escuro) {
+body[data-tema="escuro"] .pub-logo img:not(.logo-tema-claro):not(.logo-tema-escuro),
+body[data-tema="escuro"] .login-logo img:not(.logo-tema-claro):not(.logo-tema-escuro),
+body.suporta-tema-sistema[data-tema="escuro"] .pub-logo img:not(.logo-tema-claro):not(.logo-tema-escuro),
+body.suporta-tema-sistema[data-tema="escuro"] .login-logo img:not(.logo-tema-claro):not(.logo-tema-escuro) {
   content: url('/img/logo-branco.svg') !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-tema="claro"]) .pub-logo img:not(.logo-tema-claro):not(.logo-tema-escuro),
+  :root:not([data-tema="claro"]) .login-logo img:not(.logo-tema-claro):not(.logo-tema-escuro) {
+    content: url('/img/logo-branco.svg') !important;
+  }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -830,7 +863,8 @@ tbody tr:hover { background: #f9fbfd; }
   padding: 20px;
 }
 :root[data-tema="escuro"] .pagina-login,
-body.suporta-tema-sistema .pagina-login {
+body[data-tema="escuro"] .pagina-login,
+body.suporta-tema-sistema[data-tema="escuro"] .pagina-login {
   background: radial-gradient(circle at 50% 30%, #1e293b 0%, #0b1120 70%, #030712 100%);
 }
 @media (prefers-color-scheme: dark) {

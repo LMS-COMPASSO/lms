@@ -217,6 +217,46 @@ test.describe('Auditoria Visual e Alinhamento Multilíngue (Alemão, Ucraniano, 
       await expect(statusPegada).toBeVisible();
       expect((await statusPegada.textContent())?.trim().length).toBeGreaterThan(0);
     });
+
+    test(`Valida layout da página principal (SendPulse style), abas dos 3 eixos e FAQ para ${idioma.nome}`, async ({ page }) => {
+      await page.goto('/');
+
+      // Troca para o idioma alvo
+      const botaoIdioma = page.locator('#btn-seletor-idioma');
+      await botaoIdioma.click();
+      await page.locator(`#opt-idioma-${idioma.codigo}`).click();
+
+      // Valida atributo lang no HTML
+      await expect(page.locator('html')).toHaveAttribute('lang', idioma.codigo);
+
+      // 1. Ausência de overflow horizontal
+      const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth);
+      const clientWidth = await page.evaluate(() => document.documentElement.clientWidth);
+      expect(scrollWidth).toBeLessThanOrEqual(clientWidth + 1);
+
+      // 2. Valida elementos chave do novo design
+      const heroTitulo = page.locator('#titulo-hero');
+      await expect(heroTitulo).toBeVisible();
+
+      // 3. Valida os 3 cards de perfis
+      const perfis = page.locator('.sp-perfil-card');
+      expect(await perfis.count()).toBe(3);
+
+      // 4. Valida seletor de abas dos 3 eixos
+      const btnMundo = page.locator('#tab-mundo');
+      await btnMundo.click();
+      await expect(page.locator('#painel-mundo')).toHaveClass(/ativa/);
+
+      const btnCultura = page.locator('#tab-cultura');
+      await btnCultura.click();
+      await expect(page.locator('#painel-cultura')).toHaveClass(/ativa/);
+
+      // 5. Valida FAQ
+      const faqItem = page.locator('.sp-faq-item').first();
+      await faqItem.locator('.sp-faq-summary').click();
+      await expect(faqItem).toHaveAttribute('open', '');
+    });
   }
 });
+
 
