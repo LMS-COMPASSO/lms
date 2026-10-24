@@ -39,6 +39,7 @@ import * as usabilityRoutes from './routes/usabilidade_rotas.js';
  */
 async function rotearAuth(partes, metodo, request, env, db) {
   const acao = partes[2];
+  if (acao === 'config' && metodo === 'GET') return authRoutes.obterConfigAuth(request, env);
   if (acao === 'registrar' && metodo === 'POST') return authRoutes.registrar(request, env, db);
   if (acao === 'login' && metodo === 'POST') return authRoutes.login(request, env, db);
   if (acao === 'google' && metodo === 'POST') return authRoutes.loginComGoogle(request, env, db);

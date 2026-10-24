@@ -250,6 +250,18 @@ export function detectarPerfilAcademico(email = '', nome = '', hd = '', papelSug
 }
 
 /**
+ * Retorna configurações públicas de autenticação (ex.: Client ID do Google).
+ * Não expõe segredos nem dados confidenciais.
+ */
+export function obterConfigAuth(request, env) {
+  const googleClientId = String(env?.GOOGLE_CLIENT_ID || '').trim();
+  return jsonResponse({
+    googleClientId,
+    googleConfigurado: Boolean(googleClientId),
+  });
+}
+
+/**
  * Autentica ou cadastra automaticamente um usuário via Google (com suporte especial a contas acadêmicas e Google Workspace for Education).
  */
 export async function loginComGoogle(request, env, db) {
@@ -260,10 +272,56 @@ export async function loginComGoogle(request, env, db) {
   let avatarUrl = null;
   let hd = '';
   const papelSugerido = body.perfil || null;
+  const googleClientIdEsperado = String(env?.GOOGLE_CLIENT_ID || '').trim();
+
+  // Suporte a troca de Authorization Code OAuth2 (caso enviado pelo frontend com Google Console)
+  if (body.code && googleClientIdEsperado && env?.GOOGLE_CLIENT_SECRET) {
+    try {
+      const redirectUri = body.redirect_uri || (request?.url ? new URL(request.url).origin + '/login.html' : '');
+      const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+          code: body.code,
+          client_id: googleClientIdEsperado,
+          client_secret: env.GOOGLE_CLIENT_SECRET,
+          redirect_uri: redirectUri,
+          grant_type: 'authorization_code',
+        }),
+      });
+      if (tokenRes.ok) {
+        const tokenData = await tokenRes.json();
+        if (tokenData.id_token) {
+          body.credential = tokenData.id_token;
+        }
+      }
+    } catch (err) {
+      console.warn('Erro ao trocar authorization code com Google:', err);
+    }
+  }
 
   if (body.credential) {
     const claims = decodificarTokenGoogle(body.credential);
-    if (claims && claims.email) {
+    if (!claims) {
+      return jsonErro('Credencial do Google inválida ou malformada.', 400);
+    }
+
+    // Se a secret GOOGLE_CLIENT_ID estiver configurada no Cloudflare / env, valida a audiência
+    if (googleClientIdEsperado) {
+      const audValido = Array.isArray(claims.aud)
+        ? claims.aud.includes(googleClientIdEsperado)
+        : claims.aud === googleClientIdEsperado;
+      if (!audValido) {
+        return jsonErro('Token do Google não autorizado para esta aplicação (Client ID incompatível).', 401);
+      }
+    }
+
+    // Valida expiração do token se disponível (com tolerância de 5 min para desvio de relógio)
+    if (claims.exp && typeof claims.exp === 'number' && claims.exp * 1000 < Date.now() - 300000) {
+      return jsonErro('Token do Google expirado. Faça login novamente.', 401);
+    }
+
+    if (claims.email) {
       email = claims.email;
       nome = claims.name || claims.given_name || email.split('@')[0];
       sub = claims.sub || '';

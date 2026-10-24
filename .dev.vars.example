@@ -7,3 +7,24 @@ JWT_SECRET=gere-um-valor-aleatorio-com-pelo-menos-32-caracteres
 
 # OPCIONAL. Senha do administrador padrão criado quando o banco está vazio (padrão: Admin@12345, só para demonstração).
 # ADMIN_INITIAL_PASSWORD=defina-uma-senha-forte
+
+# ==============================================================================
+# AUTENTICAÇÃO COM GOOGLE / GOOGLE WORKSPACE FOR EDUCATION
+# ==============================================================================
+# Obtenha suas credenciais no Google Cloud Console:
+# 1. Acesse: https://console.cloud.google.com/apis/credentials
+# 2. Crie um "ID do cliente OAuth 2.0" (Tipo de aplicativo: Aplicativo da Web).
+# 3. Adicione as "Origens JavaScript autorizadas":
+#    - Produção: https://seu-dominio.com
+#    - Desenvolvimento local: http://localhost:8787 e http://127.0.0.1:8787
+# 4. Adicione os "URIs de redirecionamento autorizados":
+#    - https://seu-dominio.com/login.html
+#    - http://127.0.0.1:8787/login.html
+#
+# Para configurar em PRODUÇÃO na Cloudflare via Wrangler CLI execute:
+#   npx wrangler secret put GOOGLE_CLIENT_ID
+#   npx wrangler secret put GOOGLE_CLIENT_SECRET
+#
+# Para desenvolvimento local, descomente as linhas abaixo no seu arquivo .dev.vars:
+# GOOGLE_CLIENT_ID=seu-id-de-cliente.apps.googleusercontent.com
+# GOOGLE_CLIENT_SECRET=seu-client-secret-aqui

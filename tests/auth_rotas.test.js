@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { hashSenha, sha256Hex, signJwt } from '../src/worker/crypto_seguranca.js';
-import { alterarSenha, login, loginComGoogle, registrar, verificarDominioAcademico } from '../src/worker/routes/auth_rotas.js';
+import { alterarSenha, login, loginComGoogle, obterConfigAuth, registrar, verificarDominioAcademico } from '../src/worker/routes/auth_rotas.js';
 
 const SEGREDO = 'segredo-de-teste-com-mais-de-32-caracteres!!';
 
@@ -265,4 +265,59 @@ test('loginComGoogle recusa usuário inativo', async () => {
   );
   assert.equal(resposta.status, 403);
 });
+
+test('obterConfigAuth retorna googleClientId e status de configuração', async () => {
+  const req = new Request('https://lms.test/api/auth/config', { method: 'GET' });
+
+  // Sem secret configurada
+  const res1 = await obterConfigAuth(req, {});
+  const dados1 = await res1.json();
+  assert.equal(dados1.googleClientId, '');
+  assert.equal(dados1.googleConfigurado, false);
+
+  // Com secret GOOGLE_CLIENT_ID configurada na Cloudflare/env
+  const res2 = await obterConfigAuth(req, { GOOGLE_CLIENT_ID: 'meu-app-123.apps.googleusercontent.com' });
+  const dados2 = await res2.json();
+  assert.equal(dados2.googleClientId, 'meu-app-123.apps.googleusercontent.com');
+  assert.equal(dados2.googleConfigurado, true);
+});
+
+test('loginComGoogle valida aud quando GOOGLE_CLIENT_ID está configurado nas secrets', async () => {
+  const db = criarBanco();
+  const CLIENT_ID_OFICIAL = '123456789-escola.apps.googleusercontent.com';
+  const env = { JWT_SECRET: SEGREDO, GOOGLE_CLIENT_ID: CLIENT_ID_OFICIAL };
+
+  const headerB64 = Buffer.from(JSON.stringify({ alg: 'RS256', typ: 'JWT' })).toString('base64');
+
+  // Token com aud divergente
+  const payloadErrado = Buffer.from(
+    JSON.stringify({
+      aud: 'outro-app-hacker.apps.googleusercontent.com',
+      email: 'tentativa@escola.edu.br',
+      name: 'Hacker',
+    }),
+  ).toString('base64');
+  const tokenErrado = `${headerB64}.${payloadErrado}.fake_signature`;
+
+  const respostaErrada = await loginComGoogle(requisicao({ credential: tokenErrado }), env, db);
+  assert.equal(respostaErrada.status, 401);
+
+  // Token com aud correto
+  const payloadCorreto = Buffer.from(
+    JSON.stringify({
+      aud: CLIENT_ID_OFICIAL,
+      email: 'prof.ana@educacao.sp.gov.br',
+      name: 'Professora Ana',
+      hd: 'educacao.sp.gov.br',
+    }),
+  ).toString('base64');
+  const tokenCorreto = `${headerB64}.${payloadCorreto}.fake_signature`;
+
+  const respostaCorreta = await loginComGoogle(requisicao({ credential: tokenCorreto }), env, db);
+  assert.equal(respostaCorreta.status, 200);
+  const dadosCorretos = await respostaCorreta.json();
+  assert.equal(dadosCorretos.usuario.email, 'prof.ana@educacao.sp.gov.br');
+  assert.equal(dadosCorretos.usuario.perfil, 'instrutor');
+});
+
 

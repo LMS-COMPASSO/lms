@@ -67,12 +67,8 @@
 
           <div class="mt-14">
             <div id="google-gis-btn-wrap" class="mb-8" style="min-height: 44px;">
-              <div id="g_id_onload"
-                   data-client_id="1023847291823-dummy-google-client.apps.googleusercontent.com"
-                   data-callback="tratarRespostaGoogleGIS"
-                   data-auto_prompt="false">
-              </div>
-              <button type="button" id="btn-login-google-academic" class="btn-google-academic btn-bloco" aria-label="Entrar com Google Acadêmico" onclick="abrirModalGoogle()">
+              <div id="google-gis-container" class="flex-centro mb-8" style="display: none; width: 100%;"></div>
+              <button type="button" id="btn-login-google-academic" class="btn-google-academic btn-bloco" aria-label="Entrar com Google Acadêmico" onclick="acionarLoginGoogle()">
                 <svg class="google-g-icon" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                   <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                   <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -82,7 +78,7 @@
                 <span>Entrar com Google Acadêmico</span>
               </button>
             </div>
-            <p class="texto-centro texto-suave m-0" style="font-size: 0.78rem;">
+            <p id="google-status-subtexto" class="texto-centro texto-suave m-0" style="font-size: 0.78rem;">
               Redes municipais, estaduais, federais e colégios parceiros
             </p>
           </div>
@@ -124,7 +120,7 @@
     </div>
   </main>
 
-  <!-- Modal Interativo de Seleção de Conta Google Acadêmica -->
+  <!-- Modal Interativo de Autenticação Google Acadêmica -->
   <div id="modal-google-academico" class="modal-google-backdrop oculto" role="dialog" aria-modal="true" aria-labelledby="titulo-modal-google">
     <div class="modal-google-conteudo">
       <div class="modal-google-header">
@@ -135,54 +131,41 @@
             <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
             <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
           </svg>
-          <strong id="titulo-modal-google" style="font-size: 1.05rem;">Selecionar Conta Google Acadêmica</strong>
+          <strong id="titulo-modal-google" style="font-size: 1.05rem;">Acesso Institucional Google</strong>
         </div>
         <button type="button" class="btn btn-xs btn-neutro" onclick="fecharModalGoogle()" aria-label="Fechar janela">Fechar</button>
       </div>
 
-      <p class="texto-suave mb-14" style="font-size: 0.86rem;">
-        Selecione uma conta institucional cadastrada para login rápido em 1 clique ou informe seu endereço @escola.edu.br:
-      </p>
+      <!-- Container do botão nativo do Google GIS no modal quando configurado -->
+      <div id="modal-google-gis-container" class="mb-14" style="display: none; justify-content: center;"></div>
 
-      <div class="perfis-institucionais-lista">
-        <button type="button" class="perfil-academico-item" onclick="entrarComoPerfilAcademico('Mariana Costa', 'mariana.costa@aluno.escola.edu.br', 'aluno')">
-          <div class="avatar-academico" style="background: #0284c7;">MC</div>
-          <div style="flex:1;">
-            <div style="font-weight: 600; font-size: 0.92rem;">Mariana Costa</div>
-            <div class="texto-suave" style="font-size: 0.8rem;">mariana.costa@aluno.escola.edu.br</div>
-          </div>
-          <span class="badge badge-aluno">Estudante</span>
-        </button>
-
-        <button type="button" class="perfil-academico-item" onclick="entrarComoPerfilAcademico('Prof. Carlos Eduardo', 'prof.carlos@educacao.sp.gov.br', 'instrutor')">
-          <div class="avatar-academico" style="background: #059669;">CE</div>
-          <div style="flex:1;">
-            <div style="font-weight: 600; font-size: 0.92rem;">Prof. Carlos Eduardo</div>
-            <div class="texto-suave" style="font-size: 0.8rem;">prof.carlos@educacao.sp.gov.br</div>
-          </div>
-          <span class="badge badge-instrutor">Docente BNCC</span>
-        </button>
-
-        <button type="button" class="perfil-academico-item" onclick="entrarComoPerfilAcademico('Silvia Helena', 'silvia@escola.gov.br', 'administrador')">
-          <div class="avatar-academico" style="background: #7c3aed;">SH</div>
-          <div style="flex:1;">
-            <div style="font-weight: 600; font-size: 0.92rem;">Silvia Helena</div>
-            <div class="texto-suave" style="font-size: 0.8rem;">silvia@escola.gov.br</div>
-          </div>
-          <span class="badge badge-administrador">Gestão</span>
-        </button>
+      <!-- Instruções de configuração de secret quando o Client ID ainda não estiver cadastrado -->
+      <div id="banner-config-cloudflare" class="google-config-banner" style="display: none;">
+        <div class="flex-linha gap-8 mb-6">
+          <span class="material-symbols-outlined icon-xs text-primaria" aria-hidden="true">tune</span>
+          <strong style="font-size: 0.88rem;">Integração Google Console Pronta</strong>
+        </div>
+        <p class="texto-suave mb-6" style="font-size: 0.82rem; line-height: 1.4;">
+          Para ativar o login do Google em 1 clique na Cloudflare, configure o secret:
+        </p>
+        <code class="codigo-secret-cmd">npx wrangler secret put GOOGLE_CLIENT_ID</code>
       </div>
 
-      <div class="divisor-mobile-login my-12"><span>ou digite seu email institucional</span></div>
+      <p class="texto-suave mb-14" style="font-size: 0.86rem;">
+        Informe seu e-mail escolar institucional para validar acesso vinculado ao Google Workspace for Education:
+      </p>
 
       <form id="form-google-custom" onsubmit="event.preventDefault(); submeterEmailCustomGoogle();">
-        <div class="form-grupo mb-10">
-          <label for="input-email-google-custom" style="font-size: 0.85rem;">Email Institucional / Google</label>
-          <input type="email" id="input-email-google-custom" placeholder="voce@suaescola.edu.br" required spellcheck="false">
+        <div class="form-grupo mb-12">
+          <label for="input-email-google-custom" style="font-size: 0.86rem; font-weight: 600;">E-mail Institucional</label>
+          <input type="email" id="input-email-google-custom" placeholder="seu.nome@escola.edu.br" required spellcheck="false" autocomplete="email">
+          <small class="texto-suave" style="font-size: 0.76rem; display: block; margin-top: 4px;">
+            Aceita domínios @*.edu.br, @*.gov.br, @*.sp.gov.br e redes conveniadas.
+          </small>
         </div>
         <button type="submit" id="btn-submit-google-custom" class="btn btn-primario btn-bloco flex-inline-icon flex-centro">
           <span class="material-symbols-outlined icon-xs" aria-hidden="true">login</span>
-          <span>Acessar com esta conta</span>
+          <span>Acessar com Email Acadêmico</span>
         </button>
       </form>
     </div>
@@ -197,9 +180,89 @@
       window.location.href = usuarioLogado.perfil === 'aluno' ? '/cursos.html' : '/dashboard.html';
     }
 
+    let authConfig = { googleClientId: '', googleConfigurado: false };
+
+    // Carrega a configuração pública do backend (Google Client ID das secrets da Cloudflare)
+    async function carregarConfigAuth() {
+      try {
+        authConfig = await api('/auth/config');
+        configurarGoogleGIS();
+      } catch (err) {
+        console.warn('Configuração de autenticação Google indisponível:', err);
+      }
+    }
+
+    // Inicializa a biblioteca Google Identity Services (GIS) quando as credenciais estiverem configuradas
+    function configurarGoogleGIS() {
+      const banner = document.getElementById('banner-config-cloudflare');
+      if (!authConfig.googleConfigurado) {
+        if (banner) banner.style.display = 'block';
+        return;
+      }
+
+      if (banner) banner.style.display = 'none';
+
+      if (window.google?.accounts?.id && authConfig.googleClientId) {
+        try {
+          google.accounts.id.initialize({
+            client_id: authConfig.googleClientId,
+            callback: tratarRespostaGoogleGIS,
+            auto_select: false,
+            cancel_on_tap_outside: true,
+          });
+
+          // Renderiza o botão oficial na coluna de login acadêmico
+          const container = document.getElementById('google-gis-container');
+          if (container) {
+            container.style.display = 'flex';
+            google.accounts.id.renderButton(container, {
+              theme: document.documentElement.getAttribute('data-tema') === 'escuro' ? 'filled_black' : 'outline',
+              size: 'large',
+              text: 'signin_with',
+              shape: 'rectangular',
+              logo_alignment: 'left',
+              width: 320,
+            });
+            const btnManual = document.getElementById('btn-login-google-academic');
+            if (btnManual) btnManual.style.display = 'none';
+          }
+
+          // Renderiza também no modal institucional
+          const modalContainer = document.getElementById('modal-google-gis-container');
+          if (modalContainer) {
+            modalContainer.style.display = 'flex';
+            google.accounts.id.renderButton(modalContainer, {
+              theme: document.documentElement.getAttribute('data-tema') === 'escuro' ? 'filled_black' : 'outline',
+              size: 'large',
+              text: 'continue_with',
+              shape: 'rectangular',
+              logo_alignment: 'left',
+              width: 320,
+            });
+          }
+        } catch (e) {
+          console.warn('Erro ao inicializar Google Identity Services:', e);
+        }
+      }
+    }
+
+    // Aciona o fluxo de login com Google
+    function acionarLoginGoogle() {
+      if (authConfig.googleConfigurado && window.google?.accounts?.id) {
+        try {
+          google.accounts.id.prompt();
+          return;
+        } catch {}
+      }
+      abrirModalGoogle();
+    }
+    window.acionarLoginGoogle = acionarLoginGoogle;
+
     // Abre o modal de login Google
     function abrirModalGoogle() {
       document.getElementById('modal-google-academico').classList.remove('oculto');
+      const input = document.getElementById('input-email-google-custom');
+      if (input) setTimeout(() => input.focus(), 100);
     }
 
     // Fecha o modal de login Google
@@ -230,24 +293,22 @@
     }
     window.tratarRespostaGoogleGIS = tratarRespostaGoogleGIS;
 
-    // Login rápido com perfis institucionais verificados
-    async function entrarComoPerfilAcademico(nome, email, perfil) {
-      const alertaEl = document.getElementById('alerta');
-      alertaEl.classList.add('oculto');
-      try {
-        const resposta = await api('/auth/google', {
-          method: 'POST',
-          body: JSON.stringify({ nome, email, perfil, academico: true }),
-        });
-        salvarSessao(resposta.token, resposta.usuario);
-        window.location.href = resposta.usuario.perfil === 'aluno' ? '/cursos.html' : '/dashboard.html';
-      } catch (err) {
-        fecharModalGoogle();
-        alertaEl.textContent = err.message;
-        alertaEl.classList.remove('oculto');
+    // Inicia a carga de configuração ao carregar a página
+    carregarConfigAuth();
+
+    // Aguarda o script GIS do Google se ele ainda estiver carregando
+    window.addEventListener('load', () => {
+      if (window.google?.accounts?.id && authConfig.googleConfigurado) {
+        configurarGoogleGIS();
       }
+    });
+
+    // Se o usuário clicou no menu "Google Acadêmico" na página inicial, abre direto o fluxo
+    if (new URLSearchParams(window.location.search).get('metodo') === 'google') {
+      setTimeout(() => {
+        acionarLoginGoogle();
+      }, 200);
     }
-    window.entrarComoPerfilAcademico = entrarComoPerfilAcademico;
 
     // Login com email customizado informado no modal
     async function submeterEmailCustomGoogle() {
@@ -275,11 +336,6 @@
       }
     }
     window.submeterEmailCustomGoogle = submeterEmailCustomGoogle;
-
-    // Se o usuário clicou no menu "Google Acadêmico" na página inicial, abre direto o fluxo
-    if (new URLSearchParams(window.location.search).get('metodo') === 'google') {
-      setTimeout(abrirModalGoogle, 150);
-    }
 
     // Formulário tradicional (Email e Senha)
     document.getElementById('form-login').addEventListener('submit', async (e) => {
