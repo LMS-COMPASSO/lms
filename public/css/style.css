@@ -2377,14 +2377,14 @@ details > summary {
 details > summary::-webkit-details-marker {
   display: none;
 }
-details > summary::after {
+details:not(.sp-faq-item) > summary::after {
   content: '▾';
   font-size: 1rem;
   font-weight: 800;
   transition: transform 0.2s ease;
   color: var(--cor-secao-ativa);
 }
-details[open] > summary::after {
+details:not(.sp-faq-item)[open] > summary::after {
   transform: rotate(180deg);
 }
 
