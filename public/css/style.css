@@ -2737,6 +2737,342 @@ textarea[aria-invalid="true"],
   }
 }
 
+/* ==========================================================================
+   AUTENTICAÇÃO COM GOOGLE ACADÊMICO (GOOGLE WORKSPACE FOR EDUCATION)
+   ========================================================================== */
+.caixa-login-ampla {
+  max-width: 880px;
+  width: 100%;
+  padding: 36px 40px;
+  background: var(--cor-cartao, #ffffff);
+  border-radius: var(--raio, 12px);
+  border: 1px solid var(--cor-borda, #e2e8f0);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+}
+
+.grid-login-duplo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  align-items: stretch;
+  margin-top: 24px;
+}
+
+.divisor-mobile-login {
+  display: none;
+}
+
+@media (max-width: 820px) {
+  .caixa-login-ampla {
+    max-width: 440px;
+    padding: 24px 20px;
+  }
+  .grid-login-duplo {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+.card-login-academico {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: linear-gradient(145deg, rgba(66, 133, 244, 0.06) 0%, rgba(52, 168, 83, 0.03) 100%);
+  border: 1.5px solid rgba(66, 133, 244, 0.35);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(66, 133, 244, 0.07);
+}
+
+:root[data-tema="escuro"] .card-login-academico,
+body[data-tema="escuro"] .card-login-academico {
+  background: linear-gradient(145deg, rgba(66, 133, 244, 0.12) 0%, rgba(15, 23, 42, 0.7) 100%);
+  border-color: rgba(66, 133, 244, 0.45);
+}
+
+.card-login-convencional {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px 4px;
+}
+
+.google-academico-topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.google-academico-logo-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--cor-texto, #1e293b);
+}
+
+.badge-academico-recomendado {
+  background: rgba(66, 133, 244, 0.12);
+  color: #1a73e8;
+  font-weight: 700;
+  font-size: 0.76rem;
+  padding: 4px 9px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+:root[data-tema="escuro"] .badge-academico-recomendado,
+body[data-tema="escuro"] .badge-academico-recomendado {
+  background: rgba(66, 133, 244, 0.25);
+  color: #8ab4f8;
+}
+
+.lista-vantagens-academico {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lista-vantagens-academico li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.88rem;
+  color: var(--cor-texto-suave, #475569);
+  line-height: 1.35;
+}
+
+.lista-vantagens-academico .icon-check {
+  color: #10b981;
+  flex-shrink: 0;
+  font-size: 18px;
+}
+
+.btn-google-academic {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 18px;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #374151;
+  font-size: 0.94rem;
+  font-weight: 600;
+  border: 1px solid #d1d5db;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.btn-google-academic:hover,
+.btn-google-academic:focus-visible {
+  background: #f9fafb;
+  border-color: #4285f4;
+  box-shadow: 0 2px 8px rgba(66, 133, 244, 0.25);
+  color: #111827;
+  transform: translateY(-1px);
+}
+
+:root[data-tema="escuro"] .btn-google-academic,
+body[data-tema="escuro"] .btn-google-academic {
+  background: #1e293b;
+  color: #f8fafc;
+  border-color: #334155;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+:root[data-tema="escuro"] .btn-google-academic:hover,
+body[data-tema="escuro"] .btn-google-academic:focus-visible {
+  background: #273549;
+  border-color: #60a5fa;
+  box-shadow: 0 2px 8px rgba(96, 165, 250, 0.3);
+}
+
+@media (min-width: 821px) {
+  .card-login-convencional {
+    border-left: 1px solid var(--cor-borda, #e2e8f0);
+    padding-left: 28px;
+  }
+}
+
+@media (max-width: 820px) {
+  .divisor-mobile-login {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: var(--cor-texto-suave);
+    font-size: 0.82rem;
+    margin: 8px 0;
+  }
+  .divisor-mobile-login::before,
+  .divisor-mobile-login::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid var(--cor-borda, #e2e8f0);
+  }
+  .divisor-mobile-login span {
+    padding: 0 10px;
+  }
+}
+
+/* Modal de Contas Institucionais Google */
+.modal-google-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 25, 47, 0.7);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.modal-google-conteudo {
+  background: var(--cor-cartao, #ffffff);
+  color: var(--cor-texto, #1a202c);
+  border-radius: 14px;
+  width: 100%;
+  max-width: 480px;
+  padding: 24px;
+  border: 1px solid var(--cor-borda, #e2e8f0);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+}
+
+.modal-google-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--cor-borda, #e2e8f0);
+}
+
+.perfil-academico-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: var(--cor-fundo-alt, #f8fafc);
+  border: 1px solid var(--cor-borda, #e2e8f0);
+  color: var(--cor-texto);
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s ease;
+  margin-bottom: 8px;
+}
+
+.perfil-academico-item:hover,
+.perfil-academico-item:focus-visible {
+  border-color: #4285F4;
+  background: rgba(66, 133, 244, 0.08);
+  transform: translateX(2px);
+}
+
+.avatar-academico {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #4285F4;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+/* Badges de Google Acadêmico na Topbar e Sidebar */
+.badge-google-topbar {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(66, 133, 244, 0.12);
+  color: #1a73e8;
+  border: 1px solid rgba(66, 133, 244, 0.25);
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+:root[data-tema="escuro"] .badge-google-topbar {
+  background: rgba(66, 133, 244, 0.22);
+  color: #8ab4f8;
+  border-color: rgba(66, 133, 244, 0.4);
+}
+
+.badge-google-sidebar {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #60a5fa;
+  margin-top: 2px;
+}
+
+.btn-google-menu {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 38px;
+  padding: 6px 12px;
+  font-size: 0.86rem;
+  font-weight: 600;
+  white-space: nowrap;
+  background: var(--cor-cartao, #ffffff);
+  color: var(--pub-texto, #1e293b);
+  border: 1.5px solid rgba(66, 133, 244, 0.4);
+  border-radius: 8px;
+  text-decoration: none !important;
+  box-shadow: 0 1px 2px rgba(66, 133, 244, 0.06);
+  transition: all 0.18s ease;
+}
+
+.btn-google-menu:hover,
+.btn-google-menu:focus-visible {
+  border-color: #4285F4;
+  background: rgba(66, 133, 244, 0.08);
+  box-shadow: 0 2px 6px rgba(66, 133, 244, 0.2);
+}
+
+:root[data-tema="escuro"] .btn-google-menu,
+body[data-tema="escuro"] .btn-google-menu {
+  background: #1e293b;
+  color: #f8fafc;
+  border-color: rgba(66, 133, 244, 0.5);
+}
+
+.card-registro-google-academico {
+  background: linear-gradient(145deg, rgba(66, 133, 244, 0.06) 0%, rgba(52, 168, 83, 0.03) 100%);
+  border: 1.5px solid rgba(66, 133, 244, 0.35);
+  border-radius: 10px;
+  padding: 16px;
+}
+:root[data-tema="escuro"] .card-registro-google-academico,
+body[data-tema="escuro"] .card-registro-google-academico {
+  background: linear-gradient(145deg, rgba(66, 133, 244, 0.12) 0%, rgba(15, 23, 42, 0.7) 100%);
+  border-color: rgba(66, 133, 244, 0.45);
+}
+
+
 
 
 

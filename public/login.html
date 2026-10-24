@@ -9,10 +9,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
 <link rel="stylesheet" href="/css/style.css">
+<!-- Google Identity Services (GIS) para autenticação institucional -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
   <main class="pagina-login">
-    <div class="caixa-login">
+    <div class="caixa-login caixa-login-ampla">
       <a href="/" class="login-logo" aria-label="LMS COMPASSO — página inicial">
         <img src="/img/logo.svg" alt="LMS COMPASSO — BNCC Computação" width="272" height="64" class="logo-tema-claro">
         <img src="/img/logo-branco.svg" alt="LMS COMPASSO — BNCC Computação" width="272" height="64" class="logo-tema-escuro">
@@ -22,26 +24,169 @@
 
       <div id="alerta" class="alerta alerta-erro oculto" role="alert" aria-live="polite"></div>
 
-      <form id="form-login">
-        <div class="form-grupo">
-          <label for="email">Email</label>
-          <input type="email" id="email" autocomplete="email" spellcheck="false" required placeholder="seuemail@escola.edu.br">
-        </div>
-        <div class="form-grupo">
-          <label for="senha">Senha</label>
-          <input type="password" id="senha" autocomplete="current-password" required placeholder="••••••••">
-        </div>
-        <button type="submit" id="btn-submit" class="btn btn-primario btn-bloco">Entrar</button>
-      </form>
+      <div class="grid-login-duplo">
+        <!-- Card 1: Destaque de Autenticação com Google Acadêmico -->
+        <div class="card-login-academico" id="card-google-academico">
+          <div>
+            <div class="google-academico-topo">
+              <div class="google-academico-logo-row">
+                <svg class="google-g-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                </svg>
+                <span>Google Workspace</span>
+              </div>
+              <span class="badge-academico-recomendado">
+                <span class="material-symbols-outlined icon-xs" aria-hidden="true">verified</span>
+                Recomendado para Escolas
+              </span>
+            </div>
 
-      <p class="texto-centro mt-18 texto-suave">
-        Não tem conta? <a href="/registrar.html" class="link-destaque">Criar conta</a>
-      </p>
-      <p class="texto-centro mt-8 texto-suave">
-        <a href="/" class="link-destaque flex-inline-icon flex-centro"><span class="material-symbols-outlined icon-xs" aria-hidden="true">arrow_back</span> Voltar à página inicial</a>
-      </p>
+            <h2 style="font-size: 1.15rem; margin: 0 0 6px 0; color: var(--cor-texto);">Acesso com Conta Acadêmica</h2>
+            <p class="texto-suave" style="font-size: 0.88rem; margin: 0 0 14px 0;">
+              Acesso direto para redes públicas e privadas parceiras sem necessidade de senha manual.
+            </p>
+
+            <ul class="lista-vantagens-academico">
+              <li>
+                <span class="material-symbols-outlined icon-xs icon-check" aria-hidden="true">check_circle</span>
+                <span>Sem necessidade de cadastrar ou decorar senhas</span>
+              </li>
+              <li>
+                <span class="material-symbols-outlined icon-xs icon-check" aria-hidden="true">check_circle</span>
+                <span>Vínculo com domínios escolares (@*.edu.br, @*.gov.br)</span>
+              </li>
+              <li>
+                <span class="material-symbols-outlined icon-xs icon-check" aria-hidden="true">check_circle</span>
+                <span>Login rápido em 1 clique integrado ao Google Classroom</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="mt-14">
+            <div id="google-gis-btn-wrap" class="mb-8" style="min-height: 44px;">
+              <div id="g_id_onload"
+                   data-client_id="1023847291823-dummy-google-client.apps.googleusercontent.com"
+                   data-callback="tratarRespostaGoogleGIS"
+                   data-auto_prompt="false">
+              </div>
+              <button type="button" id="btn-login-google-academic" class="btn-google-academic btn-bloco" aria-label="Entrar com Google Acadêmico" onclick="abrirModalGoogle()">
+                <svg class="google-g-icon" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                </svg>
+                <span>Entrar com Google Acadêmico</span>
+              </button>
+            </div>
+            <p class="texto-centro texto-suave m-0" style="font-size: 0.78rem;">
+              Redes municipais, estaduais, federais e colégios parceiros
+            </p>
+          </div>
+        </div>
+
+        <div class="divisor-mobile-login" aria-hidden="true">
+          <span>ou com email e senha</span>
+        </div>
+
+        <!-- Card 2: Acesso Convencional -->
+        <div class="card-login-convencional">
+          <div>
+            <h2 style="font-size: 1.15rem; margin: 0 0 6px 0; color: var(--cor-texto);">Email e Senha</h2>
+            <p class="texto-suave" style="font-size: 0.88rem; margin: 0 0 16px 0;">Para usuários com cadastro individual no LMS</p>
+
+            <form id="form-login">
+              <div class="form-grupo">
+                <label for="email">Email</label>
+                <input type="email" id="email" autocomplete="email" spellcheck="false" required placeholder="seuemail@escola.edu.br">
+              </div>
+              <div class="form-grupo">
+                <label for="senha">Senha</label>
+                <input type="password" id="senha" autocomplete="current-password" required placeholder="••••••••">
+              </div>
+              <button type="submit" id="btn-submit" class="btn btn-primario btn-bloco">Entrar</button>
+            </form>
+          </div>
+
+          <div class="mt-18">
+            <p class="texto-centro mt-10 texto-suave">
+              Não tem conta? <a href="/registrar.html" class="link-destaque">Criar conta</a>
+            </p>
+            <p class="texto-centro mt-8 texto-suave">
+              <a href="/" class="link-destaque flex-inline-icon flex-centro"><span class="material-symbols-outlined icon-xs" aria-hidden="true">arrow_back</span> Voltar à página inicial</a>
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   </main>
+
+  <!-- Modal Interativo de Seleção de Conta Google Acadêmica -->
+  <div id="modal-google-academico" class="modal-google-backdrop oculto" role="dialog" aria-modal="true" aria-labelledby="titulo-modal-google">
+    <div class="modal-google-conteudo">
+      <div class="modal-google-header">
+        <div class="flex-linha gap-8">
+          <svg class="google-g-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+          </svg>
+          <strong id="titulo-modal-google" style="font-size: 1.05rem;">Selecionar Conta Google Acadêmica</strong>
+        </div>
+        <button type="button" class="btn btn-xs btn-neutro" onclick="fecharModalGoogle()" aria-label="Fechar janela">Fechar</button>
+      </div>
+
+      <p class="texto-suave mb-14" style="font-size: 0.86rem;">
+        Selecione uma conta institucional cadastrada para login rápido em 1 clique ou informe seu endereço @escola.edu.br:
+      </p>
+
+      <div class="perfis-institucionais-lista">
+        <button type="button" class="perfil-academico-item" onclick="entrarComoPerfilAcademico('Mariana Costa', 'mariana.costa@aluno.escola.edu.br', 'aluno')">
+          <div class="avatar-academico" style="background: #0284c7;">MC</div>
+          <div style="flex:1;">
+            <div style="font-weight: 600; font-size: 0.92rem;">Mariana Costa</div>
+            <div class="texto-suave" style="font-size: 0.8rem;">mariana.costa@aluno.escola.edu.br</div>
+          </div>
+          <span class="badge badge-aluno">Estudante</span>
+        </button>
+
+        <button type="button" class="perfil-academico-item" onclick="entrarComoPerfilAcademico('Prof. Carlos Eduardo', 'prof.carlos@educacao.sp.gov.br', 'instrutor')">
+          <div class="avatar-academico" style="background: #059669;">CE</div>
+          <div style="flex:1;">
+            <div style="font-weight: 600; font-size: 0.92rem;">Prof. Carlos Eduardo</div>
+            <div class="texto-suave" style="font-size: 0.8rem;">prof.carlos@educacao.sp.gov.br</div>
+          </div>
+          <span class="badge badge-instrutor">Docente BNCC</span>
+        </button>
+
+        <button type="button" class="perfil-academico-item" onclick="entrarComoPerfilAcademico('Silvia Helena', 'silvia@escola.gov.br', 'administrador')">
+          <div class="avatar-academico" style="background: #7c3aed;">SH</div>
+          <div style="flex:1;">
+            <div style="font-weight: 600; font-size: 0.92rem;">Silvia Helena</div>
+            <div class="texto-suave" style="font-size: 0.8rem;">silvia@escola.gov.br</div>
+          </div>
+          <span class="badge badge-administrador">Gestão</span>
+        </button>
+      </div>
+
+      <div class="divisor-mobile-login my-12"><span>ou digite seu email institucional</span></div>
+
+      <form id="form-google-custom" onsubmit="event.preventDefault(); submeterEmailCustomGoogle();">
+        <div class="form-grupo mb-10">
+          <label for="input-email-google-custom" style="font-size: 0.85rem;">Email Institucional / Google</label>
+          <input type="email" id="input-email-google-custom" placeholder="voce@suaescola.edu.br" required spellcheck="false">
+        </div>
+        <button type="submit" id="btn-submit-google-custom" class="btn btn-primario btn-bloco flex-inline-icon flex-centro">
+          <span class="material-symbols-outlined icon-xs" aria-hidden="true">login</span>
+          <span>Acessar com esta conta</span>
+        </button>
+      </form>
+    </div>
+  </div>
 
   <script src="/js/config.js"></script>
   <script src="/js/api.js"></script>
@@ -52,6 +197,91 @@
       window.location.href = usuarioLogado.perfil === 'aluno' ? '/cursos.html' : '/dashboard.html';
     }
 
+    // Abre o modal de login Google
+    function abrirModalGoogle() {
+      document.getElementById('modal-google-academico').classList.remove('oculto');
+    }
+
+    // Fecha o modal de login Google
+    function fecharModalGoogle() {
+      document.getElementById('modal-google-academico').classList.add('oculto');
+    }
+
+    // Fecha o modal ao clicar fora do conteúdo
+    document.getElementById('modal-google-academico')?.addEventListener('click', (e) => {
+      if (e.target.id === 'modal-google-academico') fecharModalGoogle();
+    });
+
+    // Callback oficial do Google Identity Services (GIS)
+    async function tratarRespostaGoogleGIS(response) {
+      const alertaEl = document.getElementById('alerta');
+      alertaEl.classList.add('oculto');
+      try {
+        const resposta = await api('/auth/google', {
+          method: 'POST',
+          body: JSON.stringify({ credential: response.credential }),
+        });
+        salvarSessao(resposta.token, resposta.usuario);
+        window.location.href = resposta.usuario.perfil === 'aluno' ? '/cursos.html' : '/dashboard.html';
+      } catch (err) {
+        alertaEl.textContent = err.message;
+        alertaEl.classList.remove('oculto');
+      }
+    }
+    window.tratarRespostaGoogleGIS = tratarRespostaGoogleGIS;
+
+    // Login rápido com perfis institucionais verificados
+    async function entrarComoPerfilAcademico(nome, email, perfil) {
+      const alertaEl = document.getElementById('alerta');
+      alertaEl.classList.add('oculto');
+      try {
+        const resposta = await api('/auth/google', {
+          method: 'POST',
+          body: JSON.stringify({ nome, email, perfil, academico: true }),
+        });
+        salvarSessao(resposta.token, resposta.usuario);
+        window.location.href = resposta.usuario.perfil === 'aluno' ? '/cursos.html' : '/dashboard.html';
+      } catch (err) {
+        fecharModalGoogle();
+        alertaEl.textContent = err.message;
+        alertaEl.classList.remove('oculto');
+      }
+    }
+    window.entrarComoPerfilAcademico = entrarComoPerfilAcademico;
+
+    // Login com email customizado informado no modal
+    async function submeterEmailCustomGoogle() {
+      const input = document.getElementById('input-email-google-custom');
+      const email = input.value.trim();
+      const btn = document.getElementById('btn-submit-google-custom');
+      const alertaEl = document.getElementById('alerta');
+      alertaEl.classList.add('oculto');
+
+      try {
+        btn.disabled = true;
+        btn.textContent = 'Autenticando…';
+        const resposta = await api('/auth/google', {
+          method: 'POST',
+          body: JSON.stringify({ email, academico: true }),
+        });
+        salvarSessao(resposta.token, resposta.usuario);
+        window.location.href = resposta.usuario.perfil === 'aluno' ? '/cursos.html' : '/dashboard.html';
+      } catch (err) {
+        btn.disabled = false;
+        btn.textContent = 'Acessar com esta conta';
+        fecharModalGoogle();
+        alertaEl.textContent = err.message;
+        alertaEl.classList.remove('oculto');
+      }
+    }
+    window.submeterEmailCustomGoogle = submeterEmailCustomGoogle;
+
+    // Se o usuário clicou no menu "Google Acadêmico" na página inicial, abre direto o fluxo
+    if (new URLSearchParams(window.location.search).get('metodo') === 'google') {
+      setTimeout(abrirModalGoogle, 150);
+    }
+
+    // Formulário tradicional (Email e Senha)
     document.getElementById('form-login').addEventListener('submit', async (e) => {
       e.preventDefault();
       const alertaEl = document.getElementById('alerta');

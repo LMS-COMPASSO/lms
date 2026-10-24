@@ -152,3 +152,195 @@ export async function alterarSenha(request, env, db) {
 
   return jsonResponse({ mensagem: 'Senha alterada com sucesso.' });
 }
+
+/**
+ * Decodifica o payload de um token JWT do Google (Google Identity Services).
+ */
+export function decodificarTokenGoogle(credential) {
+  if (typeof credential !== 'string') return null;
+  const partes = credential.split('.');
+  if (partes.length < 2) return null;
+  try {
+    let base64 = partes[1].replace(/-/g, '+').replace(/_/g, '/');
+    while (base64.length % 4) {
+      base64 += '=';
+    }
+    const jsonStr = typeof atob === 'function'
+      ? decodeURIComponent(escape(atob(base64)))
+      : Buffer.from(base64, 'base64').toString('utf8');
+    return JSON.parse(jsonStr);
+  } catch {
+    try {
+      if (typeof Buffer !== 'undefined') {
+        return JSON.parse(Buffer.from(partes[1], 'base64').toString('utf8'));
+      }
+    } catch {}
+    return null;
+  }
+}
+
+/**
+ * Identifica se um domínio de email pertence a uma rede acadêmica, escolar ou institucional.
+ */
+export function verificarDominioAcademico(email = '', hd = '') {
+  const emailLimpo = String(email || '').toLowerCase().trim();
+  const hdLimpo = String(hd || '').toLowerCase().trim();
+  const dominio = hdLimpo || (emailLimpo.includes('@') ? emailLimpo.split('@')[1] : '');
+
+  if (!dominio) return false;
+
+  const sufixosAcademicos = [
+    '.edu',
+    '.edu.br',
+    '.gsuite.edu.br',
+    '.escola.gov.br',
+    '.educacao.sp.gov.br',
+    '.educacao.mg.gov.br',
+    '.educacao.rj.gov.br',
+    '.educacao.ba.gov.br',
+    '.educacao.rs.gov.br',
+    '.educacao.pr.gov.br',
+    '.educacao.sc.gov.br',
+    '.educacao.ce.gov.br',
+    '.educacao.pe.gov.br',
+    '.seduc.ce.gov.br',
+    '.seduc.go.gov.br',
+    '.seduc.mt.gov.br',
+    '.seduc.pa.gov.br',
+    '.seduc.ro.gov.br',
+    '.semed.',
+  ];
+
+  for (const sufixo of sufixosAcademicos) {
+    if (dominio.endsWith(sufixo) || dominio.includes(sufixo)) return true;
+  }
+
+  const termosAcademicos = ['escola', 'colegio', 'faculdade', 'universidade', 'academico', 'aluno', 'prof', 'docente', 'educacao', 'ensino', 'cefet', 'ifs'];
+  for (const termo of termosAcademicos) {
+    if (dominio.includes(termo) || emailLimpo.split('@')[0].includes(termo)) return true;
+  }
+
+  if (hdLimpo && hdLimpo !== 'gmail.com') return true;
+
+  return false;
+}
+
+/**
+ * Deduz o perfil escolar do usuário (aluno ou professor/instrutor) baseado no prefixo do email ou papel sugerido.
+ */
+export function detectarPerfilAcademico(email = '', nome = '', hd = '', papelSugerido = null) {
+  if (papelSugerido && ['aluno', 'instrutor'].includes(papelSugerido)) {
+    return papelSugerido;
+  }
+  const emailLimpo = String(email || '').toLowerCase();
+  const parteLocal = emailLimpo.split('@')[0] || '';
+
+  if (
+    parteLocal.startsWith('prof.') ||
+    parteLocal.startsWith('prof_') ||
+    parteLocal.startsWith('professor') ||
+    parteLocal.includes('docente') ||
+    parteLocal.includes('coordenador') ||
+    parteLocal.includes('educador')
+  ) {
+    return 'instrutor';
+  }
+
+  return 'aluno';
+}
+
+/**
+ * Autentica ou cadastra automaticamente um usuário via Google (com suporte especial a contas acadêmicas e Google Workspace for Education).
+ */
+export async function loginComGoogle(request, env, db) {
+  const body = await readJsonBody(request);
+  let email = '';
+  let nome = '';
+  let sub = '';
+  let avatarUrl = null;
+  let hd = '';
+  const papelSugerido = body.perfil || null;
+
+  if (body.credential) {
+    const claims = decodificarTokenGoogle(body.credential);
+    if (claims && claims.email) {
+      email = claims.email;
+      nome = claims.name || claims.given_name || email.split('@')[0];
+      sub = claims.sub || '';
+      avatarUrl = claims.picture || null;
+      hd = claims.hd || '';
+    }
+  }
+
+  if (!email && body.email) {
+    email = body.email;
+    nome = body.nome || body.name || email.split('@')[0];
+    sub = body.sub || body.google_id || `google_${Date.now()}`;
+    avatarUrl = body.avatar_url || body.picture || null;
+    hd = body.hd || (email.includes('@') ? email.split('@')[1] : '');
+  }
+
+  email = String(email || '').trim().toLowerCase();
+  nome = String(nome || '').trim();
+
+  if (!email) {
+    return jsonErro('Email institucional do Google ou credencial inválida.', 400);
+  }
+
+  const segredo = exigirSegredoJwt(env.JWT_SECRET);
+  const ehAcademico = verificarDominioAcademico(email, hd) || Boolean(body.academico);
+  const dominioInstitucional = hd || (email.includes('@') ? email.split('@')[1] : '');
+
+  let usuario = await getUserByEmail(db, email);
+
+  if (usuario) {
+    if (!usuario.ativo) {
+      return jsonErro('Este usuário está desativado. Contate a administração.', 403);
+    }
+    if (!usuario.avatar_url && avatarUrl) {
+      try {
+        await db.prepare('UPDATE usuarios SET avatar_url = ?, atualizado_em = CURRENT_TIMESTAMP WHERE id = ?')
+          .bind(avatarUrl, usuario.id).run();
+        usuario.avatar_url = avatarUrl;
+      } catch {}
+    }
+  } else {
+    const papel = detectarPerfilAcademico(email, nome, hd, papelSugerido);
+    const senhaAleatoria = await hashSenha(`google_auth_placeholder_${crypto.randomUUID()}`);
+
+    const resultado = await db.prepare(
+      "INSERT INTO usuarios (nome, email, senha_hash, perfil, avatar_url, ativo) VALUES (?, ?, ?, ?, ?, 1)",
+    ).bind(nome, email, senhaAleatoria, papel, avatarUrl).run();
+
+    usuario = {
+      id: resultado.meta.last_row_id,
+      nome,
+      email,
+      perfil: papel,
+      avatar_url: avatarUrl,
+      ativo: 1,
+    };
+  }
+
+  const dadosSessao = {
+    id: usuario.id,
+    nome: usuario.nome,
+    email: usuario.email,
+    perfil: usuario.perfil,
+    avatar_url: usuario.avatar_url || avatarUrl,
+    metodo_auth: 'google_academico',
+    conta_academica: ehAcademico,
+    dominio_institucional: dominioInstitucional,
+    google_id: sub,
+  };
+
+  const token = await signJwt(dadosSessao, segredo);
+  return jsonResponse({
+    mensagem: 'Autenticação com Google Acadêmico realizada com sucesso.',
+    usuario: dadosSessao,
+    token,
+    contaAcademica: ehAcademico,
+    dominioInstitucional,
+  });
+}
+

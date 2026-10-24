@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { hashSenha, sha256Hex, signJwt } from '../src/worker/crypto_seguranca.js';
-import { alterarSenha, login, registrar } from '../src/worker/routes/auth_rotas.js';
+import { alterarSenha, login, loginComGoogle, registrar, verificarDominioAcademico } from '../src/worker/routes/auth_rotas.js';
 
 const SEGREDO = 'segredo-de-teste-com-mais-de-32-caracteres!!';
 
@@ -29,14 +29,19 @@ function criarBanco(usuarios = []) {
             },
             async run() {
               if (sql.startsWith('INSERT INTO usuarios')) {
-                const [nome, email, senhaHash] = params;
-                linhas.push({ id: proximoId, nome, email, senha_hash: senhaHash, perfil: 'aluno', ativo: 1 });
+                const [nome, email, senhaHash, perfil = 'aluno', avatarUrl = null] = params;
+                linhas.push({ id: proximoId, nome, email, senha_hash: senhaHash, perfil, avatar_url: avatarUrl, ativo: 1 });
                 proximoId += 1;
                 return { meta: { last_row_id: proximoId - 1 } };
               }
               if (sql.startsWith('UPDATE usuarios SET senha_hash')) {
                 const usuario = linhas.find((u) => u.id === params[1]);
                 usuario.senha_hash = params[0];
+                return { meta: {} };
+              }
+              if (sql.startsWith('UPDATE usuarios SET avatar_url')) {
+                const usuario = linhas.find((u) => u.id === params[1]);
+                if (usuario) usuario.avatar_url = params[0];
                 return { meta: {} };
               }
               throw new Error(`Consulta run() não prevista: ${sql}`);
@@ -147,3 +152,117 @@ test('alterarSenha valida a senha atual (inclusive legada) e grava PBKDF2', asyn
   const novoLogin = await login(requisicao({ email: 'ana@escola.gov.br', senha: 'Nova@12345' }), env, db);
   assert.equal(novoLogin.status, 200);
 });
+
+test('verificarDominioAcademico reconhece domínios educacionais e governamentais', () => {
+  assert.equal(verificarDominioAcademico('aluno@escola.edu.br'), true);
+  assert.equal(verificarDominioAcademico('prof.joao@seduc.ce.gov.br'), true);
+  assert.equal(verificarDominioAcademico('lucas@colegio.gsuite.edu.br'), true);
+  assert.equal(verificarDominioAcademico('usuario@empresa.com', 'escola.edu.br'), true);
+  assert.equal(verificarDominioAcademico('qualquer@gmail.com', 'gmail.com'), false);
+});
+
+test('loginComGoogle provisiona novo aluno institucional com domínio acadêmico', async () => {
+  const db = criarBanco();
+  const env = { JWT_SECRET: SEGREDO };
+
+  const resposta = await loginComGoogle(
+    requisicao({
+      nome: 'Mariana Costa',
+      email: 'mariana.costa@aluno.escola.edu.br',
+      avatar_url: 'https://lh3.googleusercontent.com/avatar-mariana',
+    }),
+    env,
+    db,
+  );
+  const dados = await resposta.json();
+
+  assert.equal(resposta.status, 200);
+  assert.equal(dados.contaAcademica, true);
+  assert.equal(dados.usuario.nome, 'Mariana Costa');
+  assert.equal(dados.usuario.perfil, 'aluno');
+  assert.equal(dados.usuario.metodo_auth, 'google_academico');
+  assert.equal(typeof dados.token, 'string');
+  assert.equal(db.linhas.length, 1);
+  assert.equal(db.linhas[0].email, 'mariana.costa@aluno.escola.edu.br');
+});
+
+test('loginComGoogle com professor institucional deduz perfil instrutor', async () => {
+  const db = criarBanco();
+  const env = { JWT_SECRET: SEGREDO };
+
+  const resposta = await loginComGoogle(
+    requisicao({
+      nome: 'Prof. Carlos Eduardo',
+      email: 'prof.carlos@educacao.sp.gov.br',
+    }),
+    env,
+    db,
+  );
+  const dados = await resposta.json();
+
+  assert.equal(resposta.status, 200);
+  assert.equal(dados.contaAcademica, true);
+  assert.equal(dados.usuario.perfil, 'instrutor');
+  assert.equal(db.linhas[0].perfil, 'instrutor');
+});
+
+test('loginComGoogle com usuário existente preserva perfil atual (inclusive administrador)', async () => {
+  const db = criarBanco([
+    { id: 99, nome: 'Diretora Silvia', email: 'silvia@escola.gov.br', perfil: 'administrador' },
+  ]);
+  const env = { JWT_SECRET: SEGREDO };
+
+  const resposta = await loginComGoogle(
+    requisicao({
+      email: 'silvia@escola.gov.br',
+      avatar_url: 'https://lh3.googleusercontent.com/silvia',
+    }),
+    env,
+    db,
+  );
+  const dados = await resposta.json();
+
+  assert.equal(resposta.status, 200);
+  assert.equal(dados.usuario.perfil, 'administrador');
+  assert.equal(db.linhas[0].perfil, 'administrador');
+});
+
+test('loginComGoogle decodifica credencial JWT simulada do Google GIS', async () => {
+  const db = criarBanco();
+  const env = { JWT_SECRET: SEGREDO };
+
+  const headerB64 = Buffer.from(JSON.stringify({ alg: 'RS256', typ: 'JWT' })).toString('base64');
+  const payloadB64 = Buffer.from(
+    JSON.stringify({
+      sub: 'google_sub_123456789',
+      email: 'pedro.souza@colegio.edu.br',
+      name: 'Pedro Souza',
+      picture: 'https://lh3.googleusercontent.com/pedro',
+      hd: 'colegio.edu.br',
+    }),
+  ).toString('base64');
+  const fakeToken = `${headerB64}.${payloadB64}.fake_signature_bytes`;
+
+  const resposta = await loginComGoogle(requisicao({ credential: fakeToken }), env, db);
+  const dados = await resposta.json();
+
+  assert.equal(resposta.status, 200);
+  assert.equal(dados.usuario.email, 'pedro.souza@colegio.edu.br');
+  assert.equal(dados.usuario.nome, 'Pedro Souza');
+  assert.equal(dados.contaAcademica, true);
+});
+
+test('loginComGoogle recusa usuário inativo', async () => {
+  const db = criarBanco([
+    { id: 5, nome: 'Aluno Bloqueado', email: 'bloqueado@escola.edu.br', ativo: 0 },
+  ]);
+  const env = { JWT_SECRET: SEGREDO };
+
+  const resposta = await loginComGoogle(
+    requisicao({ email: 'bloqueado@escola.edu.br' }),
+    env,
+    db,
+  );
+  assert.equal(resposta.status, 403);
+});
+
