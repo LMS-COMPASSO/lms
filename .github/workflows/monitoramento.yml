@@ -87,10 +87,11 @@ jobs:
           args: >-
             --verbose
             --no-progress
-            --exclude-mail
+            --root-dir public
             --exclude '^http://localhost'
             --exclude '^http://127.0.0.1'
             --exclude '^https://lms-compasso.workers.dev'
+            --exclude '^/api/'
             public/**/*.html *.md docs/**/*.md
           fail: false
         env:
@@ -99,6 +100,8 @@ jobs:
       - name: Notificar em Issue se houver links quebrados
         if: steps.lychee.outputs.exit_code != 0
         uses: actions/github-script@v7
+        env:
+          LYCHEE_REPORT: ${{ steps.lychee.outputs.report }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
