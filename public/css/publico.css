@@ -221,12 +221,12 @@ body.suporta-tema-sistema[data-tema="escuro"] .pub-nav::-webkit-scrollbar-thumb:
 .pub-nav a {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
   min-height: 38px;
-  padding: 6px 10px;
+  padding: 6px 8px;
   border-radius: 8px;
   color: var(--pub-texto-suave);
-  font-size: 0.88rem;
+  font-size: 0.86rem;
   font-weight: 600;
   white-space: nowrap;
   flex-shrink: 0;
@@ -253,6 +253,10 @@ body.suporta-tema-sistema[data-tema="escuro"] .pub-nav a[aria-current="page"] {
 }
 .pub-acoes { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; flex-shrink: 0; }
 .pub-acoes .btn { display: inline-flex; align-items: center; gap: 5px; min-height: 38px; padding: 6px 10px; font-size: 0.86rem; white-space: nowrap; }
+.pub-acoes .btn-google-menu span { display: none; }
+@media (min-width: 1540px) {
+  .pub-acoes .btn-google-menu span { display: inline; }
+}
 
 /* ---------- Botões Extras ---------- */
 .btn-grande { padding: 13px 24px; font-size: 0.98rem; border-radius: 10px; font-weight: 600; }

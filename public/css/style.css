@@ -3316,9 +3316,8 @@ body[data-tema="escuro"] .topbar {
   text-decoration: underline;
 }
 
-/* Oculta breadcrumbs redundantes no catálogo dentro da aplicação logada com barra superior */
-.app-shell .atv-raiz > .atv-breadcrumbs:first-child,
-.modo-app .atv-raiz > .atv-breadcrumbs:first-child {
+/* Oculta breadcrumbs redundantes no catálogo apenas dentro da aplicação logada com barra superior */
+body.modo-app .atv-raiz > .atv-breadcrumbs:first-child {
   display: none !important;
 }
 
