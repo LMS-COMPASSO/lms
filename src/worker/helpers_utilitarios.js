@@ -15,12 +15,52 @@ import { exigirSegredoJwt, hashSenha, verifyJwt } from './crypto_seguranca.js';
 
 /**
  * Cabeçalhos padrão para permitir que qualquer navegador acesse a API (CORS).
+ * MDN Web Security: Access-Control-Max-Age reduz requisições preflight desnecessárias.
  */
 export const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Methods': 'GET,POST,PUT,PATCH,DELETE,OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+  'Access-Control-Max-Age': '86400',
 };
+
+/**
+ * Cabeçalhos de segurança recomendados pela MDN Web Security (Defense-in-Depth).
+ * Protegem contra XSS, clickjacking, MIME-sniffing, vazamento de referrer e restringe APIs do navegador.
+ */
+export const SECURITY_HEADERS = {
+  'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://accounts.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; connect-src 'self' https://accounts.google.com; frame-src 'self' https://accounts.google.com; frame-ancestors 'self'; object-src 'none'; base-uri 'self'; form-action 'self' https:;",
+  'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload',
+  'X-Content-Type-Options': 'nosniff',
+  'X-Frame-Options': 'SAMEORIGIN',
+  'Referrer-Policy': 'strict-origin-when-cross-origin',
+  'Permissions-Policy': 'camera=(), microphone=(), geolocation=(), payment=()',
+  'Cross-Origin-Opener-Policy': 'same-origin-allow-popups',
+};
+
+/**
+ * Aplica os cabeçalhos de segurança recomendados pela MDN Web Security a uma resposta HTTP.
+ *
+ * @param {Response} response - Resposta HTTP original.
+ * @returns {Response} Nova resposta com os cabeçalhos de segurança aplicados.
+ */
+export function aplicarCabecalhosSeguranca(response) {
+  if (!response) return response;
+  const status = response.status;
+  // Respostas 204 No Content e 304 Not Modified não devem ter corpo
+  const corpo = (status === 204 || status === 304) ? null : response.body;
+  const novosHeaders = new Headers(response.headers);
+  for (const [chave, valor] of Object.entries(SECURITY_HEADERS)) {
+    if (!novosHeaders.has(chave)) {
+      novosHeaders.set(chave, valor);
+    }
+  }
+  return new Response(corpo, {
+    status: response.status,
+    statusText: response.statusText,
+    headers: novosHeaders,
+  });
+}
 
 /**
  * Retorna uma resposta HTTP no formato JSON com cabeçalhos CORS inclusos.
@@ -35,6 +75,7 @@ export function jsonResponse(dados, status = 200) {
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
       ...CORS_HEADERS,
+      ...SECURITY_HEADERS,
     },
   });
 }

@@ -20,6 +20,7 @@ import {
   jsonErro,
   ensureDefaultAdmin,
   ErroHttp,
+  aplicarCabecalhosSeguranca,
 } from './helpers_utilitarios.js';
 
 import * as authRoutes from './routes/auth_rotas.js';
@@ -332,15 +333,16 @@ export default {
       return new Response(null, { status: 204, headers: CORS_HEADERS });
     }
 
-    // Serve o frontend estático se não for chamada de API
+    // Serve o frontend estático se não for chamada de API (MDN: cabeçalhos de segurança obrigatórios em assets)
     if (!rota.startsWith('/api')) {
       if (env.ASSETS) {
-        return env.ASSETS.fetch(request);
+        const respostaAsset = await env.ASSETS.fetch(request);
+        return aplicarCabecalhosSeguranca(respostaAsset);
       }
-      return new Response('Frontend não configurado. Binding ASSETS ausente no worker.', {
+      return aplicarCabecalhosSeguranca(new Response('Frontend não configurado. Binding ASSETS ausente no worker.', {
         status: 404,
         headers: { 'Content-Type': 'text/plain; charset=utf-8', ...CORS_HEADERS },
-      });
+      }));
     }
 
     // Valida o banco D1
@@ -362,9 +364,10 @@ export default {
     // Divide a URL em segmentos para roteamento didático sem regex
     const partes = rota.split('/').filter(Boolean);
 
-    // Processa a rota da API com tratamento central de erros
+    // Processa a rota da API com tratamento central de erros e aplicação de cabeçalhos de segurança
     try {
-      return await despacharRotaApi(partes, metodo, request, env, db, url);
+      const respostaApi = await despacharRotaApi(partes, metodo, request, env, db, url);
+      return aplicarCabecalhosSeguranca(respostaApi);
     } catch (error) {
       if (error instanceof ErroHttp) {
         return jsonErro(error.message, error.status);

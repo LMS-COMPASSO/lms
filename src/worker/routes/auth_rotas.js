@@ -23,7 +23,65 @@ import {
   getUserByEmail,
   getUserProfile,
   authorizeUser,
+  CORS_HEADERS,
 } from '../helpers_utilitarios.js';
+
+/**
+ * Hash PBKDF2 sintético utilizado para mitigar ataques de temporização (Timing Attacks / Enumeração de Usuários).
+ * Mantém o tempo de processamento equivalente (~70ms) quando um usuário não existe.
+ */
+const DUMMY_PBKDF2_HASH = 'pbkdf2_sha256$100000$dHVtbXlzYWx0MTIzNDU2Nw$dHVtbXloYXNoMTIzNDU2Nzg5MDEyMzQ1Njc4OTA=';
+
+/**
+ * Rate limiting de tentativas de login em memória (MDN Web Security: Brute-Force & Credential Stuffing Protection).
+ * Bloqueia um IP ou email após 5 tentativas incorretas consecutivas por 15 minutos.
+ */
+const tentativasFalhasLogin = new Map();
+export const LIMITE_TENTATIVAS_FALHAS = 5;
+export const JANELA_BLOQUEIO_MS = 15 * 60 * 1000; // 15 minutos
+
+export function verificarRateLimitLogin(ip, email) {
+  const agora = Date.now();
+  for (const chave of [ip, email].filter(Boolean)) {
+    const reg = tentativasFalhasLogin.get(chave);
+    if (reg) {
+      if (reg.bloqueadoAte && agora < reg.bloqueadoAte) {
+        const segundosRestantes = Math.max(1, Math.ceil((reg.bloqueadoAte - agora) / 1000));
+        return { bloqueado: true, retryAfter: segundosRestantes };
+      }
+      if (agora - reg.primeiroErroEm > JANELA_BLOQUEIO_MS) {
+        tentativasFalhasLogin.delete(chave);
+      }
+    }
+  }
+  return { bloqueado: false, retryAfter: 0 };
+}
+
+export function registrarTentativaFalhaLogin(ip, email) {
+  const agora = Date.now();
+  for (const chave of [ip, email].filter(Boolean)) {
+    const reg = tentativasFalhasLogin.get(chave) || { contagem: 0, primeiroErroEm: agora, bloqueadoAte: 0 };
+    if (agora - reg.primeiroErroEm > JANELA_BLOQUEIO_MS) {
+      reg.contagem = 0;
+      reg.primeiroErroEm = agora;
+      reg.bloqueadoAte = 0;
+    }
+    reg.contagem += 1;
+    if (reg.contagem >= LIMITE_TENTATIVAS_FALHAS) {
+      reg.bloqueadoAte = agora + JANELA_BLOQUEIO_MS;
+    }
+    tentativasFalhasLogin.set(chave, reg);
+  }
+}
+
+export function limparTentativasFalhasLogin(ip, email) {
+  if (ip) tentativasFalhasLogin.delete(ip);
+  if (email) tentativasFalhasLogin.delete(email);
+}
+
+export function resetarRateLimitLogin() {
+  tentativasFalhasLogin.clear();
+}
 
 /**
  * Cadastra um novo aluno no sistema.
@@ -67,8 +125,13 @@ export async function registrar(request, env, db) {
 /**
  * Realiza o login com email e senha, conferindo o hash criptográfico.
  * Retorna um token JWT para autorizar as chamadas subsequentes.
+ * Aplica proteção contra timing attacks e rate limiting de força bruta.
  */
 export async function login(request, env, db) {
+  const ip = request?.headers?.get?.('cf-connecting-ip')
+    || request?.headers?.get?.('x-forwarded-for')?.split?.(',')?.[0]?.trim?.()
+    || '127.0.0.1';
+
   const body = await readJsonBody(request);
   const email = String(body.email || '').trim().toLowerCase();
   const senha = String(body.senha || '');
@@ -77,23 +140,54 @@ export async function login(request, env, db) {
     return jsonErro('Email e senha são obrigatórios.', 400);
   }
 
+  // Verifica proteção contra ataques de força bruta (MDN Web Security)
+  const statusRateLimit = verificarRateLimitLogin(ip, email);
+  if (statusRateLimit.bloqueado) {
+    return new Response(
+      JSON.stringify({
+        erro: 'Muitas tentativas incorretas de login. Por segurança, aguarde alguns minutos antes de tentar novamente.',
+      }),
+      {
+        status: 429,
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+          'Retry-After': String(statusRateLimit.retryAfter),
+          ...CORS_HEADERS,
+        },
+      },
+    );
+  }
+
   const usuario = await getUserByEmail(db, email);
-  if (!usuario) {
+  let senhaValida = false;
+  let precisaRehash = false;
+
+  if (usuario) {
+    if (!usuario.ativo) {
+      registrarTentativaFalhaLogin(ip, email);
+      return jsonErro('Este usuário está desativado. Contate a administração.', 403);
+    }
+    const conferencia = await verificarSenha(senha, usuario.senha_hash);
+    senhaValida = conferencia.valido;
+    precisaRehash = conferencia.precisaRehash;
+  } else {
+    // Mitigação de Timing Attack / Enumeração de Usuários (MDN Web Security):
+    // Executa verificação PBKDF2 fictícia idêntica para manter tempo de resposta constante.
+    await verificarSenha(senha, DUMMY_PBKDF2_HASH);
+  }
+
+  if (!usuario || !senhaValida) {
+    registrarTentativaFalhaLogin(ip, email);
     return jsonErro('Email ou senha inválidos.', 401);
   }
 
-  if (!usuario.ativo) {
-    return jsonErro('Este usuário está desativado. Contate a administração.', 403);
-  }
+  // Login bem-sucedido: limpa o contador de falhas
+  limparTentativasFalhasLogin(ip, email);
 
   const segredo = exigirSegredoJwt(env.JWT_SECRET);
-  const conferencia = await verificarSenha(senha, usuario.senha_hash);
-  if (!conferencia.valido) {
-    return jsonErro('Email ou senha inválidos.', 401);
-  }
 
   // Migração transparente: contas com hash legado (SHA-256 sem salt) são regravadas em PBKDF2.
-  if (conferencia.precisaRehash) {
+  if (precisaRehash) {
     await db.prepare(
       'UPDATE usuarios SET senha_hash = ?, atualizado_em = CURRENT_TIMESTAMP WHERE id = ?',
     ).bind(await hashSenha(senha), usuario.id).run();
@@ -331,6 +425,9 @@ export async function loginComGoogle(request, env, db) {
   }
 
   if (!email && body.email) {
+    if (googleClientIdEsperado) {
+      return jsonErro('Credencial do Google é obrigatória em ambiente com Google Client ID configurado.', 401);
+    }
     email = body.email;
     nome = body.nome || body.name || email.split('@')[0];
     sub = body.sub || body.google_id || `google_${Date.now()}`;

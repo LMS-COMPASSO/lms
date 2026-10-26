@@ -122,6 +122,7 @@
           'Cultura Digital': 'verified_user',
         };
 
+        window.cacheCursos = Object.fromEntries(cursos.map((c) => [c.id, c]));
         container.innerHTML = cursos.map((c) => {
           const textoBotaoStatus = c.status === 'publicado' ? 'Voltar p/ rascunho' : 'Publicar';
           const iconeStatus = c.status === 'publicado' ? 'schedule' : 'check_circle';
@@ -129,18 +130,18 @@
           return `
             <div class="cartao">
               <div class="flex-topo">
-                <span class="badge badge-${c.status} flex-inline-icon">
+                <span class="badge badge-${escaparHtml(c.status)} flex-inline-icon">
                   <span class="material-symbols-outlined icon-xs" aria-hidden="true">${c.status === 'publicado' ? 'check_circle' : 'schedule'}</span>
-                  ${c.status}
+                  ${escaparHtml(c.status)}
                 </span>
-                <span class="texto-suave flex-inline-icon"><span class="material-symbols-outlined icon-xs" aria-hidden="true">schedule</span> ${c.carga_horaria}h</span>
+                <span class="texto-suave flex-inline-icon"><span class="material-symbols-outlined icon-xs" aria-hidden="true">schedule</span> ${Number(c.carga_horaria) || 0}h</span>
               </div>
-              <h3 class="mt-8 mb-10">${c.titulo}</h3>
-              <p class="texto-suave">${c.descricao || 'Sem descrição.'}</p>
+              <h3 class="mt-8 mb-10">${escaparHtml(c.titulo)}</h3>
+              <p class="texto-suave">${escaparHtml(c.descricao || 'Sem descrição.')}</p>
               <div class="curso-meta-info texto-suave">
-                <div><span class="material-symbols-outlined icon-xs" aria-hidden="true">${iconeEixo}</span> <span>${c.eixo_bncc}</span></div>
-                <div><span class="material-symbols-outlined icon-xs" aria-hidden="true">school</span> <span>${c.ano_escolar}</span> · <span class="material-symbols-outlined icon-xs" aria-hidden="true">person</span> <span>${c.instrutor_nome}</span></div>
-                <div><span class="material-symbols-outlined icon-xs" aria-hidden="true">group</span> <span>${c.total_matriculados || 0} matriculado(s)</span></div>
+                <div><span class="material-symbols-outlined icon-xs" aria-hidden="true">${iconeEixo}</span> <span>${escaparHtml(c.eixo_bncc)}</span></div>
+                <div><span class="material-symbols-outlined icon-xs" aria-hidden="true">school</span> <span>${escaparHtml(c.ano_escolar)}</span> · <span class="material-symbols-outlined icon-xs" aria-hidden="true">person</span> <span>${escaparHtml(c.instrutor_nome)}</span></div>
+                <div><span class="material-symbols-outlined icon-xs" aria-hidden="true">group</span> <span>${Number(c.total_matriculados) || 0} matriculado(s)</span></div>
               </div>
               <div class="flex-linha flex-wrap mt-10">
                 <a href="/curso-detalhe.html?id=${c.id}" class="btn btn-neutro btn-sm flex-inline-icon">
@@ -148,10 +149,10 @@
                   <span class="material-symbols-outlined icon-xs" aria-hidden="true">arrow_forward</span>
                 </a>
                 ${usuario.perfil !== 'aluno' ? `
-                  <button type="button" class="btn btn-neutro btn-sm flex-inline-icon" onclick='editarCurso(${JSON.stringify(c)})'>
+                  <button type="button" class="btn btn-neutro btn-sm flex-inline-icon" onclick="editarCursoPorId(${c.id})">
                     <span class="material-symbols-outlined icon-xs" aria-hidden="true">edit</span> Editar
                   </button>
-                  <button type="button" class="btn btn-secundario btn-sm flex-inline-icon" onclick="alternarStatus(${c.id}, '${c.status}')">
+                  <button type="button" class="btn btn-secundario btn-sm flex-inline-icon" onclick="alternarStatus(${c.id}, '${escaparHtml(c.status)}')">
                     <span class="material-symbols-outlined icon-xs" aria-hidden="true">${iconeStatus}</span> ${textoBotaoStatus}
                   </button>
                   <button type="button" class="btn btn-perigo btn-sm flex-inline-icon" onclick="excluirCurso(${c.id})">
@@ -179,6 +180,10 @@
     }
     function fecharModalCurso() {
       document.getElementById('modal-curso').classList.add('oculto');
+    }
+    function editarCursoPorId(id) {
+      const c = window.cacheCursos?.[id];
+      if (c) editarCurso(c);
     }
     function editarCurso(c) {
       document.getElementById('titulo-modal').textContent = 'Editar Curso';

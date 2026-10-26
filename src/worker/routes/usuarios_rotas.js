@@ -126,7 +126,13 @@ export async function atualizarUsuario(request, env, db, targetId) {
 
   if (body.nome !== undefined) { campos.push('nome = ?'); params.push(String(body.nome)); }
   if (body.email !== undefined) { campos.push('email = ?'); params.push(String(body.email).toLowerCase()); }
-  if (body.perfil !== undefined) { campos.push('perfil = ?'); params.push(String(body.perfil)); }
+  if (body.perfil !== undefined) {
+    if (!['administrador', 'instrutor', 'aluno'].includes(body.perfil)) {
+      return jsonErro('Perfil inválido. Deve ser administrador, instrutor ou aluno.', 400);
+    }
+    campos.push('perfil = ?');
+    params.push(String(body.perfil));
+  }
   if (body.ativo !== undefined) { campos.push('ativo = ?'); params.push(body.ativo ? 1 : 0); }
 
   if (campos.length === 0) {

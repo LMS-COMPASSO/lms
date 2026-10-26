@@ -98,11 +98,12 @@
           corpo.innerHTML = '<tr><td colspan="6" class="texto-suave">Nenhum usuário encontrado.</td></tr>';
           return;
         }
+        window.cacheUsuarios = Object.fromEntries(usuarios.map((u) => [u.id, u]));
         corpo.innerHTML = usuarios.map((u) => `
           <tr>
-            <td>${u.nome}</td>
-            <td>${u.email}</td>
-            <td><span class="badge badge-${u.perfil}">${u.perfil}</span></td>
+            <td>${escaparHtml(u.nome)}</td>
+            <td>${escaparHtml(u.email)}</td>
+            <td><span class="badge badge-${escaparHtml(u.perfil)}">${escaparHtml(u.perfil)}</span></td>
             <td>
               <span class="badge ${u.ativo ? 'badge-ativo' : 'badge-inativo'} flex-inline-icon">
                 <span class="material-symbols-outlined icon-xs" aria-hidden="true">${u.ativo ? 'check_circle' : 'block'}</span>
@@ -111,8 +112,8 @@
             </td>
             <td>${formatarData(u.criado_em)}</td>
             <td class="texto-direita">
-              <button type="button" class="btn btn-neutro btn-xs" aria-label="Editar usuário ${u.nome}" onclick='editarUsuario(${JSON.stringify(u)})'>Editar</button>
-              ${u.ativo ? `<button type="button" class="btn btn-perigo btn-xs" aria-label="Desativar usuário ${u.nome}" onclick="desativar(${u.id})">Desativar</button>` : ''}
+              <button type="button" class="btn btn-neutro btn-xs" aria-label="Editar usuário ${escaparHtml(u.nome)}" onclick="editarUsuarioPorId(${u.id})">Editar</button>
+              ${u.ativo ? `<button type="button" class="btn btn-perigo btn-xs" aria-label="Desativar usuário ${escaparHtml(u.nome)}" onclick="desativar(${u.id})">Desativar</button>` : ''}
             </td>
           </tr>
         `).join('');
@@ -130,6 +131,11 @@
       document.getElementById('modal-usuario').classList.remove('oculto');
     }
     function fecharModalUsuario() { document.getElementById('modal-usuario').classList.add('oculto'); }
+
+    function editarUsuarioPorId(id) {
+      const u = window.cacheUsuarios?.[id];
+      if (u) editarUsuario(u);
+    }
 
     function editarUsuario(u) {
       document.getElementById('titulo-modal').textContent = 'Editar Usuário';

@@ -205,10 +205,10 @@
         container.innerHTML = curso.modulos.map((m) => `
           <div class="cartao">
             <div class="flex-entre">
-              <h3>${m.titulo}</h3>
+              <h3>${escaparHtml(m.titulo)}</h3>
               <button type="button" class="btn btn-perigo btn-xs oculto-aluno" onclick="excluirModulo(${m.id})">Excluir módulo</button>
             </div>
-            <p class="texto-suave">${m.descricao || ''}</p>
+            <p class="texto-suave">${escaparHtml(m.descricao || '')}</p>
 
             <div class="tabela-scroll">
               <table>
@@ -216,9 +216,9 @@
                 <tbody>
                   ${m.aulas.map((a) => `
                     <tr>
-                      <td>${a.titulo}${renderizarConteudoAula(a, curso.id)}</td>
-                      <td>${a.tipo}</td>
-                      <td>${a.duracao_min || 0} min</td>
+                      <td>${escaparHtml(a.titulo)}${renderizarConteudoAula(a, curso.id)}</td>
+                      <td>${escaparHtml(a.tipo)}</td>
+                      <td>${Number(a.duracao_min) || 0} min</td>
                       <td>
                         ${renderizarAcaoAula(a, usuario.perfil)}
                       </td>

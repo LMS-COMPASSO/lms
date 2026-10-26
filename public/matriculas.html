@@ -48,17 +48,17 @@
 
         corpo.innerHTML = matriculas.map((m) => `
           <tr>
-            <td>${m.aluno_nome}<br><small class="texto-suave">${m.aluno_email}</small></td>
-            <td>${m.curso_titulo}</td>
-            <td><span class="badge badge-${m.status}">${m.status}</span></td>
+            <td>${escaparHtml(m.aluno_nome)}<br><small class="texto-suave">${escaparHtml(m.aluno_email)}</small></td>
+            <td>${escaparHtml(m.curso_titulo)}</td>
+            <td><span class="badge badge-${escaparHtml(m.status)}">${escaparHtml(m.status)}</span></td>
             <td class="min-w-160">
-              <div class="progress-bar"><div class="progress-bar-fill" style="width:${m.progresso_percentual}%;"></div></div>
-              <small>${m.progresso_percentual}%</small>
+              <div class="progress-bar"><div class="progress-bar-fill" style="width:${Number(m.progresso_percentual) || 0}%;"></div></div>
+              <small>${Number(m.progresso_percentual) || 0}%</small>
             </td>
             <td>${formatarData(m.data_matricula)}</td>
             <td class="texto-direita">
-              ${m.status !== 'cancelada' ? `<button type="button" class="btn btn-perigo btn-xs" aria-label="Cancelar matrícula de ${m.aluno_nome}" onclick="cancelar(${m.id})">Cancelar</button>` : ''}
-              ${m.status === 'concluida' ? `<button type="button" class="btn btn-secundario btn-xs" aria-label="Emitir certificado para ${m.aluno_nome}" onclick="emitirCertificado(${m.id})">Certificado</button>` : ''}
+              ${m.status !== 'cancelada' ? `<button type="button" class="btn btn-perigo btn-xs" aria-label="Cancelar matrícula de ${escaparHtml(m.aluno_nome)}" onclick="cancelar(${m.id})">Cancelar</button>` : ''}
+              ${m.status === 'concluida' ? `<button type="button" class="btn btn-secundario btn-xs" aria-label="Emitir certificado para ${escaparHtml(m.aluno_nome)}" onclick="emitirCertificado(${m.id})">Certificado</button>` : ''}
             </td>
           </tr>
         `).join('');

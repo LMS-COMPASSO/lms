@@ -208,11 +208,11 @@
                 <span class="material-symbols-outlined" aria-hidden="true">${iconeMedalha}</span>
               </div>
               <div>
-                <h4 class="card-medalha-titulo">${m.titulo}</h4>
-                <span class="card-medalha-eixo">${m.eixo_bncc}</span>
+                <h4 class="card-medalha-titulo">${escaparHtml(m.titulo)}</h4>
+                <span class="card-medalha-eixo">${escaparHtml(m.eixo_bncc)}</span>
               </div>
             </div>
-            <p class="card-medalha-desc">${m.descricao}</p>
+            <p class="card-medalha-desc">${escaparHtml(m.descricao)}</p>
             <div class="card-medalha-status">
               ${bloqueada
                 ? '<span class="flex-inline-icon"><span class="material-symbols-outlined icon-xs" aria-hidden="true">lock</span> Bloqueado</span>'

@@ -382,19 +382,19 @@
 
     const rotulosEventos = {
       matricula: (e) => ({
-        texto: `<strong>${e.usuario_nome}</strong> se matriculou em <strong>${e.curso_titulo}</strong>`,
+        texto: `<strong>${escaparHtml(e.usuario_nome)}</strong> se matriculou em <strong>${escaparHtml(e.curso_titulo)}</strong>`,
         icone: 'person_add'
       }),
       conclusao: (e) => ({
-        texto: `<strong>${e.usuario_nome}</strong> concluiu o curso <strong>${e.curso_titulo}</strong>`,
+        texto: `<strong>${escaparHtml(e.usuario_nome)}</strong> concluiu o curso <strong>${escaparHtml(e.curso_titulo)}</strong>`,
         icone: 'military_tech'
       }),
       curso_publicado: (e) => ({
-        texto: `Curso <strong>${e.curso_titulo}</strong> foi publicado por ${e.usuario_nome}`,
+        texto: `Curso <strong>${escaparHtml(e.curso_titulo)}</strong> foi publicado por ${escaparHtml(e.usuario_nome)}`,
         icone: 'rocket_launch'
       }),
       certificado: (e) => ({
-        texto: `Certificado emitido para <strong>${e.usuario_nome}</strong> (${e.curso_titulo})`,
+        texto: `Certificado emitido para <strong>${escaparHtml(e.usuario_nome)}</strong> (${escaparHtml(e.curso_titulo)})`,
         icone: 'workspace_premium'
       }),
     };
@@ -567,19 +567,19 @@
 
           const amostraChips = h.registros.slice(0, 3).map((r) => `
             <span class="chip-aluno" title="Nota: ${Number(r.pontuacao).toFixed(1)}">
-              ${r.aluno_nome.split(' ')[0]} <strong>(${Number(r.pontuacao).toFixed(1)})</strong>
+              ${escaparHtml(String(r.aluno_nome || '').split(' ')[0])} <strong>(${Number(r.pontuacao).toFixed(1)})</strong>
             </span>
           `).join('');
 
           return `
             <tr class="linha-pedagogica">
-              <td><span class="badge-bncc-codigo">${h.codigo}</span></td>
-              <td><strong>${h.totalAlunos}</strong> aluno(s)</td>
-              <td><strong>${h.mediaPontuacao.toFixed(1)}</strong> <span class="texto-suave">/ 10.0</span></td>
+              <td><span class="badge-bncc-codigo">${escaparHtml(h.codigo)}</span></td>
+              <td><strong>${Number(h.totalAlunos) || 0}</strong> aluno(s)</td>
+              <td><strong>${Number(h.mediaPontuacao || 0).toFixed(1)}</strong> <span class="texto-suave">/ 10.0</span></td>
               <td>
-                <div class="flex-entre mb-4"><span>${h.taxaConsolidacao}%</span></div>
+                <div class="flex-entre mb-4"><span>${Number(h.taxaConsolidacao) || 0}%</span></div>
                 <div class="barra-progresso-wrap">
-                  <div class="barra-progresso-preenchimento barra-pedagogica" style="width: 0%;" data-largura="${h.taxaConsolidacao}%"></div>
+                  <div class="barra-progresso-preenchimento barra-pedagogica" style="width: 0%;" data-largura="${Number(h.taxaConsolidacao) || 0}%"></div>
                 </div>
               </td>
               <td>${badgeStatus}</td>
@@ -588,7 +588,7 @@
           `;
         }).join('');
       } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="6" class="texto-centro texto-suave">Erro ao carregar relatório: ${err.message}</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" class="texto-centro texto-suave">Erro ao carregar relatório: ${escaparHtml(err.message)}</td></tr>`;
       }
     }
 
@@ -638,20 +638,22 @@
         tbody.innerHTML = submissoes.map((s, idx) => {
           const tituloAtv = titulosPython3d[s.atividade_id] || s.atividade_id;
           const estrelas = '★'.repeat(Math.max(1, Math.min(3, Number(s.estrelas) || 3)));
+          const parceiroEsc = escaparHtml(s.parceiro_dupla);
+          const papelEsc = escaparHtml(s.papel_dupla || 'piloto');
           const badgeDupla = s.parceiro_dupla
-            ? `<span class="chip-aluno" title="Pair Programming (${s.papel_dupla || 'piloto'})">👥 Dupla com ${s.parceiro_dupla} (${s.papel_dupla || 'piloto'})</span>`
+            ? `<span class="chip-aluno" title="Pair Programming (${papelEsc})">👥 Dupla com ${parceiroEsc} (${papelEsc})</span>`
             : '<span class="texto-suave texto-pequeno">Individual</span>';
 
           return `
             <tr class="linha-pedagogica">
               <td>
-                <strong>${s.aluno_nome || 'Estudante'}</strong>
+                <strong>${escaparHtml(s.aluno_nome || 'Estudante')}</strong>
                 <div>${badgeDupla}</div>
               </td>
-              <td><span class="badge-bncc-codigo">${tituloAtv}</span></td>
+              <td><span class="badge-bncc-codigo">${escaparHtml(tituloAtv)}</span></td>
               <td>
                 <strong style="color:#d97706;">${estrelas}</strong>
-                <span class="texto-suave texto-pequeno">(${s.tentativas || 1} tent.)</span>
+                <span class="texto-suave texto-pequeno">(${Number(s.tentativas) || 1} tent.)</span>
               </td>
               <td class="texto-suave texto-pequeno">${formatarData(s.criado_em)}</td>
               <td>
@@ -663,7 +665,7 @@
           `;
         }).join('');
       } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="5" class="texto-centro texto-suave">Erro ao carregar submissões Python: ${err.message}</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" class="texto-centro texto-suave">Erro ao carregar submissões Python: ${escaparHtml(err.message)}</td></tr>`;
       }
     };
 

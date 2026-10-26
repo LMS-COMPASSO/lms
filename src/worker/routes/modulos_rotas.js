@@ -15,8 +15,10 @@ import {
   jsonErro,
   readJsonBody,
   queryAll,
+  queryOne,
   authorizeUser,
   exigirPerfil,
+  ErroHttp,
 } from '../helpers_utilitarios.js';
 
 /**
@@ -34,13 +36,21 @@ export async function listarModulosDoCurso(request, env, db, cursoId) {
 }
 
 /**
- * Cria um novo módulo associado a um curso.
+ * Cria um novo módulo associado a um curso, validando propriedade do curso (IDOR).
  */
 export async function criarModulo(request, env, db, cursoId) {
   const { payload } = await authorizeUser(request, env, db);
   exigirPerfil(payload, ['administrador', 'instrutor']);
 
   const id = Number(cursoId);
+  const curso = await queryOne(db, 'SELECT id, instrutor_id FROM cursos WHERE id = ?', [id]);
+  if (!curso) {
+    return jsonErro('Curso não encontrado.', 404);
+  }
+  if (payload.perfil === 'instrutor' && curso.instrutor_id !== payload.id) {
+    throw new ErroHttp('Você não tem permissão para adicionar módulos a este curso.', 403);
+  }
+
   const body = await readJsonBody(request);
   const titulo = String(body.titulo || '').trim();
 
@@ -64,13 +74,25 @@ export async function criarModulo(request, env, db, cursoId) {
 }
 
 /**
- * Atualiza os campos de um módulo existente.
+ * Atualiza os campos de um módulo existente, validando propriedade do curso (IDOR).
  */
 export async function atualizarModulo(request, env, db, moduloId) {
   const { payload } = await authorizeUser(request, env, db);
   exigirPerfil(payload, ['administrador', 'instrutor']);
 
   const id = Number(moduloId);
+  const modulo = await queryOne(
+    db,
+    'SELECT m.id, c.instrutor_id FROM modulos m JOIN cursos c ON m.curso_id = c.id WHERE m.id = ?',
+    [id],
+  );
+  if (!modulo) {
+    return jsonErro('Módulo não encontrado.', 404);
+  }
+  if (payload.perfil === 'instrutor' && modulo.instrutor_id !== payload.id) {
+    throw new ErroHttp('Você não tem permissão para editar este módulo.', 403);
+  }
+
   const body = await readJsonBody(request);
   const campos = [];
   const params = [];
@@ -89,13 +111,25 @@ export async function atualizarModulo(request, env, db, moduloId) {
 }
 
 /**
- * Remove um módulo e suas aulas associadas.
+ * Remove um módulo e suas aulas associadas, validando propriedade do curso (IDOR).
  */
 export async function excluirModulo(request, env, db, moduloId) {
   const { payload } = await authorizeUser(request, env, db);
   exigirPerfil(payload, ['administrador', 'instrutor']);
 
   const id = Number(moduloId);
+  const modulo = await queryOne(
+    db,
+    'SELECT m.id, c.instrutor_id FROM modulos m JOIN cursos c ON m.curso_id = c.id WHERE m.id = ?',
+    [id],
+  );
+  if (!modulo) {
+    return jsonErro('Módulo não encontrado.', 404);
+  }
+  if (payload.perfil === 'instrutor' && modulo.instrutor_id !== payload.id) {
+    throw new ErroHttp('Você não tem permissão para excluir este módulo.', 403);
+  }
+
   await db.prepare('DELETE FROM modulos WHERE id = ?').bind(id).run();
   return jsonResponse({ mensagem: 'Módulo excluído com sucesso.' });
 }

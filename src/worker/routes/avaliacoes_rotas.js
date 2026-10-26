@@ -19,6 +19,7 @@ import {
   queryOne,
   authorizeUser,
   exigirPerfil,
+  ErroHttp,
 } from '../helpers_utilitarios.js';
 
 /**
@@ -69,13 +70,25 @@ export async function obterAvaliacao(request, env, db, avaliacaoId) {
 }
 
 /**
- * Cria uma nova avaliação com suas questões e alternativas.
+ * Cria uma nova avaliação com suas questões e alternativas, validando propriedade do curso (IDOR).
  */
 export async function criarAvaliacao(request, env, db, moduloId) {
   const { payload } = await authorizeUser(request, env, db);
   exigirPerfil(payload, ['administrador', 'instrutor']);
 
   const id = Number(moduloId);
+  const modulo = await queryOne(
+    db,
+    'SELECT m.id, c.instrutor_id FROM modulos m JOIN cursos c ON m.curso_id = c.id WHERE m.id = ?',
+    [id],
+  );
+  if (!modulo) {
+    return jsonErro('Módulo não encontrado.', 404);
+  }
+  if (payload.perfil === 'instrutor' && modulo.instrutor_id !== payload.id) {
+    throw new ErroHttp('Você não tem permissão para criar avaliações neste módulo.', 403);
+  }
+
   const body = await readJsonBody(request);
   const titulo = String(body.titulo || '').trim();
 
@@ -213,13 +226,25 @@ export async function responderAvaliacao(request, env, db, avaliacaoId) {
 }
 
 /**
- * Exclui uma avaliação e suas questões.
+ * Exclui uma avaliação e suas questões, validando propriedade do curso (IDOR).
  */
 export async function excluirAvaliacao(request, env, db, avaliacaoId) {
   const { payload } = await authorizeUser(request, env, db);
   exigirPerfil(payload, ['administrador', 'instrutor']);
 
   const id = Number(avaliacaoId);
+  const avaliacao = await queryOne(
+    db,
+    'SELECT av.id, c.instrutor_id FROM avaliacoes av JOIN modulos m ON av.modulo_id = m.id JOIN cursos c ON m.curso_id = c.id WHERE av.id = ?',
+    [id],
+  );
+  if (!avaliacao) {
+    return jsonErro('Avaliação não encontrada.', 404);
+  }
+  if (payload.perfil === 'instrutor' && avaliacao.instrutor_id !== payload.id) {
+    throw new ErroHttp('Você não tem permissão para excluir esta avaliação.', 403);
+  }
+
   await db.prepare('DELETE FROM avaliacoes WHERE id = ?').bind(id).run();
   return jsonResponse({ mensagem: 'Avaliação excluída com sucesso.' });
 }
