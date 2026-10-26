@@ -812,31 +812,42 @@ function renderCatalogo() {
     }
   }
 
-  // Montagem na raiz com padrão semântico e breadcrumbs de orientação
-  raiz.replaceChildren(
-    h(
-      'nav',
-      { class: 'atv-breadcrumbs', 'aria-label': t('wf.voceEstaAqui') },
+  // Montagem na raiz com padrão semântico (evita duplicação com a barra superior de wayfinding)
+  const elementosRaiz = [];
+  const temWayfindingSuperior = Boolean(document.getElementById('barra-wayfinding-universal') || document.body.classList.contains('modo-app'));
+  if (!temWayfindingSuperior) {
+    elementosRaiz.push(
       h(
-        'a',
-        { class: 'wf-breadcrumb-mobile-voltar seta-voltar', href: '/cursos.html' },
-        h('span', { class: 'material-symbols-outlined icon-xs', 'aria-hidden': 'true' }, 'arrow_back'),
-        t('wf.voltarTrilhas'),
+        'nav',
+        { class: 'atv-breadcrumbs', 'aria-label': t('wf.voceEstaAqui') },
+        h(
+          'a',
+          { class: 'wf-breadcrumb-mobile-voltar seta-voltar', href: '/cursos.html' },
+          h('span', { class: 'material-symbols-outlined icon-xs', 'aria-hidden': 'true' }, 'arrow_back'),
+          t('wf.voltarTrilhas'),
+        ),
+        h(
+          'ol',
+          {},
+          h('li', {}, h('a', { href: '/' }, t('wf.inicio'))),
+          h('li', {}, h('a', { href: '/cursos.html' }, t('wf.pensamentoComputacional'))),
+          h('li', { 'aria-current': 'page' }, t('wf.atividadesLab3d')),
+        ),
       ),
-      h(
-        'ol',
-        {},
-        h('li', {}, h('a', { href: '/' }, t('wf.inicio'))),
-        h('li', {}, h('a', { href: '/cursos.html' }, t('wf.pensamentoComputacional'))),
-        h('li', { 'aria-current': 'page' }, t('wf.atividadesLab3d')),
-      ),
-    ),
+    );
+  }
+
+  elementosRaiz.push(
     // Spotlight Hero CinemaOS
     bannerSpotlight(
       { atividade: atividadeDestaque, tipoDestaque },
       concluidasTotal,
       totalGeral,
     ),
+  );
+
+  raiz.replaceChildren(
+    ...elementosRaiz,
     // Seção de Descoberta com Barra de Ferramentas CinemaOS
     h(
       'section',

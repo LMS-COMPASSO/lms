@@ -33,6 +33,7 @@
         <a href="/atividades.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">format_list_numbered</span> Atividades</a>
         <a href="/mundo-digital.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">memory</span> Mundo Digital</a>
         <a href="/cultura-digital.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">verified_user</span> Cultura Digital</a>
+        <a href="/planos.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">credit_card</span> Planos</a>
       </nav>
       <div class="pub-acoes">
         <a href="/atividades.html" class="btn btn-contorno-escuro btn-sm flex-inline-icon" title="Buscar atividades BNCC" aria-label="Buscar atividades"><span class="material-symbols-outlined icon-xs" aria-hidden="true">search</span> Buscar</a>
@@ -56,12 +57,8 @@
     <section class="sp-hero" aria-labelledby="titulo-hero">
       <div class="pub-container sp-hero-grid">
         <div>
-          <div class="sp-kicker-badge">
-            <span class="sp-pulse-dot" aria-hidden="true"></span>
-            <span>Plataforma Educacional Completa · BNCC Computação</span>
-          </div>
           <h1 id="titulo-hero" class="sp-hero-titulo">
-            Ensine, inspire e engaje com a plataforma de Computação <span>mais prática da Educação Básica</span>
+            Compasso, a plataforma de Computação <span>mais prática da Educação Básica</span>
           </h1>
           <p class="sp-hero-desc">
             Tudo o que sua escola precisa para aplicar os 3 eixos da BNCC Computação no Ensino Fundamental:
@@ -129,7 +126,7 @@
                 <span class="material-symbols-outlined icon-xs">smart_toy</span>
                 Pensamento Computacional
               </span>
-              <h3 class="sp-mockup-titulo-aula">Missão: O Robô que Desvia de Poças</h3>
+              <div class="sp-mockup-titulo-aula"><strong>Missão: O Robô que Desvia de Poças</strong></div>
 
               <ul class="sp-mockup-passos">
                 <li class="sp-mockup-passo-item check">
@@ -152,6 +149,54 @@
               </div>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 1.1 Seção de Parceiros e Tecnologias Globais -->
+    <section class="sp-parceiros-secao" aria-label="Parceiros Institucionais e Tecnologias Integradas">
+      <div class="pub-container">
+        <p class="sp-parceiros-rotulo">
+          Parceiros Institucionais &amp; Tecnologias do Ecossistema
+        </p>
+
+        <div class="sp-parceiros-carrossel-container">
+          <button type="button" class="sp-parceiros-btn-nav prev" id="btn-parceiros-prev" aria-label="Ver parceiros anteriores">
+            <span class="material-symbols-outlined" aria-hidden="true">chevron_left</span>
+          </button>
+
+          <div class="sp-parceiros-carrossel-wrap" id="wrap-carrossel-parceiros" tabindex="0" role="region" aria-label="Lista de parceiros tecnológicos e institucionais">
+            <div class="sp-parceiros-trilha" id="trilha-carrossel-parceiros">
+              <div class="sp-parceiros-item" title="Cloudflare (Infraestrutura Global Edge &amp; D1)">
+                <img src="/img/parceiros/cloudflare.svg" alt="Logo da Cloudflare" width="125" height="34" loading="lazy">
+              </div>
+              <div class="sp-parceiros-item" title="IFMA — Instituto Federal do Maranhão (Campus Grajaú)">
+                <img src="/img/parceiros/ifma.svg" alt="Logo do Instituto Federal do Maranhão (IFMA)" width="135" height="34" loading="lazy">
+              </div>
+              <div class="sp-parceiros-item" title="Google for Education (Google Acadêmico &amp; Workspace)">
+                <img src="/img/parceiros/google-education.svg" alt="Logo do Google for Education" width="145" height="34" loading="lazy">
+              </div>
+              <div class="sp-parceiros-item" title="MEC / Ministério da Educação &amp; BNCC Computação">
+                <img src="/img/parceiros/mec-bncc.svg" alt="Logo do MEC e BNCC Computação" width="130" height="34" loading="lazy">
+              </div>
+              <div class="sp-parceiros-item" title="SBC — Sociedade Brasileira de Computação">
+                <img src="/img/parceiros/sbc.svg" alt="Logo da Sociedade Brasileira de Computação (SBC)" width="120" height="34" loading="lazy">
+              </div>
+              <div class="sp-parceiros-item" title="SUAP — Inovação Tecnológica (Edital nº 14246/2025)">
+                <img src="/img/parceiros/suap.svg" alt="Logo do SUAP Inovação" width="120" height="34" loading="lazy">
+              </div>
+              <div class="sp-parceiros-item" title="Python Software Foundation (Simulador Python 3D)">
+                <img src="/img/parceiros/python.svg" alt="Logo da linguagem Python" width="120" height="34" loading="lazy">
+              </div>
+              <div class="sp-parceiros-item" title="GitHub (Código Livre e Aberto · Licença MIT)">
+                <img src="/img/parceiros/github.svg" alt="Logo do GitHub" width="115" height="34" loading="lazy">
+              </div>
+            </div>
+          </div>
+
+          <button type="button" class="sp-parceiros-btn-nav next" id="btn-parceiros-next" aria-label="Ver próximos parceiros">
+            <span class="material-symbols-outlined" aria-hidden="true">chevron_right</span>
+          </button>
         </div>
       </div>
     </section>
@@ -680,6 +725,7 @@
             <li><a href="/atividades.html">Atividades dinâmicas</a></li>
             <li><a href="/mundo-digital.html">Mundo Digital (Hardware 3D)</a></li>
             <li><a href="/cultura-digital.html">Cultura Digital (Simulador Chat)</a></li>
+            <li><a href="/planos.html">Planos &amp; Assinaturas</a></li>
             <li><a href="/boas-vindas.html">Boas-vindas &amp; Parceiros</a></li>
           </ul>
         </nav>
@@ -729,6 +775,19 @@
         });
       });
     });
+
+    // Navegação do Carrossel de Parceiros (Acessível por Botões e Swipe)
+    const wrapParceiros = document.getElementById('wrap-carrossel-parceiros');
+    const btnParceirosPrev = document.getElementById('btn-parceiros-prev');
+    const btnParceirosNext = document.getElementById('btn-parceiros-next');
+    if (wrapParceiros && btnParceirosPrev && btnParceirosNext) {
+      btnParceirosPrev.addEventListener('click', () => {
+        wrapParceiros.scrollBy({ left: -220, behavior: 'smooth' });
+      });
+      btnParceirosNext.addEventListener('click', () => {
+        wrapParceiros.scrollBy({ left: 220, behavior: 'smooth' });
+      });
+    }
 
     // Quem já tem sessão ativa atualiza o CTA do Hero
     const usuarioLogado = typeof obterToken === 'function' && obterToken() ? obterUsuario() : null;

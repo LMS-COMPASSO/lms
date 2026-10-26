@@ -114,6 +114,95 @@ export function inicializarMenuUniversal() {
     montarSeletorIdioma(containerAcoes);
   }
   traduzirDocumento();
+
+  // 5. Habilitar rolagem suave horizontal para menus sem necessidade de redimensionamento manual
+  habilitarRolagemHorizontalMenus();
+}
+
+/**
+ * Habilita rolagem suave horizontal via roda do mouse (wheel) e touch,
+ * com indicadores visuais dinâmicos de fade (mask-image) e auto-centralização
+ * do item ativo ao carregar ou redimensionar.
+ */
+export function habilitarRolagemHorizontalMenus(seletor = '.pub-nav, .dashboard-nav-tabs, .atv-pills-modalidades, .sp-abas-controle, .wf-breadcrumb-lista, .planos-periodo-pills, .menu-scroll-horizontal, [data-scroll-horizontal]') {
+  if (typeof document === 'undefined') return;
+  const menus = document.querySelectorAll(seletor);
+  if (!menus.length) return;
+
+  menus.forEach((menu) => {
+    if (menu.dataset.rolagemHabilitada === 'true') {
+      if (typeof menu._atualizarMascaraRolagem === 'function') {
+        menu._atualizarMascaraRolagem();
+      }
+      return;
+    }
+    menu.dataset.rolagemHabilitada = 'true';
+
+    const atualizarMascara = () => {
+      const maxScroll = menu.scrollWidth - menu.clientWidth;
+      if (maxScroll <= 2) {
+        menu.removeAttribute('data-scroll-mascara');
+        menu.setAttribute('data-scroll-ativo', 'false');
+        return;
+      }
+
+      menu.setAttribute('data-scroll-ativo', 'true');
+      const inicio = menu.scrollLeft <= 4;
+      const fim = menu.scrollLeft >= maxScroll - 4;
+
+      if (!inicio && !fim) {
+        menu.setAttribute('data-scroll-mascara', 'ambos');
+      } else if (inicio) {
+        menu.setAttribute('data-scroll-mascara', 'direita');
+      } else if (fim) {
+        menu.setAttribute('data-scroll-mascara', 'esquerda');
+      }
+    };
+
+    menu._atualizarMascaraRolagem = atualizarMascara;
+
+    // Rolagem horizontal com a roda vertical do mouse (desktop)
+    menu.addEventListener('wheel', (e) => {
+      if (menu.scrollWidth > menu.clientWidth && e.deltaY !== 0 && e.deltaX === 0 && !e.shiftKey) {
+        e.preventDefault();
+        menu.scrollLeft += e.deltaY;
+        atualizarMascara();
+      }
+    }, { passive: false });
+
+    menu.addEventListener('scroll', atualizarMascara, { passive: true });
+    window.addEventListener('resize', atualizarMascara, { passive: true });
+
+    if (typeof ResizeObserver !== 'undefined') {
+      try {
+        const ro = new ResizeObserver(() => atualizarMascara());
+        ro.observe(menu);
+      } catch {}
+    }
+
+    // Auto-centralização suave do item ativo na inicialização
+    requestAnimationFrame(() => {
+      atualizarMascara();
+      const itemAtivo = menu.querySelector('[aria-current="page"], [aria-selected="true"], .ativo, .active');
+      if (itemAtivo) {
+        const menuRect = menu.getBoundingClientRect();
+        const itemRect = itemAtivo.getBoundingClientRect();
+        const foraDeVista = itemRect.left < menuRect.left || itemRect.right > menuRect.right;
+        if (foraDeVista) {
+          itemAtivo.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
+      }
+    });
+
+    // Suporte a teclado (setas Direita / Esquerda se o menu tiver foco)
+    menu.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' && !menu.hasAttribute('role')) {
+        menu.scrollBy({ left: 80, behavior: 'smooth' });
+      } else if (e.key === 'ArrowLeft' && !menu.hasAttribute('role')) {
+        menu.scrollBy({ left: -80, behavior: 'smooth' });
+      }
+    });
+  });
 }
 
 // Inicialização automática ao carregar o DOM

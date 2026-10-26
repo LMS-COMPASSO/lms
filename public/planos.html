@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Planos &amp; Assinaturas — LMS COMPASSO</title>
+<meta name="description" content="Conheça os planos, assinaturas e modelos de contratação institucional do LMS COMPASSO: plano educacional gratuito, planos escaláveis por alunos e contratação pública via Marco Legal das Startups e Dispensa de Licitação.">
+<link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/publico.css">
+<link rel="stylesheet" href="/css/planos.css">
+</head>
+<body class="pagina-planos">
+  <a class="pular-conteudo" href="#conteudo">Pular para o conteúdo principal</a>
+
+  <!-- Topo de Navegação -->
+  <header class="planos-topo" role="banner">
+    <div class="planos-topo-conteudo">
+      <a href="/" class="pub-logo" aria-label="LMS COMPASSO — página inicial">
+        <img src="/img/logo.svg" alt="LMS COMPASSO — BNCC Computação" width="220" height="52" class="logo-tema-claro">
+        <img src="/img/logo-branco.svg" alt="LMS COMPASSO — BNCC Computação" width="220" height="52" class="logo-tema-escuro">
+      </a>
+      <div class="planos-topo-acoes">
+        <a href="/" class="btn btn-sm btn-neutro flex-inline-icon" title="Voltar para a página inicial">
+          <span class="material-symbols-outlined icon-xs" aria-hidden="true">arrow_back</span>
+          <span>Voltar</span>
+        </a>
+        <a href="/login.html" class="btn btn-sm btn-primario flex-inline-icon" id="btn-login-planos">
+          <span class="material-symbols-outlined icon-xs" aria-hidden="true">account_circle</span>
+          <span>Entrar</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main id="conteudo" class="planos-secao-principal" tabindex="-1">
+    <a href="/" class="planos-voltar-link">
+      <span class="material-symbols-outlined icon-xs" aria-hidden="true">arrow_back</span>
+      <span>Voltar</span>
+    </a>
+
+    <!-- Cabeçalho Principal -->
+    <div class="planos-cabecalho">
+      <h1 class="planos-titulo">Planos</h1>
+      <p class="planos-subtitulo">
+        Planos educacionais escaláveis desenhados para professores, escolas e redes de ensino aplicarem a BNCC Computação com atividades digitais e desplugadas (Resolução CNE nº 2/2025).
+      </p>
+
+      <!-- Seletor de Período de Cobrança -->
+      <div class="planos-periodo-wrap" role="group" aria-label="Período de cobrança">
+        <span class="planos-periodo-rotulo">Período de cobrança:</span>
+        <div class="planos-periodo-pills">
+          <button type="button" class="planos-periodo-btn" id="btn-periodo-mes" onclick="selecionarPeriodo('mes')">
+            <span>Mês</span>
+          </button>
+          <button type="button" class="planos-periodo-btn" id="btn-periodo-semestre" onclick="selecionarPeriodo('semestre')">
+            <span>6 meses</span>
+            <span class="planos-desconto-tag">-35%</span>
+          </button>
+          <button type="button" class="planos-periodo-btn ativo" id="btn-periodo-ano" onclick="selecionarPeriodo('ano')">
+            <span>1 ano</span>
+            <span class="planos-desconto-tag">-50%</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grade de Cards de Planos -->
+    <section class="planos-grid" aria-label="Opções de Planos de Assinatura">
+      <!-- Card 1: Assinatura Gratuita -->
+      <article class="plano-card" aria-labelledby="titulo-plano-gratis">
+        <div>
+          <h2 class="plano-titulo" id="titulo-plano-gratis">Assinatura gratuita</h2>
+          <p class="plano-desc">
+            Para lançar cursos gratuitos e atrair um público de <strong>Até 200 alunos</strong>.
+          </p>
+
+          <div class="plano-preco-box">
+            <div class="plano-preco-principal">Grátis</div>
+            <div class="plano-preco-sub">Sem necessidade de cartão de crédito</div>
+          </div>
+
+          <a href="/registrar.html?plano=gratis" class="plano-btn" id="btn-ativar-gratis">
+            Ativar
+          </a>
+
+          <ul class="plano-features" aria-label="Recursos inclusos no plano gratuito">
+            <li class="plano-feature-item">
+              <span class="material-symbols-outlined plano-check-icon" aria-hidden="true">check_circle</span>
+              <span><strong>1 academia</strong> (escola ou polo cadastrado)</span>
+            </li>
+            <li class="plano-feature-item">
+              <span class="material-symbols-outlined plano-check-icon" aria-hidden="true">check_circle</span>
+              <span><strong>1 curso</strong> ou trilha ativa</span>
+            </li>
+            <li class="plano-feature-item">
+              <span class="material-symbols-outlined plano-check-icon" aria-hidden="true">check_circle</span>
+              <span><strong>1 instrutor</strong> com painel de gestão</span>
+            </li>
+            <li class="plano-feature-item">
+              <span class="material-symbols-outlined plano-check-icon" aria-hidden="true">check_circle</span>
+              <span><strong>1 GB</strong> espaço de armazenamento de arquivos</span>
+            </li>
+            <li class="plano-feature-item">
+              <span class="material-symbols-outlined plano-check-icon" aria-hidden="true">check_circle</span>
+              <span><strong>30 dias de suporte por chat</strong> <span class="plano-info-tag" title="Suporte direto pela equipe técnica e comunidade de educadores">ⓘ</span></span>
+            </li>
+            <li class="plano-feature-item">
+              <span class="material-symbols-outlined plano-check-icon" aria-hidden="true">check_circle</span>
+              <span>Catálogo completo da BNCC Computação (3 eixos estruturantes)</span>
+            </li>
+            <li class="plano-feature-item">
+              <span class="material-symbols-outlined plano-check-icon" aria-hidden="true">check_circle</span>
+              <span>Fichas desplugadas em PDF para impressão A4 sem tela</span>
+            </li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- Card 2: Plano Escalável Interativo com Slider -->
+      <article class="plano-card plano-destaque" aria-labelledby="titulo-plano-escola">
+        <span class="plano-badge-popular">Mais Escolhido</span>
+        <div>
+          <!-- Slider Interativo de Alunos -->
+          <div class="plano-slider-topo">
+            <div class="plano-slider-contador">
+              <span class="plano-slider-num" id="contador-alunos">1 000</span>
+              <span class="plano-slider-label">alunos</span>
+            </div>
+
+            <div class="plano-slider-container">
+              <label for="slider-alunos" class="sr-only">Selecione o número de alunos atendidos</label>
+              <input
+                type="range"
+                id="slider-alunos"
+                class="plano-range-input"
+                min="0"
+                max="7"
+                step="1"
+                value="0"
+                oninput="atualizarTierAlunos(this.value)"
+                aria-valuemin="1000"
+                aria-valuemax="100000"
+                aria-valuenow="1000"
+                aria-label="Controle de quantidade de alunos atendidos na escola"
+              >
+              <div class="plano-slider-ticks" aria-hidden="true">
+                <span class="plano-tick-label ativo" onclick="definirPassoSlider(0)">1k</span>
+                <span class="plano-tick-label" onclick="definirPassoSlider(1)">2k</span>
+                <span class="plano-tick-label" onclick="definirPassoSlider(2)">5k</span>
+                <span class="plano-tick-label" onclick="definirPassoSlider(3)">10k</span>
+                <span class="plano-tick-label" onclick="definirPassoSlider(4)">17k</span>
+                <span class="plano-tick-label" onclick="definirPassoSlider(5)">25k</span>
+                <span class="plano-tick-label" onclick="definirPassoSlider(6)">50k</span>
+                <span class="plano-tick-label" onclick="definirPassoSlider(7)">100k</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Preço Dinâmico Calculado -->
+          <div class="plano-preco-box">
+            <div class="plano-preco-principal">
+              <span id="valor-preco">150</span>
+              <span class="plano-preco-moeda">BRL / mês</span>
+            </div>
+            <div class="plano-preco-sub" id="legenda-economia">
+              Pagamento anual mais barato 150 BRL / mês (-50%)
+            </div>
+          </div>
+
+          <button type="button" class="plano-btn" id="btn-comprar-plano" onclick="abrirModalContrato()">
+            Comprar
+          </button>
+
+          <!-- Lista de Recursos Escaláveis -->
+          <ul class="plano-features" aria-label="Recursos inclusos no plano avançado">
+            <li class="plano-feature-item">
+              <span class="material-symbols-outlined plano-check-icon" aria-hidden="true">check_circle</span>
+              <span id="feat-academias">Até 2 academias</span>
+            </li>
+            <li class="plano-feature-item">
+              <span class="material-symbols-outlined plano-check-icon" aria-hidden="true">check_circle</span>
+              <span><strong>Cursos ilimitados</strong></span>
+            </li>
+            <li class="plano-feature-item">
+              <span class="material-symbols-outlined plano-check-icon" aria-hidden="true">check_circle</span>
+              <span id="feat-instrutores"><strong>10 instrutores</strong></span>
+            </li>
+            <li class="plano-feature-item">
+              <span class="material-symbols-outlined plano-check-icon" aria-hidden="true">check_circle</span>
+              <span><strong id="feat-storage">15 GB</strong> espaço de armazenamento de arquivos <a href="#faq-planos" class="plano-info-tag">Comprar mais</a></span>
+            </li>
+            <li class="plano-feature-item">
+              <span class="material-symbols-outlined plano-check-icon" aria-hidden="true">check_circle</span>
+              <span>Link personalizado do curso</span>
+            </li>
+            <li class="plano-feature-item">
+              <span class="material-symbols-outlined plano-check-icon" aria-hidden="true">check_circle</span>
+              <span>Cursos pagos e turmas institucionais</span>
+            </li>
+            <li class="plano-feature-item">
+              <span class="material-symbols-outlined plano-check-icon" aria-hidden="true">check_circle</span>
+              <span>Sem o logo da LMS COMPASSO (marca própria da escola)</span>
+            </li>
+            <li class="plano-feature-item">
+              <span class="material-symbols-outlined plano-check-icon" aria-hidden="true">check_circle</span>
+              <span>Número ilimitado de lições de casa e atividades</span>
+            </li>
+            <li class="plano-feature-item">
+              <span class="material-symbols-outlined plano-check-icon" aria-hidden="true">check_circle</span>
+              <span>Diário Escolar (CSV) com consolidação de habilidades</span>
+            </li>
+            <li class="plano-feature-item">
+              <span class="material-symbols-outlined plano-check-icon" aria-hidden="true">check_circle</span>
+              <span>Auditoria de Tempo de Tela e Desplugadas (Resolução CNE nº 2/2025)</span>
+            </li>
+            <li class="plano-feature-item">
+              <span class="material-symbols-outlined plano-check-icon" aria-hidden="true">check_circle</span>
+              <span>Visualização e edição do histórico do curso</span>
+            </li>
+            <li class="plano-feature-item">
+              <span class="material-symbols-outlined plano-check-icon" aria-hidden="true">check_circle</span>
+              <span>Tempo limite para conclusão do curso</span>
+            </li>
+            <li class="plano-feature-item">
+              <span class="material-symbols-outlined plano-check-icon" aria-hidden="true">check_circle</span>
+              <span>Avaliações de alunos e métricas SUS no curso</span>
+            </li>
+            <li class="plano-feature-item">
+              <span class="material-symbols-outlined plano-check-icon" aria-hidden="true">check_circle</span>
+              <span>Cursos recomendados e trilhas progressivas</span>
+            </li>
+          </ul>
+        </div>
+      </article>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- SEÇÃO BMC (BUSINESS MODEL CANVAS) E SEGURANÇA JURÍDICA         -->
+    <!-- ============================================================== -->
+    <section class="secao-bmc-contratos" id="informacoes-contratos" aria-labelledby="titulo-bmc-contratos">
+      <div class="bmc-cabecalho">
+        <span class="bmc-tag">
+          <span class="material-symbols-outlined icon-xs" aria-hidden="true">verified_user</span>
+          <span>Modelo de Negócio BMC &amp; Governança</span>
+        </span>
+        <h2 class="bmc-titulo" id="titulo-bmc-contratos">
+          Conceitos do Projeto BMC &amp; Contratos Institucionais
+        </h2>
+        <p class="bmc-desc">
+          O LMS COMPASSO foi estruturado sobre o <strong>Business Model Canvas (BMC)</strong> da inovação educacional pública e privada, oferecendo modelos flexíveis de contratação compatíveis com a administração pública e proteção de dados de menores.
+        </p>
+      </div>
+
+      <!-- 4 Pilares de Contratação e Segurança Jurídica -->
+      <div class="bmc-grid">
+        <div class="bmc-card">
+          <div class="bmc-card-icone">
+            <span class="material-symbols-outlined" aria-hidden="true">gavel</span>
+          </div>
+          <h3 class="bmc-card-titulo">Dispensa de Licitação</h3>
+          <p class="bmc-card-texto">
+            Contratação direta facilitada para escolas e municípios com base no <strong>Art. 75, inciso II da Lei nº 14.133/2021</strong>, com emissão de nota fiscal de serviços e faturamento por empenho.
+          </p>
+        </div>
+
+        <div class="bmc-card">
+          <div class="bmc-card-icone">
+            <span class="material-symbols-outlined" aria-hidden="true">rocket_launch</span>
+          </div>
+          <h3 class="bmc-card-titulo">Marco Legal das Startups</h3>
+          <p class="bmc-card-texto">
+            Amparo pelo <strong>Art. 13 da Lei Complementar nº 182/2021</strong> (Contrato Público de Solução Inovadora - CPSI) para testes e validação de impacto educacional e proficiência na BNCC.
+          </p>
+        </div>
+
+        <div class="bmc-card">
+          <div class="bmc-card-icone">
+            <span class="material-symbols-outlined" aria-hidden="true">shield</span>
+          </div>
+          <h3 class="bmc-card-titulo">Conformidade com a LGPD</h3>
+          <p class="bmc-card-texto">
+            Proteção rigorosa de dados de crianças e adolescentes (Art. 14 da Lei nº 13.709/2018). Dados não comercializados, criptografia PBKDF2 e isolamento relacional por escola.
+          </p>
+        </div>
+
+        <div class="bmc-card">
+          <div class="bmc-card-icone">
+            <span class="material-symbols-outlined" aria-hidden="true">cloud_sync</span>
+          </div>
+          <h3 class="bmc-card-titulo">SLA 99,9% &amp; Sem Multa</h3>
+          <p class="bmc-card-texto">
+            Infraestrutura em nuvem Cloudflare Workers + D1 com alta disponibilidade. Sem multas de fidelidade oculta e com exportação total dos dados em CSV/JSON a qualquer momento.
+          </p>
+        </div>
+      </div>
+
+      <!-- Banner de Simulação de Contrato e Adesão Formal -->
+      <div class="bmc-banner-adesao">
+        <div class="bmc-banner-info">
+          <h3 class="bmc-banner-titulo">Precisa de Proposta Formal ou Minuta para a sua Escola?</h3>
+          <p class="bmc-banner-texto">
+            Gere uma minuta contratual formal pré-preenchida com justificativa pedagógica alinhada à Resolução CNE nº 2/2025 para aprovação na diretoria escolar ou setor de compras.
+          </p>
+        </div>
+        <div class="bmc-banner-acoes">
+          <button type="button" class="btn btn-primario flex-inline-icon" onclick="abrirModalContrato()">
+            <span class="material-symbols-outlined icon-xs" aria-hidden="true">description</span>
+            <span>Gerar Minuta de Proposta</span>
+          </button>
+          <a href="mailto:contato@lms-bncc.edu.br?subject=Solicitacao%20de%20Proposta%20Institucional%20LMS%20COMPASSO" class="btn btn-neutro flex-inline-icon">
+            <span class="material-symbols-outlined icon-xs" aria-hidden="true">mail</span>
+            <span>Falar com Consultor</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- FAQ Acordeão de Contratos e Planos -->
+      <div class="planos-faq-secao" id="faq-planos">
+        <h3 class="planos-faq-titulo">Perguntas Frequentes sobre Planos e Contratação</h3>
+        <div class="planos-faq-lista">
+          <div class="planos-faq-item">
+            <button type="button" class="planos-faq-pergunta" onclick="alternarFaq(this)">
+              <span>Como funciona a contratação por escolas públicas e secretarias de educação?</span>
+              <span class="material-symbols-outlined planos-faq-icone" aria-hidden="true">expand_more</span>
+            </button>
+            <div class="planos-faq-resposta">
+              A contratação por órgãos públicos pode ser efetuada via <strong>Dispensa de Licitação por Valor (Art. 75, II da Lei 14.133/2021)</strong> ou pelo <strong>Marco Legal das Startups (LC 182/2021)</strong>. Fornecemos proposta comercial, certidões negativas de débito (CND), minuta padrão de contrato e faturamento por empenho prévio com ordem bancária.
+            </div>
+          </div>
+
+          <div class="planos-faq-item">
+            <button type="button" class="planos-faq-pergunta" onclick="alternarFaq(this)">
+              <span>Como o LMS COMPASSO atende à Resolução CNE nº 2/2025 de tempo de tela?</span>
+              <span class="material-symbols-outlined planos-faq-icone" aria-hidden="true">expand_more</span>
+            </button>
+            <div class="planos-faq-resposta">
+              O sistema monitora automaticamente o equilíbrio entre atividades em tela (simulador de robô e blocos) e atividades desplugadas (folhas e fichas físicas em PDF). Caso uma turma ultrapasse 30 minutos contínuos de tela, o painel pedagógico emite alertas sugerindo dinâmicas corporais e tarefas coletivas sem telas.
+            </div>
+          </div>
+
+          <div class="planos-faq-item">
+            <button type="button" class="planos-faq-pergunta" onclick="alternarFaq(this)">
+              <span>O que acontece se o número de alunos aumentar durante o ano letivo?</span>
+              <span class="material-symbols-outlined planos-faq-icone" aria-hidden="true">expand_more</span>
+            </button>
+            <div class="planos-faq-resposta">
+              O plano pode ser redimensionado a qualquer momento de forma proporcional (pró-rata). Novos alunos matriculados mantêm o acesso a todas as atividades e certificados já emitidos sem interrupção de serviço.
+            </div>
+          </div>
+
+          <div class="planos-faq-item">
+            <button type="button" class="planos-faq-pergunta" onclick="alternarFaq(this)">
+              <span>Quais são as formas de pagamento disponíveis?</span>
+              <span class="material-symbols-outlined planos-faq-icone" aria-hidden="true">expand_more</span>
+            </button>
+            <div class="planos-faq-resposta">
+              Aceitamos Nota de Empenho Pública, Boleto Bancário com prazo para instituições de ensino, PIX instantâneo e Cartão Corporativo. Os planos anuais contam com 50% de desconto e os semestrais com 35% de desconto.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal Interativo de Minuta de Proposta e Contrato -->
+  <div id="modal-contrato-proposta" class="modal-overlay-contrato" role="dialog" aria-modal="true" aria-labelledby="modal-titulo" hidden>
+    <div class="modal-contrato">
+      <button type="button" class="modal-fechar-btn" onclick="fecharModalContrato()" aria-label="Fechar janela">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+
+      <div class="flex-inline-icon gap-8 mb-12">
+        <span class="material-symbols-outlined icon-md icone-destaque-primario">description</span>
+        <h3 id="modal-titulo" class="m-0">Simulador de Proposta &amp; Contrato Escolar</h3>
+      </div>
+      <p class="texto-suave texto-pequeno mb-16">
+        Gere uma proposta institucional instantânea pré-preenchida com os dados da sua escola e os parâmetros selecionados no painel.
+      </p>
+
+      <form id="form-proposta-contrato" onsubmit="event.preventDefault(); gerarMinutaDocumento();">
+        <div class="form-grupo">
+          <label for="campo-nome-escola">Nome da Escola / Instituição ou Município:</label>
+          <input type="text" id="campo-nome-escola" placeholder="Ex.: E.M. Darcy Ribeiro ou Secretaria Municipal de Educação" required>
+        </div>
+
+        <div class="grid-2col gap-12">
+          <div class="form-grupo">
+            <label for="campo-gestor-responsavel">Nome do(a) Gestor(a) ou Solicitante:</label>
+            <input type="text" id="campo-gestor-responsavel" placeholder="Ex.: Profª Mariana Souza" required>
+          </div>
+          <div class="form-grupo">
+            <label for="campo-email-contato">E-mail Institucional:</label>
+            <input type="email" id="campo-email-contato" placeholder="gestao@escola.edu.br" required>
+          </div>
+        </div>
+
+        <div class="cartao mt-12 mb-16 p-16" style="background: var(--cor-fundo-alt); border-radius: 10px;">
+          <h4 class="m-0 mb-8" style="font-size: 0.95rem;">Resumo da Configuração Selecionada:</h4>
+          <p class="m-0 texto-pequeno"><strong>Capacidade de Alunos:</strong> <span id="modal-resumo-alunos">1 000 alunos</span></p>
+          <p class="m-0 texto-pequeno"><strong>Ciclo de Faturamento:</strong> <span id="modal-resumo-periodo">Anual (50% de desconto)</span></p>
+          <p class="m-0 texto-pequeno"><strong>Investimento Mensal Estimado:</strong> <span id="modal-resumo-valor">150 BRL / mês</span></p>
+          <p class="m-0 texto-pequeno"><strong>Armazenamento &amp; Polos:</strong> <span id="modal-resumo-storage">15 GB · Até 2 polos</span></p>
+        </div>
+
+        <div class="flex-entre flex-wrap gap-10">
+          <button type="button" class="btn btn-neutro" onclick="fecharModalContrato()">Cancelar</button>
+          <button type="submit" class="btn btn-primario flex-inline-icon">
+            <span class="material-symbols-outlined icon-xs" aria-hidden="true">print</span>
+            <span>Imprimir Minuta Formal</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Rodapé Institucional -->
+  <footer class="pub-rodape" role="contentinfo">
+    <div class="pub-container pub-rodape-conteudo">
+      <div class="pub-rodape-coluna">
+        <div class="pub-rodape-logo">
+          <img src="/img/logo-branco.svg" alt="LMS COMPASSO" width="180" height="42">
+        </div>
+        <p class="pub-rodape-desc">
+          Plataforma educacional para o ensino da Computação no Ensino Fundamental. Desenvolvida sob o projeto de inovação tecnológica SUAP/IFMA nº 14246/2025.
+        </p>
+      </div>
+
+      <div class="pub-rodape-coluna">
+        <h4 class="pub-rodape-titulo">Navegação</h4>
+        <ul class="pub-rodape-links">
+          <li><a href="/">Página Inicial</a></li>
+          <li><a href="/boas-vindas.html">Boas-vindas &amp; Parceiros</a></li>
+          <li><a href="/planos.html" aria-current="page">Planos &amp; Assinaturas</a></li>
+          <li><a href="/atividades.html">Atividades BNCC</a></li>
+          <li><a href="/login.html">Área do Professor / Aluno</a></li>
+        </ul>
+      </div>
+
+      <div class="pub-rodape-coluna">
+        <h4 class="pub-rodape-titulo">Legislação &amp; CNE</h4>
+        <ul class="pub-rodape-links">
+          <li><a href="/dashboard.html">Resolução CNE/CEB nº 2/2025</a></li>
+          <li><a href="/mundo-digital.html">Resolução CNE/CP nº 1/2022</a></li>
+          <li><a href="#informacoes-contratos">Marco Legal das Startups (LC 182/2021)</a></li>
+          <li><a href="#informacoes-contratos">Lei de Licitações (Art. 75 Lei 14.133)</a></li>
+        </ul>
+      </div>
+
+      <div class="pub-rodape-coluna">
+        <h4 class="pub-rodape-titulo">Governança</h4>
+        <ul class="pub-rodape-links">
+          <li><a href="https://github.com/LMS-COMPASSO/lms" target="_blank" rel="noopener noreferrer">Repositório GitHub</a></li>
+          <li><a href="/compartilhar.html">Gerador de Cadernos PDF</a></li>
+          <li><a href="/perfil.html">Preferências de Acessibilidade</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="pub-rodape-base">
+      <div class="pub-container flex-entre flex-wrap gap-8">
+        <p class="m-0 texto-pequeno">© 2026 LMS COMPASSO — Todos os direitos reservados. Licença MIT Open-Source.</p>
+        <p class="m-0 texto-pequeno">Alinhado à BNCC Computação e diretrizes de tempo de tela saudável.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/config.js"></script>
+  <script>
+    // Dados de Escala de Alunos e Valores
+    const TIERS_ALUNOS = [
+      { alunos: 1000, label: '1 000', precoBaseMes: 300, academias: 'Até 2 academias', storage: '15 GB', instrutores: '10 instrutores' },
+      { alunos: 2000, label: '2 000', precoBaseMes: 560, academias: 'Até 3 academias', storage: '30 GB', instrutores: '20 instrutores' },
+      { alunos: 5000, label: '5 000', precoBaseMes: 1200, academias: 'Até 5 academias', storage: '60 GB', instrutores: '50 instrutores' },
+      { alunos: 10000, label: '10 000', precoBaseMes: 2100, academias: 'Até 10 academias', storage: '120 GB', instrutores: 'Instrutores ilimitados' },
+      { alunos: 17000, label: '17 000', precoBaseMes: 3200, academias: 'Até 15 academias', storage: '180 GB', instrutores: 'Instrutores ilimitados' },
+      { alunos: 25000, label: '25 000', precoBaseMes: 4200, academias: 'Até 25 academias', storage: '250 GB', instrutores: 'Instrutores ilimitados' },
+      { alunos: 50000, label: '50 000', precoBaseMes: 7500, academias: 'Até 50 academias', storage: '500 GB', instrutores: 'Instrutores ilimitados' },
+      { alunos: 100000, label: '100 000', precoBaseMes: 13000, academias: 'Rede Completa (Sem limite)', storage: '1 TB', instrutores: 'Instrutores ilimitados' }
+    ];
+
+    let periodoAtual = 'ano'; // 'mes' | 'semestre' | 'ano'
+    let indiceTierAtual = 0;
+
+    function selecionarPeriodo(periodo) {
+      periodoAtual = periodo;
+      document.querySelectorAll('.planos-periodo-btn').forEach(btn => btn.classList.remove('ativo'));
+      const btnAlvo = document.getElementById(`btn-periodo-${periodo}`);
+      if (btnAlvo) btnAlvo.classList.add('ativo');
+      recalcularPrecos();
+    }
+
+    function definirPassoSlider(indice) {
+      const slider = document.getElementById('slider-alunos');
+      if (slider) {
+        slider.value = indice;
+        atualizarTierAlunos(indice);
+      }
+    }
+
+    function atualizarTierAlunos(indice) {
+      indiceTierAtual = parseInt(indice, 10);
+      const tier = TIERS_ALUNOS[indiceTierAtual];
+      if (!tier) return;
+
+      document.getElementById('contador-alunos').textContent = tier.label;
+      document.getElementById('feat-academias').innerHTML = `<strong>${tier.academias}</strong>`;
+      document.getElementById('feat-instrutores').innerHTML = `<strong>${tier.instrutores}</strong>`;
+      document.getElementById('feat-storage').textContent = tier.storage;
+
+      // Atualiza estado ativo nos marcadores
+      const ticks = document.querySelectorAll('.planos-tick-label');
+      ticks.forEach((tick, i) => {
+        if (i === indiceTierAtual) tick.classList.add('ativo');
+        else tick.classList.remove('ativo');
+      });
+
+      recalcularPrecos();
+    }
+
+    function recalcularPrecos() {
+      const tier = TIERS_ALUNOS[indiceTierAtual];
+      if (!tier) return;
+
+      let fatorDesconto = 1.0;
+      let textoEconomia = 'Faturamento mensal sem fidelidade';
+
+      if (periodoAtual === 'semestre') {
+        fatorDesconto = 0.65; // -35%
+        const precoSemestral = Math.round(tier.precoBaseMes * fatorDesconto);
+        textoEconomia = `Pagamento semestral com desconto: ${precoSemestral} BRL / mês (-35%)`;
+      } else if (periodoAtual === 'ano') {
+        fatorDesconto = 0.50; // -50%
+        const precoAnual = Math.round(tier.precoBaseMes * fatorDesconto);
+        textoEconomia = `Pagamento anual mais barato ${precoAnual} BRL / mês (-50%)`;
+      }
+
+      const valorFinal = Math.round(tier.precoBaseMes * fatorDesconto);
+      document.getElementById('valor-preco').textContent = valorFinal.toLocaleString('pt-BR');
+      document.getElementById('legenda-economia').textContent = textoEconomia;
+    }
+
+    function alternarFaq(btn) {
+      const item = btn.closest('.planos-faq-item');
+      if (item) {
+        item.classList.toggle('aberto');
+      }
+    }
+
+    function abrirModalContrato() {
+      const modal = document.getElementById('modal-contrato-proposta');
+      const tier = TIERS_ALUNOS[indiceTierAtual];
+      const periodoNomes = {
+        mes: 'Mensal (Preço regular)',
+        semestre: 'Semestral (35% de desconto)',
+        ano: 'Anual (50% de desconto)'
+      };
+
+      let valorFinal = tier.precoBaseMes;
+      if (periodoAtual === 'semestre') valorFinal = Math.round(tier.precoBaseMes * 0.65);
+      if (periodoAtual === 'ano') valorFinal = Math.round(tier.precoBaseMes * 0.50);
+
+      document.getElementById('modal-resumo-alunos').textContent = `${tier.label} alunos`;
+      document.getElementById('modal-resumo-periodo').textContent = periodoNomes[periodoAtual];
+      document.getElementById('modal-resumo-valor').textContent = `${valorFinal} BRL / mês`;
+      document.getElementById('modal-resumo-storage').textContent = `${tier.storage} · ${tier.academias}`;
+
+      if (modal) modal.hidden = false;
+    }
+
+    function fecharModalContrato() {
+      const modal = document.getElementById('modal-contrato-proposta');
+      if (modal) modal.hidden = true;
+    }
+
+    function gerarMinutaDocumento() {
+      const escola = document.getElementById('campo-nome-escola').value;
+      const gestor = document.getElementById('campo-gestor-responsavel').value;
+      const tier = TIERS_ALUNOS[indiceTierAtual];
+      fecharModalContrato();
+
+      const janela = window.open('', '_blank');
+      janela.document.write(`
+        <!DOCTYPE html>
+        <html lang="pt-BR">
+        <head>
+          <meta charset="UTF-8">
+          <title>Minuta de Proposta Contratual — ${escola}</title>
+          <style>
+            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 40px; color: #0f172a; line-height: 1.6; max-width: 800px; margin: 0 auto; }
+            h1 { font-size: 1.6rem; color: #0369a1; border-bottom: 2px solid #0369a1; padding-bottom: 8px; }
+            h2 { font-size: 1.2rem; margin-top: 24px; }
+            table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+            th, td { border: 1px solid #cbd5e1; padding: 10px 14px; text-align: left; }
+            th { background: #f1f5f9; }
+            .badge { display: inline-block; padding: 4px 8px; background: #e0f2fe; color: #0369a1; border-radius: 4px; font-weight: bold; font-size: 0.85rem; }
+            @media print { body { padding: 0; } button { display: none; } }
+          </style>
+        </head>
+        <body>
+          <button onclick="window.print()" style="padding: 10px 20px; background: #0369a1; color: white; border: none; border-radius: 6px; cursor: pointer; margin-bottom: 20px; font-weight: bold;">Imprimir Proposta / Salvar PDF</button>
+          <h1>LMS COMPASSO — Proposta de Adesão e Minuta de Contrato</h1>
+          <p><strong>Instituição Solicitante:</strong> ${escola}</p>
+          <p><strong>Responsável Pedagógico(a):</strong> ${gestor}</p>
+          <p><strong>Embasamento Legal:</strong> Dispensa de Licitação (Art. 75, II da Lei 14.133/2021) e Marco Legal das Startups (LC 182/2021)</p>
+          <p><strong>Conformidade Curricular:</strong> Resolução CNE/CP nº 1/2022 e Resolução CNE/CEB nº 2/2025 (Diretrizes de Equilíbrio Saudável de Telas)</p>
+
+          <h2>Especificações do Plano Contratado</h2>
+          <table>
+            <tr><th>Item</th><th>Especificação</th></tr>
+            <tr><td>Capacidade de Estudantes</td><td>Até ${tier.label} alunos matriculados</td></tr>
+            <tr><td>Armazenamento em Nuvem D1</td><td>${tier.storage}</td></tr>
+            <tr><td>Polos Escolares</td><td>${tier.academias}</td></tr>
+            <tr><td>Ciclo de Faturamento</td><td>${periodoAtual.toUpperCase()}</td></tr>
+            <tr><td>Módulos Pedagógicos</td><td>3 Eixos BNCC (Pensamento Computacional, Mundo Digital, Cultura Digital) + Laboratório 3D Python</td></tr>
+            <tr><td>Atividades Desplugadas</td><td>Acesso ilimitado e gerador de fichas em PDF (sem telas)</td></tr>
+            <tr><td>Relatórios de Governança</td><td>Exportação de Diário Escolar (CSV) com registro de habilidades</td></tr>
+          </table>
+
+          <h2>Garantias e SLA</h2>
+          <p>Disponibilidade garantida de 99,9% via infraestrutura Cloudflare. Conformidade total com a Lei Geral de Proteção de Dados (LGPD - Lei 13.709/2018) com custódia inviolável de dados de menores de idade.</p>
+          <p style="margin-top: 40px; border-top: 1px solid #94a3b8; padding-top: 10px;">Assinatura do(a) Gestor(a) Escolar: ___________________________________________</p>
+        </body>
+        </html>
+      `);
+      janela.document.close();
+    }
+
+    // Inicialização
+    document.addEventListener('DOMContentLoaded', () => {
+      recalcularPrecos();
+
+      // Atualiza botão entrar se usuário já estiver autenticado
+      try {
+        const usuario = localStorage.getItem('lms_usuario');
+        if (usuario) {
+          const btnLogin = document.getElementById('btn-login-planos');
+          if (btnLogin) {
+            btnLogin.href = '/dashboard.html';
+            btnLogin.innerHTML = '<span class="material-symbols-outlined icon-xs" aria-hidden="true">dashboard</span><span>Meu Painel</span>';
+          }
+        }
+      } catch {}
+    });
+  </script>
+</body>
+</html>

@@ -12,9 +12,14 @@
  * ============================================================================
  */
 
-// Importa assincronamente o motor de hidratação SVG e Web Component <lms-icon>
+// Importa assincronamente o motor de hidratação SVG e rolagem horizontal universal
 if (typeof window !== 'undefined') {
   import('/js/icones-universais.js').catch(() => {});
+  import('/js/menu-universal.js').then((m) => {
+    if (typeof m.habilitarRolagemHorizontalMenus === 'function') {
+      m.habilitarRolagemHorizontalMenus();
+    }
+  }).catch(() => {});
 }
 
 const MAPA_WAYFINDING_PAGINAS = {
@@ -137,6 +142,18 @@ const MAPA_WAYFINDING_PAGINAS = {
     voltar: { href: '/certificados.html', rotulo: 'Certificados' },
     avancar: { href: '/atividades.html', rotulo: 'Praticar Atividades' },
     ajuda: 'Você está em Meu Perfil. Consulte seus dados, altere sua senha e acompanhe suas medalhas conquistadas nos 3 eixos da BNCC.',
+  },
+  planos: {
+    titulo: 'Planos & Assinaturas',
+    eixo: 'Modelos BMC & Contratação Institucional',
+    secao: 'config',
+    rotuloSecao: 'Gestão Escolar',
+    icone: 'credit_card',
+    etapaAtual: 6,
+    totalEtapas: 6,
+    voltar: { href: '/dashboard.html', rotulo: 'Painel Geral' },
+    avancar: { href: '/atividades.html', rotulo: 'Atividades' },
+    ajuda: 'Você está em Planos e Assinaturas. Simule valores por quantidade de alunos, contratações públicas e adesão institucional.',
   },
 };
 
@@ -290,11 +307,26 @@ function executarBuscaGlobalWayfinding(termo) {
   window.location.href = `/atividades.html?busca=${encodeURIComponent(q)}`;
 }
 
+function atualizarBotoesTema() {
+  try {
+    const modoSalvo = localStorage.getItem('lms_tema');
+    const btnAuto = document.getElementById('btn-tema-auto');
+    const btnClaro = document.getElementById('btn-tema-claro');
+    const btnEscuro = document.getElementById('btn-tema-escuro');
+
+    if (btnAuto) btnAuto.classList.toggle('ativo', !modoSalvo);
+    if (btnClaro) btnClaro.classList.toggle('ativo', modoSalvo === 'claro');
+    if (btnEscuro) btnEscuro.classList.toggle('ativo', modoSalvo === 'escuro');
+  } catch {}
+}
+
 window.alternarSidebar = alternarSidebar;
 window.fecharSidebar = fecharSidebar;
 window.alternarPainelWayfinding = alternarPainelWayfinding;
 window.aplicarPreferenciaAcessibilidade = aplicarPreferenciaAcessibilidade;
 window.executarBuscaGlobalWayfinding = executarBuscaGlobalWayfinding;
+window.atualizarBotoesTema = atualizarBotoesTema;
+window.addEventListener('temaAlterado', () => atualizarBotoesTema());
 
 restaurarPreferenciasAcessibilidade();
 
@@ -318,6 +350,13 @@ function montarLayout(paginaAtiva) {
 
   // Define o código de cor por seção no body (Pilar 2: --cor-secao-*)
   document.body.setAttribute('data-secao', infoWf.secao || 'pensamento');
+
+  // Sincroniza tema atual no body e html
+  const temaAtual = document.documentElement.getAttribute('data-tema') ||
+    (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'escuro' : 'claro');
+  document.documentElement.setAttribute('data-tema', temaAtual);
+  document.body.setAttribute('data-tema', temaAtual);
+  document.body.classList.add('suporta-tema-sistema');
 
   // Ajuste de rota "Voltar" quando perfil é aluno (aluno não acessa /dashboard.html)
   const linkVoltar = (usuario.perfil === 'aluno' && infoWf.voltar.href === '/dashboard.html')
@@ -397,6 +436,14 @@ function montarLayout(paginaAtiva) {
       chave: 'perfil',
       secao: 'config',
       perfis: ['administrador', 'instrutor', 'aluno'],
+    },
+    {
+      href: '/planos.html',
+      icone: 'credit_card',
+      label: 'Planos & Assinaturas',
+      chave: 'planos',
+      secao: 'config',
+      perfis: ['administrador', 'instrutor'],
     },
   ];
 
@@ -666,6 +713,20 @@ function montarLayout(paginaAtiva) {
           <span>Reduzir Animações e Transições</span>
         </label>
       </div>
+      <div class="wf-tema-seletor mt-12 pt-12" style="border-top: 1px solid var(--cor-borda);">
+        <label style="font-weight: 700; margin-bottom: 6px; display: block; font-size: 0.85rem;">Tema de Exibição</label>
+        <div class="flex-linha gap-8 flex-wrap">
+          <button type="button" class="btn btn-xs btn-neutro wf-btn-tema ${!localStorage.getItem('lms_tema') ? 'ativo' : ''}" id="btn-tema-auto" onclick="definirTemaLMS('auto'); atualizarBotoesTema();" title="Seguir preferência do sistema operacional">
+            <span class="material-symbols-outlined icon-xs">devices</span> Automático
+          </button>
+          <button type="button" class="btn btn-xs btn-neutro wf-btn-tema ${localStorage.getItem('lms_tema') === 'claro' ? 'ativo' : ''}" id="btn-tema-claro" onclick="definirTemaLMS('claro'); atualizarBotoesTema();" title="Ativar tema claro">
+            <span class="material-symbols-outlined icon-xs">light_mode</span> Claro
+          </button>
+          <button type="button" class="btn btn-xs btn-neutro wf-btn-tema ${localStorage.getItem('lms_tema') === 'escuro' ? 'ativo' : ''}" id="btn-tema-escuro" onclick="definirTemaLMS('escuro'); atualizarBotoesTema();" title="Ativar tema escuro">
+            <span class="material-symbols-outlined icon-xs">dark_mode</span> Escuro
+          </button>
+        </div>
+      </div>
     </div>
 
     <div id="painel-wf-ajuda" class="wf-painel-flutuante" role="region" aria-label="Guia rápido de localização e ajuda" hidden>
@@ -725,6 +786,14 @@ function montarLayout(paginaAtiva) {
 
   if (sidebarContainer) sidebarContainer.innerHTML = sidebarHtml;
   if (topbarContainer) topbarContainer.innerHTML = topbarHtml;
+
+  if (typeof window !== 'undefined') {
+    import('/js/menu-universal.js').then((m) => {
+      if (typeof m.habilitarRolagemHorizontalMenus === 'function') {
+        m.habilitarRolagemHorizontalMenus();
+      }
+    }).catch(() => {});
+  }
 }
 
 /**
