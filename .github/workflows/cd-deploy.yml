@@ -19,7 +19,7 @@ jobs:
     timeout-minutes: 10
     environment:
       name: production
-      url: https://lms-compasso.workers.dev
+      url: https://lms.thedelacosta.workers.dev
 
     steps:
       - name: Baixar código
@@ -79,7 +79,7 @@ jobs:
           echo "Aguardando propagação da borda..."
           sleep 5
           for i in {1..5}; do
-            STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://lms-compasso.workers.dev/api/health || true)
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://lms.thedelacosta.workers.dev/api/health || true)
             if [ "$STATUS" = "200" ]; then
               echo "✔ Health check passou com sucesso! API online e operacional."
               exit 0

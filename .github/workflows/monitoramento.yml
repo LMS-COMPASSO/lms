@@ -111,7 +111,7 @@ jobs:
             --root-dir public
             --exclude '^http://localhost'
             --exclude '^http://127.0.0.1'
-            --exclude '^https://lms-compasso.workers.dev'
+            --exclude '^https://lms.thedelacosta.workers.dev'
             --exclude '/api/'
             public/**/*.html *.md docs/**/*.md
           fail: false

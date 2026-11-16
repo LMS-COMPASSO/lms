@@ -246,9 +246,6 @@ jobs:
               ? '### 🎉 Todos os Portões de Qualidade Passaram!'
               : '### ⚠️ Atenção: Falha em Portões de Qualidade Essenciais';
 
-            const prNumero = context.issue.number;
-            const previewUrl = `https://pr-${prNumero}.lms-compasso.workers.dev`;
-
             const corpo = `
             ${tituloStatus}
 
@@ -262,8 +259,9 @@ jobs:
 
             ---
 
-            ### 🌐 Ambiente de Pré-visualização (Preview):
-            - **URL do PR:** [${previewUrl}](${previewUrl}) *(Disponível enquanto o PR estiver aberto)*
+            ### 🌐 Ambiente e Pré-visualização (Cloudflare Workers):
+            - **Produção:** [https://lms.thedelacosta.workers.dev](https://lms.thedelacosta.workers.dev)
+            - **Preview do PR:** publicado automaticamente pelo check **Workers Builds: lms** acima.
 
             ### 📋 Checklist de Revisão dos Codeowners:
             - [ ] Dados e habilidades da BNCC validados pela Equipe Pedagógica
