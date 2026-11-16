@@ -87,7 +87,7 @@
   text-decoration: none;
   border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .btn-futurista-primario:hover {
@@ -108,7 +108,7 @@
   font-size: 1rem;
   text-decoration: none;
   border: 1px solid rgba(255, 255, 255, 0.15);
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
 .btn-futurista-contorno:hover {

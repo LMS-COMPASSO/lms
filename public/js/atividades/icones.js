@@ -53,7 +53,7 @@ export const DICIONARIO_ICONES = {
 
   // Funções Universais de Wayfinding e Sistema (Pilar 1)
   configuracoes: { icone: 'settings', cor: 'cor-padrao' },
-  buscar: { icone: 'search', cor: 'cor-pesquisa' },
+  buscar: { icone: 'travel_explore', cor: 'cor-pesquisa' },
   inicio: { icone: 'home', cor: 'cor-meta' },
   perfil: { icone: 'account_circle', cor: 'cor-robo' },
   ajuda: { icone: 'help', cor: 'cor-aviso' },
@@ -130,7 +130,6 @@ export const DICIONARIO_ICONES = {
   pontos: { icone: 'military_tech', cor: 'cor-estrela' },
   fim: { icone: 'sports_score', cor: 'cor-meta' },
   planejar: { icone: 'edit_note', cor: 'cor-pesquisa' },
-  buscar: { icone: 'travel_explore', cor: 'cor-pesquisa' },
   organizar: { icone: 'folder_copy', cor: 'cor-pesquisa' },
   apresentar: { icone: 'co_present', cor: 'cor-meta' },
   fora: { icone: 'delete_outline', cor: 'cor-descarte' },

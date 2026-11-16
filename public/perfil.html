@@ -111,13 +111,17 @@
       ` : '<span class="texto-suave">Email e Senha Convencionais</span>'}</p>
     `;
 
-    // Atualiza checkboxes de preferências
-    const checkContraste = document.getElementById('pref-alto-contraste');
-    const checkFonte = document.getElementById('pref-fonte-ampliada');
-    const checkMovimento = document.getElementById('pref-reduzir-movimento');
-    if (checkContraste) checkContraste.checked = document.documentElement.classList.contains('a11y-alto-contraste');
-    if (checkFonte) checkFonte.checked = document.documentElement.classList.contains('a11y-fonte-ampliada');
-    if (checkMovimento) checkMovimento.checked = document.documentElement.classList.contains('a11y-reduzir-movimento');
+    // Atualiza checkboxes de preferências e sincroniza quando D1 terminar de carregar
+    function sincronizarCheckboxesAcessibilidade() {
+      const checkContraste = document.getElementById('pref-alto-contraste');
+      const checkFonte = document.getElementById('pref-fonte-ampliada');
+      const checkMovimento = document.getElementById('pref-reduzir-movimento');
+      if (checkContraste) checkContraste.checked = document.documentElement.classList.contains('a11y-alto-contraste');
+      if (checkFonte) checkFonte.checked = document.documentElement.classList.contains('a11y-fonte-ampliada');
+      if (checkMovimento) checkMovimento.checked = document.documentElement.classList.contains('a11y-reduzir-movimento');
+    }
+    sincronizarCheckboxesAcessibilidade();
+    window.addEventListener('preferenciasA11yAtualizadas', sincronizarCheckboxesAcessibilidade);
 
     document.getElementById('form-senha').addEventListener('submit', async (e) => {
       e.preventDefault();

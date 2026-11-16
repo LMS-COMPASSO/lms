@@ -14,14 +14,18 @@ import {
   queryOne,
   authorizeUser,
   exigirPerfil,
+  parseIdPositivo,
+  escaparCelulaCsv,
   CORS_HEADERS,
 } from '../helpers_utilitarios.js';
+import { garantirTabelasGamificacao } from './gamificacao_rotas.js';
 
 /**
  * Retorna estatísticas gerais e indicadores para o dashboard.
  */
 export async function obterIndicadores(request, env, db) {
   const { payload } = await authorizeUser(request, env, db);
+  exigirPerfil(payload, ['administrador', 'instrutor']);
 
   // Contagem geral de usuários (apenas administrador visualiza)
   const usuarios = await queryOne(db, `
@@ -95,6 +99,65 @@ export async function obterIndicadores(request, env, db) {
     ? Number(((concluidasMatriculas / totalMatriculas) * 100).toFixed(2))
     : 0;
 
+  // Cálculo real do equilíbrio entre atividades desplugadas/leitura (texto/pdf) e digitais/plugadas (vídeo/link/Python 3D)
+  let aulasSql = `
+    SELECT
+      SUM(CASE WHEN a.tipo IN ('texto', 'pdf') THEN 1 ELSE 0 END) AS desplugadas,
+      SUM(CASE WHEN a.tipo IN ('video', 'link') THEN 1 ELSE 0 END) AS plugadas,
+      SUM(COALESCE(a.duracao_min, 0)) AS minutos_aulas
+    FROM aulas a
+    JOIN modulos m ON m.id = a.modulo_id
+    JOIN cursos c ON c.id = m.curso_id
+  `;
+  const aulasParams = [];
+  if (payload.perfil === 'instrutor') {
+    aulasSql += ' WHERE c.instrutor_id = ?';
+    aulasParams.push(payload.id);
+  }
+  const resumoAulas = await queryOne(db, aulasSql, aulasParams);
+
+  let cursosHorasSql = 'SELECT SUM(COALESCE(carga_horaria, 0)) AS total_horas FROM cursos';
+  const cursosHorasParams = [];
+  if (payload.perfil === 'instrutor') {
+    cursosHorasSql += ' WHERE instrutor_id = ?';
+    cursosHorasParams.push(payload.id);
+  }
+  const resumoHoras = await queryOne(db, cursosHorasSql, cursosHorasParams);
+
+  let totalSubmissoesPlugadas = 0;
+  try {
+    let subSql = 'SELECT COUNT(*) AS total FROM submissoes_python sp';
+    const subParams = [];
+    if (payload.perfil === 'instrutor') {
+      subSql += ` WHERE EXISTS (
+        SELECT 1 FROM matriculas mt
+        JOIN cursos c ON c.id = mt.curso_id
+        WHERE mt.usuario_id = sp.usuario_id AND c.instrutor_id = ?
+      )`;
+      subParams.push(payload.id);
+    }
+    const subRes = await queryOne(db, subSql, subParams);
+    totalSubmissoesPlugadas = Number(subRes?.total || 0);
+  } catch {
+    totalSubmissoesPlugadas = 0;
+  }
+
+  const qtdDesplugadas = Number(resumoAulas?.desplugadas || 0);
+  const qtdPlugadas = Number(resumoAulas?.plugadas || 0) + totalSubmissoesPlugadas;
+  const totalAtividades = qtdDesplugadas + qtdPlugadas;
+  const desplugadasPct = totalAtividades > 0 ? Math.round((qtdDesplugadas / totalAtividades) * 100) : 0;
+  const plugadasPct = totalAtividades > 0 ? 100 - desplugadasPct : 0;
+  const taxaEquilibrio = totalAtividades > 0
+    ? Math.max(0, 100 - Math.abs(desplugadasPct - 50) * 2)
+    : 0;
+  const totalHorasEstimadas = Number(resumoHoras?.total_horas || 0)
+    || Math.round(Number(resumoAulas?.minutos_aulas || 0) / 60);
+
+  let statusEquilibrio = 'Sem registros';
+  if (totalAtividades > 0) {
+    statusEquilibrio = taxaEquilibrio >= 60 ? 'Conforme' : 'Atenção ao equilíbrio';
+  }
+
   return jsonResponse({
     usuarios: payload.perfil === 'administrador' ? usuarios : undefined,
     cursos,
@@ -103,12 +166,12 @@ export async function obterIndicadores(request, env, db) {
     taxaConclusao,
     cursosPorEixoBNCC: cursosPorEixo,
     conformidadeTempoTela: {
-      status: 'Conforme',
+      status: statusEquilibrio,
       resolucao: 'Resolução CNE nº 2/2025',
-      taxaEquilibrio: 85,
-      atividadesDesplugadasPercent: 42,
-      atividadesPlugadasPercent: 58,
-      totalHorasEstimadas: 40,
+      taxaEquilibrio,
+      atividadesDesplugadasPercent: desplugadasPct,
+      atividadesPlugadasPercent: plugadasPct,
+      totalHorasEstimadas,
       recomendacao: 'Equilíbrio recomendado para a Educação Básica: alternância pedagógica com dinâmicas físicas e fichas desplugadas a cada 30 minutos de tela.',
     },
   });
@@ -119,7 +182,9 @@ export async function obterIndicadores(request, env, db) {
  */
 export async function obterLinhaDoTempo(request, env, db, url) {
   const { payload } = await authorizeUser(request, env, db);
-  const limite = Number(url.searchParams.get('limite') || 15);
+  exigirPerfil(payload, ['administrador', 'instrutor']);
+  const limiteBruto = Number.parseInt(url.searchParams.get('limite') || '15', 10);
+  const limite = Number.isFinite(limiteBruto) ? Math.min(100, Math.max(1, limiteBruto)) : 15;
 
   let sql = `SELECT tipo, data, usuario_nome, curso_titulo, extra FROM (
     SELECT 'matricula' AS tipo, mt.data_matricula AS data, u.nome AS usuario_nome, c.titulo AS curso_titulo, NULL AS extra
@@ -191,13 +256,23 @@ export async function obterRelatorioPedagogico(request, env, db, url) {
   const params = [];
 
   if (payload.perfil === 'instrutor') {
-    sql += ' AND (c.instrutor_id = ? OR dh.curso_id IS NULL)';
-    params.push(payload.id);
+    sql += ` AND (
+      c.instrutor_id = ?
+      OR (
+        dh.curso_id IS NULL
+        AND EXISTS (
+          SELECT 1 FROM matriculas mt
+          JOIN cursos cm ON cm.id = mt.curso_id
+          WHERE mt.usuario_id = dh.usuario_id AND cm.instrutor_id = ?
+        )
+      )
+    )`;
+    params.push(payload.id, payload.id);
   }
 
   if (cursoId) {
     sql += ' AND dh.curso_id = ?';
-    params.push(Number(cursoId));
+    params.push(parseIdPositivo(cursoId, 'curso_id'));
   }
 
   if (eixoFiltro) {
@@ -214,7 +289,18 @@ export async function obterRelatorioPedagogico(request, env, db, url) {
     const cabecalhoCsv = 'Aluno;Email;Curso;Eixo BNCC;Ano Escolar;Código Habilidade;Origem;Nota;Nível Atingido;Data\n';
     const linhasCsv = registros.map((r) => {
       const dataFormatada = (r.registrado_em || '').substring(0, 10);
-      return `"${r.aluno_nome}";"${r.aluno_email}";"${r.curso_titulo}";"${r.curso_eixo}";"${r.ano_escolar}";"${r.habilidade_codigo}";"${r.origem_tipo}";"${Number(r.pontuacao).toFixed(1)}";"${r.nivel_atingido}";"${dataFormatada}"`;
+      return [
+        r.aluno_nome,
+        r.aluno_email,
+        r.curso_titulo,
+        r.curso_eixo,
+        r.ano_escolar,
+        r.habilidade_codigo,
+        r.origem_tipo,
+        Number(r.pontuacao).toFixed(1),
+        r.nivel_atingido,
+        dataFormatada,
+      ].map(escaparCelulaCsv).join(';');
     }).join('\n');
 
     return new Response(cabecalhoCsv + linhasCsv, {
@@ -282,6 +368,8 @@ export async function listarSubmissoesPython(request, env, db, url) {
   const { payload } = await authorizeUser(request, env, db);
   exigirPerfil(payload, ['administrador', 'instrutor']);
 
+  await garantirTabelasGamificacao(db);
+
   const atividadeFiltro = url ? url.searchParams.get('atividade_id') : null;
   let sql = `
     SELECT sp.id, sp.usuario_id, sp.atividade_id, sp.codigo_python, sp.sucesso,
@@ -289,18 +377,23 @@ export async function listarSubmissoesPython(request, env, db, url) {
       u.nome AS aluno_nome, u.email AS aluno_email
     FROM submissoes_python sp
     JOIN usuarios u ON u.id = sp.usuario_id
+    WHERE 1 = 1
   `;
   const params = [];
   if (atividadeFiltro) {
-    sql += ' WHERE sp.atividade_id = ?';
+    sql += ' AND sp.atividade_id = ?';
     params.push(atividadeFiltro);
+  }
+  if (payload.perfil === 'instrutor') {
+    sql += ` AND EXISTS (
+      SELECT 1 FROM matriculas mt
+      JOIN cursos cm ON cm.id = mt.curso_id
+      WHERE mt.usuario_id = sp.usuario_id AND cm.instrutor_id = ?
+    )`;
+    params.push(payload.id);
   }
   sql += ' ORDER BY sp.criado_em DESC LIMIT 50';
 
-  try {
-    const submissoes = await queryAll(db, sql, params);
-    return jsonResponse({ total: submissoes.length, submissoes });
-  } catch {
-    return jsonResponse({ total: 0, submissoes: [] });
-  }
+  const submissoes = await queryAll(db, sql, params);
+  return jsonResponse({ total: submissoes.length, submissoes });
 }

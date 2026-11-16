@@ -20,14 +20,18 @@ import {
   authorizeUser,
   exigirPerfil,
   ErroHttp,
+  parseIdPositivo,
+  recalcularConclusaoMatricula,
 } from '../helpers_utilitarios.js';
+
+const TIPOS_QUESTAO_VALIDOS = ['multipla_escolha', 'verdadeiro_falso', 'dissertativa'];
 
 /**
  * Retorna as avaliações associadas a um módulo.
  */
 export async function listarAvaliacoesDoModulo(request, env, db, moduloId) {
   await authorizeUser(request, env, db);
-  const id = Number(moduloId);
+  const id = parseIdPositivo(moduloId, 'moduloId');
   const avaliacoes = await queryAll(
     db,
     'SELECT * FROM avaliacoes WHERE modulo_id = ?',
@@ -42,7 +46,7 @@ export async function listarAvaliacoesDoModulo(request, env, db, moduloId) {
  */
 export async function obterAvaliacao(request, env, db, avaliacaoId) {
   const { payload } = await authorizeUser(request, env, db);
-  const id = Number(avaliacaoId);
+  const id = parseIdPositivo(avaliacaoId, 'avaliacaoId');
 
   const avaliacao = await queryOne(db, 'SELECT * FROM avaliacoes WHERE id = ?', [id]);
   if (!avaliacao) {
@@ -76,7 +80,7 @@ export async function criarAvaliacao(request, env, db, moduloId) {
   const { payload } = await authorizeUser(request, env, db);
   exigirPerfil(payload, ['administrador', 'instrutor']);
 
-  const id = Number(moduloId);
+  const id = parseIdPositivo(moduloId, 'moduloId');
   const modulo = await queryOne(
     db,
     'SELECT m.id, c.instrutor_id FROM modulos m JOIN cursos c ON m.curso_id = c.id WHERE m.id = ?',
@@ -96,6 +100,20 @@ export async function criarAvaliacao(request, env, db, moduloId) {
     return jsonErro('Título da avaliação é obrigatório.', 400);
   }
 
+  const questoes = Array.isArray(body.questoes) ? body.questoes : [];
+  for (const questao of questoes) {
+    const tipoQ = String(questao?.tipo || 'multipla_escolha');
+    if (!TIPOS_QUESTAO_VALIDOS.includes(tipoQ)) {
+      return jsonErro('Tipo de questão inválido. Use "multipla_escolha", "verdadeiro_falso" ou "dissertativa".', 400);
+    }
+    if (!String(questao?.enunciado || '').trim()) {
+      return jsonErro('Todas as questões devem possuir enunciado.', 400);
+    }
+  }
+
+  const notaMinima = Math.min(10, Math.max(0, Number.isFinite(Number(body.nota_minima)) ? Number(body.nota_minima) : 6));
+  const tentativasPermitidas = Math.max(1, Number.parseInt(body.tentativas_permitidas, 10) || 3);
+
   const assessment = await db.prepare(`
     INSERT INTO avaliacoes (modulo_id, titulo, descricao, nota_minima, tentativas_permitidas)
     VALUES (?, ?, ?, ?, ?)
@@ -103,12 +121,11 @@ export async function criarAvaliacao(request, env, db, moduloId) {
     id,
     titulo,
     body.descricao || null,
-    Number(body.nota_minima || 6),
-    Number(body.tentativas_permitidas || 3),
+    notaMinima,
+    tentativasPermitidas,
   ).run();
 
   const avaliacaoId = assessment.meta.last_row_id;
-  const questoes = Array.isArray(body.questoes) ? body.questoes : [];
   const insertsAlternativas = [];
 
   for (const [indice, questao] of questoes.entries()) {
@@ -150,7 +167,7 @@ export async function responderAvaliacao(request, env, db, avaliacaoId) {
   const { payload } = await authorizeUser(request, env, db);
   exigirPerfil(payload, ['aluno']);
 
-  const id = Number(avaliacaoId);
+  const id = parseIdPositivo(avaliacaoId, 'avaliacaoId');
   const body = await readJsonBody(request);
 
   // Localiza a avaliação e o curso correspondente
@@ -218,9 +235,16 @@ export async function responderAvaliacao(request, env, db, avaliacaoId) {
     JSON.stringify(respostas),
   ).run();
 
+  let statusCurso = null;
+  if (aprovado) {
+    const resumo = await recalcularConclusaoMatricula(db, matricula.id, avaliacao.curso_id);
+    statusCurso = resumo.status;
+  }
+
   return jsonResponse({
     nota: notaCalculada,
     aprovado,
+    status_matricula: statusCurso,
     mensagem: aprovado ? 'Parabéns, você foi aprovado na avaliação!' : 'Você não atingiu a nota mínima. Tente novamente.',
   });
 }
@@ -232,7 +256,7 @@ export async function excluirAvaliacao(request, env, db, avaliacaoId) {
   const { payload } = await authorizeUser(request, env, db);
   exigirPerfil(payload, ['administrador', 'instrutor']);
 
-  const id = Number(avaliacaoId);
+  const id = parseIdPositivo(avaliacaoId, 'avaliacaoId');
   const avaliacao = await queryOne(
     db,
     'SELECT av.id, c.instrutor_id FROM avaliacoes av JOIN modulos m ON av.modulo_id = m.id JOIN cursos c ON m.curso_id = c.id WHERE av.id = ?',

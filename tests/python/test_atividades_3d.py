@@ -196,7 +196,9 @@ for i in range(3):
 """
         exec(codigo, {"robo": robo, "range": range})
         self.assertTrue(robo.chegou_meta, "Robô deve alcançar o portal (M).")
-        self.assertEqual(robo.itens_coletados, 3, "Robô deve coletar todos os 3 cristais.")
+        self.assertEqual(
+            robo.itens_coletados, 3, "Robô deve coletar todos os 3 cristais."
+        )
 
     def test_04_funcoes_decomposicao(self):
         grade = ["R.I##", "##.I#", "###.M"]
@@ -220,7 +222,9 @@ avancar_e_coletar(1)
 """
         exec(codigo, {"robo": robo, "range": range})
         self.assertTrue(robo.chegou_meta, "Robô deve alcançar o portal (M).")
-        self.assertEqual(robo.itens_coletados, 2, "Robô deve coletar todos os cristais.")
+        self.assertEqual(
+            robo.itens_coletados, 2, "Robô deve coletar todos os cristais."
+        )
 
     def test_05_listas_ordenacao_bubble_sort(self):
         lista = ListaTorres([4, 2, 5, 1, 3])
@@ -267,4 +271,3 @@ resolver_hanoi(3, 'A', 'C', 'B')
 
 if __name__ == "__main__":
     unittest.main()
-

@@ -21,7 +21,10 @@ import {
   authorizeUser,
   exigirPerfil,
   ErroHttp,
+  parseIdPositivo,
 } from '../helpers_utilitarios.js';
+
+const EIXOS_BNCC_VALIDOS = ['Pensamento Computacional', 'Mundo Digital', 'Cultura Digital'];
 
 /**
  * Lista cursos de acordo com o perfil do usuário logado.
@@ -61,7 +64,7 @@ export async function listarCursos(request, env, db, url) {
     params.push(payload.id);
   } else if (instrutorId) {
     sql += ' AND c.instrutor_id = ?';
-    params.push(Number(instrutorId));
+    params.push(parseIdPositivo(instrutorId, 'instrutor_id'));
   }
 
   // Filtros pedagógicos da BNCC
@@ -99,9 +102,12 @@ export async function criarCurso(request, env, db) {
   if (!titulo || !eixo || !ano) {
     return jsonErro('Título, eixo BNCC e ano escolar são obrigatórios.', 400);
   }
+  if (!EIXOS_BNCC_VALIDOS.includes(eixo)) {
+    return jsonErro('Eixo BNCC inválido. Use "Pensamento Computacional", "Mundo Digital" ou "Cultura Digital".', 400);
+  }
 
   const instrutorId = payload.perfil === 'administrador' && body.instrutor_id
-    ? Number(body.instrutor_id)
+    ? parseIdPositivo(body.instrutor_id, 'instrutor_id')
     : payload.id;
 
   const resultado = await db.prepare(`
@@ -129,7 +135,7 @@ export async function criarCurso(request, env, db) {
  */
 export async function obterCurso(request, env, db, cursoId) {
   const { payload } = await authorizeUser(request, env, db);
-  const id = Number(cursoId);
+  const id = parseIdPositivo(cursoId, 'cursoId');
 
   const curso = await queryOne(
     db,
@@ -185,7 +191,7 @@ export async function atualizarCurso(request, env, db, cursoId) {
   const { payload } = await authorizeUser(request, env, db);
   exigirPerfil(payload, ['administrador', 'instrutor']);
 
-  const id = Number(cursoId);
+  const id = parseIdPositivo(cursoId, 'cursoId');
   const cursoExistente = await queryOne(db, 'SELECT id, instrutor_id FROM cursos WHERE id = ?', [id]);
   if (!cursoExistente) {
     return jsonErro('Curso não encontrado.', 404);
@@ -199,12 +205,34 @@ export async function atualizarCurso(request, env, db, cursoId) {
   const campos = [];
   const params = [];
 
-  if (body.titulo !== undefined) { campos.push('titulo = ?'); params.push(String(body.titulo)); }
+  if (body.titulo !== undefined) {
+    const tituloLimpo = String(body.titulo).trim();
+    if (!tituloLimpo) return jsonErro('Título do curso não pode ser vazio.', 400);
+    campos.push('titulo = ?');
+    params.push(tituloLimpo);
+  }
   if (body.descricao !== undefined) { campos.push('descricao = ?'); params.push(String(body.descricao)); }
-  if (body.eixo_bncc !== undefined) { campos.push('eixo_bncc = ?'); params.push(String(body.eixo_bncc)); }
-  if (body.ano_escolar !== undefined) { campos.push('ano_escolar = ?'); params.push(String(body.ano_escolar)); }
-  if (body.carga_horaria !== undefined) { campos.push('carga_horaria = ?'); params.push(Number(body.carga_horaria)); }
-  if (body.capa_url !== undefined) { campos.push('capa_url = ?'); params.push(String(body.capa_url)); }
+  if (body.eixo_bncc !== undefined) {
+    const eixoLimpo = String(body.eixo_bncc).trim();
+    if (!EIXOS_BNCC_VALIDOS.includes(eixoLimpo)) {
+      return jsonErro('Eixo BNCC inválido. Use "Pensamento Computacional", "Mundo Digital" ou "Cultura Digital".', 400);
+    }
+    campos.push('eixo_bncc = ?');
+    params.push(eixoLimpo);
+  }
+  if (body.ano_escolar !== undefined) {
+    const anoLimpo = String(body.ano_escolar).trim();
+    if (!anoLimpo) return jsonErro('Ano escolar não pode ser vazio.', 400);
+    campos.push('ano_escolar = ?');
+    params.push(anoLimpo);
+  }
+  if (body.carga_horaria !== undefined) {
+    const carga = Number(body.carga_horaria);
+    if (!Number.isFinite(carga) || carga < 0) return jsonErro('Carga horária inválida.', 400);
+    campos.push('carga_horaria = ?');
+    params.push(Math.round(carga));
+  }
+  if (body.capa_url !== undefined) { campos.push('capa_url = ?'); params.push(body.capa_url ? String(body.capa_url) : null); }
 
   if (campos.length === 0) {
     return jsonErro('Nenhum campo para atualizar.', 400);
@@ -224,7 +252,7 @@ export async function alterarStatusCurso(request, env, db, cursoId) {
   const { payload } = await authorizeUser(request, env, db);
   exigirPerfil(payload, ['administrador', 'instrutor']);
 
-  const id = Number(cursoId);
+  const id = parseIdPositivo(cursoId, 'cursoId');
   const cursoExistente = await queryOne(db, 'SELECT id, instrutor_id FROM cursos WHERE id = ?', [id]);
   if (!cursoExistente) {
     return jsonErro('Curso não encontrado.', 404);
@@ -251,7 +279,7 @@ export async function excluirCurso(request, env, db, cursoId) {
   const { payload } = await authorizeUser(request, env, db);
   exigirPerfil(payload, ['administrador', 'instrutor']);
 
-  const id = Number(cursoId);
+  const id = parseIdPositivo(cursoId, 'cursoId');
   const cursoExistente = await queryOne(db, 'SELECT id, instrutor_id FROM cursos WHERE id = ?', [id]);
   if (!cursoExistente) {
     return jsonErro('Curso não encontrado.', 404);

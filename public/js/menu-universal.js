@@ -14,12 +14,8 @@ export function inicializarMenuUniversal() {
     const href = link.getAttribute('href');
     if (!href) return;
 
-    let ativo = false;
-    if (href === '/' && (caminhoAtual === '/' || caminhoAtual === '/index.html' || caminhoAtual === '')) {
-      ativo = true;
-    } else if (href !== '/' && caminhoAtual.includes(href.replace('.html', ''))) {
-      ativo = true;
-    }
+    const ativo = (href === '/' && (caminhoAtual === '/' || caminhoAtual === '/index.html' || caminhoAtual === ''))
+      || (href !== '/' && caminhoAtual.includes(href.replace('.html', '')));
 
     if (ativo) {
       link.setAttribute('aria-current', 'page');

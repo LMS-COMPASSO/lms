@@ -77,7 +77,11 @@ export function criarControladorCena3D(container, cena3dConfig, { reduzirMovimen
         barra.className = 'py3d-2d-torre';
         if (estado.destaque?.includes(idx)) barra.classList.add('destaque');
         barra.style.height = `${v * 28}px`;
-        barra.innerHTML = `<span>${v}</span><small>[${idx}]</small>`;
+        const spanValor = document.createElement('span');
+        spanValor.textContent = String(v);
+        const smallIdx = document.createElement('small');
+        smallIdx.textContent = `[${idx}]`;
+        barra.replaceChildren(spanValor, smallIdx);
         fila.appendChild(barra);
       });
       camada2D.appendChild(fila);
@@ -483,11 +487,11 @@ export function criarControladorCena3D(container, cena3dConfig, { reduzirMovimen
       camada2D.style.display = 'grid';
       renderizarFallback2D();
     } else {
-      inicializarCena3D();
+      void inicializarCena3D();
     }
   }
 
-  inicializarCena3D();
+  void inicializarCena3D();
 
   return {
     reproduzirEventos,

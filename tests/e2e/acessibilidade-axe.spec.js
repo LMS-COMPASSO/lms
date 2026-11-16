@@ -9,6 +9,8 @@ const ROTAS_PUBLICAS = [
   { url: '/cultura-digital.html', nome: 'Eixo 3: Cultura Digital' },
   { url: '/login.html', nome: 'Login' },
   { url: '/registrar.html', nome: 'Cadastro' },
+  { url: '/planos.html', nome: 'Planos e Contratos' },
+  { url: '/usabilidade-piloto.html', nome: 'Piloto SUS' },
   { url: '/404.html', nome: 'Página de Erro 404' },
 ];
 

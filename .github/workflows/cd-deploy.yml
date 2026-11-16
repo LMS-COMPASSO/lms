@@ -23,12 +23,12 @@ jobs:
 
     steps:
       - name: Baixar código
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           fetch-depth: 2
 
       - name: Configurar Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 22
           cache: npm
@@ -40,8 +40,10 @@ jobs:
         run: npm test
 
       - name: Validar presença das credenciais Cloudflare
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: |
-          if [ -z "${{ secrets.CLOUDFLARE_API_TOKEN }}" ]; then
+          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
             echo "::error::O segredo CLOUDFLARE_API_TOKEN está vazio ou não configurado nas Secrets do repositório/ambiente no GitHub!"
             echo "::notice::Configure em: GitHub > Settings > Secrets and variables > Actions > New repository secret (CLOUDFLARE_API_TOKEN)"
             exit 1
@@ -59,14 +61,14 @@ jobs:
 
       - name: Aplicar migrações remotas no Cloudflare D1
         if: steps.check-d1.outputs.schema_alterado == 'true'
-        uses: cloudflare/wrangler-action@v3
+        uses: cloudflare/wrangler-action@9acf94ace14e7dc412b076f2c5c20b8ce93c79cd # v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: d1 execute lms_prod --remote --file=./d1/schema.sql
 
       - name: Publicar Worker e Ativos Estáticos
-        uses: cloudflare/wrangler-action@v3
+        uses: cloudflare/wrangler-action@9acf94ace14e7dc412b076f2c5c20b8ce93c79cd # v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

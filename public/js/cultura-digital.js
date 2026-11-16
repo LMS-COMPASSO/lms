@@ -328,8 +328,8 @@ function inicializarTestadorSenha() {
 
     const tem8Char = senha.length >= 8;
     const temMaiusc = /[A-Z]/.test(senha);
-    const temNum = /[0-9]/.test(senha);
-    const temSimb = /[^A-Za-z0-9]/.test(senha);
+    const temNum = /\d/.test(senha);
+    const temSimb = /[^A-Za-z\d]/.test(senha);
 
     if (reqTam) reqTam.classList.toggle("atendido", tem8Char);
     if (reqMaiusc) reqMaiusc.classList.toggle("atendido", temMaiusc);

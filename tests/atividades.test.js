@@ -508,6 +508,25 @@ test('Pilar 2: Pistas Visuais (tokens --cor-secao-*, breadcrumbs aria-label="Voc
   assert.ok(atividadesRaw.includes('mapaOrientacaoDaTrilha'), 'Falta mapaOrientacaoDaTrilha em atividades.js');
 });
 
+test('interpretador fallback de Python 3D aceita indentação de 2 espaços, booleanos Python e bloqueia loop infinito sem eval', () => {
+  const cena = { modo: 'grade', grade: ['R.I.M'], direcaoInicial: 'leste' };
+  const codigo2Espacos = [
+    'for passo in range(4):',
+    '  if robo.esta_livre() and not robo.frente_porta():',
+    '    robo.mover()',
+    '  if robo.tem_item():',
+    '    robo.coletar()',
+  ].join('\n');
+
+  const ok2Esp = executarPythonPedagogicoFallback(codigo2Espacos, cena);
+  assert.equal(ok2Esp.ok, true, ok2Esp.erro);
+  assert.equal(ok2Esp.resumo.sucesso, true, ok2Esp.resumo?.motivo);
+
+  const loopInfinito = executarPythonPedagogicoFallback('while True:\n  x = 1', cena);
+  assert.equal(loopInfinito.ok, false);
+  assert.match(loopInfinito.erro, /limite máximo de passos/i);
+});
+
 
 
 

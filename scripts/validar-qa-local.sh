@@ -37,7 +37,7 @@ if command -v python3 >/dev/null 2>&1; then
 fi
 
 echo "☁️ [4/5] Validando compilação do Cloudflare Worker (dry-run)..."
-npx wrangler deploy --dry-run --outdir .wrangler/dryrun > /dev/null
+./node_modules/.bin/wrangler deploy --dry-run --outdir .wrangler/dryrun > /dev/null
 echo "✔ Cloudflare Worker e ativos estáticos compilam perfeitamente!"
 
 echo "🔐 [5/5] Varredura estática de segredos e credenciais expostas..."

@@ -388,7 +388,7 @@ function inicializarCicloCPU() {
     if (pulsoEl) {
       pulsoEl.classList.remove('animando');
       if (dadosPasso.pulso) {
-        void pulsoEl.offsetWidth; // Força repaint
+        pulsoEl.getBoundingClientRect(); // Força repaint
         pulsoEl.classList.add('animando');
       }
     }

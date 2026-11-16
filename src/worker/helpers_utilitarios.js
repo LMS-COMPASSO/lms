@@ -29,7 +29,7 @@ export const CORS_HEADERS = {
  * Protegem contra XSS, clickjacking, MIME-sniffing, vazamento de referrer e restringe APIs do navegador.
  */
 export const SECURITY_HEADERS = {
-  'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://accounts.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; connect-src 'self' https://accounts.google.com; frame-src 'self' https://accounts.google.com; frame-ancestors 'self'; object-src 'none'; base-uri 'self'; form-action 'self' https:;",
+  'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://accounts.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; connect-src 'self' https://cdn.jsdelivr.net https://accounts.google.com; worker-src 'self' blob:; frame-src 'self' https://accounts.google.com; frame-ancestors 'self'; object-src 'none'; base-uri 'self'; form-action 'self' https:;",
   'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload',
   'X-Content-Type-Options': 'nosniff',
   'X-Frame-Options': 'SAMEORIGIN',
@@ -233,6 +233,21 @@ export async function authorizeUser(request, env, db) {
 }
 
 /**
+ * Tenta autenticar opcionalmente uma requisição sem lançar erro caso o token esteja ausente ou inválido.
+ * Útil em rotas híbridas (públicas com dados extras para usuários autenticados).
+ */
+export async function obterPayloadOpcional(request, env, db) {
+  try {
+    if (!getAuthToken(request) || !env?.JWT_SECRET) {
+      return null;
+    }
+    return await authorizeUser(request, env, db);
+  } catch {
+    return null;
+  }
+}
+
+/**
  * Garante a existência do usuário administrador padrão do sistema ao iniciar o backend.
  * Caso o banco seja recém-criado, insere admin@lms-bncc.edu.br. A senha inicial vem do
  * Secret opcional ADMIN_INITIAL_PASSWORD; sem ele, usa Admin@12345 (apenas para demonstração,
@@ -249,4 +264,124 @@ export async function ensureDefaultAdmin(db, env = {}) {
       "INSERT INTO usuarios (nome, email, senha_hash, perfil, ativo) VALUES (?, ?, ?, 'administrador', 1)",
     ).bind('Administrador do Sistema', 'admin@lms-bncc.edu.br', senhaHash).run();
   }
+}
+
+const bancosComAdminVerificado = new WeakSet();
+
+/**
+ * Executa ensureDefaultAdmin no máximo uma vez por instância D1 neste isolate do Worker,
+ * evitando consultas redundantes em todas as chamadas de API.
+ */
+export async function garantirAdminPadraoUmaVez(db, env = {}) {
+  if (!db || bancosComAdminVerificado.has(db)) {
+    return;
+  }
+  await ensureDefaultAdmin(db, env);
+  bancosComAdminVerificado.add(db);
+}
+
+/**
+ * Converte e valida um identificador numérico inteiro positivo de rota ou payload.
+ */
+export function parseIdPositivo(valor, nomeCampo = 'ID') {
+  const texto = String(valor ?? '').trim();
+  if (!/^\d+$/.test(texto)) {
+    throw new ErroHttp(`${nomeCampo} inválido.`, 400);
+  }
+  const numero = Number(texto);
+  if (!Number.isSafeInteger(numero) || numero <= 0) {
+    throw new ErroHttp(`${nomeCampo} inválido.`, 400);
+  }
+  return numero;
+}
+
+/**
+ * Escapa caracteres especiais de HTML para renderização segura em respostas SSR do Worker.
+ */
+export function escaparHtml(texto) {
+  const mapa = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;',
+  };
+  return String(texto ?? '').replace(/[&<>"']/g, (caractere) => mapa[caractere]);
+}
+
+/**
+ * Formata uma célula CSV escapando aspas duplas e neutralizando CSV Formula Injection.
+ */
+export function escaparCelulaCsv(valor) {
+  let texto = String(valor ?? '');
+  if (/^[=+\-@\t\r]/.test(texto)) {
+    texto = `'${texto}`;
+  }
+  return `"${texto.replaceAll('"', '""')}"`;
+}
+
+/**
+ * Recalcula progresso percentual e status de conclusão da matrícula considerando
+ * 100% das aulas concluídas e aprovação em todas as avaliações do curso (se houver).
+ */
+export async function recalcularConclusaoMatricula(db, matriculaId, cursoId) {
+  const totalAulasRegistro = await queryOne(
+    db,
+    'SELECT COUNT(*) AS total FROM aulas a JOIN modulos m ON m.id = a.modulo_id WHERE m.curso_id = ?',
+    [cursoId],
+  );
+  const concluidasRegistro = await queryOne(
+    db,
+    'SELECT COUNT(*) AS total FROM progresso_aulas WHERE matricula_id = ? AND concluida = 1',
+    [matriculaId],
+  );
+  const totalAvaliacoesRegistro = await queryOne(
+    db,
+    'SELECT COUNT(*) AS total FROM avaliacoes av JOIN modulos m ON m.id = av.modulo_id WHERE m.curso_id = ?',
+    [cursoId],
+  );
+  const avaliacoesAprovadasRegistro = await queryOne(
+    db,
+    'SELECT COUNT(DISTINCT avaliacao_id) AS total FROM tentativas_avaliacao WHERE matricula_id = ? AND aprovado = 1',
+    [matriculaId],
+  );
+
+  const totalAulas = Number(totalAulasRegistro?.total || 0);
+  const totalConcluidas = Number(concluidasRegistro?.total || 0);
+  const totalAvaliacoes = Number(totalAvaliacoesRegistro?.total || 0);
+  const totalAprovadas = Number(avaliacoesAprovadasRegistro?.total || 0);
+
+  const percentual = totalAulas > 0 ? Math.round((totalConcluidas / totalAulas) * 10000) / 100 : 0;
+  const aulasCompletas = totalAulas > 0 && totalConcluidas >= totalAulas;
+  const avaliacoesCompletas = totalAvaliacoes === 0 || totalAprovadas >= totalAvaliacoes;
+  const status = aulasCompletas && avaliacoesCompletas ? 'concluida' : 'ativa';
+
+  await db.prepare(`
+    UPDATE matriculas
+    SET progresso_percentual = ?, status = ?, data_conclusao = ?
+    WHERE id = ?
+  `).bind(
+    percentual,
+    status,
+    status === 'concluida' ? new Date().toISOString() : null,
+    matriculaId,
+  ).run();
+
+  return { percentual, status, avaliacoesPendentes: Math.max(0, totalAvaliacoes - totalAprovadas) };
+}
+
+/**
+ * Valida formato básico de endereço de email sem risco de backtracking linear.
+ */
+export function validarFormatoEmail(email) {
+  if (typeof email !== 'string' || email.length < 3 || email.length > 254 || /\s/.test(email)) {
+    return false;
+  }
+  const arroba = email.indexOf('@');
+  if (arroba <= 0 || arroba !== email.lastIndexOf('@') || arroba === email.length - 1) {
+    return false;
+  }
+  const dominio = email.slice(arroba + 1);
+  const ponto = dominio.indexOf('.');
+  return ponto > 0 && !dominio.startsWith('.') && !dominio.endsWith('.') && !dominio.includes('..');
 }

@@ -22,6 +22,8 @@ import {
   getUserProfile,
   authorizeUser,
   exigirPerfil,
+  parseIdPositivo,
+  validarFormatoEmail,
 } from '../helpers_utilitarios.js';
 
 /**
@@ -64,7 +66,7 @@ export async function listarUsuarios(request, env, db, url) {
  */
 export async function obterUsuarioPorId(request, env, db, targetId) {
   const { payload } = await authorizeUser(request, env, db);
-  const id = Number(targetId);
+  const id = parseIdPositivo(targetId, 'ID do usuário');
 
   if (payload.perfil !== 'administrador' && payload.id !== id) {
     return jsonErro('Acesso negado.', 403);
@@ -93,6 +95,9 @@ export async function criarUsuario(request, env, db) {
   if (!nome || !email || !senha || !['administrador', 'instrutor', 'aluno'].includes(perfil)) {
     return jsonErro('Nome, email, senha e perfil válido são obrigatórios.', 400);
   }
+  if (!validarFormatoEmail(email)) {
+    return jsonErro('Email inválido.', 400);
+  }
 
   const usuarioExistente = await getUserByEmail(db, email);
   if (usuarioExistente) {
@@ -119,13 +124,23 @@ export async function atualizarUsuario(request, env, db, targetId) {
   const { payload } = await authorizeUser(request, env, db);
   exigirPerfil(payload, ['administrador']);
 
-  const id = Number(targetId);
+  const id = parseIdPositivo(targetId, 'ID do usuário');
   const body = await readJsonBody(request);
   const campos = [];
   const params = [];
 
-  if (body.nome !== undefined) { campos.push('nome = ?'); params.push(String(body.nome)); }
-  if (body.email !== undefined) { campos.push('email = ?'); params.push(String(body.email).toLowerCase()); }
+  if (body.nome !== undefined) {
+    const nomeLimpo = String(body.nome).trim();
+    if (!nomeLimpo) return jsonErro('Nome não pode ser vazio.', 400);
+    campos.push('nome = ?');
+    params.push(nomeLimpo);
+  }
+  if (body.email !== undefined) {
+    const emailLimpo = String(body.email).trim().toLowerCase();
+    if (!validarFormatoEmail(emailLimpo)) return jsonErro('Email inválido.', 400);
+    campos.push('email = ?');
+    params.push(emailLimpo);
+  }
   if (body.perfil !== undefined) {
     if (!['administrador', 'instrutor', 'aluno'].includes(body.perfil)) {
       return jsonErro('Perfil inválido. Deve ser administrador, instrutor ou aluno.', 400);
@@ -153,7 +168,7 @@ export async function desativarUsuario(request, env, db, targetId) {
   const { payload } = await authorizeUser(request, env, db);
   exigirPerfil(payload, ['administrador']);
 
-  const id = Number(targetId);
+  const id = parseIdPositivo(targetId, 'ID do usuário');
   await db.prepare('UPDATE usuarios SET ativo = 0, atualizado_em = CURRENT_TIMESTAMP WHERE id = ?').bind(id).run();
   return jsonResponse({ mensagem: 'Usuário desativado com sucesso.' });
 }
@@ -165,7 +180,7 @@ export async function redefinirSenhaUsuario(request, env, db, targetId) {
   const { payload } = await authorizeUser(request, env, db);
   exigirPerfil(payload, ['administrador']);
 
-  const id = Number(targetId);
+  const id = parseIdPositivo(targetId, 'ID do usuário');
   const body = await readJsonBody(request);
   const novaSenha = String(body.novaSenha || '');
 
@@ -208,7 +223,10 @@ export async function salvarPreferencias(request, env, db) {
   const altoContraste = body.alto_contraste ? 1 : 0;
   const fonteAmpliada = body.fonte_ampliada ? 1 : 0;
   const reduzirMovimento = body.reduzir_movimento ? 1 : 0;
-  const tema = String(body.tema || 'claro');
+  const tema = String(body.tema || 'claro').trim();
+  if (!['claro', 'escuro', 'sistema'].includes(tema)) {
+    return jsonErro('Tema inválido. Use "claro", "escuro" ou "sistema".', 400);
+  }
 
   await db.prepare(`
     INSERT INTO preferencias_usuario (usuario_id, alto_contraste, fonte_ampliada, reduzir_movimento, tema, atualizado_em)

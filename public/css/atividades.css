@@ -162,7 +162,7 @@
   font-weight: 700;
   font-size: 1rem;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease, box-shadow 0.2s ease;
   cursor: pointer;
   white-space: normal;
   line-height: 1.3;
@@ -190,7 +190,7 @@
   text-decoration: none;
   font-weight: 600;
   font-size: 0.92rem;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
   cursor: pointer;
   white-space: normal;
   line-height: 1.3;
@@ -395,7 +395,7 @@
 }
 
 .atv-input-busca:focus {
-  outline: none;
+  outline: 2px solid transparent;
   border-color: var(--pub-azul-700);
   box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
 }
@@ -451,7 +451,7 @@
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
-  transition: all 0.15s ease;
+  transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .atv-pill-tab:hover {
@@ -501,7 +501,7 @@
   font-size: 0.86rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
 }
 
 .atv-btn-filtros-gaveta:hover,
@@ -576,7 +576,7 @@
   font-size: 0.84rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
 }
 
 .atv-chip-filtro:hover {
@@ -603,7 +603,7 @@
 }
 
 .atv-select-habilidade:focus {
-  outline: none;
+  outline: 2px solid transparent;
   border-color: var(--pub-azul-700);
   box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
 }
@@ -890,7 +890,7 @@
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
 .atv-fase-tab small {
@@ -938,7 +938,7 @@
   font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
 .btn-hud-tool:hover {
@@ -1049,7 +1049,7 @@
   position: relative;
   aspect-ratio: 1;
   user-select: none;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
 }
 
 .atv-celula-coord {
@@ -1213,7 +1213,7 @@
   color: #ffffff;
   cursor: pointer;
   position: relative;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
 }
 
 .atv-fita-comando .cmd-num {
@@ -1298,7 +1298,7 @@
   border: 1px solid rgba(255, 255, 255, 0.12);
   color: #ffffff;
   cursor: pointer;
-  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: background-color 0.15s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.15s ease, transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .atv-btn-direcao .simbolo-seta {
@@ -1839,7 +1839,7 @@
   font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
 .atv-btn-som:hover {
@@ -1891,7 +1891,7 @@
    ============================================================================ */
 
 .atv-icone-simbolo {
-  font-family: 'Material Symbols Outlined';
+  font-family: 'Material Symbols Outlined', sans-serif;
   font-weight: normal;
   font-style: normal;
   display: inline-flex;
@@ -1932,7 +1932,7 @@
 .cor-jogo { color: #7c3aed; }
 .cor-pesquisa { color: #4f46e5; }
 .cor-geometria { color: #0284c7; }
-.cor-labirinto { color: #059669; }
+.cor-labirinto { color: #047857; }
 .cor-estrela { color: #d97706; }
 .cor-descarte, .cor-erro { color: #dc2626; }
 .cor-item { color: #d97706; }

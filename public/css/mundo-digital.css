@@ -87,7 +87,7 @@ body.pagina-mundo-digital {
   text-decoration: none;
   border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
   cursor: pointer;
 }
 
@@ -109,7 +109,7 @@ body.pagina-mundo-digital {
   font-size: 1rem;
   text-decoration: none;
   border: 1px solid rgba(255, 255, 255, 0.16);
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
   cursor: pointer;
 }
 
@@ -234,7 +234,7 @@ body.pagina-mundo-digital {
   border-radius: 50%;
   background: #64748b;
   display: inline-block;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s ease;
 }
 
 .md-status-post.ligado .md-led-status {
@@ -261,7 +261,7 @@ body.pagina-mundo-digital {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
 .btn-vista:hover {
@@ -322,7 +322,7 @@ body.pagina-mundo-digital {
   position: absolute;
   cursor: pointer;
   border-radius: 8px;
-  transition: all 0.25s ease;
+  transition: transform 0.25s ease, outline-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
   transform-style: preserve-3d;
 }
 
@@ -711,7 +711,7 @@ button.md-slot-componente {
   border: 1px solid rgba(255, 255, 255, 0.06);
   font-size: 0.9rem;
   color: #cbd5e1;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
   min-width: 0;
   box-sizing: border-box;
 }
@@ -757,7 +757,7 @@ button.md-slot-componente {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease;
 }
 
 .btn-acao-montar:hover:not(:disabled) {
@@ -779,7 +779,7 @@ button.md-slot-componente {
   font-weight: 600;
   font-size: 0.85rem;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .btn-reset-montar:hover {
@@ -808,7 +808,7 @@ button.md-slot-componente {
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.1);
   margin-bottom: 16px;
-  transition: all 0.3s ease;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
 }
 
 .md-cpu-bloco.ativo {
@@ -876,7 +876,7 @@ button.md-slot-componente {
   border-radius: 12px;
   background: rgba(15, 23, 42, 0.6);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  transition: all 0.25s ease;
+  transition: border-color 0.25s ease, background-color 0.25s ease;
 }
 
 .md-passo-ciclo.ativo {
@@ -954,7 +954,7 @@ button.md-slot-componente {
   place-items: center;
   margin-bottom: 10px;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
-  transition: all 0.3s ease;
+  transition: border-color 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
 }
 
 .md-no-icone .material-symbols-outlined {

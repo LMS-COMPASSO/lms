@@ -10,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
 <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/publico.css">
 <style>
   .sus-form-card {
     background: var(--cor-cartao, #ffffff);
@@ -219,7 +220,7 @@
         <span class="texto-suave texto-pequeno">Benchmark SUS Médio Mundial: 68.0 pontos</span>
       </div>
 
-      <div class="tabela-scroll">
+      <div class="tabela-scroll" tabindex="0" role="region" aria-label="Tabulação das respostas do teste de usabilidade SUS">
         <table aria-label="Tabulação das respostas do teste de usabilidade SUS">
           <thead>
             <tr>
@@ -362,6 +363,8 @@
       { nome: 'Profa. Renata Rocha', tipo: 'professor', turma: 'IFMA Grajaú - Coordenação Pedagógica', tempo: '105s', tarefas: '4/4 (100%)', score: 92.5, comentario: 'Alinhamento visual impecável e conformidade estrita com as diretrizes WCAG 2.2.' }
     ];
 
+    const inicioFormularioSusMs = Date.now();
+
     async function carregarTabelaResultados() {
       let lista = DADOS_INICIAIS_PILOTO;
       try {
@@ -371,10 +374,10 @@
             nome: item.nome_participante,
             tipo: item.participante_tipo,
             turma: item.escola_turma,
-            tempo: `${item.tempo_segundos || 130}s`,
-            tarefas: `${item.tarefas_concluidas || 4}/4 (100%)`,
-            score: item.sus_score,
-            comentario: item.comentarios || 'Sem observações adicionais.',
+            tempo: `${Number(item.tempo_segundos) || 0}s`,
+            tarefas: `${item.tarefas_concluidas ?? 4}/4`,
+            score: Number(item.sus_score) || 0,
+            comentario: item.comentarios || 'Dados detalhados disponíveis apenas para docentes autenticados.',
           }));
           document.getElementById('indicador-score-geral').textContent = dadosApi.mediaSusGeral.toFixed(1);
           document.getElementById('indicador-total-participantes').textContent = dadosApi.totalParticipantes;
@@ -386,13 +389,13 @@
       const tbody = document.getElementById('corpo-tabela-sus');
       tbody.innerHTML = lista.map((p) => `
         <tr>
-          <td><strong>${p.nome}</strong></td>
-          <td><span class="badge ${p.tipo === 'professor' ? 'badge-instrutor' : 'badge-aluno'}">${p.tipo}</span></td>
-          <td>${p.turma}</td>
-          <td>${p.tempo}</td>
-          <td><span class="estado-progresso-pill estado-concluido"><span class="material-symbols-outlined icon-xs" aria-hidden="true">check_circle</span> ${p.tarefas}</span></td>
-          <td><strong class="texto-score-destaque">${p.score.toFixed(1)}</strong></td>
-          <td class="texto-suave" style="font-size: 0.85rem;"><em>"${p.comentario}"</em></td>
+          <td><strong>${escaparHtml(p.nome)}</strong></td>
+          <td><span class="badge ${p.tipo === 'professor' ? 'badge-instrutor' : 'badge-aluno'}">${escaparHtml(p.tipo)}</span></td>
+          <td>${escaparHtml(p.turma)}</td>
+          <td>${escaparHtml(p.tempo)}</td>
+          <td><span class="estado-progresso-pill estado-concluido"><span class="material-symbols-outlined icon-xs" aria-hidden="true">check_circle</span> ${escaparHtml(p.tarefas)}</span></td>
+          <td><strong class="texto-score-destaque">${Number(p.score).toFixed(1)}</strong></td>
+          <td class="texto-suave" style="font-size: 0.85rem;"><em>"${escaparHtml(p.comentario)}"</em></td>
         </tr>
       `).join('');
     }
@@ -401,11 +404,12 @@
       e.preventDefault();
       const form = e.target;
       const score = calcularPreviaSus();
+      const tempoDecorrido = Math.max(1, Math.round((Date.now() - inicioFormularioSusMs) / 1000));
       const payload = {
         nome: document.getElementById('nome-participante').value,
         tipo: document.getElementById('tipo-participante').value,
         turma: 'IFMA Campus Grajaú - 5º/6º ano',
-        tempoSegundos: 135,
+        tempoSegundos: tempoDecorrido,
         tarefasConcluidas: 4,
         comentarios: document.getElementById('comentarios-sus').value,
         q1: form.q1.value,
@@ -423,22 +427,12 @@
       try {
         await api('/usabilidade/sus', { method: 'POST', body: JSON.stringify(payload) });
         mostrarNotificacao(`Obrigado! Sua avaliação SUS foi registrada com sucesso com escore ${score.toFixed(1)} / 100.`, 'sucesso');
-      } catch {
-        mostrarNotificacao(`Sua avaliação local com escore ${score.toFixed(1)} / 100 foi calculada e salva.`, 'info');
+        await carregarTabelaResultados();
+        form.reset();
+        calcularPreviaSus();
+      } catch (err) {
+        mostrarNotificacao(`Não foi possível enviar a avaliação SUS ao servidor (${err.message}). Escore calculado localmente: ${score.toFixed(1)} / 100.`, 'erro');
       }
-
-      DADOS_INICIAIS_PILOTO.unshift({
-        nome: payload.nome,
-        tipo: payload.tipo,
-        turma: payload.turma,
-        tempo: `${payload.tempoSegundos}s`,
-        tarefas: '4/4 (100%)',
-        score,
-        comentario: payload.comentarios || 'Avaliação recente registrada.',
-      });
-      carregarTabelaResultados();
-      form.reset();
-      calcularPreviaSus();
     });
 
     carregarTabelaResultados();

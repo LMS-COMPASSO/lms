@@ -137,6 +137,9 @@ function req(url, metodo, corpo, token, ip = '192.168.1.100') {
 
 test('MDN Web Security: cabeçalhos essenciais de segurança e pré-voo CORS configurados', () => {
   assert.ok(SECURITY_HEADERS['Content-Security-Policy'], 'CSP deve estar presente');
+  assert.ok(SECURITY_HEADERS['Content-Security-Policy'].includes('https://cdn.jsdelivr.net'), 'CSP deve permitir CDN do Pyodide');
+  assert.ok(SECURITY_HEADERS['Content-Security-Policy'].includes("'wasm-unsafe-eval'"), 'CSP deve permitir WebAssembly');
+  assert.equal(SECURITY_HEADERS['Content-Security-Policy'].includes("'unsafe-eval'"), false, 'CSP não deve liberar eval JS');
   assert.ok(SECURITY_HEADERS['Strict-Transport-Security'].includes('max-age=31536000'), 'HSTS deve ter max-age de 1 ano');
   assert.equal(SECURITY_HEADERS['X-Content-Type-Options'], 'nosniff', 'X-Content-Type-Options deve ser nosniff');
   assert.equal(SECURITY_HEADERS['X-Frame-Options'], 'SAMEORIGIN', 'X-Frame-Options deve ser SAMEORIGIN');

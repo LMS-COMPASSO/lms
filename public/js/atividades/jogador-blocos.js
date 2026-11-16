@@ -550,7 +550,7 @@ export function jogadorBlocos(atividade, ctx) {
 
     if (meta.tipo === 'labirinto') {
       if (estadoSimulacao.x === meta.alvo.x && estadoSimulacao.y === meta.alvo.y) {
-        finalizarComVitoria(3);
+        void finalizarComVitoria(3);
       } else {
         feedback.info('Quase lá!', 'O robô não colidiu, mas ainda não chegou ao alvo 🎯. Tente estender o programa.');
       }
@@ -567,8 +567,10 @@ export function jogadorBlocos(atividade, ctx) {
 
       // Checa número de lados traçados
       if (estadoSimulacao.ladosContados >= meta.lados) {
-        const estrelas = tentativas <= 2 ? 3 : (tentativas <= 4 ? 2 : 1);
-        finalizarComVitoria(estrelas);
+        let estrelas = 1;
+        if (tentativas <= 2) estrelas = 3;
+        else if (tentativas <= 4) estrelas = 2;
+        void finalizarComVitoria(estrelas);
       } else {
         feedback.info('Desenho incompleto', `O robô traçou ${estadoSimulacao.ladosContados} lados, mas a figura exige ${meta.lados}.`);
       }
@@ -583,6 +585,10 @@ export function jogadorBlocos(atividade, ctx) {
     feedback.sucesso('Missão Concluída! ⭐⭐⭐', atividade.conclusao);
     anunciar(`Parabéns! ${atividade.conclusao}`);
 
+    let pontuacaoEstrelas = 7.0;
+    if (estrelas === 3) pontuacaoEstrelas = 10.0;
+    else if (estrelas === 2) pontuacaoEstrelas = 8.5;
+
     // Registra a conclusão e o desempenho da habilidade na API se houver usuário
     try {
       if (window.api) {
@@ -591,7 +597,7 @@ export function jogadorBlocos(atividade, ctx) {
           body: JSON.stringify({
             atividadeId: atividade.id,
             habilidades: atividade.habilidades,
-            pontuacao: estrelas === 3 ? 10.0 : (estrelas === 2 ? 8.5 : 7.0),
+            pontuacao: pontuacaoEstrelas,
           }),
         });
       }

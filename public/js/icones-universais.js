@@ -280,7 +280,6 @@ export function hidratarIconesUniversaisNoDom(raiz = document) {
 
     let tamanho = 20;
     if (span.classList.contains('icon-xs')) tamanho = 16;
-    else if (span.classList.contains('icon-sm')) tamanho = 20;
     else if (span.classList.contains('icon-md')) tamanho = 24;
     else if (span.classList.contains('icon-lg') || span.classList.contains('icon-xl')) tamanho = 32;
 

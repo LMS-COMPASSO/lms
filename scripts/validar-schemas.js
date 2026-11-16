@@ -59,7 +59,7 @@ try {
     erro('bncc-habilidades.json: lista de habilidades ausente ou vazia.');
   } else {
     const codigosVistos = new Set();
-    const regexCodigo = /^EF[0-9]{2}CO[0-9]{2}$/;
+    const regexCodigo = /^EF\d{2}CO\d{2}$/;
     const eixosValidos = new Set(['Pensamento Computacional', 'Mundo Digital', 'Cultura Digital']);
 
     for (const hab of bnccData.habilidades) {
@@ -178,12 +178,7 @@ try {
       const refLimpa = ref.split('?')[0].split('#')[0];
       if (!refLimpa || refLimpa === '/') continue;
 
-      let caminhoAlvo;
-      if (refLimpa.startsWith('/')) {
-        caminhoAlvo = path.join(pastaPublic, refLimpa);
-      } else {
-        caminhoAlvo = path.join(pastaPublic, refLimpa);
-      }
+      const caminhoAlvo = path.join(pastaPublic, refLimpa);
 
       if (!fs.existsSync(caminhoAlvo)) {
         erro(`${htmlFile}: link ou recurso quebrado para "${ref}" (esperado em: ${path.relative(RAIZ, caminhoAlvo)})`);

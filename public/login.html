@@ -143,31 +143,33 @@
       <div id="banner-config-cloudflare" class="google-config-banner" style="display: none;">
         <div class="flex-linha gap-8 mb-6">
           <span class="material-symbols-outlined icon-xs text-primaria" aria-hidden="true">tune</span>
-          <strong style="font-size: 0.88rem;">Integração Google Console Pronta</strong>
+          <strong style="font-size: 0.88rem;">Integração Google Console Pendente</strong>
         </div>
         <p class="texto-suave mb-6" style="font-size: 0.82rem; line-height: 1.4;">
-          Para ativar o login do Google em 1 clique na Cloudflare, configure o secret:
+          Para ativar o login do Google em 1 clique na Cloudflare com verificação criptográfica, configure o secret e utilize Email e Senha enquanto isso:
         </p>
         <code class="codigo-secret-cmd">npx wrangler secret put GOOGLE_CLIENT_ID</code>
       </div>
 
-      <p class="texto-suave mb-14" style="font-size: 0.86rem;">
-        Informe seu e-mail escolar institucional para validar acesso vinculado ao Google Workspace for Education:
-      </p>
+      <div id="bloco-google-simulado" hidden>
+        <p class="texto-suave mb-14" style="font-size: 0.86rem;">
+          Informe seu e-mail escolar institucional para validar acesso em modo de desenvolvimento local:
+        </p>
 
-      <form id="form-google-custom" onsubmit="event.preventDefault(); submeterEmailCustomGoogle();">
-        <div class="form-grupo mb-12">
-          <label for="input-email-google-custom" style="font-size: 0.86rem; font-weight: 600;">E-mail Institucional</label>
-          <input type="email" id="input-email-google-custom" placeholder="seu.nome@escola.edu.br" required spellcheck="false" autocomplete="email">
-          <small class="texto-suave" style="font-size: 0.76rem; display: block; margin-top: 4px;">
-            Aceita domínios @*.edu.br, @*.gov.br, @*.sp.gov.br e redes conveniadas.
-          </small>
-        </div>
-        <button type="submit" id="btn-submit-google-custom" class="btn btn-primario btn-bloco flex-inline-icon flex-centro">
-          <span class="material-symbols-outlined icon-xs" aria-hidden="true">login</span>
-          <span>Acessar com Email Acadêmico</span>
-        </button>
-      </form>
+        <form id="form-google-custom" onsubmit="event.preventDefault(); submeterEmailCustomGoogle();">
+          <div class="form-grupo mb-12">
+            <label for="input-email-google-custom" style="font-size: 0.86rem; font-weight: 600;">E-mail Institucional</label>
+            <input type="email" id="input-email-google-custom" placeholder="seu.nome@escola.edu.br" required spellcheck="false" autocomplete="email">
+            <small class="texto-suave" style="font-size: 0.76rem; display: block; margin-top: 4px;">
+              Aceita domínios @*.edu.br, @*.gov.br, @*.sp.gov.br e redes conveniadas.
+            </small>
+          </div>
+          <button type="submit" id="btn-submit-google-custom" class="btn btn-primario btn-bloco flex-inline-icon flex-centro">
+            <span class="material-symbols-outlined icon-xs" aria-hidden="true">login</span>
+            <span>Acessar com Email Acadêmico</span>
+          </button>
+        </form>
+      </div>
     </div>
   </div>
 
@@ -180,7 +182,8 @@
       window.location.href = usuarioLogado.perfil === 'aluno' ? '/cursos.html' : '/dashboard.html';
     }
 
-    let authConfig = { googleClientId: '', googleConfigurado: false };
+    let authConfig = { googleClientId: '', googleConfigurado: false, googleSimuladoAtivo: false };
+    let focoAntesModalGoogle = null;
 
     // Carrega a configuração pública do backend (Google Client ID das secrets da Cloudflare)
     async function carregarConfigAuth() {
@@ -195,10 +198,17 @@
     // Inicializa a biblioteca Google Identity Services (GIS) quando as credenciais estiverem configuradas
     function configurarGoogleGIS() {
       const banner = document.getElementById('banner-config-cloudflare');
+      const blocoSimulado = document.getElementById('bloco-google-simulado');
+      const subtexto = document.getElementById('google-status-subtexto');
       if (!authConfig.googleConfigurado) {
         if (banner) banner.style.display = 'block';
+        if (blocoSimulado) blocoSimulado.hidden = !authConfig.googleSimuladoAtivo;
+        if (!authConfig.googleSimuladoAtivo && subtexto) {
+          subtexto.textContent = 'Login Google requer GOOGLE_CLIENT_ID configurado; utilize Email e Senha ao lado.';
+        }
         return;
       }
+      if (blocoSimulado) blocoSimulado.hidden = true;
 
       if (banner) banner.style.display = 'none';
 
@@ -258,21 +268,56 @@
     }
     window.acionarLoginGoogle = acionarLoginGoogle;
 
-    // Abre o modal de login Google
+    // Abre o modal de login Google com gerenciamento acessível de foco
     function abrirModalGoogle() {
-      document.getElementById('modal-google-academico').classList.remove('oculto');
+      const modal = document.getElementById('modal-google-academico');
+      if (!modal) return;
+      focoAntesModalGoogle = document.activeElement;
+      modal.classList.remove('oculto');
       const input = document.getElementById('input-email-google-custom');
-      if (input) setTimeout(() => input.focus(), 100);
+      const blocoSimulado = document.getElementById('bloco-google-simulado');
+      const alvoInicial = (blocoSimulado && !blocoSimulado.hidden && input)
+        ? input
+        : modal.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+      if (alvoInicial) setTimeout(() => alvoInicial.focus(), 50);
     }
 
-    // Fecha o modal de login Google
+    // Fecha o modal de login Google e restaura o foco ao elemento anterior
     function fecharModalGoogle() {
-      document.getElementById('modal-google-academico').classList.add('oculto');
+      const modal = document.getElementById('modal-google-academico');
+      if (modal) modal.classList.add('oculto');
+      if (focoAntesModalGoogle && typeof focoAntesModalGoogle.focus === 'function') {
+        focoAntesModalGoogle.focus();
+      }
+      focoAntesModalGoogle = null;
     }
+    window.fecharModalGoogle = fecharModalGoogle;
 
-    // Fecha o modal ao clicar fora do conteúdo
-    document.getElementById('modal-google-academico')?.addEventListener('click', (e) => {
+    // Fecha o modal ao clicar fora do conteúdo ou com Escape e aplica focus trap
+    const modalGoogleEl = document.getElementById('modal-google-academico');
+    modalGoogleEl?.addEventListener('click', (e) => {
       if (e.target.id === 'modal-google-academico') fecharModalGoogle();
+    });
+    modalGoogleEl?.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        fecharModalGoogle();
+        return;
+      }
+      if (e.key !== 'Tab') return;
+      const focaveis = Array.from(
+        modalGoogleEl.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'),
+      ).filter((el) => el.offsetParent !== null);
+      if (focaveis.length === 0) return;
+      const primeiro = focaveis[0];
+      const ultimo = focaveis[focaveis.length - 1];
+      if (e.shiftKey && document.activeElement === primeiro) {
+        e.preventDefault();
+        ultimo.focus();
+      } else if (!e.shiftKey && document.activeElement === ultimo) {
+        e.preventDefault();
+        primeiro.focus();
+      }
     });
 
     // Callback oficial do Google Identity Services (GIS)

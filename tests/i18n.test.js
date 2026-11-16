@@ -88,7 +88,26 @@ test('i18n: Tradução de chaves e interpolação de parâmetros', () => {
   assert.equal(t('cd.sec1Titulo'), 'ZapCompasso: Симулятор диалога и цифрового гражданства');
   assert.equal(t('cd.chat.phishing.nome'), 'Лео (Друг по игре)');
 
-  // 5. Fallback para chaves ausentes
+  // 5. Demais idiomas (es, de, fr, it, tr) devem possuir suas traduções de Cultura Digital isoladas
+  assert.deepEqual(
+    Object.keys(DICIONARIO).sort(),
+    ['de', 'en', 'es', 'fr', 'it', 'pt', 'ru', 'tr', 'uk'],
+    'DICIONARIO não deve vazar chaves soltas fora dos 9 idiomas',
+  );
+  const esperadosCd = {
+    es: 'ZapCompasso: Simulador de Diálogo y Ciudadanía',
+    de: 'ZapCompasso: Dialog- & Bürgersinn-Simulator',
+    fr: 'ZapCompasso: Simulateur de Dialogue et Citoyenneté',
+    it: 'ZapCompasso: Simulatore di Dialogo e Cittadinanza',
+    tr: 'ZapCompasso: Diyalog ve Dijital Vatandaşlık Simülatörü',
+  };
+  for (const [cod, tituloEsperado] of Object.entries(esperadosCd)) {
+    storage[CHAVE_STORAGE_IDIOMA] = cod;
+    assert.equal(t('cd.sec1Titulo'), tituloEsperado, `Idioma ${cod} deve traduzir cd.sec1Titulo`);
+  }
+
+  // 6. Fallback para chaves ausentes
+  storage[CHAVE_STORAGE_IDIOMA] = 'pt';
   assert.equal(t('chave.inexistente', {}, 'Padrão'), 'Padrão');
 });
 

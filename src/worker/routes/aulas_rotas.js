@@ -21,14 +21,18 @@ import {
   authorizeUser,
   exigirPerfil,
   ErroHttp,
+  parseIdPositivo,
+  recalcularConclusaoMatricula,
 } from '../helpers_utilitarios.js';
+
+const TIPOS_AULA_VALIDOS = ['video', 'texto', 'pdf', 'link'];
 
 /**
  * Retorna as aulas pertencentes a um módulo.
  */
 export async function listarAulasDoModulo(request, env, db, moduloId) {
   await authorizeUser(request, env, db);
-  const id = Number(moduloId);
+  const id = parseIdPositivo(moduloId, 'moduloId');
   const aulas = await queryAll(
     db,
     'SELECT * FROM aulas WHERE modulo_id = ? ORDER BY ordem ASC, id ASC',
@@ -42,7 +46,7 @@ export async function listarAulasDoModulo(request, env, db, moduloId) {
  */
 export async function obterAula(request, env, db, aulaId) {
   await authorizeUser(request, env, db);
-  const id = Number(aulaId);
+  const id = parseIdPositivo(aulaId, 'aulaId');
   const aula = await queryOne(db, 'SELECT * FROM aulas WHERE id = ?', [id]);
   if (!aula) {
     return jsonErro('Aula não encontrada.', 404);
@@ -57,7 +61,7 @@ export async function criarAula(request, env, db, moduloId) {
   const { payload } = await authorizeUser(request, env, db);
   exigirPerfil(payload, ['administrador', 'instrutor']);
 
-  const id = Number(moduloId);
+  const id = parseIdPositivo(moduloId, 'moduloId');
   const modulo = await queryOne(
     db,
     'SELECT m.id, c.instrutor_id FROM modulos m JOIN cursos c ON m.curso_id = c.id WHERE m.id = ?',
@@ -77,7 +81,7 @@ export async function criarAula(request, env, db, moduloId) {
   if (!titulo) {
     return jsonErro('Título da aula é obrigatório.', 400);
   }
-  if (!['video', 'texto', 'pdf', 'link'].includes(tipo)) {
+  if (!TIPOS_AULA_VALIDOS.includes(tipo)) {
     return jsonErro('Tipo de aula inválido. Use "video", "texto", "pdf" ou "link".', 400);
   }
 
@@ -107,7 +111,7 @@ export async function atualizarAula(request, env, db, aulaId) {
   const { payload } = await authorizeUser(request, env, db);
   exigirPerfil(payload, ['administrador', 'instrutor']);
 
-  const id = Number(aulaId);
+  const id = parseIdPositivo(aulaId, 'aulaId');
   const aula = await queryOne(
     db,
     'SELECT a.id, c.instrutor_id FROM aulas a JOIN modulos m ON a.modulo_id = m.id JOIN cursos c ON m.curso_id = c.id WHERE a.id = ?',
@@ -127,8 +131,24 @@ export async function atualizarAula(request, env, db, aulaId) {
 
   for (const campo of camposPermitidos) {
     if (body[campo] !== undefined) {
+      if (campo === 'titulo') {
+        const tituloLimpo = String(body.titulo).trim();
+        if (!tituloLimpo) return jsonErro('Título da aula não pode ser vazio.', 400);
+        campos.push('titulo = ?');
+        params.push(tituloLimpo);
+        continue;
+      }
+      if (campo === 'tipo') {
+        const tipoLimpo = String(body.tipo);
+        if (!TIPOS_AULA_VALIDOS.includes(tipoLimpo)) {
+          return jsonErro('Tipo de aula inválido. Use "video", "texto", "pdf" ou "link".', 400);
+        }
+        campos.push('tipo = ?');
+        params.push(tipoLimpo);
+        continue;
+      }
       campos.push(`${campo} = ?`);
-      params.push(campo === 'duracao_min' || campo === 'ordem' ? Number(body[campo]) : body[campo]);
+      params.push(campo === 'duracao_min' || campo === 'ordem' ? Number(body[campo] || 0) : body[campo]);
     }
   }
 
@@ -148,7 +168,7 @@ export async function excluirAula(request, env, db, aulaId) {
   const { payload } = await authorizeUser(request, env, db);
   exigirPerfil(payload, ['administrador', 'instrutor']);
 
-  const id = Number(aulaId);
+  const id = parseIdPositivo(aulaId, 'aulaId');
   const aula = await queryOne(
     db,
     'SELECT a.id, c.instrutor_id FROM aulas a JOIN modulos m ON a.modulo_id = m.id JOIN cursos c ON m.curso_id = c.id WHERE a.id = ?',
@@ -172,7 +192,7 @@ export async function atualizarProgressoAula(request, env, db, aulaId) {
   const { payload } = await authorizeUser(request, env, db);
   exigirPerfil(payload, ['aluno']);
 
-  const id = Number(aulaId);
+  const id = parseIdPositivo(aulaId, 'aulaId');
   const body = await readJsonBody(request);
 
   // Localiza a aula e o curso ao qual pertence
@@ -207,37 +227,12 @@ export async function atualizarProgressoAula(request, env, db, aulaId) {
       data_conclusao = excluded.data_conclusao
   `).bind(matricula.id, id, concluida, dataConclusao).run();
 
-  // Recalcula o percentual de conclusão geral do curso
-  const totalAulasRegistro = await queryOne(
-    db,
-    'SELECT COUNT(*) AS total FROM aulas a JOIN modulos m ON m.id = a.modulo_id WHERE m.curso_id = ?',
-    [aula.curso_id],
-  );
-  const concluidasRegistro = await queryOne(
-    db,
-    'SELECT COUNT(*) AS total FROM progresso_aulas WHERE matricula_id = ? AND concluida = 1',
-    [matricula.id],
-  );
-
-  const totalAulas = Number(totalAulasRegistro.total || 0);
-  const totalConcluidas = Number(concluidasRegistro.total || 0);
-  const percentual = totalAulas > 0 ? Math.round((totalConcluidas / totalAulas) * 10000) / 100 : 0;
-  const status = totalAulas > 0 && totalConcluidas >= totalAulas ? 'concluida' : 'ativa';
-
-  await db.prepare(`
-    UPDATE matriculas
-    SET progresso_percentual = ?, status = ?, data_conclusao = ?
-    WHERE id = ?
-  `).bind(
-    percentual,
-    status,
-    status === 'concluida' ? new Date().toISOString() : null,
-    matricula.id,
-  ).run();
+  const { percentual, status, avaliacoesPendentes } = await recalcularConclusaoMatricula(db, matricula.id, aula.curso_id);
 
   return jsonResponse({
     mensagem: 'Progresso atualizado com sucesso.',
     progresso_percentual: percentual,
     status,
+    avaliacoes_pendentes: avaliacoesPendentes,
   });
 }

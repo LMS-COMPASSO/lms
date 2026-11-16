@@ -11,6 +11,7 @@
  */
 
 import {
+  base64UrlDecode,
   exigirSegredoJwt,
   hashSenha,
   signJwt,
@@ -23,7 +24,9 @@ import {
   getUserByEmail,
   getUserProfile,
   authorizeUser,
+  ErroHttp,
   CORS_HEADERS,
+  validarFormatoEmail,
 } from '../helpers_utilitarios.js';
 
 /**
@@ -95,6 +98,9 @@ export async function registrar(request, env, db) {
 
   if (!nome || !email || !senha) {
     return jsonErro('Nome, email e senha são obrigatórios.', 400);
+  }
+  if (!validarFormatoEmail(email)) {
+    return jsonErro('Informe um endereço de email válido.', 400);
   }
   if (senha.length < 6) {
     return jsonErro('A senha deve ter ao menos 6 caracteres.', 400);
@@ -247,30 +253,127 @@ export async function alterarSenha(request, env, db) {
   return jsonResponse({ mensagem: 'Senha alterada com sucesso.' });
 }
 
+const GOOGLE_JWKS_URL = 'https://www.googleapis.com/oauth2/v3/certs';
+let cacheJwksGoogle = { keys: [], expiraEm: 0 };
+
+/**
+ * Decodifica o cabeçalho ou payload Base64URL de um JWT.
+ */
+function decodificarSegmentoJwt(segmento) {
+  if (typeof segmento !== 'string' || !segmento) return null;
+  try {
+    const bytes = base64UrlDecode(segmento);
+    return JSON.parse(new TextDecoder().decode(bytes));
+  } catch {
+    return null;
+  }
+}
+
 /**
  * Decodifica o payload de um token JWT do Google (Google Identity Services).
+ * Nota: não substitui a verificação criptográfica realizada por verificarTokenGoogle().
  */
 export function decodificarTokenGoogle(credential) {
   if (typeof credential !== 'string') return null;
   const partes = credential.split('.');
-  if (partes.length < 2) return null;
-  try {
-    let base64 = partes[1].replace(/-/g, '+').replace(/_/g, '/');
-    while (base64.length % 4) {
-      base64 += '=';
-    }
-    const jsonStr = typeof atob === 'function'
-      ? decodeURIComponent(escape(atob(base64)))
-      : Buffer.from(base64, 'base64').toString('utf8');
-    return JSON.parse(jsonStr);
-  } catch {
-    try {
-      if (typeof Buffer !== 'undefined') {
-        return JSON.parse(Buffer.from(partes[1], 'base64').toString('utf8'));
-      }
-    } catch {}
-    return null;
+  if (partes.length !== 3) return null;
+  return decodificarSegmentoJwt(partes[1]);
+}
+
+async function obterChavesPublicasGoogle(env = {}, forcarAtualizacao = false) {
+  if (env?.__GOOGLE_JWKS) {
+    return Array.isArray(env.__GOOGLE_JWKS) ? env.__GOOGLE_JWKS : (env.__GOOGLE_JWKS.keys || []);
   }
+  const agora = Date.now();
+  if (!forcarAtualizacao && cacheJwksGoogle.keys.length > 0 && agora < cacheJwksGoogle.expiraEm) {
+    return cacheJwksGoogle.keys;
+  }
+  const resposta = await fetch(GOOGLE_JWKS_URL);
+  if (!resposta.ok) {
+    throw new ErroHttp('Não foi possível consultar as chaves públicas do Google.', 503);
+  }
+  const cacheControl = resposta.headers.get('cache-control') || '';
+  const matchMaxAge = cacheControl.match(/max-age=(\d+)/i);
+  const ttlMs = matchMaxAge ? Number(matchMaxAge[1]) * 1000 : 3600 * 1000;
+  const corpo = await resposta.json();
+  const keys = Array.isArray(corpo?.keys) ? corpo.keys : [];
+  cacheJwksGoogle = { keys, expiraEm: agora + Math.max(60_000, ttlMs) };
+  return keys;
+}
+
+/**
+ * Verifica criptograficamente um ID Token RS256 do Google Identity Services (JWKS, iss, aud, exp e email_verified).
+ */
+export async function verificarTokenGoogle(credential, clientIdEsperado, env = {}) {
+  if (typeof credential !== 'string') {
+    throw new ErroHttp('Credencial do Google inválida ou malformada.', 400);
+  }
+  const partes = credential.split('.');
+  if (partes.length !== 3 || !partes[0] || !partes[1] || !partes[2]) {
+    throw new ErroHttp('Credencial do Google inválida ou malformada.', 400);
+  }
+
+  const header = decodificarSegmentoJwt(partes[0]);
+  const claims = decodificarSegmentoJwt(partes[1]);
+  if (!header || !claims) {
+    throw new ErroHttp('Credencial do Google inválida ou malformada.', 400);
+  }
+
+  if (header.alg !== 'RS256' || !header.kid) {
+    throw new ErroHttp('Cabeçalho do token Google inválido.', 401);
+  }
+
+  if (!['https://accounts.google.com', 'accounts.google.com'].includes(claims.iss)) {
+    throw new ErroHttp('Emissor do token Google inválido.', 401);
+  }
+
+  if (claims.email_verified !== true || !claims.email) {
+    throw new ErroHttp('A conta Google precisa possuir e-mail verificado.', 401);
+  }
+
+  const audValido = Array.isArray(claims.aud)
+    ? claims.aud.includes(clientIdEsperado)
+    : claims.aud === clientIdEsperado;
+  if (!audValido) {
+    throw new ErroHttp('Token do Google não autorizado para esta aplicação (Client ID incompatível).', 401);
+  }
+
+  if (typeof claims.exp !== 'number' || claims.exp * 1000 < Date.now() - 300_000) {
+    throw new ErroHttp('Token do Google expirado. Faça login novamente.', 401);
+  }
+
+  let chaves = await obterChavesPublicasGoogle(env, false);
+  let jwk = chaves.find((k) => k.kid === header.kid);
+  if (!jwk && !env?.__GOOGLE_JWKS) {
+    chaves = await obterChavesPublicasGoogle(env, true);
+    jwk = chaves.find((k) => k.kid === header.kid);
+  }
+  if (!jwk) {
+    throw new ErroHttp('Chave pública de assinatura do Google não encontrada.', 401);
+  }
+
+  let assinaturaBytes;
+  try {
+    assinaturaBytes = base64UrlDecode(partes[2]);
+  } catch {
+    throw new ErroHttp('Assinatura do token Google inválida.', 401);
+  }
+
+  const chavePublica = await crypto.subtle.importKey(
+    'jwk',
+    jwk,
+    { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' },
+    false,
+    ['verify'],
+  );
+
+  const entrada = new TextEncoder().encode(`${partes[0]}.${partes[1]}`);
+  const assinaturaValida = await crypto.subtle.verify('RSASSA-PKCS1-v1_5', chavePublica, assinaturaBytes, entrada);
+  if (!assinaturaValida) {
+    throw new ErroHttp('Assinatura do token Google inválida.', 401);
+  }
+
+  return claims;
 }
 
 /**
@@ -320,12 +423,9 @@ export function verificarDominioAcademico(email = '', hd = '') {
 }
 
 /**
- * Deduz o perfil escolar do usuário (aluno ou professor/instrutor) baseado no prefixo do email ou papel sugerido.
+ * Deduz o perfil escolar do usuário (aluno ou professor/instrutor) apenas a partir do email verificado.
  */
-export function detectarPerfilAcademico(email = '', nome = '', hd = '', papelSugerido = null) {
-  if (papelSugerido && ['aluno', 'instrutor'].includes(papelSugerido)) {
-    return papelSugerido;
-  }
+export function detectarPerfilAcademico(email = '') {
   const emailLimpo = String(email || '').toLowerCase();
   const parteLocal = emailLimpo.split('@')[0] || '';
 
@@ -349,9 +449,11 @@ export function detectarPerfilAcademico(email = '', nome = '', hd = '', papelSug
  */
 export function obterConfigAuth(request, env) {
   const googleClientId = String(env?.GOOGLE_CLIENT_ID || '').trim();
+  const googleSimuladoAtivo = !googleClientId && String(env?.ALLOW_UNVERIFIED_GOOGLE_DEV || '') === 'true';
   return jsonResponse({
     googleClientId,
     googleConfigurado: Boolean(googleClientId),
+    googleSimuladoAtivo,
   });
 }
 
@@ -365,8 +467,12 @@ export async function loginComGoogle(request, env, db) {
   let sub = '';
   let avatarUrl = null;
   let hd = '';
-  const papelSugerido = body.perfil || null;
   const googleClientIdEsperado = String(env?.GOOGLE_CLIENT_ID || '').trim();
+  const permitirModoSimulado = !googleClientIdEsperado && String(env?.ALLOW_UNVERIFIED_GOOGLE_DEV || '') === 'true';
+
+  if (!googleClientIdEsperado && !permitirModoSimulado) {
+    return jsonErro('Login com Google não está configurado neste ambiente. Configure GOOGLE_CLIENT_ID ou utilize email e senha.', 503);
+  }
 
   // Suporte a troca de Authorization Code OAuth2 (caso enviado pelo frontend com Google Console)
   if (body.code && googleClientIdEsperado && env?.GOOGLE_CLIENT_SECRET) {
@@ -395,24 +501,12 @@ export async function loginComGoogle(request, env, db) {
   }
 
   if (body.credential) {
-    const claims = decodificarTokenGoogle(body.credential);
+    const claims = googleClientIdEsperado
+      ? await verificarTokenGoogle(body.credential, googleClientIdEsperado, env)
+      : decodificarTokenGoogle(body.credential);
+
     if (!claims) {
       return jsonErro('Credencial do Google inválida ou malformada.', 400);
-    }
-
-    // Se a secret GOOGLE_CLIENT_ID estiver configurada no Cloudflare / env, valida a audiência
-    if (googleClientIdEsperado) {
-      const audValido = Array.isArray(claims.aud)
-        ? claims.aud.includes(googleClientIdEsperado)
-        : claims.aud === googleClientIdEsperado;
-      if (!audValido) {
-        return jsonErro('Token do Google não autorizado para esta aplicação (Client ID incompatível).', 401);
-      }
-    }
-
-    // Valida expiração do token se disponível (com tolerância de 5 min para desvio de relógio)
-    if (claims.exp && typeof claims.exp === 'number' && claims.exp * 1000 < Date.now() - 300000) {
-      return jsonErro('Token do Google expirado. Faça login novamente.', 401);
     }
 
     if (claims.email) {
@@ -422,10 +516,8 @@ export async function loginComGoogle(request, env, db) {
       avatarUrl = claims.picture || null;
       hd = claims.hd || '';
     }
-  }
-
-  if (!email && body.email) {
-    if (googleClientIdEsperado) {
+  } else if (body.email) {
+    if (!permitirModoSimulado) {
       return jsonErro('Credencial do Google é obrigatória em ambiente com Google Client ID configurado.', 401);
     }
     email = body.email;
@@ -443,7 +535,7 @@ export async function loginComGoogle(request, env, db) {
   }
 
   const segredo = exigirSegredoJwt(env.JWT_SECRET);
-  const ehAcademico = verificarDominioAcademico(email, hd) || Boolean(body.academico);
+  const ehAcademico = verificarDominioAcademico(email, hd);
   const dominioInstitucional = hd || (email.includes('@') ? email.split('@')[1] : '');
 
   let usuario = await getUserByEmail(db, email);
@@ -460,7 +552,7 @@ export async function loginComGoogle(request, env, db) {
       } catch {}
     }
   } else {
-    const papel = detectarPerfilAcademico(email, nome, hd, papelSugerido);
+    const papel = detectarPerfilAcademico(email);
     const senhaAleatoria = await hashSenha(`google_auth_placeholder_${crypto.randomUUID()}`);
 
     const resultado = await db.prepare(

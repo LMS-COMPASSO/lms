@@ -17,6 +17,7 @@ import {
   queryAll,
   queryOne,
   authorizeUser,
+  parseIdPositivo,
 } from '../helpers_utilitarios.js';
 
 /**
@@ -247,16 +248,18 @@ export async function avaliarConquistasAutomaticas(request, env, db) {
     }
   }
 
-  // Insere as medalhas no banco
+  // Insere as medalhas no banco contabilizando apenas as realmente novas
   let novasConquistadas = 0;
   for (const cod of medalhasConceder) {
     const medalha = await queryOne(db, 'SELECT id FROM medalhas WHERE codigo = ?', [cod]);
     if (medalha) {
       try {
-        await db.prepare('INSERT OR IGNORE INTO usuario_medalhas (usuario_id, medalha_id) VALUES (?, ?)')
+        const res = await db.prepare('INSERT OR IGNORE INTO usuario_medalhas (usuario_id, medalha_id) VALUES (?, ?)')
           .bind(usuarioId, medalha.id)
           .run();
-        novasConquistadas += 1;
+        if (Number(res?.meta?.changes || 0) > 0) {
+          novasConquistadas += 1;
+        }
       } catch {
         // Ignora duplicidade
       }
@@ -277,45 +280,62 @@ export async function registrarAtividadeConcluida(request, env, db) {
   const usuarioId = payload.id;
   const body = await readJsonBody(request);
 
-  const atividadeId = String(body.atividadeId || '').trim();
-  const habilidades = Array.isArray(body.habilidades) ? body.habilidades : [];
-  const pontuacao = Number(body.pontuacao ?? 10.0);
-  const cursoId = body.cursoId ? Number(body.cursoId) : null;
-  const codigoPython = typeof body.codigoPython === 'string' ? body.codigoPython : null;
-  const tentativas = Number(body.tentativas || 1);
-  const estrelas = Number(body.estrelas || 3);
-  const parceiroDupla = body.parceiroDupla ? String(body.parceiroDupla).trim() : null;
+  const atividadeId = String(body.atividadeId || '').trim().slice(0, 120);
+  const habilidadesBrutas = Array.isArray(body.habilidades) ? body.habilidades : [];
+  const habilidades = habilidadesBrutas
+    .map((cod) => String(cod || '').trim().toUpperCase())
+    .filter((cod) => /^[A-Z]{2}\d{2}CO\d{2}$/.test(cod));
+  const pontuacaoBruta = Number(body.pontuacao ?? 10.0);
+  const pontuacao = Number.isFinite(pontuacaoBruta) ? Math.min(10, Math.max(0, pontuacaoBruta)) : 10.0;
+  const cursoId = body.cursoId !== undefined && body.cursoId !== null && body.cursoId !== ''
+    ? parseIdPositivo(body.cursoId, 'cursoId')
+    : null;
+  const codigoPython = typeof body.codigoPython === 'string' && body.codigoPython.trim().length > 0
+    ? body.codigoPython.slice(0, 20_000)
+    : null;
+  const tentativas = Math.max(1, Number.parseInt(body.tentativas, 10) || 1);
+  const estrelas = Math.min(3, Math.max(1, Number.parseInt(body.estrelas, 10) || 3));
+  const parceiroDupla = body.parceiroDupla ? String(body.parceiroDupla).trim().slice(0, 120) : null;
   const papelDupla = ['individual', 'piloto', 'navegador'].includes(body.papelDupla) ? body.papelDupla : 'individual';
-  const concluiuTodasPython3d = Boolean(body.concluiuTodasPython3d);
 
   if (!atividadeId) {
     return jsonErro('Identificador da atividade é obrigatório.', 400);
   }
 
-  const nivelAtingido = pontuacao >= 8.5 ? 'avancado' : (pontuacao >= 6.0 ? 'adequado' : 'em_desenvolvimento');
+  let nivelAtingido = 'em_desenvolvimento';
+  if (pontuacao >= 8.5) nivelAtingido = 'avancado';
+  else if (pontuacao >= 6.0) nivelAtingido = 'adequado';
+
+  const executarComGarantiaTabela = async (operacaoSql) => {
+    try {
+      await operacaoSql();
+    } catch {
+      await garantirTabelasGamificacao(db);
+      await operacaoSql();
+    }
+  };
 
   // Grava o registro para cada habilidade desenvolvida na atividade
   for (const cod of habilidades) {
-    await db.prepare(`
-      INSERT INTO desempenho_habilidades (usuario_id, curso_id, habilidade_codigo, origem_tipo, origem_id, pontuacao, nivel_atingido)
-      VALUES (?, ?, ?, 'atividade', ?, ?, ?)
-    `).bind(usuarioId, cursoId, cod, atividadeId, pontuacao, nivelAtingido).run();
+    await executarComGarantiaTabela(() =>
+      db.prepare(`
+        INSERT INTO desempenho_habilidades (usuario_id, curso_id, habilidade_codigo, origem_tipo, origem_id, pontuacao, nivel_atingido)
+        VALUES (?, ?, ?, 'atividade', ?, ?, ?)
+      `).bind(usuarioId, cursoId, cod, atividadeId, pontuacao, nivelAtingido).run(),
+    );
   }
 
   // Se for atividade Python 3D com código enviado, persiste em submissoes_python
   if (codigoPython) {
-    try {
-      await db.prepare(`
+    await executarComGarantiaTabela(() =>
+      db.prepare(`
         INSERT INTO submissoes_python (usuario_id, atividade_id, codigo_python, sucesso, tentativas, estrelas, parceiro_dupla, papel_dupla)
         VALUES (?, ?, ?, 1, ?, ?, ?, ?)
-      `).bind(usuarioId, atividadeId, codigoPython, tentativas, estrelas, parceiroDupla, papelDupla).run();
-    } catch {
-      // Caso a tabela ainda não exista no ambiente local, tenta criá-la
-      await garantirTabelasGamificacao(db);
-    }
+      `).bind(usuarioId, atividadeId, codigoPython, tentativas, estrelas, parceiroDupla, papelDupla).run(),
+    );
   }
 
-  // Avalia medalhas em decorrência da atividade
+  // Avalia medalhas exclusivamente a partir do histórico persistido no banco (sem confiar em flags do cliente)
   const medalhasNovas = [];
   let medalhaExploradorPython3d = false;
 
@@ -329,18 +349,16 @@ export async function registrarAtividadeConcluida(request, env, db) {
     const m = await queryOne(db, 'SELECT id FROM medalhas WHERE codigo = ?', ['programador_blocos']);
     if (m) medalhasNovas.push(m.id);
   } else if (atividadeId.startsWith('python3d-')) {
-    let totalPythonConcluidas = concluiuTodasPython3d ? 6 : 0;
-    if (!concluiuTodasPython3d) {
-      try {
-        const contagem = await queryOne(
-          db,
-          "SELECT COUNT(DISTINCT atividade_id) AS total FROM submissoes_python WHERE usuario_id = ? AND atividade_id LIKE 'python3d-%' AND sucesso = 1",
-          [usuarioId],
-        );
-        totalPythonConcluidas = Number(contagem?.total || 0);
-      } catch {
-        totalPythonConcluidas = 0;
-      }
+    let totalPythonConcluidas = 0;
+    try {
+      const contagem = await queryOne(
+        db,
+        "SELECT COUNT(DISTINCT atividade_id) AS total FROM submissoes_python WHERE usuario_id = ? AND atividade_id LIKE 'python3d-%' AND sucesso = 1",
+        [usuarioId],
+      );
+      totalPythonConcluidas = Number(contagem?.total || 0);
+    } catch {
+      totalPythonConcluidas = 0;
     }
     if (totalPythonConcluidas >= 6) {
       const mPy = await queryOne(db, 'SELECT id FROM medalhas WHERE codigo = ?', ['explorador_python_3d']);

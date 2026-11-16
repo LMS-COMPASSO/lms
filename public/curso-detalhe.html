@@ -33,6 +33,17 @@
     </main>
   </div>
 
+  <!-- Modal para realização de avaliações do módulo -->
+  <div id="modal-avaliacao" class="modal-backdrop oculto" role="dialog" aria-modal="true" aria-labelledby="titulo-modal-avaliacao">
+    <div class="modal-conteudo" style="max-width: 680px; max-height: 90vh; overflow-y: auto;">
+      <div class="flex-entre mb-12">
+        <h3 id="titulo-modal-avaliacao" style="margin: 0;">Avaliação do Módulo</h3>
+        <button type="button" class="btn btn-xs btn-neutro" onclick="fecharModalAvaliacao()" aria-label="Fechar avaliação">Fechar</button>
+      </div>
+      <div id="conteudo-modal-avaliacao"></div>
+    </div>
+  </div>
+
   <script src="/js/config.js"></script>
   <script src="/js/api.js"></script>
   <script src="/js/layout.js"></script>
@@ -40,9 +51,14 @@
     const usuario = exigirAutenticacao();
     montarLayout('cursos');
     document.getElementById('titulo-pagina').textContent = 'Detalhe do Curso';
-    if (usuario.perfil === 'aluno') {
-      document.querySelectorAll('.oculto-aluno').forEach((el) => { el.classList.add('oculto'); });
+
+    function aplicarVisibilidadePerfil() {
+      const ehAluno = usuario?.perfil === 'aluno';
+      document.querySelectorAll('.oculto-aluno').forEach((el) => {
+        el.classList.toggle('oculto', ehAluno);
+      });
     }
+    aplicarVisibilidadePerfil();
 
     const params = new URLSearchParams(window.location.search);
     const cursoId = params.get('id');
@@ -206,11 +222,11 @@
           <div class="cartao">
             <div class="flex-entre">
               <h3>${escaparHtml(m.titulo)}</h3>
-              <button type="button" class="btn btn-perigo btn-xs oculto-aluno" onclick="excluirModulo(${m.id})">Excluir módulo</button>
+              <button type="button" class="btn btn-perigo btn-xs oculto-aluno${usuario.perfil === 'aluno' ? ' oculto' : ''}" onclick="excluirModulo(${m.id})">Excluir módulo</button>
             </div>
             <p class="texto-suave">${escaparHtml(m.descricao || '')}</p>
 
-            <div class="tabela-scroll">
+            <div class="tabela-scroll" tabindex="0" role="region" aria-label="Lista de aulas do módulo">
               <table>
                 <thead><tr><th>Aula</th><th>Tipo</th><th>Duração</th><th></th></tr></thead>
                 <tbody>
@@ -228,7 +244,7 @@
               </table>
             </div>
 
-            <div class="oculto-aluno flex-linha flex-wrap mt-12">
+            <div class="oculto-aluno${usuario.perfil === 'aluno' ? ' oculto' : ''} flex-linha flex-wrap mt-12">
               <input type="text" id="nova-aula-${m.id}" placeholder="Título da nova aula" title="Título da nova aula" aria-label="Título da nova aula" class="flex-1 min-w-160">
               <select id="tipo-aula-${m.id}" title="Tipo de aula" aria-label="Tipo de aula">
                 <option value="texto">Texto</option>
@@ -240,17 +256,88 @@
             </div>
 
             ${m.avaliacoes.length > 0 ? `
-              <p class="mt-10 texto-suave"><strong>Avaliações:</strong> ${m.avaliacoes.map((av) => av.titulo).join(', ')}</p>
+              <div class="mt-12 pt-10" style="border-top: 1px solid var(--cor-borda);">
+                <p class="texto-suave mb-6"><strong>Avaliações do módulo:</strong></p>
+                <div class="flex-linha flex-wrap gap-8">
+                  ${m.avaliacoes.map((av) => `
+                    <button type="button" class="btn btn-neutro btn-sm flex-inline-icon" onclick="abrirAvaliacao(${av.id})">
+                      <span class="material-symbols-outlined icon-xs" aria-hidden="true">quiz</span>
+                      <span>${escaparHtml(av.titulo)} (mín. ${Number(av.nota_minima) || 6})</span>
+                    </button>
+                  `).join('')}
+                </div>
+              </div>
             ` : ''}
           </div>
         `).join('');
+        aplicarVisibilidadePerfil();
       } catch (err) {
         mostrarNotificacao(err.message, 'erro');
       }
     }
 
-    if (usuario.perfil !== 'aluno') {
-      document.querySelectorAll('.oculto-aluno').forEach((el) => { el.classList.remove('oculto'); });
+    async function abrirAvaliacao(avaliacaoId) {
+      const modal = document.getElementById('modal-avaliacao');
+      const tituloEl = document.getElementById('titulo-modal-avaliacao');
+      const corpoEl = document.getElementById('conteudo-modal-avaliacao');
+      if (!modal || !corpoEl) return;
+      corpoEl.innerHTML = '<p class="texto-suave">Carregando questões da avaliação...</p>';
+      modal.classList.remove('oculto');
+      try {
+        const av = await api(`/avaliacoes/${avaliacaoId}`);
+        tituloEl.textContent = av.titulo || 'Avaliação';
+        const questoes = Array.isArray(av.questoes) ? av.questoes : [];
+        if (questoes.length === 0) {
+          corpoEl.innerHTML = '<p class="texto-suave">Esta avaliação ainda não possui questões cadastradas.</p>';
+          return;
+        }
+        const ehAluno = usuario.perfil === 'aluno';
+        corpoEl.innerHTML = `
+          ${av.descricao ? `<p class="texto-suave mb-12">${escaparHtml(av.descricao)}</p>` : ''}
+          <form id="form-responder-avaliacao">
+            ${questoes.map((q, idx) => `
+              <fieldset class="mb-14" style="border: 1px solid var(--cor-borda); border-radius: 8px; padding: 12px;">
+                <legend style="font-weight: 700; padding: 0 6px;">${idx + 1}. ${escaparHtml(q.enunciado)} (${Number(q.pontos) || 1} pt)</legend>
+                ${(q.alternativas || []).map((alt) => `
+                  <label class="flex-linha gap-8 mt-6" style="font-weight: 500;">
+                    ${ehAluno
+                      ? `<input type="radio" name="questao_${q.id}" value="${alt.id}" style="width:auto;" required>`
+                      : `<span class="material-symbols-outlined icon-xs" aria-hidden="true">${alt.correta ? 'check_circle' : 'radio_button_unchecked'}</span>`}
+                    <span>${escaparHtml(alt.texto)}</span>
+                  </label>
+                `).join('')}
+              </fieldset>
+            `).join('')}
+            <div id="resultado-avaliacao-modal" class="mb-10"></div>
+            ${ehAluno ? '<button type="submit" class="btn btn-primario flex-inline-icon"><span class="material-symbols-outlined icon-xs" aria-hidden="true">task_alt</span> Enviar Respostas</button>' : ''}
+          </form>
+        `;
+        const formAv = document.getElementById('form-responder-avaliacao');
+        formAv?.addEventListener('submit', async (ev) => {
+          ev.preventDefault();
+          const respostas = questoes.map((q) => {
+            const marcada = formAv.querySelector(`input[name="questao_${q.id}"]:checked`);
+            return { questaoId: q.id, alternativaId: Number(marcada?.value || 0) };
+          });
+          const resBox = document.getElementById('resultado-avaliacao-modal');
+          try {
+            const resp = await api(`/avaliacoes/${avaliacaoId}/responder`, {
+              method: 'POST',
+              body: JSON.stringify({ respostas }),
+            });
+            resBox.innerHTML = `<div class="alerta ${resp.aprovado ? 'alerta-sucesso' : 'alerta-erro'}">${escaparHtml(resp.mensagem)} Nota obtida: <strong>${Number(resp.nota).toFixed(1)}</strong>.</div>`;
+            await carregarCurso();
+          } catch (errResp) {
+            resBox.innerHTML = `<div class="alerta alerta-erro">${escaparHtml(errResp.message)}</div>`;
+          }
+        });
+      } catch (err) {
+        corpoEl.innerHTML = `<div class="alerta alerta-erro">${escaparHtml(err.message)}</div>`;
+      }
+    }
+
+    function fecharModalAvaliacao() {
+      document.getElementById('modal-avaliacao')?.classList.add('oculto');
     }
 
     async function criarModulo() {
@@ -306,6 +393,8 @@
       criarAula,
       excluirAula,
       marcarProgresso,
+      abrirAvaliacao,
+      fecharModalAvaliacao,
     });
 
     await carregarCurso();

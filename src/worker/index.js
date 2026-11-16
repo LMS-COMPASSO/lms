@@ -18,7 +18,7 @@ import {
   CORS_HEADERS,
   jsonResponse,
   jsonErro,
-  ensureDefaultAdmin,
+  garantirAdminPadraoUmaVez,
   ErroHttp,
   aplicarCabecalhosSeguranca,
 } from './helpers_utilitarios.js';
@@ -354,9 +354,9 @@ export default {
       );
     }
 
-    // Garante existência do admin padrão inicial
+    // Garante existência do admin padrão inicial uma única vez por isolate
     try {
-      await ensureDefaultAdmin(db, env);
+      await garantirAdminPadraoUmaVez(db, env);
     } catch {
       // Ignora erro inicial antes do schema
     }

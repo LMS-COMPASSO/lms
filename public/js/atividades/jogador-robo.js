@@ -435,6 +435,9 @@ export function jogadorRobo(atividade, ctx) {
     const bateriaAtual = estado.bateria;
     const bateriaPct = Math.round((bateriaAtual / bateriaMax) * 100);
     const busolaTexto = BUSSOLA_SIMBOLOS[estado.direcaoRobo] || '► LESTE';
+    let classeBateria = '';
+    if (bateriaPct < 30) classeBateria = 'critico';
+    else if (bateriaPct < 60) classeBateria = 'alerta';
 
     return h(
       'div',
@@ -516,7 +519,7 @@ export function jogadorRobo(atividade, ctx) {
             'div',
             { class: 'atv-bateria-trilho' },
             h('div', {
-              class: `atv-bateria-preenchimento ${bateriaPct < 30 ? 'critico' : (bateriaPct < 60 ? 'alerta' : '')}`,
+              class: `atv-bateria-preenchimento ${classeBateria}`,
               style: `width: ${bateriaPct}%`,
             }),
           ),

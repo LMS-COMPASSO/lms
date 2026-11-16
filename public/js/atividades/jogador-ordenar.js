@@ -207,18 +207,25 @@ export function jogadorOrdenar(atividade, ctx) {
   }
 
   function renderizar(foco = null) {
+    const conteudoBanco = estado.banco.length
+      ? h('ul', { class: 'atv-banco' }, estado.banco.map((id) => h('li', {}, botaoPasso(id))))
+      : h('p', { class: 'atv-vazio' }, 'Você já usou todos os passos. Confira o seu algoritmo e toque em Verificar.');
+    const tituloPainelBanco = estado.concluida ? 'Ficaram de fora (e estava certo!)' : 'Passos disponíveis';
+    let painelBanco = null;
+    if (!estado.concluida || estado.banco.length) {
+      painelBanco = h(
+        'div',
+        { class: 'atv-painel' },
+        h(ctx.TituloPainel, {}, tituloPainelBanco),
+        conteudoBanco,
+      );
+    }
+
     renderizarComFoco(
       area,
       () => [
         barraTelemetria(),
-        estado.concluida && !estado.banco.length ? null : h(
-          'div',
-          { class: 'atv-painel' },
-          h(ctx.TituloPainel, {}, estado.concluida ? 'Ficaram de fora (e estava certo!)' : 'Passos disponíveis'),
-          estado.banco.length
-            ? h('ul', { class: 'atv-banco' }, estado.banco.map((id) => h('li', {}, botaoPasso(id))))
-            : h('p', { class: 'atv-vazio' }, 'Você já usou todos os passos. Confira o seu algoritmo e toque em Verificar.'),
-        ),
+        painelBanco,
         h(
           'div',
           { class: 'atv-painel' },

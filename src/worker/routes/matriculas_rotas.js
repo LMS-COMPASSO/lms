@@ -16,6 +16,7 @@ import {
   queryAll,
   queryOne,
   authorizeUser,
+  parseIdPositivo,
 } from '../helpers_utilitarios.js';
 
 /**
@@ -70,23 +71,36 @@ export async function listarMatriculas(request, env, db, url) {
 export async function matricularAluno(request, env, db) {
   const { payload } = await authorizeUser(request, env, db);
   const body = await readJsonBody(request);
-  const cursoId = Number(body.curso_id);
-
-  if (!cursoId) {
+  if (!body.curso_id) {
     return jsonErro('curso_id é obrigatório.', 400);
   }
+  const cursoId = parseIdPositivo(body.curso_id, 'curso_id');
 
-  const alunoId = payload.perfil === 'aluno'
-    ? payload.id
-    : (Number(body.usuario_id) || payload.id);
+  let alunoId = payload.id;
+  if (payload.perfil !== 'aluno' && body.usuario_id !== undefined) {
+    alunoId = parseIdPositivo(body.usuario_id, 'usuario_id');
+  }
 
-  const curso = await queryOne(db, 'SELECT id, status FROM cursos WHERE id = ?', [cursoId]);
+  const curso = await queryOne(db, 'SELECT id, status, instrutor_id FROM cursos WHERE id = ?', [cursoId]);
   if (!curso) {
     return jsonErro('Curso não encontrado.', 404);
   }
 
   if (payload.perfil === 'aluno' && curso.status !== 'publicado') {
     return jsonErro('Este curso ainda não está disponível para matrícula.', 403);
+  }
+  if (payload.perfil === 'instrutor' && curso.instrutor_id !== payload.id) {
+    return jsonErro('Acesso negado. Você só pode matricular alunos em seus próprios cursos.', 403);
+  }
+
+  if (alunoId !== payload.id) {
+    const alunoExiste = await queryOne(db, 'SELECT id, ativo FROM usuarios WHERE id = ?', [alunoId]);
+    if (!alunoExiste) {
+      return jsonErro('Usuário informado para matrícula não encontrado.', 404);
+    }
+    if (!alunoExiste.ativo) {
+      return jsonErro('Não é possível matricular um usuário desativado.', 400);
+    }
   }
 
   const matriculaExistente = await queryOne(
@@ -129,17 +143,22 @@ export async function matricularAluno(request, env, db) {
  */
 export async function cancelarMatricula(request, env, db, matriculaId) {
   const { payload } = await authorizeUser(request, env, db);
-  const id = Number(matriculaId);
+  const id = parseIdPositivo(matriculaId, 'matriculaId');
 
-  if (payload.perfil === 'aluno') {
-    const propriaMatricula = await queryOne(
-      db,
-      'SELECT id FROM matriculas WHERE id = ? AND usuario_id = ?',
-      [id, payload.id],
-    );
-    if (!propriaMatricula) {
-      return jsonErro('Acesso negado. Esta matrícula não pertence a você.', 403);
-    }
+  const matricula = await queryOne(
+    db,
+    'SELECT m.id, m.usuario_id, c.instrutor_id FROM matriculas m JOIN cursos c ON c.id = m.curso_id WHERE m.id = ?',
+    [id],
+  );
+  if (!matricula) {
+    return jsonErro('Matrícula não encontrada.', 404);
+  }
+
+  if (payload.perfil === 'aluno' && matricula.usuario_id !== payload.id) {
+    return jsonErro('Acesso negado. Esta matrícula não pertence a você.', 403);
+  }
+  if (payload.perfil === 'instrutor' && matricula.instrutor_id !== payload.id) {
+    return jsonErro('Acesso negado. Você só pode cancelar matrículas de seus próprios cursos.', 403);
   }
 
   await db.prepare('UPDATE matriculas SET status = "cancelada" WHERE id = ?').bind(id).run();

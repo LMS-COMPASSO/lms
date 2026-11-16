@@ -87,7 +87,7 @@ body.pagina-cultura-digital {
   text-decoration: none;
   border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
   cursor: pointer;
 }
 
@@ -109,7 +109,7 @@ body.pagina-cultura-digital {
   font-size: 1rem;
   text-decoration: none;
   border: 1px solid rgba(255, 255, 255, 0.16);
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
   cursor: pointer;
 }
 
@@ -444,7 +444,7 @@ body.pagina-cultura-digital {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
 .btn-opcao-decisao:hover {
@@ -494,8 +494,9 @@ body.pagina-cultura-digital {
 }
 
 .cd-input-senha:focus {
-  outline: none;
+  outline: 2px solid transparent;
   border-color: #fbbf24;
+  box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.28);
 }
 
 .cd-termometro-forca {
@@ -609,7 +610,7 @@ body.pagina-cultura-digital {
   display: grid;
   place-items: center;
   margin: 0 auto 20px;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
 }
 
 .cd-pegada-icone-grande .material-symbols-outlined {

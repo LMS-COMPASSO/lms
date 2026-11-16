@@ -117,7 +117,8 @@ body[data-tema="claro"],
 body.suporta-tema-sistema[data-tema="claro"] {
   --cor-primaria: #0369a1;
   --cor-primaria-escura: #025985;
-  --cor-primaria-texto: #ffffff;
+  --cor-primaria-texto: #0369a1;
+  --cor-sobre-primaria: #ffffff;
   --cor-secundaria: #047857;
   --cor-secundaria-suave: #10b981;
   --cor-alerta: #b45309;
@@ -212,13 +213,6 @@ body[data-tema="escuro"] .login-logo img:not(.logo-tema-claro):not(.logo-tema-es
 body.suporta-tema-sistema[data-tema="escuro"] .pub-logo img:not(.logo-tema-claro):not(.logo-tema-escuro),
 body.suporta-tema-sistema[data-tema="escuro"] .login-logo img:not(.logo-tema-claro):not(.logo-tema-escuro) {
   content: url('/img/logo-branco.svg') !important;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-tema="claro"]) .pub-logo img:not(.logo-tema-claro):not(.logo-tema-escuro),
-  :root:not([data-tema="claro"]) .login-logo img:not(.logo-tema-claro):not(.logo-tema-escuro) {
-    content: url('/img/logo-branco.svg') !important;
-  }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -393,7 +387,7 @@ a { text-decoration: none; color: inherit; }
   border-radius: 8px;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, color 0.2s ease;
   flex-shrink: 0;
 }
 .btn-fechar-sidebar:hover {
@@ -430,7 +424,7 @@ a { text-decoration: none; color: inherit; }
   font-weight: 500;
   text-decoration: none;
   position: relative;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s ease, border-color 0.2s ease, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   border: 1px solid transparent;
   cursor: pointer;
 }
@@ -561,7 +555,7 @@ a { text-decoration: none; color: inherit; }
   cursor: pointer;
   width: 100%;
   text-align: left;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
 .nav-item-sair .material-symbols-outlined {
@@ -660,7 +654,7 @@ body[data-tema="escuro"] .topbar {
   min-width: 44px;
   min-height: 44px;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s ease, border-color 0.2s ease, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 .menu-toggle:hover {
@@ -925,7 +919,7 @@ input, select, textarea {
   box-sizing: border-box;
 }
 input:focus, select:focus, textarea:focus {
-  outline: none;
+  outline: 2px solid transparent;
   border-color: var(--cor-primaria);
   box-shadow: 0 0 0 3px rgba(44,82,130,0.12);
 }
@@ -1009,6 +1003,11 @@ body[data-tema="escuro"] tbody tr:hover {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   max-width: 100%;
+}
+
+.tabela-scroll:focus-visible {
+  outline: 2px solid var(--cor-primaria);
+  outline-offset: 2px;
 }
 
 :root[data-tema="escuro"] input,
@@ -3946,7 +3945,7 @@ body[data-tema="escuro"] .badge-academico-recomendado {
   border: 1px solid #d1d5db;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease, transform 0.2s ease;
   text-decoration: none;
 }
 
@@ -4085,7 +4084,7 @@ body[data-tema="escuro"] .btn-google-academic:focus-visible {
   color: var(--cor-texto);
   cursor: pointer;
   text-align: left;
-  transition: all 0.15s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
   margin-bottom: 8px;
 }
 
@@ -4154,7 +4153,7 @@ body[data-tema="escuro"] .btn-google-academic:focus-visible {
   border-radius: 8px;
   text-decoration: none !important;
   box-shadow: 0 1px 2px rgba(66, 133, 244, 0.06);
-  transition: all 0.18s ease;
+  transition: background-color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
 }
 
 .btn-google-menu:hover,

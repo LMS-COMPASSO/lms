@@ -116,6 +116,23 @@ function obterUrlCertificadoPython3d(parceiroDupla = null) {
   return `/api/certificados/python3d${query ? `?${query}` : ''}`;
 }
 
+async function abrirCertificadoPython3d(evento, parceiroDupla = null) {
+  const token = typeof obterToken === 'function' ? obterToken() : null;
+  if (!token) return;
+  evento.preventDefault();
+  const url = obterUrlCertificadoPython3d(parceiroDupla);
+  try {
+    const resp = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+    if (!resp.ok) throw new Error('Falha ao abrir certificado');
+    const html = await resp.text();
+    const blobUrl = URL.createObjectURL(new Blob([html], { type: 'text/html;charset=utf-8' }));
+    window.open(blobUrl, '_blank', 'noopener');
+    setTimeout(() => URL.revokeObjectURL(blobUrl), 60_000);
+  } catch {
+    window.open(url, '_blank', 'noopener');
+  }
+}
+
 function bannerExploradorPython3d() {
   const concluidas3d = contarPython3dConcluidas();
   const total3d = ATIVIDADES_PYTHON_3D.length;
@@ -176,6 +193,7 @@ function bannerExploradorPython3d() {
           href: obterUrlCertificadoPython3d(),
           target: '_blank',
           rel: 'noopener',
+          onclick: (e) => abrirCertificadoPython3d(e),
         },
         h('span', { class: 'material-symbols-outlined icon-xs', 'aria-hidden': 'true' }, 'workspace_premium'),
         conquistado ? 'Emitir Certificado Python 3D' : 'Visualizar Certificado Python 3D',
@@ -404,6 +422,7 @@ function bannerSpotlight(destaqueObj, concluidas, total) {
               target: '_blank',
               rel: 'noopener',
               title: t('spotlight.certificado3dTitulo'),
+              onclick: (e) => abrirCertificadoPython3d(e),
             },
             h('span', { class: 'material-symbols-outlined icon-xs', 'aria-hidden': 'true' }, 'workspace_premium'),
             t('spotlight.certificado3d', { concluidas: concluidas3d, total: total3d }),
@@ -1073,23 +1092,31 @@ function renderAtividade(atividade) {
     const concluidas3d = contarPython3dConcluidas();
     const concluiuTodasPython3d = concluidas3d >= ATIVIDADES_PYTHON_3D.length && ATIVIDADES_PYTHON_3D.length > 0;
 
+    let btnCertificado3d = null;
+    if (atividade.tipo === 'python3d') {
+      const classeCert = concluiuTodasPython3d ? 'btn-primario' : 'btn-secundario';
+      const labelCert = concluiuTodasPython3d
+        ? t('spotlight.certificado3dEmitir', {}, 'Emitir Certificado Explorador Python 3D')
+        : t('spotlight.certificado3dVisualizar', {}, 'Visualizar Certificado Python 3D');
+      btnCertificado3d = h(
+        'a',
+        {
+          class: `btn ${classeCert} flex-inline-icon`,
+          href: obterUrlCertificadoPython3d(dados?.parceiroDupla),
+          target: '_blank',
+          rel: 'noopener',
+          onclick: (e) => abrirCertificadoPython3d(e, dados?.parceiroDupla),
+        },
+        h('span', { class: 'material-symbols-outlined icon-xs' }, 'workspace_premium'),
+        labelCert,
+      );
+    }
+
     const acoes = [
       proxima
         ? h('a', { class: 'btn btn-primario seta-proximo', href: `/atividades.html?id=${encodeURIComponent(proxima.id)}` }, t('spotlight.proximaAtividade', {}, 'Próxima atividade'), h('span', { class: 'material-symbols-outlined icon-xs' }, 'arrow_forward'))
         : null,
-      atividade.tipo === 'python3d'
-        ? h(
-            'a',
-            {
-              class: `btn ${concluiuTodasPython3d ? 'btn-primario' : 'btn-secundario'} flex-inline-icon`,
-              href: obterUrlCertificadoPython3d(dados?.parceiroDupla),
-              target: '_blank',
-              rel: 'noopener',
-            },
-            h('span', { class: 'material-symbols-outlined icon-xs' }, 'workspace_premium'),
-            concluiuTodasPython3d ? t('spotlight.certificado3dEmitir', {}, 'Emitir Certificado Explorador Python 3D') : t('spotlight.certificado3dVisualizar', {}, 'Visualizar Certificado Python 3D'),
-          )
-        : null,
+      btnCertificado3d,
       h('a', { class: 'btn btn-neutro seta-voltar', href: '/atividades.html' }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'arrow_back'), t('spotlight.verTodas', {}, 'Ver todas as atividades')),
     ];
 
@@ -1120,10 +1147,14 @@ function renderAtividade(atividade) {
 
     if (usuario) {
       try {
+        const pontuacaoEstrelas = dados?.estrelas ? Math.min(10, 4 + Number(dados.estrelas) * 2) : 10.0;
         await api('/gamificacao/concluir-atividade', {
           method: 'POST',
           body: JSON.stringify({
             atividadeId: atividade.id,
+            habilidades: Array.isArray(atividade.habilidades) ? atividade.habilidades : [],
+            pontuacao: pontuacaoEstrelas,
+            cursoId: cursoId || undefined,
             titulo: atividade.titulo,
             xp: atividade.tipo === 'python3d' ? 35 : 25,
             codigoPython: dados?.codigoPython || '',
@@ -1131,7 +1162,6 @@ function renderAtividade(atividade) {
             estrelas: dados?.estrelas || 3,
             parceiroDupla: dados?.parceiroDupla || null,
             papelDupla: dados?.papelDupla || null,
-            concluiuTodasPython3d,
           }),
         });
       } catch {

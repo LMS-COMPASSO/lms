@@ -14,12 +14,12 @@
 
 // Importa assincronamente o motor de hidratação SVG e rolagem horizontal universal
 if (typeof window !== 'undefined') {
-  import('/js/icones-universais.js').catch(() => {});
+  import('/js/icones-universais.js').catch(() => { });
   import('/js/menu-universal.js').then((m) => {
     if (typeof m.habilitarRolagemHorizontalMenus === 'function') {
       m.habilitarRolagemHorizontalMenus();
     }
-  }).catch(() => {});
+  }).catch(() => { });
 }
 
 const MAPA_WAYFINDING_PAGINAS = {
@@ -231,7 +231,7 @@ function alternarSidebar() {
     document.body.classList.toggle('sidebar-recolhida', recolhendo);
     try {
       localStorage.setItem('lms_sidebar_recolhida', recolhendo ? '1' : '0');
-    } catch {}
+    } catch { }
   }
 }
 
@@ -260,11 +260,16 @@ function alternarPainelWayfinding(idPainel) {
   });
 }
 
-function aplicarPreferenciaAcessibilidade(chave, ativo) {
+function aplicarClassePreferenciaAcessibilidade(chave, ativo) {
   try {
     localStorage.setItem(`lms_a11y_${chave}`, ativo ? '1' : '0');
-  } catch {}
+  } catch { }
   document.documentElement.classList.toggle(`a11y-${chave}`, Boolean(ativo));
+}
+
+function aplicarPreferenciaAcessibilidade(chave, ativo) {
+  aplicarClassePreferenciaAcessibilidade(chave, ativo);
+  window.dispatchEvent(new CustomEvent('preferenciasA11yAtualizadas'));
 
   // Sincroniza com Cloudflare D1 se o usuário estiver autenticado
   if (typeof api === 'function' && typeof obterToken === 'function' && obterToken()) {
@@ -275,7 +280,7 @@ function aplicarPreferenciaAcessibilidade(chave, ativo) {
         fonte_ampliada: document.documentElement.classList.contains('a11y-fonte-ampliada') ? 1 : 0,
         reduzir_movimento: document.documentElement.classList.contains('a11y-reduzir-movimento') ? 1 : 0,
       }),
-    }).catch(() => {});
+    }).catch(() => { });
   }
 }
 
@@ -285,19 +290,34 @@ function restaurarPreferenciasAcessibilidade() {
       if (localStorage.getItem(`lms_a11y_${chave}`) === '1') {
         document.documentElement.classList.add(`a11y-${chave}`);
       }
-    } catch {}
+    } catch { }
   });
 
-  // Carrega preferências salvas no Cloudflare D1 caso existam
+  // Carrega preferências salvas no Cloudflare D1 sem disparar PUTs redundantes
   if (typeof api === 'function' && typeof obterToken === 'function' && obterToken()) {
     api('/preferencias')
       .then((prefs) => {
         if (!prefs) return;
-        if (prefs.alto_contraste) aplicarPreferenciaAcessibilidade('alto-contraste', true);
-        if (prefs.fonte_ampliada) aplicarPreferenciaAcessibilidade('fonte-ampliada', true);
-        if (prefs.reduzir_movimento) aplicarPreferenciaAcessibilidade('reduzir-movimento', true);
+        if (prefs.alto_contraste !== undefined) {
+          aplicarClassePreferenciaAcessibilidade('alto-contraste', Boolean(prefs.alto_contraste));
+        }
+        if (prefs.fonte_ampliada !== undefined) {
+          aplicarClassePreferenciaAcessibilidade('fonte-ampliada', Boolean(prefs.fonte_ampliada));
+        }
+        if (prefs.reduzir_movimento !== undefined) {
+          aplicarClassePreferenciaAcessibilidade('reduzir-movimento', Boolean(prefs.reduzir_movimento));
+        }
+        window.dispatchEvent(new CustomEvent('preferenciasA11yAtualizadas'));
       })
-      .catch(() => {});
+      .catch(() => { });
+  }
+}
+
+function lerTemaSalvoSeguro() {
+  try {
+    return localStorage.getItem('lms_tema') || '';
+  } catch {
+    return '';
   }
 }
 
@@ -317,7 +337,7 @@ function atualizarBotoesTema() {
     if (btnAuto) btnAuto.classList.toggle('ativo', !modoSalvo);
     if (btnClaro) btnClaro.classList.toggle('ativo', modoSalvo === 'claro');
     if (btnEscuro) btnEscuro.classList.toggle('ativo', modoSalvo === 'escuro');
-  } catch {}
+  } catch { }
 }
 
 window.alternarSidebar = alternarSidebar;
@@ -453,7 +473,7 @@ function montarLayout(paginaAtiva) {
   try {
     recolhidaInicial = window.innerWidth > 1024 && localStorage.getItem('lms_sidebar_recolhida') === '1';
     if (recolhidaInicial) document.body.classList.add('sidebar-recolhida');
-  } catch {}
+  } catch { }
 
   const inicialNome = (usuario.nome || 'U').charAt(0).toUpperCase();
   const rotaInicio = usuario.perfil === 'aluno' ? '/cursos.html' : '/dashboard.html';
@@ -496,8 +516,8 @@ function montarLayout(paginaAtiva) {
           <span class="nav-item-texto">Início</span>
         </a>
         ${itensVisiveis.map((item) => {
-          const isAtivo = item.chave === paginaAtiva || (chaveContexto === 'curso-detalhe' && item.chave === 'cursos');
-          return `
+    const isAtivo = item.chave === paginaAtiva || (chaveContexto === 'curso-detalhe' && item.chave === 'cursos');
+    return `
             <a href="${item.href}" class="nav-item ${isAtivo ? 'ativo' : ''}" data-secao-item="${item.secao}" ${isAtivo ? 'aria-current="page"' : ''} title="${item.label}" onclick="if (window.innerWidth <= 1024) fecharSidebar()">
               <div class="nav-item-icone">
                 <span class="material-symbols-outlined" aria-hidden="true">${item.icone}</span>
@@ -506,16 +526,16 @@ function montarLayout(paginaAtiva) {
               ${isAtivo ? '<span class="nav-item-indicador" aria-hidden="true"></span>' : ''}
             </a>
           `;
-        }).join('')}
+  }).join('')}
       </nav>
 
       <div class="sidebar-footer">
-        <a href="/perfil.html" class="sidebar-usuario-card" title="Acessar Meu Perfil (${usuario.nome})">
-          <div class="usuario-avatar-mini" aria-hidden="true">${inicialNome}</div>
+        <a href="/perfil.html" class="sidebar-usuario-card" title="Acessar Meu Perfil (${escaparHtml(usuario.nome)})">
+          <div class="usuario-avatar-mini" aria-hidden="true">${escaparHtml(inicialNome)}</div>
           <div class="usuario-info-mini">
-            <span class="usuario-nome-mini">${usuario.nome}</span>
+            <span class="usuario-nome-mini">${escaparHtml(usuario.nome)}</span>
             <div class="flex-linha gap-4 flex-wrap">
-              <span class="badge badge-${usuario.perfil} badge-micro">${usuario.perfil}</span>
+              <span class="badge badge-${escaparHtml(usuario.perfil)} badge-micro">${escaparHtml(usuario.perfil)}</span>
               ${ehGoogleAcademico ? '<span class="badge-google-sidebar" title="Conta Google Acadêmica"><svg width="10" height="10" viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg> Google</span>' : ''}
             </div>
           </div>
@@ -622,14 +642,14 @@ function montarLayout(paginaAtiva) {
           <span class="wf-tool-label">Ajuda</span>
         </button>
 
-        <a href="/perfil.html" class="topbar-usuario-link" title="Meu Perfil: ${usuario.nome} (${usuario.perfil}${ehGoogleAcademico ? ' · Google Acadêmico' : ''})" aria-label="Meu Perfil: ${usuario.nome}">
+        <a href="/perfil.html" class="topbar-usuario-link" title="Meu Perfil: ${escaparHtml(usuario.nome)} (${escaparHtml(usuario.perfil)}${ehGoogleAcademico ? ' · Google Acadêmico' : ''})" aria-label="Meu Perfil: ${escaparHtml(usuario.nome)}">
           <span class="material-symbols-outlined icon-sm" aria-hidden="true">account_circle</span>
           <div class="texto-direita topbar-usuario">
-            <strong>${usuario.nome}</strong>
+            <strong>${escaparHtml(usuario.nome)}</strong>
             <div class="flex-linha gap-4 justify-end">
-              <span class="badge badge-${usuario.perfil}">${usuario.perfil}</span>
+              <span class="badge badge-${escaparHtml(usuario.perfil)}">${escaparHtml(usuario.perfil)}</span>
               ${ehGoogleAcademico ? `
-                <span class="badge badge-google-topbar" title="Autenticado via Google Workspace for Education (${usuario.dominio_institucional || 'Conta Institucional'})">
+                <span class="badge badge-google-topbar" title="Autenticado via Google Workspace for Education (${escaparHtml(usuario.dominio_institucional || 'Conta Institucional')})">
                   <svg width="11" height="11" viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
                   Google
                 </span>
@@ -716,13 +736,13 @@ function montarLayout(paginaAtiva) {
       <div class="wf-tema-seletor mt-12 pt-12" style="border-top: 1px solid var(--cor-borda);">
         <label style="font-weight: 700; margin-bottom: 6px; display: block; font-size: 0.85rem;">Tema de Exibição</label>
         <div class="flex-linha gap-8 flex-wrap">
-          <button type="button" class="btn btn-xs btn-neutro wf-btn-tema ${!localStorage.getItem('lms_tema') ? 'ativo' : ''}" id="btn-tema-auto" onclick="definirTemaLMS('auto'); atualizarBotoesTema();" title="Seguir preferência do sistema operacional">
+          <button type="button" class="btn btn-xs btn-neutro wf-btn-tema ${!lerTemaSalvoSeguro() ? 'ativo' : ''}" id="btn-tema-auto" onclick="definirTemaLMS('auto'); atualizarBotoesTema();" title="Seguir preferência do sistema operacional">
             <span class="material-symbols-outlined icon-xs">devices</span> Automático
           </button>
-          <button type="button" class="btn btn-xs btn-neutro wf-btn-tema ${localStorage.getItem('lms_tema') === 'claro' ? 'ativo' : ''}" id="btn-tema-claro" onclick="definirTemaLMS('claro'); atualizarBotoesTema();" title="Ativar tema claro">
+          <button type="button" class="btn btn-xs btn-neutro wf-btn-tema ${lerTemaSalvoSeguro() === 'claro' ? 'ativo' : ''}" id="btn-tema-claro" onclick="definirTemaLMS('claro'); atualizarBotoesTema();" title="Ativar tema claro">
             <span class="material-symbols-outlined icon-xs">light_mode</span> Claro
           </button>
-          <button type="button" class="btn btn-xs btn-neutro wf-btn-tema ${localStorage.getItem('lms_tema') === 'escuro' ? 'ativo' : ''}" id="btn-tema-escuro" onclick="definirTemaLMS('escuro'); atualizarBotoesTema();" title="Ativar tema escuro">
+          <button type="button" class="btn btn-xs btn-neutro wf-btn-tema ${lerTemaSalvoSeguro() === 'escuro' ? 'ativo' : ''}" id="btn-tema-escuro" onclick="definirTemaLMS('escuro'); atualizarBotoesTema();" title="Ativar tema escuro">
             <span class="material-symbols-outlined icon-xs">dark_mode</span> Escuro
           </button>
         </div>
@@ -792,7 +812,7 @@ function montarLayout(paginaAtiva) {
       if (typeof m.habilitarRolagemHorizontalMenus === 'function') {
         m.habilitarRolagemHorizontalMenus();
       }
-    }).catch(() => {});
+    }).catch(() => { });
   }
 }
 

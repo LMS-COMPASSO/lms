@@ -198,6 +198,9 @@ export function ProgressTrail({ etapaAtual = 1, totalEtapas = 6, titulo = 'Trilh
  * @returns {string} HTML do cabeçalho de seção
  */
 export function SectionHeader({ secao = 'pensamento', titulo, subtitulo = '', badgeTexto = '', badgeIcone = '', acoesHtml = '' }) {
+  const iconeBadgeHtml = badgeIcone
+    ? `<span class="material-symbols-outlined icon-xs" aria-hidden="true">${escapeHtml(badgeIcone)}</span>`
+    : '';
   return `
     <header class="comp-section-header" data-secao="${escapeHtml(secao)}">
       <div class="flex-entre flex-wrap gap-12">
@@ -205,7 +208,7 @@ export function SectionHeader({ secao = 'pensamento', titulo, subtitulo = '', ba
           ${badgeTexto ? `
             <div class="mb-6">
               <span class="secao-pista-badge" data-secao="${escapeHtml(secao)}">
-                ${badgeIcone ? `<span class="material-symbols-outlined icon-xs" aria-hidden="true">${escapeHtml(badgeIcone)}</span>` : ''}
+                ${iconeBadgeHtml}
                 <span>${escapeHtml(badgeTexto)}</span>
               </span>
             </div>
@@ -276,11 +279,12 @@ export function EmptyState({
     ? `<a href="${escapeHtml(acaoPrimaria.href)}" class="btn btn-primario flex-inline-icon"><span class="material-symbols-outlined icon-xs" aria-hidden="true">home</span> ${escapeHtml(acaoPrimaria.rotulo)}</a>`
     : `<button type="button" class="btn btn-primario" onclick="${escapeHtml(acaoPrimaria.onClick || '')}">${escapeHtml(acaoPrimaria.rotulo)}</button>`;
 
-  const acaoSecundariaHtml = acaoSecundaria
-    ? (acaoSecundaria.href
+  let acaoSecundariaHtml = '';
+  if (acaoSecundaria) {
+    acaoSecundariaHtml = acaoSecundaria.href
       ? `<a href="${escapeHtml(acaoSecundaria.href)}" class="btn btn-neutro seta-proximo"><span>${escapeHtml(acaoSecundaria.rotulo)}</span> <span class="material-symbols-outlined icon-xs" aria-hidden="true">arrow_forward</span></a>`
-      : `<button type="button" class="btn btn-neutro" onclick="${escapeHtml(acaoSecundaria.onClick || '')}">${escapeHtml(acaoSecundaria.rotulo)}</button>`)
-    : '';
+      : `<button type="button" class="btn btn-neutro" onclick="${escapeHtml(acaoSecundaria.onClick || '')}">${escapeHtml(acaoSecundaria.rotulo)}</button>`;
+  }
 
   return `
     <section class="comp-empty-state estado-saida-404" aria-label="${escapeHtml(titulo)}">

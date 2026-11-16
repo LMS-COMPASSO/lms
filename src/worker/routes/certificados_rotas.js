@@ -17,6 +17,9 @@ import {
   queryAll,
   queryOne,
   authorizeUser,
+  obterPayloadOpcional,
+  parseIdPositivo,
+  escaparHtml,
   CORS_HEADERS,
 } from '../helpers_utilitarios.js';
 
@@ -106,19 +109,22 @@ export async function listarCertificados(request, env, db) {
 export async function emitirCertificado(request, env, db, url) {
   const { payload } = await authorizeUser(request, env, db);
   const body = await readJsonBody(request);
-  const matriculaId = Number(body.matricula_id);
+  const matriculaId = parseIdPositivo(body.matricula_id, 'matricula_id');
 
-  if (!matriculaId) {
-    return jsonErro('matricula_id é obrigatório.', 400);
-  }
-
-  const matricula = await queryOne(db, 'SELECT * FROM matriculas WHERE id = ?', [matriculaId]);
+  const matricula = await queryOne(
+    db,
+    'SELECT m.*, c.instrutor_id FROM matriculas m JOIN cursos c ON c.id = m.curso_id WHERE m.id = ?',
+    [matriculaId],
+  );
   if (!matricula) {
     return jsonErro('Matrícula não encontrada.', 404);
   }
 
   if (payload.perfil === 'aluno' && matricula.usuario_id !== payload.id) {
     return jsonErro('Acesso negado. Esta matrícula não pertence a você.', 403);
+  }
+  if (payload.perfil === 'instrutor' && matricula.instrutor_id !== payload.id) {
+    return jsonErro('Acesso negado. Você não é o instrutor responsável por este curso.', 403);
   }
 
   if (matricula.status !== 'concluida') {
@@ -150,25 +156,46 @@ export async function emitirCertificado(request, env, db, url) {
 }
 
 /**
- * Renderiza o Certificado Especial "Explorador Python 3D — BNCC Computação" em HTML/A4
- * quando o estudante conclui as 6 atividades tridimensionais de lógica em Python.
+ * Renderiza o Certificado Especial "Explorador Python 3D — BNCC Computação" em HTML/A4.
+ * Emite certificado oficial com código válido apenas para usuários autenticados que
+ * concluíram as 6 missões Python 3D no banco; acessos anônimos exibem modo pré-visualização.
  */
 export async function visualizarCertificadoPython3dHtml(request, env, db, url) {
-  const alunoParam = url.searchParams.get('aluno') || 'Estudante Explorador BNCC';
-  const duplaParam = url.searchParams.get('dupla') || '';
-  const codigoParam = url.searchParams.get('codigo') || `PY3D-2026-${Math.abs(alunoParam.length * 7919).toString(16).toUpperCase()}`;
+  const authOpcional = await obterPayloadOpcional(request, env, db);
+  let oficial = false;
+  let nomeAluno = String(url.searchParams.get('aluno') || 'Estudante Explorador BNCC').trim().slice(0, 120);
+  const duplaParam = String(url.searchParams.get('dupla') || '').trim().slice(0, 120);
+  let codigoValidacao = 'MODO-PREVIA-SEM-VALIDACAO';
+
+  if (authOpcional?.user) {
+    try {
+      const contagem = await queryOne(
+        db,
+        "SELECT COUNT(DISTINCT atividade_id) AS total FROM submissoes_python WHERE usuario_id = ? AND atividade_id LIKE 'python3d-%' AND sucesso = 1",
+        [authOpcional.user.id],
+      );
+      if (Number(contagem?.total || 0) >= 6) {
+        oficial = true;
+        nomeAluno = authOpcional.user.nome || nomeAluno;
+        codigoValidacao = `PY3D-U${authOpcional.user.id}-${new Date().getFullYear()}`;
+      }
+    } catch {
+      oficial = false;
+    }
+  }
 
   const tituloTrilha = duplaParam
     ? `Laboratório 3D de Lógica em Python (Em Dupla Colaborativa com ${duplaParam})`
     : 'Laboratório 3D de Lógica de Programação em Python (6 Desafios Tridimensionais)';
 
   const html = gerarHtmlCertificado({
-    aluno_nome: alunoParam,
+    aluno_nome: nomeAluno || 'Estudante Explorador BNCC',
     curso_titulo: tituloTrilha,
     eixo_bncc: 'Pensamento Computacional · Medalha Explorador Python 3D (EF15CO02, EF03CO03, EF69CO02, EF69CO03, EF69CO04)',
     carga_horaria: 12,
-    codigo_validacao: codigoParam,
+    codigo_validacao: codigoValidacao,
     data_emissao: new Date().toISOString(),
+    previa: !oficial,
   });
 
   return new Response(html, {
@@ -184,13 +211,22 @@ export function gerarHtmlCertificado(cert) {
   const dataFormatada = cert.data_emissao
     ? new Date(cert.data_emissao).toLocaleDateString('pt-BR')
     : new Date().toLocaleDateString('pt-BR');
+  const alunoNomeSeguro = escaparHtml(cert.aluno_nome);
+  const cursoTituloSeguro = escaparHtml(cert.curso_titulo);
+  const eixoBnccSeguro = escaparHtml(cert.eixo_bncc || 'Computação Escolar');
+  const cargaHorariaSegura = escaparHtml(cert.carga_horaria || 0);
+  const codigoValidacaoSeguro = escaparHtml(cert.codigo_validacao);
+  const dataFormatadaSegura = escaparHtml(dataFormatada);
+  const bannerPrevia = cert.previa
+    ? '<div role="note" style="background:#fef3c7;color:#92400e;border:1px solid #f59e0b;border-radius:6px;padding:6px 12px;font-size:0.78rem;font-weight:700;margin:8px auto 0;max-width:640px;">PRÉ-VISUALIZAÇÃO DEMONSTRATIVA — Faça login e conclua os 6 desafios Python 3D para obter o código oficial.</div>'
+    : '';
 
   return `<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Certificado - ${cert.aluno_nome} - LMS BNCC Computação</title>
+  <title>Certificado - ${alunoNomeSeguro} - LMS BNCC Computação</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Inter:wght@400;500;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap');
     
@@ -414,23 +450,24 @@ export function gerarHtmlCertificado(cert) {
 
         <div>
           <h1 class="title">CERTIFICADO</h1>
+          ${bannerPrevia}
           <p class="certifica-que">Certificamos com louvor que</p>
-          <div class="student-name">${cert.aluno_nome}</div>
+          <div class="student-name">${alunoNomeSeguro}</div>
           <p class="description">
             concluiu com êxito os estudos na área de Computação Escolar no curso
-            <br><span class="course-title">"${cert.curso_titulo}"</span>,
+            <br><span class="course-title">"${cursoTituloSeguro}"</span>,
             desenvolvendo competências orientadas pelas diretrizes da
             <strong>Base Nacional Comum Curricular (BNCC Computação)</strong>
-            no eixo <strong>${cert.eixo_bncc || 'Computação Escolar'}</strong>,
-            completando a carga horária de <strong>${cert.carga_horaria || 0} horas</strong>.
+            no eixo <strong>${eixoBnccSeguro}</strong>,
+            completando a carga horária de <strong>${cargaHorariaSegura} horas</strong>.
           </p>
         </div>
 
         <div class="footer">
           <div class="validation-box">
             <span>Código de Autenticidade:</span>
-            <code>${cert.codigo_validacao}</code>
-            <span>Emitido em: ${dataFormatada}</span>
+            <code>${codigoValidacaoSeguro}</code>
+            <span>Emitido em: ${dataFormatadaSegura}</span>
           </div>
 
           <div class="signatures">

@@ -79,8 +79,11 @@ async function api(caminho, opcoes = {}) {
     throw new Error('Não foi possível conectar ao servidor. Verifique sua conexão à internet.');
   }
 
-  // Se a sessão expirou ou o token for inválido, redireciona para o login
-  if (resposta.status === 401) {
+  // Se a sessão autenticada expirou ou o token atual foi rejeitado, encerra a sessão
+  const rotaPublicaAuth = caminho.startsWith('/auth/login')
+    || caminho.startsWith('/auth/registrar')
+    || caminho.startsWith('/auth/google');
+  if (resposta.status === 401 && token && !rotaPublicaAuth) {
     encerrarSessao();
     throw new Error('Sessão expirada. Faça login novamente.');
   }

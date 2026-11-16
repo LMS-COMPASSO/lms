@@ -1,9 +1,40 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { hashSenha, sha256Hex, signJwt } from '../src/worker/crypto_seguranca.js';
+import { base64UrlEncode, hashSenha, sha256Hex, signJwt } from '../src/worker/crypto_seguranca.js';
 import { alterarSenha, login, loginComGoogle, obterConfigAuth, registrar, verificarDominioAcademico } from '../src/worker/routes/auth_rotas.js';
 
 const SEGREDO = 'segredo-de-teste-com-mais-de-32-caracteres!!';
+const CLIENT_ID_TESTE = '123456789-escola.apps.googleusercontent.com';
+
+async function criarParChavesGoogleTeste() {
+  const kp = await crypto.subtle.generateKey(
+    {
+      name: 'RSASSA-PKCS1-v1_5',
+      modulusLength: 2048,
+      publicExponent: new Uint8Array([1, 0, 1]),
+      hash: 'SHA-256',
+    },
+    true,
+    ['sign', 'verify'],
+  );
+  const publicJwk = await crypto.subtle.exportKey('jwk', kp.publicKey);
+  publicJwk.kid = 'google-test-key-1';
+  publicJwk.alg = 'RS256';
+  return { privateKey: kp.privateKey, jwks: [publicJwk] };
+}
+
+async function assinarTokenGoogle(payload, privateKey, headerExtras = {}) {
+  const header = { alg: 'RS256', typ: 'JWT', kid: 'google-test-key-1', ...headerExtras };
+  const hB64 = base64UrlEncode(JSON.stringify(header));
+  const pB64 = base64UrlEncode(JSON.stringify(payload));
+  const input = `${hB64}.${pB64}`;
+  const sig = await crypto.subtle.sign(
+    'RSASSA-PKCS1-v1_5',
+    privateKey,
+    new TextEncoder().encode(input),
+  );
+  return `${input}.${base64UrlEncode(new Uint8Array(sig))}`;
+}
 
 /**
  * Banco D1 falso em memória: entende apenas as consultas usadas pelas rotas de auth.
@@ -161,14 +192,26 @@ test('verificarDominioAcademico reconhece domínios educacionais e governamentai
   assert.equal(verificarDominioAcademico('qualquer@gmail.com', 'gmail.com'), false);
 });
 
-test('loginComGoogle provisiona novo aluno institucional com domínio acadêmico', async () => {
+test('loginComGoogle falha fechado (503) quando GOOGLE_CLIENT_ID não está configurado em produção', async () => {
   const db = criarBanco();
-  const env = { JWT_SECRET: SEGREDO };
+  const res = await loginComGoogle(
+    requisicao({ email: 'invasor@escola.edu.br' }),
+    { JWT_SECRET: SEGREDO },
+    db,
+  );
+  assert.equal(res.status, 503);
+  assert.equal(db.linhas.length, 0);
+});
+
+test('loginComGoogle em modo dev explícito provisiona aluno sem aceitar escalonamento de perfil', async () => {
+  const db = criarBanco();
+  const env = { JWT_SECRET: SEGREDO, ALLOW_UNVERIFIED_GOOGLE_DEV: 'true' };
 
   const resposta = await loginComGoogle(
     requisicao({
       nome: 'Mariana Costa',
       email: 'mariana.costa@aluno.escola.edu.br',
+      perfil: 'instrutor',
       avatar_url: 'https://lh3.googleusercontent.com/avatar-mariana',
     }),
     env,
@@ -186,18 +229,24 @@ test('loginComGoogle provisiona novo aluno institucional com domínio acadêmico
   assert.equal(db.linhas[0].email, 'mariana.costa@aluno.escola.edu.br');
 });
 
-test('loginComGoogle com professor institucional deduz perfil instrutor', async () => {
+test('loginComGoogle com professor institucional verificado deduz perfil instrutor', async () => {
   const db = criarBanco();
-  const env = { JWT_SECRET: SEGREDO };
-
-  const resposta = await loginComGoogle(
-    requisicao({
-      nome: 'Prof. Carlos Eduardo',
+  const { privateKey, jwks } = await criarParChavesGoogleTeste();
+  const env = { JWT_SECRET: SEGREDO, GOOGLE_CLIENT_ID: CLIENT_ID_TESTE, __GOOGLE_JWKS: jwks };
+  const token = await assinarTokenGoogle(
+    {
+      iss: 'https://accounts.google.com',
+      aud: CLIENT_ID_TESTE,
+      exp: Math.floor(Date.now() / 1000) + 3600,
+      email_verified: true,
       email: 'prof.carlos@educacao.sp.gov.br',
-    }),
-    env,
-    db,
+      name: 'Prof. Carlos Eduardo',
+      hd: 'educacao.sp.gov.br',
+    },
+    privateKey,
   );
+
+  const resposta = await loginComGoogle(requisicao({ credential: token }), env, db);
   const dados = await resposta.json();
 
   assert.equal(resposta.status, 200);
@@ -210,16 +259,22 @@ test('loginComGoogle com usuário existente preserva perfil atual (inclusive adm
   const db = criarBanco([
     { id: 99, nome: 'Diretora Silvia', email: 'silvia@escola.gov.br', perfil: 'administrador' },
   ]);
-  const env = { JWT_SECRET: SEGREDO };
-
-  const resposta = await loginComGoogle(
-    requisicao({
+  const { privateKey, jwks } = await criarParChavesGoogleTeste();
+  const env = { JWT_SECRET: SEGREDO, GOOGLE_CLIENT_ID: CLIENT_ID_TESTE, __GOOGLE_JWKS: jwks };
+  const token = await assinarTokenGoogle(
+    {
+      iss: 'https://accounts.google.com',
+      aud: CLIENT_ID_TESTE,
+      exp: Math.floor(Date.now() / 1000) + 3600,
+      email_verified: true,
       email: 'silvia@escola.gov.br',
-      avatar_url: 'https://lh3.googleusercontent.com/silvia',
-    }),
-    env,
-    db,
+      name: 'Diretora Silvia',
+      picture: 'https://lh3.googleusercontent.com/silvia',
+    },
+    privateKey,
   );
+
+  const resposta = await loginComGoogle(requisicao({ credential: token }), env, db);
   const dados = await resposta.json();
 
   assert.equal(resposta.status, 200);
@@ -227,97 +282,148 @@ test('loginComGoogle com usuário existente preserva perfil atual (inclusive adm
   assert.equal(db.linhas[0].perfil, 'administrador');
 });
 
-test('loginComGoogle decodifica credencial JWT simulada do Google GIS', async () => {
+test('loginComGoogle verifica assinatura RS256, email_verified, iss e aud do Google GIS', async () => {
   const db = criarBanco();
-  const env = { JWT_SECRET: SEGREDO };
+  const { privateKey, jwks } = await criarParChavesGoogleTeste();
+  const env = { JWT_SECRET: SEGREDO, GOOGLE_CLIENT_ID: CLIENT_ID_TESTE, __GOOGLE_JWKS: jwks };
+  const exp = Math.floor(Date.now() / 1000) + 3600;
 
-  const headerB64 = Buffer.from(JSON.stringify({ alg: 'RS256', typ: 'JWT' })).toString('base64');
-  const payloadB64 = Buffer.from(
-    JSON.stringify({
+  const tokenValido = await assinarTokenGoogle(
+    {
+      iss: 'https://accounts.google.com',
+      aud: CLIENT_ID_TESTE,
+      exp,
+      email_verified: true,
       sub: 'google_sub_123456789',
       email: 'pedro.souza@colegio.edu.br',
       name: 'Pedro Souza',
       picture: 'https://lh3.googleusercontent.com/pedro',
       hd: 'colegio.edu.br',
-    }),
-  ).toString('base64');
-  const fakeToken = `${headerB64}.${payloadB64}.fake_signature_bytes`;
+    },
+    privateKey,
+  );
 
-  const resposta = await loginComGoogle(requisicao({ credential: fakeToken }), env, db);
+  const resposta = await loginComGoogle(requisicao({ credential: tokenValido }), env, db);
   const dados = await resposta.json();
 
   assert.equal(resposta.status, 200);
   assert.equal(dados.usuario.email, 'pedro.souza@colegio.edu.br');
   assert.equal(dados.usuario.nome, 'Pedro Souza');
   assert.equal(dados.contaAcademica, true);
+
+  // Assinatura adulterada deve falhar (401)
+  const partes = tokenValido.split('.');
+  const tokenAdulterado = `${partes[0]}.${partes[1]}.assinatura_forjada`;
+  await assert.rejects(
+    loginComGoogle(requisicao({ credential: tokenAdulterado }), env, db),
+    (err) => err.status === 401,
+  );
+
+  // E-mail não verificado deve falhar (401)
+  const tokenNaoVerificado = await assinarTokenGoogle(
+    {
+      iss: 'https://accounts.google.com',
+      aud: CLIENT_ID_TESTE,
+      exp,
+      email_verified: false,
+      email: 'falso@colegio.edu.br',
+    },
+    privateKey,
+  );
+  await assert.rejects(
+    loginComGoogle(requisicao({ credential: tokenNaoVerificado }), env, db),
+    (err) => err.status === 401,
+  );
 });
 
 test('loginComGoogle recusa usuário inativo', async () => {
   const db = criarBanco([
     { id: 5, nome: 'Aluno Bloqueado', email: 'bloqueado@escola.edu.br', ativo: 0 },
   ]);
-  const env = { JWT_SECRET: SEGREDO };
-
-  const resposta = await loginComGoogle(
-    requisicao({ email: 'bloqueado@escola.edu.br' }),
-    env,
-    db,
+  const { privateKey, jwks } = await criarParChavesGoogleTeste();
+  const env = { JWT_SECRET: SEGREDO, GOOGLE_CLIENT_ID: CLIENT_ID_TESTE, __GOOGLE_JWKS: jwks };
+  const token = await assinarTokenGoogle(
+    {
+      iss: 'https://accounts.google.com',
+      aud: CLIENT_ID_TESTE,
+      exp: Math.floor(Date.now() / 1000) + 3600,
+      email_verified: true,
+      email: 'bloqueado@escola.edu.br',
+    },
+    privateKey,
   );
+
+  const resposta = await loginComGoogle(requisicao({ credential: token }), env, db);
   assert.equal(resposta.status, 403);
 });
 
 test('obterConfigAuth retorna googleClientId e status de configuração', async () => {
   const req = new Request('https://lms.test/api/auth/config', { method: 'GET' });
 
-  // Sem secret configurada
   const res1 = await obterConfigAuth(req, {});
   const dados1 = await res1.json();
   assert.equal(dados1.googleClientId, '');
   assert.equal(dados1.googleConfigurado, false);
+  assert.equal(dados1.googleSimuladoAtivo, false);
 
-  // Com secret GOOGLE_CLIENT_ID configurada na Cloudflare/env
   const res2 = await obterConfigAuth(req, { GOOGLE_CLIENT_ID: 'meu-app-123.apps.googleusercontent.com' });
   const dados2 = await res2.json();
   assert.equal(dados2.googleClientId, 'meu-app-123.apps.googleusercontent.com');
   assert.equal(dados2.googleConfigurado, true);
+  assert.equal(dados2.googleSimuladoAtivo, false);
 });
 
 test('loginComGoogle valida aud quando GOOGLE_CLIENT_ID está configurado nas secrets', async () => {
   const db = criarBanco();
-  const CLIENT_ID_OFICIAL = '123456789-escola.apps.googleusercontent.com';
-  const env = { JWT_SECRET: SEGREDO, GOOGLE_CLIENT_ID: CLIENT_ID_OFICIAL };
+  const { privateKey, jwks } = await criarParChavesGoogleTeste();
+  const env = { JWT_SECRET: SEGREDO, GOOGLE_CLIENT_ID: CLIENT_ID_TESTE, __GOOGLE_JWKS: jwks };
+  const exp = Math.floor(Date.now() / 1000) + 3600;
 
-  const headerB64 = Buffer.from(JSON.stringify({ alg: 'RS256', typ: 'JWT' })).toString('base64');
-
-  // Token com aud divergente
-  const payloadErrado = Buffer.from(
-    JSON.stringify({
+  const tokenErrado = await assinarTokenGoogle(
+    {
+      iss: 'https://accounts.google.com',
       aud: 'outro-app-hacker.apps.googleusercontent.com',
+      exp,
+      email_verified: true,
       email: 'tentativa@escola.edu.br',
       name: 'Hacker',
-    }),
-  ).toString('base64');
-  const tokenErrado = `${headerB64}.${payloadErrado}.fake_signature`;
+    },
+    privateKey,
+  );
+  await assert.rejects(
+    loginComGoogle(requisicao({ credential: tokenErrado }), env, db),
+    (err) => err.status === 401,
+  );
 
-  const respostaErrada = await loginComGoogle(requisicao({ credential: tokenErrado }), env, db);
-  assert.equal(respostaErrada.status, 401);
-
-  // Token com aud correto
-  const payloadCorreto = Buffer.from(
-    JSON.stringify({
-      aud: CLIENT_ID_OFICIAL,
+  const tokenCorreto = await assinarTokenGoogle(
+    {
+      iss: 'https://accounts.google.com',
+      aud: CLIENT_ID_TESTE,
+      exp,
+      email_verified: true,
       email: 'prof.ana@educacao.sp.gov.br',
       name: 'Professora Ana',
       hd: 'educacao.sp.gov.br',
-    }),
-  ).toString('base64');
-  const tokenCorreto = `${headerB64}.${payloadCorreto}.fake_signature`;
+    },
+    privateKey,
+  );
 
   const respostaCorreta = await loginComGoogle(requisicao({ credential: tokenCorreto }), env, db);
   assert.equal(respostaCorreta.status, 200);
   const dadosCorretos = await respostaCorreta.json();
   assert.equal(dadosCorretos.usuario.email, 'prof.ana@educacao.sp.gov.br');
   assert.equal(dadosCorretos.usuario.perfil, 'instrutor');
+});
+
+test('registrar rejeita endereços de email inválidos com status 400', async () => {
+  const db = criarBanco();
+  const res = await registrar(
+    requisicao({ nome: 'Aluno Sem Arroba', email: 'email-invalido', senha: 'Senha@123' }),
+    { JWT_SECRET: SEGREDO },
+    db,
+  );
+  assert.equal(res.status, 400);
+  assert.equal(db.linhas.length, 0);
 });
 
 

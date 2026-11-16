@@ -15,7 +15,7 @@
     <div id="sidebar-container"></div>
     <main class="conteudo">
       <div id="topbar-container"></div>
-      <div class="cartao tabela-scroll">
+      <div class="cartao tabela-scroll" tabindex="0" role="region" aria-label="Tabela de certificados emitidos">
         <table aria-label="Lista de certificados emitidos">
           <thead><tr><th scope="col">Aluno</th><th scope="col">Curso</th><th scope="col">Código</th><th scope="col">Emitido em</th><th scope="col" class="texto-direita">Arquivo</th></tr></thead>
           <tbody id="corpo-tabela"></tbody>
@@ -49,15 +49,18 @@
           corpo.innerHTML = '<tr><td colspan="5" class="texto-suave">Nenhum certificado emitido ainda.</td></tr>';
           return;
         }
-        corpo.innerHTML = certificados.map((c) => `
-          <tr>
-            <td>${c.aluno_nome}</td>
-            <td>${c.curso_titulo}</td>
-            <td><code>${c.codigo_validacao}</code></td>
-            <td>${formatarData(c.data_emissao)}</td>
-            <td class="texto-direita"><a href="${c.url_arquivo}" target="_blank" rel="noopener" class="btn btn-neutro btn-xs flex-inline-icon" aria-label="Baixar PDF do certificado de ${c.aluno_nome}"><span class="material-symbols-outlined icon-xs" aria-hidden="true">download</span> Baixar PDF</a></td>
-          </tr>
-        `).join('');
+        corpo.innerHTML = certificados.map((c) => {
+          const urlSegura = /^(https?:\/\/|\/)/i.test(String(c.url_arquivo || '')) ? String(c.url_arquivo) : '#';
+          return `
+            <tr>
+              <td>${escaparHtml(c.aluno_nome)}</td>
+              <td>${escaparHtml(c.curso_titulo)}</td>
+              <td><code>${escaparHtml(c.codigo_validacao)}</code></td>
+              <td>${escaparHtml(formatarData(c.data_emissao))}</td>
+              <td class="texto-direita"><a href="${escaparHtml(urlSegura)}" target="_blank" rel="noopener" class="btn btn-neutro btn-xs flex-inline-icon" aria-label="Baixar PDF do certificado de ${escaparHtml(c.aluno_nome)}"><span class="material-symbols-outlined icon-xs" aria-hidden="true">download</span> Baixar PDF</a></td>
+            </tr>
+          `;
+        }).join('');
       } catch (err) {
         mostrarNotificacao(err.message, 'erro');
       }
@@ -68,18 +71,18 @@
       const resultado = document.getElementById('resultado-validacao');
       if (!codigo) return;
       try {
-        const dados = await api(`/certificados/validar/${codigo}`);
+        const dados = await api(`/certificados/validar/${encodeURIComponent(codigo)}`);
         resultado.innerHTML = `
           <div class="alerta alerta-sucesso flex-inline-icon">
             <span class="material-symbols-outlined icon-sm">verified</span>
-            <span>Certificado válido — ${dados.certificado.aluno_nome} concluiu "${dados.certificado.curso_titulo}"
-            (${dados.certificado.carga_horaria}h) em ${formatarData(dados.certificado.data_emissao)}.</span>
+            <span>Certificado válido — ${escaparHtml(dados.certificado.aluno_nome)} concluiu "${escaparHtml(dados.certificado.curso_titulo)}"
+            (${Number(dados.certificado.carga_horaria) || 0}h) em ${escaparHtml(formatarData(dados.certificado.data_emissao))}.</span>
           </div>`;
       } catch (err) {
         resultado.innerHTML = `
           <div class="alerta alerta-erro flex-inline-icon">
             <span class="material-symbols-outlined icon-sm">error</span>
-            <span>${err.message}</span>
+            <span>${escaparHtml(err.message)}</span>
           </div>`;
       }
     }

@@ -211,7 +211,7 @@ export function jogadorPython3d(atividade, { aoConcluir, reduzirMovimento = fals
           papelDupla = msg.novoPapelRemoto;
           aplicarEstadoPapelDupla();
         } else if (msg.tipoEvento === 'executar-remoto') {
-          executarCodigoCompleto(true);
+          void executarCodigoCompleto(true);
         }
       });
     } catch {
@@ -348,7 +348,11 @@ export function jogadorPython3d(atividade, { aoConcluir, reduzirMovimento = fals
             ? ` (Dupla colaborativa: ${papelDupla.toUpperCase()} com ${parceiroDupla})`
             : '';
           caixaFeedback.className = 'atv-feedback sucesso';
-          caixaFeedback.innerHTML = `<strong>${atividade.conclusao}${sufixoDupla}</strong> ${validacao.msg}`;
+          caixaFeedback.replaceChildren(
+            h('strong', {}, `${atividade.conclusao}${sufixoDupla}`),
+            ' ',
+            validacao.msg,
+          );
           anunciar(atividade.conclusao);
           if (aoConcluir) {
             aoConcluir({
@@ -489,7 +493,7 @@ export function jogadorPython3d(atividade, { aoConcluir, reduzirMovimento = fals
       class: 'btn btn-neutro btn-sm flex-inline-icon',
       onclick: () => {
         caixaFeedback.className = 'atv-feedback info';
-        caixaFeedback.innerHTML = `<strong>Dica pedagógica:</strong> ${atividade.dica}`;
+        caixaFeedback.replaceChildren(h('strong', {}, 'Dica pedagógica:'), ' ', atividade.dica);
         anunciar(`Dica: ${atividade.dica}`);
       },
     },

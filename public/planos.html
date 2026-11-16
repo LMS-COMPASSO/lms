@@ -148,14 +148,14 @@
                 aria-label="Controle de quantidade de alunos atendidos na escola"
               >
               <div class="plano-slider-ticks" aria-hidden="true">
-                <span class="plano-tick-label ativo" onclick="definirPassoSlider(0)">1k</span>
-                <span class="plano-tick-label" onclick="definirPassoSlider(1)">2k</span>
-                <span class="plano-tick-label" onclick="definirPassoSlider(2)">5k</span>
-                <span class="plano-tick-label" onclick="definirPassoSlider(3)">10k</span>
-                <span class="plano-tick-label" onclick="definirPassoSlider(4)">17k</span>
-                <span class="plano-tick-label" onclick="definirPassoSlider(5)">25k</span>
-                <span class="plano-tick-label" onclick="definirPassoSlider(6)">50k</span>
-                <span class="plano-tick-label" onclick="definirPassoSlider(7)">100k</span>
+                <button type="button" class="plano-tick-label ativo" tabindex="-1" onclick="definirPassoSlider(0)">1k</button>
+                <button type="button" class="plano-tick-label" tabindex="-1" onclick="definirPassoSlider(1)">2k</button>
+                <button type="button" class="plano-tick-label" tabindex="-1" onclick="definirPassoSlider(2)">5k</button>
+                <button type="button" class="plano-tick-label" tabindex="-1" onclick="definirPassoSlider(3)">10k</button>
+                <button type="button" class="plano-tick-label" tabindex="-1" onclick="definirPassoSlider(4)">17k</button>
+                <button type="button" class="plano-tick-label" tabindex="-1" onclick="definirPassoSlider(5)">25k</button>
+                <button type="button" class="plano-tick-label" tabindex="-1" onclick="definirPassoSlider(6)">50k</button>
+                <button type="button" class="plano-tick-label" tabindex="-1" onclick="definirPassoSlider(7)">100k</button>
               </div>
             </div>
           </div>
@@ -501,7 +501,7 @@
     }
 
     function atualizarTierAlunos(indice) {
-      indiceTierAtual = parseInt(indice, 10);
+      indiceTierAtual = Number.parseInt(indice, 10);
       const tier = TIERS_ALUNOS[indiceTierAtual];
       if (!tier) return;
 
@@ -511,7 +511,7 @@
       document.getElementById('feat-storage').textContent = tier.storage;
 
       // Atualiza estado ativo nos marcadores
-      const ticks = document.querySelectorAll('.planos-tick-label');
+      const ticks = document.querySelectorAll('.plano-tick-label');
       ticks.forEach((tick, i) => {
         if (i === indiceTierAtual) tick.classList.add('ativo');
         else tick.classList.remove('ativo');
@@ -576,12 +576,14 @@
     }
 
     function gerarMinutaDocumento() {
-      const escola = document.getElementById('campo-nome-escola').value;
-      const gestor = document.getElementById('campo-gestor-responsavel').value;
+      const escaparTexto = (valor) => String(valor ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+      const escola = escaparTexto(document.getElementById('campo-nome-escola').value);
+      const gestor = escaparTexto(document.getElementById('campo-gestor-responsavel').value);
       const tier = TIERS_ALUNOS[indiceTierAtual];
       fecharModalContrato();
 
-      const janela = window.open('', '_blank');
+      const janela = window.open('', '_blank', 'noopener');
+      if (!janela) return;
       janela.document.write(`
         <!DOCTYPE html>
         <html lang="pt-BR">
@@ -610,10 +612,10 @@
           <h2>Especificações do Plano Contratado</h2>
           <table>
             <tr><th>Item</th><th>Especificação</th></tr>
-            <tr><td>Capacidade de Estudantes</td><td>Até ${tier.label} alunos matriculados</td></tr>
-            <tr><td>Armazenamento em Nuvem D1</td><td>${tier.storage}</td></tr>
-            <tr><td>Polos Escolares</td><td>${tier.academias}</td></tr>
-            <tr><td>Ciclo de Faturamento</td><td>${periodoAtual.toUpperCase()}</td></tr>
+            <tr><td>Capacidade de Estudantes</td><td>Até ${escaparTexto(tier.label)} alunos matriculados</td></tr>
+            <tr><td>Armazenamento em Nuvem D1</td><td>${escaparTexto(tier.storage)}</td></tr>
+            <tr><td>Polos Escolares</td><td>${escaparTexto(tier.academias)}</td></tr>
+            <tr><td>Ciclo de Faturamento</td><td>${escaparTexto(periodoAtual.toUpperCase())}</td></tr>
             <tr><td>Módulos Pedagógicos</td><td>3 Eixos BNCC (Pensamento Computacional, Mundo Digital, Cultura Digital) + Laboratório 3D Python</td></tr>
             <tr><td>Atividades Desplugadas</td><td>Acesso ilimitado e gerador de fichas em PDF (sem telas)</td></tr>
             <tr><td>Relatórios de Governança</td><td>Exportação de Diário Escolar (CSV) com registro de habilidades</td></tr>

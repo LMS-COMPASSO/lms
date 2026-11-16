@@ -19,6 +19,7 @@ import {
   authorizeUser,
   exigirPerfil,
   ErroHttp,
+  parseIdPositivo,
 } from '../helpers_utilitarios.js';
 
 /**
@@ -26,7 +27,7 @@ import {
  */
 export async function listarModulosDoCurso(request, env, db, cursoId) {
   await authorizeUser(request, env, db);
-  const id = Number(cursoId);
+  const id = parseIdPositivo(cursoId, 'cursoId');
   const modulos = await queryAll(
     db,
     'SELECT * FROM modulos WHERE curso_id = ? ORDER BY ordem ASC, id ASC',
@@ -42,7 +43,7 @@ export async function criarModulo(request, env, db, cursoId) {
   const { payload } = await authorizeUser(request, env, db);
   exigirPerfil(payload, ['administrador', 'instrutor']);
 
-  const id = Number(cursoId);
+  const id = parseIdPositivo(cursoId, 'cursoId');
   const curso = await queryOne(db, 'SELECT id, instrutor_id FROM cursos WHERE id = ?', [id]);
   if (!curso) {
     return jsonErro('Curso não encontrado.', 404);
@@ -80,7 +81,7 @@ export async function atualizarModulo(request, env, db, moduloId) {
   const { payload } = await authorizeUser(request, env, db);
   exigirPerfil(payload, ['administrador', 'instrutor']);
 
-  const id = Number(moduloId);
+  const id = parseIdPositivo(moduloId, 'moduloId');
   const modulo = await queryOne(
     db,
     'SELECT m.id, c.instrutor_id FROM modulos m JOIN cursos c ON m.curso_id = c.id WHERE m.id = ?',
@@ -117,7 +118,7 @@ export async function excluirModulo(request, env, db, moduloId) {
   const { payload } = await authorizeUser(request, env, db);
   exigirPerfil(payload, ['administrador', 'instrutor']);
 
-  const id = Number(moduloId);
+  const id = parseIdPositivo(moduloId, 'moduloId');
   const modulo = await queryOne(
     db,
     'SELECT m.id, c.instrutor_id FROM modulos m JOIN cursos c ON m.curso_id = c.id WHERE m.id = ?',
