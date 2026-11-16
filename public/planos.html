@@ -145,6 +145,7 @@
                 aria-valuemin="1000"
                 aria-valuemax="100000"
                 aria-valuenow="1000"
+                aria-valuetext="1 000 alunos"
                 aria-label="Controle de quantidade de alunos atendidos na escola"
               >
               <div class="plano-slider-ticks" aria-hidden="true">
@@ -374,7 +375,7 @@
       </button>
 
       <div class="flex-inline-icon gap-8 mb-12">
-        <span class="material-symbols-outlined icon-md icone-destaque-primario">description</span>
+        <span class="material-symbols-outlined icon-md icone-destaque-primario" aria-hidden="true">description</span>
         <h3 id="modal-titulo" class="m-0">Simulador de Proposta &amp; Contrato Escolar</h3>
       </div>
       <p class="texto-suave texto-pequeno mb-16">
@@ -398,8 +399,8 @@
           </div>
         </div>
 
-        <div class="cartao mt-12 mb-16 p-16" style="background: var(--cor-fundo-alt); border-radius: 10px;">
-          <h4 class="m-0 mb-8" style="font-size: 0.95rem;">Resumo da Configuração Selecionada:</h4>
+        <div class="cartao mt-12 mb-16 p-16 planos-resumo-box">
+          <h4 class="m-0 mb-8 planos-resumo-titulo">Resumo da Configuração Selecionada:</h4>
           <p class="m-0 texto-pequeno"><strong>Capacidade de Alunos:</strong> <span id="modal-resumo-alunos">1 000 alunos</span></p>
           <p class="m-0 texto-pequeno"><strong>Ciclo de Faturamento:</strong> <span id="modal-resumo-periodo">Anual (50% de desconto)</span></p>
           <p class="m-0 texto-pequeno"><strong>Investimento Mensal Estimado:</strong> <span id="modal-resumo-valor">150 BRL / mês</span></p>
@@ -505,6 +506,11 @@
       const tier = TIERS_ALUNOS[indiceTierAtual];
       if (!tier) return;
 
+      const slider = document.getElementById('slider-alunos');
+      if (slider) {
+        slider.setAttribute('aria-valuenow', String(tier.alunos));
+        slider.setAttribute('aria-valuetext', `${tier.label} alunos`);
+      }
       document.getElementById('contador-alunos').textContent = tier.label;
       document.getElementById('feat-academias').innerHTML = `<strong>${tier.academias}</strong>`;
       document.getElementById('feat-instrutores').innerHTML = `<strong>${tier.instrutores}</strong>`;
@@ -598,11 +604,13 @@
             th, td { border: 1px solid #cbd5e1; padding: 10px 14px; text-align: left; }
             th { background: #f1f5f9; }
             .badge { display: inline-block; padding: 4px 8px; background: #e0f2fe; color: #0369a1; border-radius: 4px; font-weight: bold; font-size: 0.85rem; }
+            .btn-imprimir { padding: 10px 20px; background: #0369a1; color: white; border: none; border-radius: 6px; cursor: pointer; margin-bottom: 20px; font-weight: bold; }
+            .assinatura-gestor { margin-top: 40px; border-top: 1px solid #94a3b8; padding-top: 10px; }
             @media print { body { padding: 0; } button { display: none; } }
           </style>
         </head>
         <body>
-          <button onclick="window.print()" style="padding: 10px 20px; background: #0369a1; color: white; border: none; border-radius: 6px; cursor: pointer; margin-bottom: 20px; font-weight: bold;">Imprimir Proposta / Salvar PDF</button>
+          <button onclick="window.print()" class="btn-imprimir">Imprimir Proposta / Salvar PDF</button>
           <h1>LMS COMPASSO — Proposta de Adesão e Minuta de Contrato</h1>
           <p><strong>Instituição Solicitante:</strong> ${escola}</p>
           <p><strong>Responsável Pedagógico(a):</strong> ${gestor}</p>
@@ -623,7 +631,7 @@
 
           <h2>Garantias e SLA</h2>
           <p>Disponibilidade garantida de 99,9% via infraestrutura Cloudflare. Conformidade total com a Lei Geral de Proteção de Dados (LGPD - Lei 13.709/2018) com custódia inviolável de dados de menores de idade.</p>
-          <p style="margin-top: 40px; border-top: 1px solid #94a3b8; padding-top: 10px;">Assinatura do(a) Gestor(a) Escolar: ___________________________________________</p>
+          <p class="assinatura-gestor">Assinatura do(a) Gestor(a) Escolar: ___________________________________________</p>
         </body>
         </html>
       `);
@@ -632,7 +640,13 @@
 
     // Inicialização
     document.addEventListener('DOMContentLoaded', () => {
-      recalcularPrecos();
+      const slider = document.getElementById('slider-alunos');
+      if (slider) {
+        atualizarTierAlunos(slider.value);
+        slider.addEventListener('change', (e) => atualizarTierAlunos(e.target.value));
+      } else {
+        recalcularPrecos();
+      }
 
       // Atualiza botão entrar se usuário já estiver autenticado
       try {

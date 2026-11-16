@@ -46,8 +46,20 @@ window.LMS_API_BASE = overrideApi || DEFAULT_API;
     }
   }
 
-  // Executa imediatamente para evitar flash de tema incorreto (FOUC)
+  // Executa imediatamente para evitar flash de tema e acessibilidade incorretos (FOUC)
   aplicarTema();
+
+  function aplicarPreferenciasA11yLocais() {
+    if (typeof document === 'undefined') return;
+    ['alto-contraste', 'fonte-ampliada', 'reduzir-movimento'].forEach(function (chave) {
+      try {
+        if (localStorage.getItem('lms_a11y_' + chave) === '1') {
+          document.documentElement.classList.add('a11y-' + chave);
+        }
+      } catch {}
+    });
+  }
+  aplicarPreferenciasA11yLocais();
 
   if (typeof window !== 'undefined') {
     window.obterTemaAtual = function () {

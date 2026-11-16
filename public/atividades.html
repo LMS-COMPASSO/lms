@@ -14,6 +14,20 @@
 <link rel="stylesheet" href="/css/atividades.css">
 </head>
 <body class="pagina-atividades">
+  <script>
+    (function () {
+      try {
+        var temSessao = Boolean(
+          localStorage.getItem('lms_token') ||
+          localStorage.getItem('token') ||
+          sessionStorage.getItem('token')
+        );
+        document.body.classList.add(temSessao ? 'modo-app' : 'modo-publico');
+      } catch (e) {
+        document.body.classList.add('modo-publico');
+      }
+    })();
+  </script>
   <a class="pular-conteudo" href="#conteudo">Pular para o conteúdo</a>
 
   <!-- Cabeçalho público: some quando há uma sessão ativa (a barra lateral da plataforma assume) -->

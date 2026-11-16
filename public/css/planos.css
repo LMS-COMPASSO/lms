@@ -42,16 +42,16 @@ body.suporta-tema-sistema[data-tema="escuro"].pagina-planos {
 :root[data-tema="escuro"] .planos-topo,
 body.suporta-tema-sistema[data-tema="escuro"] .planos-topo {
   background: rgba(15, 23, 42, 0.85);
-  backdrop-filter: blur(14px) saturate(160%);
   -webkit-backdrop-filter: blur(14px) saturate(160%);
+  backdrop-filter: blur(14px) saturate(160%);
   border-bottom-color: rgba(255, 255, 255, 0.08);
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-tema="claro"]) .planos-topo {
     background: rgba(15, 23, 42, 0.85);
-    backdrop-filter: blur(14px) saturate(160%);
     -webkit-backdrop-filter: blur(14px) saturate(160%);
+    backdrop-filter: blur(14px) saturate(160%);
     border-bottom-color: rgba(255, 255, 255, 0.08);
   }
 }
@@ -78,6 +78,7 @@ body.suporta-tema-sistema[data-tema="escuro"] .planos-topo {
   margin: 0 auto;
   padding: 36px 20px 60px;
   width: 100%;
+  box-sizing: border-box;
 }
 
 .planos-voltar-link {
@@ -254,8 +255,8 @@ body.suporta-tema-sistema[data-tema="escuro"] .planos-periodo-btn.ativo {
 
 :root[data-tema="escuro"] .plano-card {
   background: rgba(17, 24, 39, 0.85);
-  backdrop-filter: blur(14px) saturate(170%);
   -webkit-backdrop-filter: blur(14px) saturate(170%);
+  backdrop-filter: blur(14px) saturate(170%);
   border-color: rgba(255, 255, 255, 0.1);
   box-shadow: 0 8px 30px -4px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
@@ -688,8 +689,8 @@ body.suporta-tema-sistema[data-tema="escuro"] .planos-periodo-btn.ativo {
 
 :root[data-tema="escuro"] .bmc-card {
   background: rgba(17, 24, 39, 0.75);
-  backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
   border-color: rgba(255, 255, 255, 0.08);
 }
 
@@ -892,8 +893,8 @@ body.suporta-tema-sistema[data-tema="escuro"] .planos-periodo-btn.ativo {
   position: fixed;
   inset: 0;
   background: rgba(15, 23, 42, 0.65);
-  backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
   z-index: 100;
   display: flex;
   align-items: center;
@@ -933,3 +934,129 @@ body.suporta-tema-sistema[data-tema="escuro"] .planos-periodo-btn.ativo {
   color: var(--cor-texto-suave);
   cursor: pointer;
 }
+
+.cartao.planos-resumo-box {
+  background: var(--cor-fundo-alt);
+  border-radius: 10px;
+}
+
+:root[data-tema="escuro"] .cartao.planos-resumo-box,
+body[data-tema="escuro"] .cartao.planos-resumo-box {
+  background: var(--cor-fundo-alt);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-tema="claro"]) .cartao.planos-resumo-box {
+    background: var(--cor-fundo-alt);
+  }
+}
+
+.planos-resumo-titulo {
+  font-size: 0.95rem;
+}
+
+@media (max-width: 600px) {
+  .planos-topo-conteudo {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+
+  .planos-topo .pub-logo img {
+    height: 32px;
+    width: auto;
+    max-width: 136px;
+  }
+
+  .planos-topo-acoes {
+    gap: 6px;
+    min-width: 0;
+  }
+
+  .planos-topo-acoes .btn {
+    padding: 6px 10px;
+    font-size: 0.78rem;
+  }
+
+  .planos-secao-principal {
+    padding: 24px 12px 48px;
+  }
+
+  .planos-periodo-pills {
+    max-width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+    border-radius: 16px;
+  }
+
+  .planos-periodo-btn {
+    padding: 6px 12px;
+    font-size: 0.82rem;
+  }
+
+  .plano-card {
+    padding: 24px 18px;
+  }
+}
+
+/* ==========================================================================
+   MODO ALTO CONTRASTE — Planos & Licenciamento (resiliente a Tema Escuro)
+   ========================================================================== */
+html.a11y-alto-contraste body.pagina-planos,
+html.a11y-alto-contraste body .planos-topo,
+html.a11y-alto-contraste body .planos-secao-principal,
+html.a11y-alto-contraste body .planos-periodo-pills,
+html.a11y-alto-contraste body .planos-periodo-btn,
+html.a11y-alto-contraste body .plano-card,
+html.a11y-alto-contraste body .plano-card.plano-destaque,
+html.a11y-alto-contraste body .plano-preco-box,
+html.a11y-alto-contraste body .plano-slider-wrapper,
+html.a11y-alto-contraste body .plano-tick-label,
+html.a11y-alto-contraste body .secao-bmc-contratos,
+html.a11y-alto-contraste body .bmc-tag,
+html.a11y-alto-contraste body .bmc-card,
+html.a11y-alto-contraste body .bmc-card-icone,
+html.a11y-alto-contraste body .bmc-banner-adesao,
+html.a11y-alto-contraste body .planos-faq-item,
+html.a11y-alto-contraste body .modal-contrato,
+html.a11y-alto-contraste body .cartao.planos-resumo-box,
+html.a11y-alto-contraste body .plano-btn-secundario {
+  background: #ffffff !important;
+  background-image: none !important;
+  color: #000000 !important;
+  border-color: #000000 !important;
+  box-shadow: none !important;
+}
+
+html.a11y-alto-contraste body.pagina-planos main *,
+html.a11y-alto-contraste body .planos-topo *,
+html.a11y-alto-contraste body .modal-contrato * {
+  color: #000000 !important;
+}
+
+html.a11y-alto-contraste body.pagina-planos .planos-periodo-btn.ativo,
+html.a11y-alto-contraste body.pagina-planos .planos-periodo-btn.ativo *,
+html.a11y-alto-contraste body.pagina-planos .plano-btn,
+html.a11y-alto-contraste body.pagina-planos .plano-btn *,
+html.a11y-alto-contraste body.pagina-planos .plano-btn-primario,
+html.a11y-alto-contraste body.pagina-planos .plano-btn-primario *,
+html.a11y-alto-contraste body.pagina-planos .plano-badge-popular,
+html.a11y-alto-contraste body.pagina-planos .plano-tick-label.ativo,
+html.a11y-alto-contraste body.pagina-planos .planos-topo .btn-primario,
+html.a11y-alto-contraste body.pagina-planos .planos-topo .btn-primario *,
+html.a11y-alto-contraste body.pagina-planos .btn-primario,
+html.a11y-alto-contraste body.pagina-planos .btn-primario * {
+  background: #000000 !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  border: 2px solid #000000 !important;
+}
+
+html.a11y-alto-contraste body.pagina-planos .plano-btn-secundario,
+html.a11y-alto-contraste body.pagina-planos .plano-btn-secundario * {
+  background: #ffffff !important;
+  background-image: none !important;
+  color: #000000 !important;
+  border-color: #000000 !important;
+}
+
+

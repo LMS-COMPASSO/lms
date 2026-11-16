@@ -112,8 +112,8 @@
               <div class="sp-mockup-aluno-info">
                 <div class="sp-mockup-avatar">LC</div>
                 <div>
-                  <strong style="display:block; font-size:0.92rem; color:var(--pub-texto);">Lucas Carvalho</strong>
-                  <span style="font-size:0.78rem; color:var(--pub-texto-suave);">5º Ano · Turma B</span>
+                  <strong class="sp-mockup-aluno-nome">Lucas Carvalho</strong>
+                  <span class="sp-mockup-aluno-turma">5º Ano · Turma B</span>
                 </div>
               </div>
               <span class="sp-mockup-xp">
@@ -216,7 +216,7 @@
           <!-- Card 1: Professores -->
           <article class="sp-perfil-card">
             <div class="sp-perfil-icone-wrap">
-              <span class="material-symbols-outlined">person_raised_hand</span>
+              <span class="material-symbols-outlined" aria-hidden="true">person_raised_hand</span>
             </div>
             <h3 class="sp-perfil-titulo">Para Professores</h3>
             <p class="sp-perfil-desc">
@@ -224,19 +224,19 @@
             </p>
             <ul class="sp-perfil-lista">
               <li>
-                <span class="material-symbols-outlined">check</span>
+                <span class="material-symbols-outlined" aria-hidden="true">check</span>
                 <span>Roteiros didáticos completos para o 1º ao 9º ano</span>
               </li>
               <li>
-                <span class="material-symbols-outlined">check</span>
+                <span class="material-symbols-outlined" aria-hidden="true">check</span>
                 <span>Atividades desplugadas prontas para imprimir em A4</span>
               </li>
               <li>
-                <span class="material-symbols-outlined">check</span>
+                <span class="material-symbols-outlined" aria-hidden="true">check</span>
                 <span>Diário de notas automático mapeado por código BNCC</span>
               </li>
               <li>
-                <span class="material-symbols-outlined">check</span>
+                <span class="material-symbols-outlined" aria-hidden="true">check</span>
                 <span>Exportação fácil de dados pedagógicos em CSV</span>
               </li>
             </ul>
@@ -249,7 +249,7 @@
           <!-- Card 2: Escolas e Gestores -->
           <article class="sp-perfil-card">
             <div class="sp-perfil-icone-wrap">
-              <span class="material-symbols-outlined">account_balance</span>
+              <span class="material-symbols-outlined" aria-hidden="true">account_balance</span>
             </div>
             <h3 class="sp-perfil-titulo">Para Escolas &amp; Gestão</h3>
             <p class="sp-perfil-desc">
@@ -257,19 +257,19 @@
             </p>
             <ul class="sp-perfil-lista">
               <li>
-                <span class="material-symbols-outlined">check</span>
+                <span class="material-symbols-outlined" aria-hidden="true">check</span>
                 <span>Zero custo de licenças: software 100% livre e aberto</span>
               </li>
               <li>
-                <span class="material-symbols-outlined">check</span>
+                <span class="material-symbols-outlined" aria-hidden="true">check</span>
                 <span>Acompanhamento consolidado por escola e turma</span>
               </li>
               <li>
-                <span class="material-symbols-outlined">check</span>
+                <span class="material-symbols-outlined" aria-hidden="true">check</span>
                 <span>Emissão de certificados oficiais com chave pública</span>
               </li>
               <li>
-                <span class="material-symbols-outlined">check</span>
+                <span class="material-symbols-outlined" aria-hidden="true">check</span>
                 <span>Métricas psicométricas de usabilidade educacional (SUS)</span>
               </li>
             </ul>
@@ -282,7 +282,7 @@
           <!-- Card 3: Estudantes -->
           <article class="sp-perfil-card">
             <div class="sp-perfil-icone-wrap">
-              <span class="material-symbols-outlined">school</span>
+              <span class="material-symbols-outlined" aria-hidden="true">school</span>
             </div>
             <h3 class="sp-perfil-titulo">Para Estudantes</h3>
             <p class="sp-perfil-desc">
@@ -290,19 +290,19 @@
             </p>
             <ul class="sp-perfil-lista">
               <li>
-                <span class="material-symbols-outlined">check</span>
+                <span class="material-symbols-outlined" aria-hidden="true">check</span>
                 <span>Laboratório 3D com robótica e Python interativo</span>
               </li>
               <li>
-                <span class="material-symbols-outlined">check</span>
+                <span class="material-symbols-outlined" aria-hidden="true">check</span>
                 <span>Simulador de Hardware e Redes em tempo real</span>
               </li>
               <li>
-                <span class="material-symbols-outlined">check</span>
+                <span class="material-symbols-outlined" aria-hidden="true">check</span>
                 <span>Conquista de medalhas e pontos de cidadania</span>
               </li>
               <li>
-                <span class="material-symbols-outlined">check</span>
+                <span class="material-symbols-outlined" aria-hidden="true">check</span>
                 <span>Feedback imediato em cada etapa do aprendizado</span>
               </li>
             </ul>
@@ -339,7 +339,7 @@
             <p class="sp-bento-desc">
               Ao contrário de plataformas que cobrem apenas programação básica, o LMS COMPASSO oferece módulos completos para <strong>Pensamento Computacional</strong> (algoritmos e decomposição), <strong>Mundo Digital</strong> (hardware 3D, arquitetura da CPU e internet TCP/IP) e <strong>Cultura Digital</strong> (segurança, ética e cidadania).
             </p>
-            <div style="display:flex; gap:12px; flex-wrap:wrap;">
+            <div class="sp-bento-links">
               <a href="/atividades.html" class="sp-perfil-link">Pensamento Computacional →</a>
               <a href="/mundo-digital.html" class="sp-perfil-link">Mundo Digital (3D) →</a>
               <a href="/cultura-digital.html" class="sp-perfil-link">Cultura Digital →</a>
@@ -440,7 +440,7 @@
           <div class="sp-aba-painel ativa" id="painel-pensamento" role="tabpanel" aria-labelledby="tab-pensamento">
             <div class="sp-painel-grid">
               <div class="sp-painel-info">
-                <span class="sp-bento-tag" style="margin-bottom:12px; display:inline-block;">Eixo 1 · Raciocínio &amp; Lógica</span>
+                <span class="sp-bento-tag sp-bento-tag-painel">Eixo 1 · Raciocínio &amp; Lógica</span>
                 <h3>Resolver problemas reais através de algoritmos</h3>
                 <p>
                   As crianças aprendem que programar é uma forma de organizar o pensamento. Elas sequenciam passos cotidianos, dividem problemas complexos em partes menores e depuram rotas de robôs.
@@ -457,12 +457,12 @@
               </div>
               <div class="sp-painel-visual">
                 <div class="sp-micro-demo">
-                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-                    <strong style="color:var(--pub-texto); font-size:0.95rem;">Simulador de Sequência Lógica</strong>
+                  <div class="sp-demo-topo">
+                    <strong class="sp-demo-titulo">Simulador de Sequência Lógica</strong>
                     <span class="sp-mockup-tag-curso">EF01CO01</span>
                   </div>
-                  <p style="font-size:0.86rem; color:var(--pub-texto-suave); margin-bottom:14px;">Qual a ordem correta para preparar um lanche saudável?</p>
-                  <div style="display:flex; flex-direction:column; gap:8px;">
+                  <p class="sp-demo-pergunta">Qual a ordem correta para preparar um lanche saudável?</p>
+                  <div class="sp-demo-lista-col">
                     <div class="sp-demo-item-bloco">
                       <span class="sp-demo-step-num">1.</span> Lavar bem as mãos e higienizar frutas
                     </div>
@@ -470,7 +470,7 @@
                       <span class="sp-demo-step-num">2.</span> Separar o pão e os ingredientes
                     </div>
                     <div class="sp-demo-drop-slot">
-                      <span class="material-symbols-outlined icon-xs">drag_indicator</span> Encaixe o próximo passo do algoritmo...
+                      <span class="material-symbols-outlined icon-xs" aria-hidden="true">drag_indicator</span> Encaixe o próximo passo do algoritmo...
                     </div>
                   </div>
                 </div>
@@ -482,7 +482,7 @@
           <div class="sp-aba-painel" id="painel-mundo" role="tabpanel" aria-labelledby="tab-mundo">
             <div class="sp-painel-grid">
               <div class="sp-painel-info">
-                <span class="sp-bento-tag" style="margin-bottom:12px; display:inline-block;">Eixo 2 · Hardware &amp; Redes</span>
+                <span class="sp-bento-tag sp-bento-tag-painel">Eixo 2 · Hardware &amp; Redes</span>
                 <h3>Como os computadores realmente pensam e se comunicam</h3>
                 <p>
                   Uma experiência interativa com uma placa-mãe em 3D, inspeção holográfica de processador e memória, simulação visual do ciclo de clock da CPU e tráfego de pacotes TCP/IP na internet.
@@ -499,14 +499,14 @@
               </div>
               <div class="sp-painel-visual">
                 <div class="sp-micro-demo">
-                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-                    <strong style="color:var(--pub-texto); font-size:0.95rem;">Inspeção Holográfica 3D</strong>
+                  <div class="sp-demo-topo">
+                    <strong class="sp-demo-titulo">Inspeção Holográfica 3D</strong>
                     <span class="sp-mockup-tag-curso">EF05CO03</span>
                   </div>
-                  <div style="text-align:center; padding:18px 0;">
+                  <div class="sp-demo-holo-centro">
                     <span class="material-symbols-outlined sp-demo-chip-icon">memory</span>
-                    <strong style="display:block; margin-top:8px; color:var(--pub-texto);">Processador Central (CPU)</strong>
-                    <span style="font-size:0.82rem; color:var(--pub-texto-suave);">Cérebro lógico do computador · Bilhões de ciclos/s</span>
+                    <strong class="sp-demo-holo-nome">Processador Central (CPU)</strong>
+                    <span class="sp-demo-holo-sub">Cérebro lógico do computador · Bilhões de ciclos/s</span>
                   </div>
                   <div class="sp-demo-status-pill">
                     ✓ Simulação de Ciclo de Clock Disponível
@@ -520,7 +520,7 @@
           <div class="sp-aba-painel" id="painel-cultura" role="tabpanel" aria-labelledby="tab-cultura">
             <div class="sp-painel-grid">
               <div class="sp-painel-info">
-                <span class="sp-bento-tag" style="margin-bottom:12px; display:inline-block;">Eixo 3 · Cidadania &amp; Ética</span>
+                <span class="sp-bento-tag sp-bento-tag-painel">Eixo 3 · Cidadania &amp; Ética</span>
                 <h3>Navegar com segurança, empatia e senso crítico</h3>
                 <p>
                   No simulador de chat "ZapCompasso", os estudantes analisam mensagens reais sobre golpes de phishing, boatos de fake news e cyberbullying, tomando decisões éticas para proteger seus dados.
@@ -537,14 +537,14 @@
               </div>
               <div class="sp-painel-visual">
                 <div class="sp-micro-demo">
-                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-                    <strong style="color:var(--pub-texto); font-size:0.95rem;">ZapCompasso · Simulação de Golpe</strong>
+                  <div class="sp-demo-topo">
+                    <strong class="sp-demo-titulo">ZapCompasso · Simulação de Golpe</strong>
                     <span class="sp-mockup-tag-curso">EF04CO04</span>
                   </div>
                   <div class="sp-chat-balao">
                     <strong>Leo (Colega):</strong> Mano, clica rápido aqui pra ganhar 10.000 moedas no jogo!
                   </div>
-                  <div style="display:flex; gap:8px; flex-direction:column;">
+                  <div class="sp-demo-lista-col">
                     <button type="button" class="sp-chat-opcao-btn">
                       1. Clicar e colocar a senha agora
                     </button>

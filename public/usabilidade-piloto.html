@@ -152,7 +152,7 @@
     </div>
   </header>
 
-  <main id="conteudo" class="pub-container" style="padding: 24px 20px 64px;">
+  <main id="conteudo" class="pub-container pub-main-piloto">
     <nav class="atv-breadcrumbs" aria-label="Você está aqui">
       <a href="/" class="wf-breadcrumb-mobile-voltar seta-voltar">
         <span class="material-symbols-outlined icon-xs" aria-hidden="true">arrow_back</span>
@@ -213,14 +213,14 @@
     <!-- Tabela de Resultados Tabulados da Turma Piloto -->
     <section class="sus-form-card" aria-labelledby="titulo-tabela-piloto">
       <div class="flex-entre flex-wrap gap-8 mb-12">
-        <h2 id="titulo-tabela-piloto" style="font-size: var(--text-lg); margin:0;">
+        <h2 id="titulo-tabela-piloto" class="sus-secao-titulo">
           <span class="material-symbols-outlined icon-xs" aria-hidden="true">table_chart</span>
           Tabulação Individual dos Participantes (IFMA Grajaú)
         </h2>
         <span class="texto-suave texto-pequeno">Benchmark SUS Médio Mundial: 68.0 pontos</span>
       </div>
 
-      <div class="tabela-scroll" tabindex="0" role="region" aria-label="Tabulação das respostas do teste de usabilidade SUS">
+      <div class="tabela-scroll" role="region" aria-label="Tabulação das respostas do teste de usabilidade SUS">
         <table aria-label="Tabulação das respostas do teste de usabilidade SUS">
           <thead>
             <tr>
@@ -242,7 +242,7 @@
 
     <!-- Formulário Interativo de Nova Avaliação SUS -->
     <section class="sus-form-card" id="formulario-coleta" aria-labelledby="titulo-form-sus">
-      <h2 id="titulo-form-sus" style="font-size: var(--text-lg); margin-top:0;">
+      <h2 id="titulo-form-sus" class="sus-secao-titulo-topo">
         <span class="material-symbols-outlined icon-xs" aria-hidden="true">fact_check</span>
         Formulário Interativo de Coleta SUS (Brooke, 1996)
       </h2>
@@ -365,12 +365,29 @@
 
     const inicioFormularioSusMs = Date.now();
 
+    function renderizarTabelaResultados(lista) {
+      const tbody = document.getElementById('corpo-tabela-sus');
+      if (!tbody) return;
+      tbody.innerHTML = lista.map((p) => `
+        <tr>
+          <td><strong>${escaparHtml(p.nome)}</strong></td>
+          <td><span class="badge ${p.tipo === 'professor' ? 'badge-instrutor' : 'badge-aluno'}">${escaparHtml(p.tipo)}</span></td>
+          <td>${escaparHtml(p.turma)}</td>
+          <td>${escaparHtml(p.tempo)}</td>
+          <td><span class="estado-progresso-pill estado-concluido"><span class="material-symbols-outlined icon-xs" aria-hidden="true">check_circle</span> ${escaparHtml(p.tarefas)}</span></td>
+          <td><strong class="texto-score-destaque">${Number(p.score).toFixed(1)}</strong></td>
+          <td class="texto-suave sus-comentario-celula"><em>"${escaparHtml(p.comentario)}"</em></td>
+        </tr>
+      `).join('');
+    }
+
     async function carregarTabelaResultados() {
-      let lista = DADOS_INICIAIS_PILOTO;
+      // Renderiza dados iniciais de imediato para evitar salto de layout (CLS) enquanto consulta a API
+      renderizarTabelaResultados(DADOS_INICIAIS_PILOTO);
       try {
         const dadosApi = await api('/usabilidade/sus');
         if (dadosApi && dadosApi.avaliacoes && dadosApi.avaliacoes.length > 0) {
-          lista = dadosApi.avaliacoes.map((item) => ({
+          const listaApi = dadosApi.avaliacoes.map((item) => ({
             nome: item.nome_participante,
             tipo: item.participante_tipo,
             turma: item.escola_turma,
@@ -381,23 +398,11 @@
           }));
           document.getElementById('indicador-score-geral').textContent = dadosApi.mediaSusGeral.toFixed(1);
           document.getElementById('indicador-total-participantes').textContent = dadosApi.totalParticipantes;
+          renderizarTabelaResultados(listaApi);
         }
       } catch {
-        // Fallback para dados tabulados iniciais
+        // Fallback já exibido com os dados tabulados iniciais
       }
-
-      const tbody = document.getElementById('corpo-tabela-sus');
-      tbody.innerHTML = lista.map((p) => `
-        <tr>
-          <td><strong>${escaparHtml(p.nome)}</strong></td>
-          <td><span class="badge ${p.tipo === 'professor' ? 'badge-instrutor' : 'badge-aluno'}">${escaparHtml(p.tipo)}</span></td>
-          <td>${escaparHtml(p.turma)}</td>
-          <td>${escaparHtml(p.tempo)}</td>
-          <td><span class="estado-progresso-pill estado-concluido"><span class="material-symbols-outlined icon-xs" aria-hidden="true">check_circle</span> ${escaparHtml(p.tarefas)}</span></td>
-          <td><strong class="texto-score-destaque">${Number(p.score).toFixed(1)}</strong></td>
-          <td class="texto-suave" style="font-size: 0.85rem;"><em>"${escaparHtml(p.comentario)}"</em></td>
-        </tr>
-      `).join('');
     }
 
     document.getElementById('form-sus-coleta').addEventListener('submit', async (e) => {

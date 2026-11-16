@@ -8,16 +8,6 @@
     .logo-compasso-miolo { fill: #ffffff; }
     .logo-compasso-arco { stroke: #38a169; }
     .logo-compasso-ponto { fill: #d69e2e; stroke: #ffffff; }
-
-    @media (prefers-color-scheme: dark) {
-      .logo-compasso-principal { fill: #ffffff !important; }
-      .logo-compasso-sub { fill: #c6f6d5 !important; }
-      .logo-compasso-pernas { stroke: #ffffff !important; }
-      .logo-compasso-pino { fill: #ffffff !important; }
-      .logo-compasso-miolo { fill: #1a365d !important; }
-      .logo-compasso-arco { stroke: #68d391 !important; }
-      .logo-compasso-ponto { fill: #ecc94b !important; stroke: #1a365d !important; }
-    }
   </style>
   <g><path class="logo-compasso-arco" d="M49 42A19 19 0 1 1 25.1 23.7" fill="none" stroke="#38a169" stroke-width="3.8" stroke-linecap="round"/>
     <path class="logo-compasso-pernas" d="M39.5 8 30 42M39.5 8 49 42" fill="none" stroke="#1a365d" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>

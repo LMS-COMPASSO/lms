@@ -176,8 +176,8 @@
   position: absolute;
   border-radius: 16px;
   background: rgba(30, 41, 59, 0.7);
-  backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 16px;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
@@ -672,8 +672,8 @@
   padding: 52px 36px;
   border-radius: 24px;
   background: rgba(30, 41, 59, 0.6);
-  backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   text-align: center;
   max-width: 840px;
@@ -857,3 +857,99 @@
     transform: none !important;
   }
 }
+
+/* Alto Contraste (WCAG 2.2 AAA): contraste estrito sobre fundo branco/preto */
+html.a11y-alto-contraste body.pagina-boas-vindas,
+html.a11y-alto-contraste .bv-hero,
+html.a11y-alto-contraste .bv-secao,
+html.a11y-alto-contraste .bv-rodape,
+html.a11y-alto-contraste .bv-palco-backdrop {
+  background: #ffffff !important;
+  background-image: none !important;
+  color: #000000 !important;
+  border-color: #000000 !important;
+}
+
+html.a11y-alto-contraste .bv-card-flutuante,
+html.a11y-alto-contraste .bv-parceiro-card,
+html.a11y-alto-contraste .bv-conexao-card,
+html.a11y-alto-contraste .bv-eixo-card,
+html.a11y-alto-contraste .bv-cta-caixa,
+html.a11y-alto-contraste .bv-codigo-bloco,
+html.a11y-alto-contraste .bv-grid-flutuante,
+html.a11y-alto-contraste .bv-metrica-item,
+html.a11y-alto-contraste .bv-parceiro-emblema {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 2px solid #000000 !important;
+  box-shadow: none !important;
+}
+
+html.a11y-alto-contraste .bv-titulo,
+html.a11y-alto-contraste .bv-titulo span,
+html.a11y-alto-contraste .bv-descricao,
+html.a11y-alto-contraste .bv-secao-eyebrow,
+html.a11y-alto-contraste .bv-secao-titulo,
+html.a11y-alto-contraste .bv-secao-subtitulo,
+html.a11y-alto-contraste .bv-parceiro-nome,
+html.a11y-alto-contraste .bv-parceiro-papel,
+html.a11y-alto-contraste .bv-parceiro-desc,
+html.a11y-alto-contraste .bv-conexao-objeto,
+html.a11y-alto-contraste .bv-conexao-conceito,
+html.a11y-alto-contraste .bv-conexao-desc,
+html.a11y-alto-contraste .bv-conexao-seta,
+html.a11y-alto-contraste .bv-eixo-titulo,
+html.a11y-alto-contraste .bv-eixo-desc,
+html.a11y-alto-contraste .bv-eixo-topicos,
+html.a11y-alto-contraste .bv-eixo-topicos li,
+html.a11y-alto-contraste .bv-card-titulo,
+html.a11y-alto-contraste .bv-card-subtitulo,
+html.a11y-alto-contraste .bv-metrica-valor,
+html.a11y-alto-contraste .bv-metrica-rotulo,
+html.a11y-alto-contraste .bv-codigo-topo,
+html.a11y-alto-contraste .bv-rodape-info,
+html.a11y-alto-contraste .bv-rodape-info p,
+html.a11y-alto-contraste .bv-rodape-col,
+html.a11y-alto-contraste .bv-rodape-col h3,
+html.a11y-alto-contraste .bv-rodape-col a,
+html.a11y-alto-contraste .bv-rodape-fim,
+html.a11y-alto-contraste .bv-cta-caixa h2,
+html.a11y-alto-contraste .bv-cta-caixa p {
+  color: #000000 !important;
+  background: transparent !important;
+}
+
+html.a11y-alto-contraste .bv-badge-inovacao,
+html.a11y-alto-contraste .bv-parceiro-badge,
+html.a11y-alto-contraste .bv-eixo-pill,
+html.a11y-alto-contraste .bv-tag-bncc,
+html.a11y-alto-contraste .bv-mochila-chip,
+html.a11y-alto-contraste .bv-card-badge-status,
+html.a11y-alto-contraste .bv-card-icone,
+html.a11y-alto-contraste .bv-conexao-icone,
+html.a11y-alto-contraste .bv-eixo-icone {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 1.5px solid #000000 !important;
+}
+
+html.a11y-alto-contraste .bv-kw { color: #991b1b !important; }
+html.a11y-alto-contraste .bv-fn { color: #0369a1 !important; }
+html.a11y-alto-contraste .bv-str { color: #14532d !important; }
+html.a11y-alto-contraste .bv-num { color: #713f12 !important; }
+
+html.a11y-alto-contraste .btn-bv-primario,
+html.a11y-alto-contraste .btn-futurista-primario {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border: 2px solid #000000 !important;
+  box-shadow: none !important;
+}
+
+html.a11y-alto-contraste .btn-bv-contorno,
+html.a11y-alto-contraste .btn-futurista-contorno {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 2px solid #000000 !important;
+}
+

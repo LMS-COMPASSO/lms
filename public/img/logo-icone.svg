@@ -6,14 +6,6 @@
     .icone-compasso-miolo { fill: #ffffff; }
     .icone-compasso-arco { stroke: #38a169; }
     .icone-compasso-ponto { fill: #d69e2e; stroke: #ffffff; }
-
-    @media (prefers-color-scheme: dark) {
-      .icone-compasso-pernas { stroke: #ffffff !important; }
-      .icone-compasso-pino { fill: #ffffff !important; }
-      .icone-compasso-miolo { fill: #1a365d !important; }
-      .icone-compasso-arco { stroke: #68d391 !important; }
-      .icone-compasso-ponto { fill: #ecc94b !important; stroke: #1a365d !important; }
-    }
   </style>
   <path class="icone-compasso-arco" d="M49 42A19 19 0 1 1 25.1 23.7" fill="none" stroke="#38a169" stroke-width="3.8" stroke-linecap="round"/>
   <path class="icone-compasso-pernas" d="M39.5 8 30 42M39.5 8 49 42" fill="none" stroke="#1a365d" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>

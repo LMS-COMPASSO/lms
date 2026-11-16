@@ -232,7 +232,7 @@
             </div>
           </div>
 
-          <div class="tabela-scroll" tabindex="0" role="region" aria-label="Tabela do relatório pedagógico por habilidades BNCC">
+          <div class="tabela-scroll" role="region" aria-label="Tabela do relatório pedagógico por habilidades BNCC">
             <table id="tabela-habilidades-pedagogico" class="tabela-relatorio">
               <thead>
                 <tr>
@@ -261,7 +261,7 @@
               <p class="texto-suave">Visualize o código Python exato submetido por cada estudante ou dupla (Pair Programming) nas 6 atividades tridimensionais.</p>
             </div>
             <div class="relatorio-acoes">
-              <select id="filtro-atividade-python" aria-label="Filtrar submissões por atividade Python 3D" onchange="carregarSubmissoesPython(this.value)" style="width:auto; min-height:38px; padding:6px 12px;">
+              <select id="filtro-atividade-python" class="select-filtro-compacto" aria-label="Filtrar submissões por atividade Python 3D" onchange="carregarSubmissoesPython(this.value)">
                 <option value="">Todas as 6 missões Python 3D</option>
                 <option value="python3d-sequencia-labirinto">1. Sequências: Robô Coletor 3D</option>
                 <option value="python3d-condicionais-portas">2. Condicionais: Sensores e Portas 3D</option>
@@ -276,7 +276,7 @@
             </div>
           </div>
 
-          <div class="tabela-scroll" tabindex="0" role="region" aria-label="Tabela de submissões de código Python 3D">
+          <div class="tabela-scroll" role="region" aria-label="Tabela de submissões de código Python 3D">
             <table id="tabela-submissoes-python" class="tabela-relatorio">
               <thead>
                 <tr>
@@ -294,11 +294,11 @@
           </div>
 
           <!-- Inspetor de Código Python Submetido pelo Aluno -->
-          <div id="inspetor-codigo-python" style="margin-top: 16px; background: #0f172a; color: #f8fafc; border-radius: 12px; padding: 16px; border: 1px solid rgba(56, 189, 248, 0.3);" hidden>
+          <div id="inspetor-codigo-python" class="inspetor-codigo-python" hidden>
             <div class="flex-entre flex-wrap gap-8 mb-8">
               <div>
-                <strong id="inspetor-python-titulo" style="color: #38bdf8; font-size: 0.95rem;">Código Python do Estudante</strong>
-                <div id="inspetor-python-meta" style="font-size: 0.8rem; color: #94a3b8;"></div>
+                <strong id="inspetor-python-titulo" class="inspetor-python-titulo">Código Python do Estudante</strong>
+                <div id="inspetor-python-meta" class="inspetor-python-meta"></div>
               </div>
               <div class="flex-inline-icon gap-8">
                 <a id="inspetor-python-certificado" href="/api/certificados/python3d" target="_blank" rel="noopener" class="btn btn-xs btn-primario flex-inline-icon">
@@ -307,7 +307,7 @@
                 <button type="button" class="btn btn-xs btn-neutro" onclick="document.getElementById('inspetor-codigo-python').hidden = true">Fechar</button>
               </div>
             </div>
-            <pre id="inspetor-python-pre" style="margin: 0; padding: 14px; background: #090d16; color: #e2e8f0; border-radius: 8px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.86rem; line-height: 1.55; overflow-x: auto; border: 1px solid rgba(255,255,255,0.1);"></pre>
+            <pre id="inspetor-python-pre" class="inspetor-python-pre"></pre>
           </div>
         </section>
       </div>
@@ -505,14 +505,19 @@
         const listaEixos = document.getElementById('lista-eixos');
         if (listaEixos) listaEixos.innerHTML = htmlEixos;
 
-        // Atualiza dados de tempo de tela se fornecidos pela API
+        // Atualiza dados de tempo de tela se fornecidos pela API (barra + legenda visível em sincronia)
         if (dados.conformidadeTempoTela) {
           const conf = dados.conformidadeTempoTela;
-          document.querySelectorAll('.proporcao-barra').forEach(el => {
-            if (el.tagName.toLowerCase() === 'progress') {
-              el.value = conf.atividadesDesplugadasPercent;
-              el.setAttribute('aria-label', `Proporção entre atividades desplugadas (${conf.atividadesDesplugadasPercent}%) e digitais (${conf.atividadesPlugadasPercent}%)`);
+          document.querySelectorAll('.tempo-tela-proporcao').forEach((bloco) => {
+            const barra = bloco.querySelector('progress.proporcao-barra');
+            if (barra) {
+              barra.value = conf.atividadesDesplugadasPercent;
+              barra.textContent = `${conf.atividadesDesplugadasPercent}%`;
+              barra.setAttribute('aria-label', `Proporção entre atividades desplugadas (${conf.atividadesDesplugadasPercent}%) e digitais (${conf.atividadesPlugadasPercent}%)`);
             }
+            const legendas = bloco.querySelectorAll('.proporcao-legenda .legenda-item strong');
+            if (legendas[0]) legendas[0].textContent = `${conf.atividadesDesplugadasPercent}%`;
+            if (legendas[1]) legendas[1].textContent = `${conf.atividadesPlugadasPercent}%`;
           });
         }
       } catch (err) {
@@ -652,7 +657,7 @@
               </td>
               <td><span class="badge-bncc-codigo">${escaparHtml(tituloAtv)}</span></td>
               <td>
-                <strong style="color:#d97706;">${estrelas}</strong>
+                <strong class="estrelas-desempenho">${estrelas}</strong>
                 <span class="texto-suave texto-pequeno">(${Number(s.tentativas) || 1} tent.)</span>
               </td>
               <td class="texto-suave texto-pequeno">${formatarData(s.criado_em)}</td>
@@ -706,43 +711,43 @@
         return;
       }
 
-      // 1. Linha do Tempo de Entrada
+      // 1. Linha do Tempo de Entrada rápida (conclui em < 240ms sem deixar blocos invisíveis)
       const tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
 
       tl.from('#dashboard-hero', {
         opacity: 0,
-        y: -18,
-        duration: 0.5,
+        y: -12,
+        duration: 0.2,
         clearProps: 'transform,opacity',
-      })
+      }, 0)
       .from('.atalho-card', {
         opacity: 0,
-        y: 12,
-        stagger: 0.04,
-        duration: 0.4,
+        y: 8,
+        stagger: 0.015,
+        duration: 0.18,
         clearProps: 'transform,opacity',
-      }, '-=0.2')
+      }, 0)
       .from('.indicador', {
         opacity: 0,
-        y: 20,
-        stagger: 0.04,
-        duration: 0.45,
+        y: 10,
+        stagger: 0.015,
+        duration: 0.18,
         clearProps: 'transform,opacity',
-      }, '-=0.2')
+      }, 0)
       .from('.cartao-coluna', {
         opacity: 0,
-        y: 16,
-        stagger: 0.08,
-        duration: 0.45,
+        y: 10,
+        stagger: 0.02,
+        duration: 0.18,
         clearProps: 'transform,opacity',
-      }, '-=0.2')
+      }, 0)
       .from('.linha-pedagogica', {
         opacity: 0,
-        y: 10,
-        stagger: 0.03,
-        duration: 0.35,
+        y: 6,
+        stagger: 0.01,
+        duration: 0.16,
         clearProps: 'transform,opacity',
-      }, '-=0.2');
+      }, 0);
 
       // 2. Animação de contadores numéricos
       document.querySelectorAll('.kpi-contador').forEach((el) => {

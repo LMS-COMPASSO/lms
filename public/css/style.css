@@ -229,10 +229,14 @@ body.suporta-tema-sistema[data-tema="escuro"] .login-logo img:not(.logo-tema-cla
   font-style: normal;
   font-size: 20px;
   line-height: 1;
+  width: 1em;
+  height: 1em;
+  overflow: hidden;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   vertical-align: middle;
+  flex-shrink: 0;
   letter-spacing: normal;
   text-transform: none;
   white-space: nowrap;
@@ -690,16 +694,16 @@ body[data-tema="escuro"] .menu-toggle:hover {
 :root[data-tema="escuro"] .cartao,
 body[data-tema="escuro"] .cartao {
   background: rgba(17, 24, 39, 0.78);
-  backdrop-filter: blur(12px) saturate(160%);
   -webkit-backdrop-filter: blur(12px) saturate(160%);
+  backdrop-filter: blur(12px) saturate(160%);
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .cartao-dashboard {
   background: rgba(255, 255, 255, 0.88);
-  backdrop-filter: blur(12px) saturate(160%);
   -webkit-backdrop-filter: blur(12px) saturate(160%);
+  backdrop-filter: blur(12px) saturate(160%);
   border: 1px solid rgba(226, 232, 240, 0.85);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03), 0 6px 16px -2px rgba(15, 23, 42, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
@@ -707,8 +711,8 @@ body[data-tema="escuro"] .cartao {
 :root[data-tema="escuro"] .cartao-dashboard,
 body[data-tema="escuro"] .cartao-dashboard {
   background: rgba(17, 24, 39, 0.78);
-  backdrop-filter: blur(14px) saturate(170%);
   -webkit-backdrop-filter: blur(14px) saturate(170%);
+  backdrop-filter: blur(14px) saturate(170%);
   border-color: rgba(255, 255, 255, 0.08);
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
@@ -738,8 +742,8 @@ body[data-tema="escuro"] .cartao-dashboard {
 
 .indicador {
   background: rgba(255, 255, 255, 0.84);
-  backdrop-filter: blur(12px) saturate(160%);
   -webkit-backdrop-filter: blur(12px) saturate(160%);
+  backdrop-filter: blur(12px) saturate(160%);
   border-radius: 12px;
   padding: 18px 20px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03), 0 4px 14px rgba(15, 23, 42, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.95);
@@ -761,8 +765,8 @@ body[data-tema="escuro"] .cartao-dashboard {
   width: 96px;
   height: 96px;
   border-radius: 50%;
-  filter: blur(24px);
   -webkit-filter: blur(24px);
+  filter: blur(24px);
   opacity: 0.5;
   pointer-events: none;
   transition: opacity 0.3s ease, transform 0.3s ease;
@@ -796,8 +800,8 @@ body[data-tema="escuro"] .cartao-dashboard {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
 }
 
@@ -808,8 +812,8 @@ body[data-tema="escuro"] .cartao-dashboard {
   letter-spacing: 0.05em;
   padding: 3px 8px;
   border-radius: 999px;
-  backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
 }
 
 .indicador .valor {
@@ -865,8 +869,8 @@ body[data-tema="escuro"] .cartao-dashboard {
 :root[data-tema="escuro"] .indicador,
 body[data-tema="escuro"] .indicador {
   background: rgba(17, 24, 39, 0.75);
-  backdrop-filter: blur(14px) saturate(170%);
   -webkit-backdrop-filter: blur(14px) saturate(170%);
+  backdrop-filter: blur(14px) saturate(170%);
   border-color: rgba(255, 255, 255, 0.08);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 8px 24px -4px rgba(0, 0, 0, 0.45);
 }
@@ -940,6 +944,18 @@ input:focus, select:focus, textarea:focus {
 .btn-primario { background: var(--cor-primaria); color: #fff; }
 .btn-secundario { background: var(--cor-secundaria); color: #fff; }
 .btn-perigo { background: var(--cor-perigo); color: #fff; }
+:root[data-tema="escuro"] .btn-perigo,
+body[data-tema="escuro"] .btn-perigo,
+body.suporta-tema-sistema[data-tema="escuro"] .btn-perigo {
+  background: #b91c1c;
+  color: #ffffff;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-tema="claro"]) .btn-perigo {
+    background: #b91c1c;
+    color: #ffffff;
+  }
+}
 .btn-neutro {
   background: var(--cor-fundo);
   color: var(--cor-texto);
@@ -1001,7 +1017,6 @@ body[data-tema="escuro"] tbody tr:hover {
 }
 .tabela-scroll {
   overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
   max-width: 100%;
 }
 
@@ -1628,8 +1643,8 @@ body[data-tema="escuro"] .barra-progresso-wrap {
   gap: 20px;
   margin-bottom: 24px;
   background: linear-gradient(135deg, rgba(15, 23, 42, 0.92) 0%, rgba(30, 41, 59, 0.86) 45%, rgba(15, 23, 42, 0.94) 100%);
-  backdrop-filter: blur(16px) saturate(180%);
   -webkit-backdrop-filter: blur(16px) saturate(180%);
+  backdrop-filter: blur(16px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.14);
   box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.22), 0 20px 35px -10px rgba(15, 23, 42, 0.28), 0 1px 3px rgba(0, 0, 0, 0.1);
   overflow: hidden;
@@ -1646,8 +1661,8 @@ body[data-tema="escuro"] .barra-progresso-wrap {
   height: 320px;
   border-radius: 50%;
   background: radial-gradient(circle, rgba(56, 189, 248, 0.32) 0%, rgba(56, 189, 248, 0.08) 45%, transparent 70%);
-  filter: blur(48px);
   -webkit-filter: blur(48px);
+  filter: blur(48px);
   pointer-events: none;
   z-index: 0;
   transition: transform 0.6s ease;
@@ -1662,8 +1677,8 @@ body[data-tema="escuro"] .barra-progresso-wrap {
   height: 300px;
   border-radius: 50%;
   background: radial-gradient(circle, rgba(99, 102, 241, 0.26) 0%, rgba(139, 92, 246, 0.06) 50%, transparent 70%);
-  filter: blur(54px);
   -webkit-filter: blur(54px);
+  filter: blur(54px);
   pointer-events: none;
   z-index: 0;
   transition: transform 0.6s ease;
@@ -1695,8 +1710,8 @@ body[data-tema="escuro"] .barra-progresso-wrap {
   letter-spacing: 0.02em;
   color: #e0f2fe;
   margin-bottom: 10px;
-  backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
 }
 
 .dashboard-hero-titulo {
@@ -1729,8 +1744,8 @@ body[data-tema="escuro"] .barra-progresso-wrap {
   background: rgba(255, 255, 255, 0.92);
   color: #0f172a;
   border: 1px solid rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.8);
   font-weight: 600;
   transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
@@ -1766,8 +1781,8 @@ body[data-tema="escuro"] .dashboard-hero-actions .btn-branco {
   background: rgba(30, 41, 59, 0.85);
   color: #f1f5f9;
   border: 1px solid rgba(255, 255, 255, 0.16);
-  backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
@@ -1921,8 +1936,8 @@ body[data-tema="escuro"] .chip-aluno {
   gap: 14px;
   padding: 13px 18px;
   background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px) saturate(160%);
   -webkit-backdrop-filter: blur(12px) saturate(160%);
+  backdrop-filter: blur(12px) saturate(160%);
   border: 1px solid var(--cor-borda, rgba(226, 232, 240, 0.85));
   border-radius: var(--raio);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03), inset 0 1px 0 rgba(255, 255, 255, 0.9);
@@ -1945,8 +1960,8 @@ body[data-tema="escuro"] .chip-aluno {
   height: 80px;
   border-radius: 50%;
   background: radial-gradient(circle, rgba(56, 189, 248, 0.25) 0%, transparent 70%);
-  filter: blur(20px);
   -webkit-filter: blur(20px);
+  filter: blur(20px);
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease, transform 0.3s ease;
@@ -1982,8 +1997,8 @@ body[data-tema="escuro"] .chip-aluno {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
   position: relative;
   z-index: 1;
@@ -2027,7 +2042,6 @@ body[data-tema="escuro"] .chip-aluno {
   gap: 6px;
   overflow-x: auto;
   overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
   overscroll-behavior-x: contain;
   scrollbar-width: thin;
@@ -2037,8 +2051,8 @@ body[data-tema="escuro"] .chip-aluno {
 .dashboard-nav-tabs {
   padding: 6px;
   background: rgba(241, 245, 249, 0.78);
-  backdrop-filter: blur(14px) saturate(160%);
   -webkit-backdrop-filter: blur(14px) saturate(160%);
+  backdrop-filter: blur(14px) saturate(160%);
   border: 1px solid rgba(226, 232, 240, 0.9);
   border-radius: 12px;
   margin-bottom: 20px;
@@ -2093,22 +2107,22 @@ body[data-tema="escuro"] [data-scroll-horizontal]::-webkit-scrollbar-thumb {
 .dashboard-nav-tabs[data-scroll-mascara="direita"],
 .menu-scroll-horizontal[data-scroll-mascara="direita"],
 [data-scroll-horizontal][data-scroll-mascara="direita"] {
-  mask-image: linear-gradient(to right, black 0%, black calc(100% - 32px), transparent 100%);
   -webkit-mask-image: linear-gradient(to right, black 0%, black calc(100% - 32px), transparent 100%);
+  mask-image: linear-gradient(to right, black 0%, black calc(100% - 32px), transparent 100%);
 }
 
 .dashboard-nav-tabs[data-scroll-mascara="esquerda"],
 .menu-scroll-horizontal[data-scroll-mascara="esquerda"],
 [data-scroll-horizontal][data-scroll-mascara="esquerda"] {
-  mask-image: linear-gradient(to right, transparent 0%, black 32px, black 100%);
   -webkit-mask-image: linear-gradient(to right, transparent 0%, black 32px, black 100%);
+  mask-image: linear-gradient(to right, transparent 0%, black 32px, black 100%);
 }
 
 .dashboard-nav-tabs[data-scroll-mascara="ambos"],
 .menu-scroll-horizontal[data-scroll-mascara="ambos"],
 [data-scroll-horizontal][data-scroll-mascara="ambos"] {
-  mask-image: linear-gradient(to right, transparent 0%, black 32px, black calc(100% - 32px), transparent 100%);
   -webkit-mask-image: linear-gradient(to right, transparent 0%, black 32px, black calc(100% - 32px), transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, black 32px, black calc(100% - 32px), transparent 100%);
 }
 
 .dashboard-tab-btn {
@@ -2139,8 +2153,8 @@ body[data-tema="escuro"] [data-scroll-horizontal]::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.96);
   color: var(--cor-primaria, #0369a1);
   font-weight: 700;
-  backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
   box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 1);
   border: 1px solid rgba(255, 255, 255, 0.7);
 }
@@ -2171,8 +2185,8 @@ body[data-tema="escuro"] [data-scroll-horizontal]::-webkit-scrollbar-thumb {
 :root[data-tema="escuro"] .dashboard-nav-tabs,
 body[data-tema="escuro"] .dashboard-nav-tabs {
   background: rgba(15, 23, 42, 0.75);
-  backdrop-filter: blur(14px) saturate(170%);
   -webkit-backdrop-filter: blur(14px) saturate(170%);
+  backdrop-filter: blur(14px) saturate(170%);
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
 }
@@ -2193,16 +2207,16 @@ body[data-tema="escuro"] .dashboard-tab-btn[aria-selected="true"] {
   background: rgba(30, 58, 138, 0.55);
   color: #bfdbfe;
   border: 1px solid rgba(96, 165, 250, 0.4);
-  backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
 :root[data-tema="escuro"] .atalho-card,
 body[data-tema="escuro"] .atalho-card {
   background: rgba(17, 24, 39, 0.75);
-  backdrop-filter: blur(14px) saturate(170%);
   -webkit-backdrop-filter: blur(14px) saturate(170%);
+  backdrop-filter: blur(14px) saturate(170%);
   border-color: rgba(255, 255, 255, 0.08);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 4px 14px rgba(0, 0, 0, 0.35);
 }
@@ -2357,8 +2371,8 @@ body[data-tema="escuro"] .tempo-tela-recomendacao p {
 /* Utilitários do Dashboard */
 .card-banner-chamada {
   background: linear-gradient(135deg, rgba(239, 246, 255, 0.75) 0%, rgba(240, 253, 250, 0.65) 100%);
-  backdrop-filter: blur(12px) saturate(160%);
   -webkit-backdrop-filter: blur(12px) saturate(160%);
+  backdrop-filter: blur(12px) saturate(160%);
   border: 1px solid rgba(191, 219, 254, 0.75);
   box-shadow: 0 4px 16px -4px rgba(59, 130, 246, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.9);
   position: relative;
@@ -2374,16 +2388,16 @@ body[data-tema="escuro"] .tempo-tela-recomendacao p {
   height: 140px;
   border-radius: 50%;
   background: radial-gradient(circle, rgba(56, 189, 248, 0.25) 0%, transparent 70%);
-  filter: blur(24px);
   -webkit-filter: blur(24px);
+  filter: blur(24px);
   pointer-events: none;
 }
 
 :root[data-tema="escuro"] .card-banner-chamada,
 body[data-tema="escuro"] .card-banner-chamada {
   background: linear-gradient(135deg, rgba(30, 58, 138, 0.28) 0%, rgba(17, 24, 39, 0.75) 100%);
-  backdrop-filter: blur(14px) saturate(170%);
   -webkit-backdrop-filter: blur(14px) saturate(170%);
+  backdrop-filter: blur(14px) saturate(170%);
   border-color: rgba(96, 165, 250, 0.3);
   box-shadow: 0 6px 20px -4px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
@@ -2505,8 +2519,8 @@ lms-icon,
   margin-bottom: 20px;
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.88);
-  backdrop-filter: blur(12px) saturate(160%);
   -webkit-backdrop-filter: blur(12px) saturate(160%);
+  backdrop-filter: blur(12px) saturate(160%);
   border: 1px solid var(--cor-borda, rgba(226, 232, 240, 0.85));
   box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
@@ -2542,7 +2556,6 @@ lms-icon,
   color: #334155;
   overflow-x: auto;
   overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
   overscroll-behavior-x: contain;
   scrollbar-width: none;
@@ -2620,8 +2633,8 @@ lms-icon,
 :root[data-tema="escuro"] .wayfinding-bar,
 body[data-tema="escuro"] .wayfinding-bar {
   background: rgba(17, 24, 39, 0.78);
-  backdrop-filter: blur(12px) saturate(160%);
   -webkit-backdrop-filter: blur(12px) saturate(160%);
+  backdrop-filter: blur(12px) saturate(160%);
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
@@ -2823,8 +2836,8 @@ html.a11y-alto-contraste .card-banner-chamada,
 html.a11y-alto-contraste .wayfinding-bar,
 html.a11y-alto-contraste .wf-tool-btn,
 html.a11y-alto-contraste .card-medalha {
-  backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
   border: 2px solid #0f172a !important;
 }
 
@@ -3276,7 +3289,6 @@ body[data-tema="escuro"] .topbar {
   color: var(--pub-texto-suave, #4a5568);
   overflow-x: auto;
   overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
   overscroll-behavior-x: contain;
   scrollbar-width: none;
@@ -3357,6 +3369,17 @@ body[data-tema="escuro"] .atv-breadcrumbs li + li::before {
 .cd-hero .atv-breadcrumbs li[aria-current="page"],
 .cd-hero .wf-breadcrumb-mobile-voltar {
   color: #fbbf24;
+}
+
+html.a11y-alto-contraste .md-hero .atv-breadcrumbs ol,
+html.a11y-alto-contraste .cd-hero .atv-breadcrumbs ol,
+html.a11y-alto-contraste .md-hero .atv-breadcrumbs ol a,
+html.a11y-alto-contraste .cd-hero .atv-breadcrumbs ol a,
+html.a11y-alto-contraste .md-hero .atv-breadcrumbs li[aria-current="page"],
+html.a11y-alto-contraste .cd-hero .atv-breadcrumbs li[aria-current="page"],
+html.a11y-alto-contraste .md-hero .wf-breadcrumb-mobile-voltar,
+html.a11y-alto-contraste .cd-hero .wf-breadcrumb-mobile-voltar {
+  color: #000000 !important;
 }
 
 .wf-breadcrumb-atual,
@@ -3547,7 +3570,7 @@ details:not(.sp-faq-item)[open] > summary::after {
 }
 
 /* 4. Previsibilidade, Estados de Interação e Distinção Links vs. Botões */
-a:not(.btn):not(.nav-item):not(.atalho-card):not(.logo):not(.pub-logo):not(.md-logo):not(.cd-logo):not(.bv-logo):not(.topbar-usuario-link):not(.sidebar-usuario-card):not(.marco-etapa):not(.mapa-orientacao-card):not(.wf-breadcrumb-mobile-voltar):not(.wf-breadcrumb-link):not(.atv-breadcrumbs ol a) {
+a:not(.btn):not(.nav-item):not(.atalho-card):not(.logo):not(.pub-logo):not(.md-logo):not(.cd-logo):not(.bv-logo):not(.topbar-usuario-link):not(.sidebar-usuario-card):not(.marco-etapa):not(.mapa-orientacao-card):not(.wf-breadcrumb-mobile-voltar):not(.wf-breadcrumb-link):not(.atv-breadcrumbs ol a):not(.btn-google-academic):not(.btn-sp-primario):not(.btn-sp-contorno):not(.btn-md-primario):not(.btn-md-contorno):not(.btn-cd-primario):not(.btn-cd-contorno):not(.btn-futurista-primario):not(.btn-futurista-contorno):not(.plano-btn):not(.trilha-marco-link):not(.planos-voltar-link) {
   text-decoration: underline;
   text-underline-offset: 3px;
   text-decoration-thickness: 1.5px;
@@ -3701,6 +3724,18 @@ textarea[aria-invalid="true"],
   text-transform: uppercase;
   background: var(--cor-secao-ativa);
   color: #ffffff;
+}
+
+:root[data-tema="escuro"] .mapa-tag-aqui,
+body[data-tema="escuro"] .mapa-tag-aqui,
+body.suporta-tema-sistema[data-tema="escuro"] .mapa-tag-aqui {
+  color: #090e1a;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-tema="claro"]) .mapa-tag-aqui {
+    color: #090e1a;
+  }
 }
 
 .mapa-tag-proximo {
@@ -4035,6 +4070,7 @@ body[data-tema="escuro"] .btn-google-academic:focus-visible {
 }
 
 .google-config-banner {
+  display: none;
   background: var(--cor-fundo-alt, #f8fafc);
   border: 1px dashed var(--cor-borda, #cbd5e1);
   border-radius: 8px;
@@ -4115,17 +4151,25 @@ body[data-tema="escuro"] .btn-google-academic:focus-visible {
   align-items: center;
   gap: 4px;
   background: rgba(66, 133, 244, 0.12);
-  color: #1a73e8;
-  border: 1px solid rgba(66, 133, 244, 0.25);
+  color: #1e40af;
+  border: 1px solid rgba(30, 64, 175, 0.28);
   border-radius: 4px;
   padding: 1px 6px;
   font-size: 0.72rem;
   font-weight: 600;
 }
-:root[data-tema="escuro"] .badge-google-topbar {
+:root[data-tema="escuro"] .badge-google-topbar,
+body[data-tema="escuro"] .badge-google-topbar {
   background: rgba(66, 133, 244, 0.22);
-  color: #8ab4f8;
-  border-color: rgba(66, 133, 244, 0.4);
+  color: #93c5fd;
+  border-color: rgba(147, 197, 253, 0.4);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-tema="claro"]) .badge-google-topbar {
+    background: rgba(66, 133, 244, 0.22);
+    color: #93c5fd;
+    border-color: rgba(147, 197, 253, 0.4);
+  }
 }
 
 .badge-google-sidebar {
@@ -4189,24 +4233,24 @@ body[data-tema="escuro"] .card-registro-google-academico {
 
   :root:not([data-tema="claro"]) .cartao {
     background: rgba(17, 24, 39, 0.78);
-    backdrop-filter: blur(12px) saturate(160%);
     -webkit-backdrop-filter: blur(12px) saturate(160%);
+    backdrop-filter: blur(12px) saturate(160%);
     border: 1px solid rgba(255, 255, 255, 0.08);
     box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.05);
   }
 
   :root:not([data-tema="claro"]) .cartao-dashboard {
     background: rgba(17, 24, 39, 0.78);
-    backdrop-filter: blur(14px) saturate(170%);
     -webkit-backdrop-filter: blur(14px) saturate(170%);
+    backdrop-filter: blur(14px) saturate(170%);
     border-color: rgba(255, 255, 255, 0.08);
     box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.06);
   }
 
   :root:not([data-tema="claro"]) .indicador {
     background: rgba(17, 24, 39, 0.75);
-    backdrop-filter: blur(14px) saturate(170%);
     -webkit-backdrop-filter: blur(14px) saturate(170%);
+    backdrop-filter: blur(14px) saturate(170%);
     border-color: rgba(255, 255, 255, 0.08);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 8px 24px -4px rgba(0, 0, 0, 0.45);
   }
@@ -4237,8 +4281,8 @@ body[data-tema="escuro"] .card-registro-google-academico {
 
   :root:not([data-tema="claro"]) .atalho-card {
     background: rgba(17, 24, 39, 0.75);
-    backdrop-filter: blur(14px) saturate(170%);
     -webkit-backdrop-filter: blur(14px) saturate(170%);
+    backdrop-filter: blur(14px) saturate(170%);
     border-color: rgba(255, 255, 255, 0.08);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 4px 14px rgba(0, 0, 0, 0.35);
   }
@@ -4271,8 +4315,8 @@ body[data-tema="escuro"] .card-registro-google-academico {
 
   :root:not([data-tema="claro"]) .dashboard-nav-tabs {
     background: rgba(15, 23, 42, 0.75);
-    backdrop-filter: blur(14px) saturate(170%);
     -webkit-backdrop-filter: blur(14px) saturate(170%);
+    backdrop-filter: blur(14px) saturate(170%);
     border-color: rgba(255, 255, 255, 0.08);
   }
   :root:not([data-tema="claro"]) .dashboard-tab-btn {
@@ -4323,6 +4367,501 @@ body[data-tema="escuro"] .card-registro-google-academico {
     box-shadow: 0 6px 20px -4px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
   }
 }
+
+/* Modais, filtros, inspetor Python 3D e textos de apoio (sem estilos inline) */
+.modal-conteudo.modal-conteudo-largo {
+  max-width: 680px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-titulo-compacto {
+  margin: 0;
+}
+
+select.select-filtro-compacto {
+  width: auto;
+  min-height: 38px;
+  padding: 6px 12px;
+}
+
+.inspetor-codigo-python {
+  margin-top: 16px;
+  background: #0f172a;
+  color: #f8fafc;
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.inspetor-python-titulo {
+  color: #38bdf8;
+  font-size: 0.95rem;
+}
+
+.inspetor-python-meta {
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+
+.inspetor-python-pre {
+  margin: 0;
+  padding: 14px;
+  background: #090d16;
+  color: #e2e8f0;
+  border-radius: 8px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.86rem;
+  line-height: 1.55;
+  overflow-x: auto;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.texto-nota-auth {
+  font-size: 0.86rem;
+}
+
+.login-card-titulo {
+  font-size: 1.15rem;
+  margin: 0 0 6px 0;
+  color: var(--cor-texto);
+}
+
+.login-card-desc {
+  font-size: 0.88rem;
+  margin: 0 0 14px 0;
+}
+
+.login-card-desc-ampla {
+  font-size: 0.88rem;
+  margin: 0 0 16px 0;
+}
+
+.google-gis-btn-wrap {
+  min-height: 44px;
+}
+
+.google-gis-container {
+  display: none;
+  justify-content: center;
+  width: 100%;
+}
+
+.google-status-subtexto {
+  font-size: 0.78rem;
+  margin: 0;
+}
+
+.modal-google-titulo {
+  font-size: 1.05rem;
+}
+
+.modal-google-gis-container {
+  display: none;
+  justify-content: center;
+}
+
+.google-config-titulo {
+  font-size: 0.88rem;
+}
+
+.google-config-desc {
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+.label-email-google {
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+.hint-email-google {
+  font-size: 0.76rem;
+  display: block;
+  margin-top: 4px;
+}
+
+/* Utilidades de acessibilidade e componentes renderizados em runtime (Lotes C & D) */
+.somente-leitor {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.wf-tema-seletor {
+  border-top: 1px solid var(--cor-borda);
+}
+
+.wf-tema-rotulo {
+  font-weight: 700;
+  margin-bottom: 6px;
+  display: block;
+  font-size: 0.85rem;
+}
+
+.trilha-marco-link {
+  color: inherit;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.badge-google-topbar-inline {
+  margin-left: 4px;
+}
+
+.badge-google-perfil {
+  font-size: 0.82rem;
+  padding: 3px 8px;
+}
+
+.modulo-avaliacoes-bloco {
+  border-top: 1px solid var(--cor-borda);
+}
+
+.avaliacao-questao-fieldset {
+  border: 1px solid var(--cor-borda);
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.avaliacao-questao-legenda {
+  font-weight: 700;
+  padding: 0 6px;
+}
+
+.avaliacao-alternativa-label {
+  font-weight: 500;
+}
+
+input.input-radio-inline {
+  width: auto;
+}
+
+.estrelas-desempenho {
+  color: #b45309;
+}
+
+:root[data-tema="escuro"] .estrelas-desempenho,
+body[data-tema="escuro"] .estrelas-desempenho {
+  color: #fbbf24;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-tema="claro"]) .estrelas-desempenho {
+    color: #fbbf24;
+  }
+}
+
+.medalhas-vazio-box {
+  grid-column: 1 / -1;
+  background: var(--cor-fundo);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio);
+  padding: 24px;
+  text-align: center;
+}
+
+.medalhas-vazio-icone {
+  font-size: var(--text-3xl);
+  color: var(--cor-texto-suave);
+}
+
+.medalhas-vazio-titulo {
+  margin: 8px 0 4px;
+  font-weight: 600;
+  color: var(--cor-texto);
+}
+
+.medalhas-vazio-desc {
+  font-size: var(--text-sm);
+  margin-bottom: 14px;
+}
+
+.cursos-card-titulo {
+  font-size: 1.15rem;
+}
+
+/* ==========================================================================
+   MODO ALTO CONTRASTE — Resiliência contra Tema Escuro & prefers-color-scheme
+   ========================================================================== */
+html.a11y-alto-contraste,
+html.a11y-alto-contraste[data-tema="escuro"],
+html.a11y-alto-contraste[data-tema="claro"],
+html.a11y-alto-contraste body,
+html.a11y-alto-contraste body[data-tema="escuro"],
+html.a11y-alto-contraste body.suporta-tema-sistema {
+  --cor-primaria: #000000 !important;
+  --cor-primaria-escura: #000000 !important;
+  --cor-primaria-texto: #000000 !important;
+  --cor-sobre-primaria: #ffffff !important;
+  --cor-secundaria: #000000 !important;
+  --cor-secundaria-suave: #000000 !important;
+  --cor-alerta: #000000 !important;
+  --cor-perigo: #000000 !important;
+  --cor-fundo: #ffffff !important;
+  --cor-fundo-alt: #ffffff !important;
+  --cor-cartao: #ffffff !important;
+  --cor-superficie: #ffffff !important;
+  --cor-texto: #000000 !important;
+  --cor-texto-principal: #000000 !important;
+  --cor-texto-suave: #000000 !important;
+  --cor-borda: #000000 !important;
+  --cor-foco: #000000 !important;
+  --cor-link: #000000 !important;
+  --cor-secao-pensamento: #000000 !important;
+  --cor-secao-pensamento-fundo: #ffffff !important;
+  --cor-secao-pensamento-borda: #000000 !important;
+  --cor-secao-mundo: #000000 !important;
+  --cor-secao-mundo-fundo: #ffffff !important;
+  --cor-secao-mundo-borda: #000000 !important;
+  --cor-secao-cultura: #000000 !important;
+  --cor-secao-cultura-fundo: #ffffff !important;
+  --cor-secao-cultura-borda: #000000 !important;
+  --cor-secao-aluno: #000000 !important;
+  --cor-secao-aluno-fundo: #ffffff !important;
+  --cor-secao-aluno-borda: #000000 !important;
+  --cor-secao-professor: #000000 !important;
+  --cor-secao-professor-fundo: #ffffff !important;
+  --cor-secao-professor-borda: #000000 !important;
+  --cor-secao-config: #000000 !important;
+  --cor-secao-config-fundo: #ffffff !important;
+  --cor-secao-config-borda: #000000 !important;
+}
+
+html.a11y-alto-contraste body,
+html.a11y-alto-contraste .conteudo,
+html.a11y-alto-contraste .topbar,
+html.a11y-alto-contraste .menu-toggle,
+html.a11y-alto-contraste .cartao,
+html.a11y-alto-contraste .cartao-dashboard,
+html.a11y-alto-contraste .dashboard-hero,
+html.a11y-alto-contraste .indicador,
+html.a11y-alto-contraste .atalho-card,
+html.a11y-alto-contraste .indicador-icone,
+html.a11y-alto-contraste .indicador-badge,
+html.a11y-alto-contraste .atalho-icone,
+html.a11y-alto-contraste .dashboard-nav-tabs,
+html.a11y-alto-contraste .dashboard-tab-btn,
+html.a11y-alto-contraste .card-banner-chamada,
+html.a11y-alto-contraste .wayfinding-bar,
+html.a11y-alto-contraste .wf-tool-btn,
+html.a11y-alto-contraste .wf-nav-btn,
+html.a11y-alto-contraste .wf-painel-flutuante,
+html.a11y-alto-contraste .wf-painel-topo,
+html.a11y-alto-contraste .wf-check-label,
+html.a11y-alto-contraste .wf-pergunta-tag,
+html.a11y-alto-contraste .card-medalha,
+html.a11y-alto-contraste .item-eixo,
+html.a11y-alto-contraste .item-eixo-contagem,
+html.a11y-alto-contraste .card-tempo-tela,
+html.a11y-alto-contraste .tempo-tela-titulo,
+html.a11y-alto-contraste .tempo-tela-proporcao,
+html.a11y-alto-contraste .tempo-tela-recomendacao,
+html.a11y-alto-contraste .tempo-tela-recomendacao p,
+html.a11y-alto-contraste .modal-conteudo,
+html.a11y-alto-contraste .modal-google-conteudo,
+html.a11y-alto-contraste .caixa-login,
+html.a11y-alto-contraste .card-login-academico,
+html.a11y-alto-contraste .card-login-convencional,
+html.a11y-alto-contraste .card-registro-google-academico,
+html.a11y-alto-contraste .google-config-banner,
+html.a11y-alto-contraste .codigo-secret-cmd,
+html.a11y-alto-contraste .inspetor-codigo-python,
+html.a11y-alto-contraste .inspetor-python-pre,
+html.a11y-alto-contraste .timeline li,
+html.a11y-alto-contraste .timeline-icone-no,
+html.a11y-alto-contraste .btn-neutro,
+html.a11y-alto-contraste .btn-branco,
+html.a11y-alto-contraste .btn-google-academic,
+html.a11y-alto-contraste .btn-google-menu,
+html.a11y-alto-contraste .badge,
+html.a11y-alto-contraste .badge-cne,
+html.a11y-alto-contraste .badge-bncc-codigo,
+html.a11y-alto-contraste .badge-google-topbar,
+html.a11y-alto-contraste .badge-conquistada,
+html.a11y-alto-contraste input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+html.a11y-alto-contraste select,
+html.a11y-alto-contraste textarea,
+html.a11y-alto-contraste thead th,
+html.a11y-alto-contraste tbody td,
+html.a11y-alto-contraste .progresso-etapas-box,
+html.a11y-alto-contraste .trilha-marco-item,
+html.a11y-alto-contraste .mapa-orientacao-card,
+html.a11y-alto-contraste .estrelas-desempenho,
+html.a11y-alto-contraste .medalhas-vazio-box {
+  background: #ffffff !important;
+  background-image: none !important;
+  color: #000000 !important;
+  border-color: #000000 !important;
+  box-shadow: none !important;
+}
+
+html.a11y-alto-contraste .conteudo h1,
+html.a11y-alto-contraste .conteudo h2,
+html.a11y-alto-contraste .conteudo h3,
+html.a11y-alto-contraste .conteudo h4,
+html.a11y-alto-contraste .conteudo p,
+html.a11y-alto-contraste .conteudo label,
+html.a11y-alto-contraste .conteudo th,
+html.a11y-alto-contraste .conteudo td,
+html.a11y-alto-contraste .texto-suave,
+html.a11y-alto-contraste .subtitulo,
+html.a11y-alto-contraste .topbar-usuario-link,
+html.a11y-alto-contraste .indicador .valor,
+html.a11y-alto-contraste .indicador .rotulo,
+html.a11y-alto-contraste .atalho-titulo,
+html.a11y-alto-contraste .atalho-desc,
+html.a11y-alto-contraste .login-card-titulo,
+html.a11y-alto-contraste .inspetor-python-titulo,
+html.a11y-alto-contraste .inspetor-python-meta,
+html.a11y-alto-contraste .medalhas-vazio-titulo,
+html.a11y-alto-contraste .medalhas-vazio-desc,
+html.a11y-alto-contraste .card-medalha-titulo,
+html.a11y-alto-contraste .card-medalha-eixo,
+html.a11y-alto-contraste .card-medalha-desc,
+html.a11y-alto-contraste .card-medalha-status {
+  color: #000000 !important;
+}
+
+html.a11y-alto-contraste .btn-primario,
+html.a11y-alto-contraste .btn-secundario,
+html.a11y-alto-contraste .btn-perigo,
+html.a11y-alto-contraste .dashboard-tab-btn[aria-selected="true"],
+html.a11y-alto-contraste .wf-btn-tema.ativo,
+html.a11y-alto-contraste .mapa-tag-aqui {
+  background: #000000 !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  border: 2px solid #000000 !important;
+  box-shadow: none !important;
+}
+
+html.a11y-alto-contraste .btn-primario *,
+html.a11y-alto-contraste .btn-secundario *,
+html.a11y-alto-contraste .btn-perigo *,
+html.a11y-alto-contraste .dashboard-tab-btn[aria-selected="true"] *,
+html.a11y-alto-contraste .wf-btn-tema.ativo * {
+  color: #ffffff !important;
+}
+
+html.a11y-alto-contraste .sidebar,
+html.a11y-alto-contraste .sidebar-footer {
+  background: #000000 !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  border-color: #ffffff !important;
+  box-shadow: none !important;
+}
+
+html.a11y-alto-contraste .sidebar .logo-titulo,
+html.a11y-alto-contraste .sidebar .logo-subtitulo,
+html.a11y-alto-contraste .sidebar .nav-secao-rotulo,
+html.a11y-alto-contraste .sidebar-nav .nav-item,
+html.a11y-alto-contraste .sidebar-nav .nav-item *,
+html.a11y-alto-contraste .sidebar-nav .nav-item .material-symbols-outlined {
+  color: #ffffff !important;
+}
+
+html.a11y-alto-contraste .sidebar-nav .nav-item.ativo {
+  background: #000000 !important;
+  border: 2px solid #ffffff !important;
+  color: #ffffff !important;
+}
+
+html.a11y-alto-contraste .pub-logo .logo-tema-claro,
+html.a11y-alto-contraste .login-logo .logo-tema-claro {
+  display: block !important;
+}
+
+html.a11y-alto-contraste .pub-logo .logo-tema-escuro,
+html.a11y-alto-contraste .login-logo .logo-tema-escuro {
+  display: none !important;
+}
+
+html.a11y-alto-contraste footer img[src*="logo-branco.svg"] {
+  content: url('/img/logo.svg') !important;
+}
+
+html.a11y-alto-contraste .wf-breadcrumb-lista,
+html.a11y-alto-contraste .wf-breadcrumb-link,
+html.a11y-alto-contraste .wf-breadcrumb-eixo,
+html.a11y-alto-contraste .wf-breadcrumb-atual,
+html.a11y-alto-contraste .dashboard-hero-tag,
+html.a11y-alto-contraste .progresso-etapas-contador,
+html.a11y-alto-contraste .progresso-etapas-contagem,
+html.a11y-alto-contraste .linha-tempo-item,
+html.a11y-alto-contraste .timeline-texto,
+html.a11y-alto-contraste .estado-progresso-pill,
+html.a11y-alto-contraste .secao-pista-badge,
+html.a11y-alto-contraste .comp-section-header,
+html.a11y-alto-contraste .atv-breadcrumbs ol,
+html.a11y-alto-contraste .sus-form-card,
+html.a11y-alto-contraste .metrica-sus-card,
+html.a11y-alto-contraste .badge-grau-a {
+  background: #ffffff !important;
+  background-image: none !important;
+  color: #000000 !important;
+  border-color: #000000 !important;
+  box-shadow: none !important;
+}
+
+html.a11y-alto-contraste .wayfinding-bar *,
+html.a11y-alto-contraste .wf-breadcrumb-lista *,
+html.a11y-alto-contraste .wf-breadcrumb-lista li + li::before,
+html.a11y-alto-contraste .wf-breadcrumb-link *,
+html.a11y-alto-contraste .wf-breadcrumb-atual *,
+html.a11y-alto-contraste .dashboard-hero-tag *,
+html.a11y-alto-contraste .timeline li *,
+html.a11y-alto-contraste .timeline-texto *,
+html.a11y-alto-contraste .mapa-orientacao-card *,
+html.a11y-alto-contraste .progresso-etapas-box *,
+html.a11y-alto-contraste .progresso-etapas-contador *,
+html.a11y-alto-contraste .cartao *,
+html.a11y-alto-contraste .cartao-dashboard *,
+html.a11y-alto-contraste .comp-section-header *,
+html.a11y-alto-contraste .atv-breadcrumbs *,
+html.a11y-alto-contraste .pub-main-piloto *,
+html.a11y-alto-contraste .secao-pista-badge *,
+html.a11y-alto-contraste .estado-progresso-pill * {
+  color: #000000 !important;
+}
+
+html.a11y-alto-contraste body .btn-primario,
+html.a11y-alto-contraste body .btn-primario *,
+html.a11y-alto-contraste body .btn-secundario,
+html.a11y-alto-contraste body .btn-secundario *,
+html.a11y-alto-contraste body .btn-perigo,
+html.a11y-alto-contraste body .btn-perigo *,
+html.a11y-alto-contraste body .dashboard-tab-btn[aria-selected="true"],
+html.a11y-alto-contraste body .dashboard-tab-btn[aria-selected="true"] *,
+html.a11y-alto-contraste body .wf-btn-tema.ativo,
+html.a11y-alto-contraste body .wf-btn-tema.ativo *,
+html.a11y-alto-contraste body .mapa-tag-aqui,
+html.a11y-alto-contraste body .mapa-tag-aqui * {
+  background: #000000 !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  border-color: #000000 !important;
+}
+
+html.a11y-alto-contraste .badge-academico-recomendado,
+html.a11y-alto-contraste .badge-academico-recomendado * {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 1.5px solid #000000 !important;
+}
+
+
+
+
 
 
 

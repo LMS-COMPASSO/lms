@@ -15,7 +15,7 @@
     <div id="sidebar-container"></div>
     <main class="conteudo">
       <div id="topbar-container"></div>
-      <div class="cartao tabela-scroll" tabindex="0" role="region" aria-label="Tabela de certificados emitidos">
+      <div class="cartao tabela-scroll" role="region" aria-label="Tabela de certificados emitidos">
         <table aria-label="Lista de certificados emitidos">
           <thead><tr><th scope="col">Aluno</th><th scope="col">Curso</th><th scope="col">Código</th><th scope="col">Emitido em</th><th scope="col" class="texto-direita">Arquivo</th></tr></thead>
           <tbody id="corpo-tabela"></tbody>
@@ -23,7 +23,7 @@
       </div>
 
       <div class="cartao">
-        <h3>Validar Certificado</h3>
+        <h2>Validar Certificado</h2>
         <div class="flex-linha flex-wrap">
           <input type="text" id="codigo-validar" placeholder="Código de validação" title="Código de validação do certificado" aria-label="Código de validação do certificado" class="flex-1 min-w-200">
           <button type="button" class="btn btn-primario flex-inline-icon" onclick="validar()"><span class="material-symbols-outlined icon-xs" aria-hidden="true">verified</span> Validar</button>

@@ -1346,6 +1346,7 @@ body.suporta-tema-sistema[data-tema="escuro"] .sp-faq-item[open] {
   font-weight: 700;
   color: var(--pub-texto);
   cursor: pointer;
+  -webkit-user-select: none;
   user-select: none;
   list-style: none;
 }
@@ -1646,7 +1647,6 @@ body.suporta-tema-sistema[data-tema="escuro"] .pub-acoes .btn-primario:hover {
   overflow-x: auto;
   overflow-y: hidden;
   scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   padding: 6px 4px;
 }
@@ -1795,4 +1795,128 @@ body.suporta-tema-sistema[data-tema="escuro"] .sp-parceiros-item {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
   }
 }
+
+/* Home SendPulse: mockup do herói, grade Bento e micro-demos (sem estilos inline) */
+.sp-mockup-aluno-nome {
+  display: block;
+  font-size: 0.92rem;
+  color: var(--pub-texto);
+}
+
+.sp-mockup-aluno-turma {
+  font-size: 0.78rem;
+  color: var(--pub-texto-suave);
+}
+
+.sp-bento-links {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.sp-bento-tag-painel {
+  margin-bottom: 12px;
+  display: inline-block;
+}
+
+.sp-demo-topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.sp-demo-titulo {
+  color: var(--pub-texto);
+  font-size: 0.95rem;
+}
+
+.sp-demo-pergunta {
+  font-size: 0.86rem;
+  color: var(--pub-texto-suave);
+  margin-bottom: 14px;
+}
+
+.sp-demo-lista-col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sp-demo-holo-centro {
+  text-align: center;
+  padding: 18px 0;
+}
+
+.sp-demo-holo-nome {
+  display: block;
+  margin-top: 8px;
+  color: var(--pub-texto);
+}
+
+.sp-demo-holo-sub {
+  font-size: 0.82rem;
+  color: var(--pub-texto-suave);
+}
+
+html:root.a11y-alto-contraste[class] .sp-hero,
+html:root.a11y-alto-contraste[class] .sp-secao,
+html:root.a11y-alto-contraste[class] .sp-secao-alt,
+html:root.a11y-alto-contraste[class] .sp-trust-bar,
+html:root.a11y-alto-contraste[class] .sp-trust-item,
+html:root.a11y-alto-contraste[class] .sp-parceiros-secao,
+html:root.a11y-alto-contraste[class] .sp-parceiros-item,
+html:root.a11y-alto-contraste[class] .sp-parceiros-btn-nav,
+html:root.a11y-alto-contraste[class] .sp-perfil-card,
+html:root.a11y-alto-contraste[class] .sp-bento-card,
+html:root.a11y-alto-contraste[class] .sp-bento-tag,
+html:root.a11y-alto-contraste[class] .sp-bento-tag-painel,
+html:root.a11y-alto-contraste[class] .sp-mockup-janela,
+html:root.a11y-alto-contraste[class] .sp-mockup-card-destaque,
+html:root.a11y-alto-contraste[class] .sp-mockup-tag-curso,
+html:root.a11y-alto-contraste[class] .sp-mockup-passo-item,
+html:root.a11y-alto-contraste[class] .sp-mockup-barra,
+html:root.a11y-alto-contraste[class] .sp-showcase-container,
+html:root.a11y-alto-contraste[class] .sp-btn-aba,
+html:root.a11y-alto-contraste[class] .sp-passo-card,
+html:root.a11y-alto-contraste[class] .sp-faq-item,
+html:root.a11y-alto-contraste[class] .sp-micro-demo,
+html:root.a11y-alto-contraste[class] .sp-painel-topicos li,
+html:root.a11y-alto-contraste[class] .sp-demo-item-bloco,
+html:root.a11y-alto-contraste[class] .sp-demo-step-num,
+html:root.a11y-alto-contraste[class] .btn-sp-contorno {
+  background: #ffffff !important;
+  background-image: none !important;
+  color: #000000 !important;
+  border-color: #000000 !important;
+  box-shadow: none !important;
+}
+
+html:root.a11y-alto-contraste[class] .sp-hero *,
+html:root.a11y-alto-contraste[class] .sp-secao *,
+html:root.a11y-alto-contraste[class] .sp-secao-alt *,
+html:root.a11y-alto-contraste[class] .sp-trust-bar *,
+html:root.a11y-alto-contraste[class] .sp-parceiros-secao *,
+html:root.a11y-alto-contraste[class] .sp-parceiros-rotulo,
+html:root.a11y-alto-contraste[class] .sp-showcase-container *,
+html:root.a11y-alto-contraste[class] .btn-sp-contorno * {
+  color: #000000 !important;
+  -webkit-text-fill-color: initial !important;
+}
+
+html:root.a11y-alto-contraste[class] .pub-acoes .btn-primario,
+html:root.a11y-alto-contraste[class] .pub-acoes .btn-primario *,
+html:root.a11y-alto-contraste[class] .btn-sp-primario,
+html:root.a11y-alto-contraste[class] .btn-sp-primario *,
+html:root.a11y-alto-contraste[class] .sp-btn-aba.ativa,
+html:root.a11y-alto-contraste[class] .sp-btn-aba.ativa *,
+html:root.a11y-alto-contraste[class] .sp-mockup-passo-item.ativo,
+html:root.a11y-alto-contraste[class] .sp-mockup-passo-item.ativo * {
+  background: #000000 !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  border: 2px solid #000000 !important;
+  box-shadow: none !important;
+}
+
 

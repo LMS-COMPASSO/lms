@@ -152,7 +152,7 @@ export function ProgressTrail({ etapaAtual = 1, totalEtapas = 6, titulo = 'Trilh
     if (m.href) {
       return `
         <li class="trilha-marco-item estado-${estado} ${ehAtual ? 'voce-esta-aqui' : ''}" ${ehAtual ? 'aria-current="step"' : ''} title="${escapeHtml(m.titulo)} (${rotulo})">
-          <a href="${escapeHtml(m.href)}" style="color:inherit; text-decoration:none; display:inline-flex; align-items:center; gap:6px;">${conteudo}</a>
+          <a href="${escapeHtml(m.href)}" class="trilha-marco-link">${conteudo}</a>
         </li>
       `;
     }

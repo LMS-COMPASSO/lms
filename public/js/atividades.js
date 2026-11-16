@@ -250,7 +250,7 @@ function cartaoDaAtividade(atividade) {
     estadoBadge = h(
       'span',
       { class: 'estado-progresso-pill estado-nao-iniciado' },
-      h('span', { class: 'material-symbols-outlined icon-xs', 'aria-hidden': 'true' }, 'circle-dashed'),
+      h('span', { class: 'material-symbols-outlined icon-xs', 'aria-hidden': 'true' }, 'radio_button_unchecked'),
       t('card.naoIniciado'),
     );
   }
@@ -343,7 +343,7 @@ function bannerSpotlight(destaqueObj, concluidas, total) {
     estadoBadge = h(
       'span',
       { class: 'estado-progresso-pill estado-nao-iniciado' },
-      h('span', { class: 'material-symbols-outlined icon-xs', 'aria-hidden': 'true' }, 'circle-dashed'),
+      h('span', { class: 'material-symbols-outlined icon-xs', 'aria-hidden': 'true' }, 'radio_button_unchecked'),
       t('card.naoIniciado'),
     );
   }
@@ -891,21 +891,23 @@ function renderCatalogo() {
 
   atualizar(false);
 
-  // Orquestração de entrada fluida com GSAP
+  // Orquestração de entrada fluida e rápida com GSAP (conclui em < 300ms e limpa estilos inline)
   if (!reduzirMovimento && typeof gsap !== 'undefined') {
     const tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
     tl.from('.atv-spotlight-conteudo > *', {
       opacity: 0,
-      y: 16,
-      stagger: 0.06,
-      duration: 0.45,
-    });
+      y: 12,
+      stagger: 0.02,
+      duration: 0.2,
+      clearProps: 'transform,opacity',
+    }, 0);
     tl.from('.atv-spotlight-preview', {
       opacity: 0,
-      scale: 0.94,
-      duration: 0.5,
-      ease: 'back.out(1.4)',
-    }, '-=0.25');
+      scale: 0.96,
+      duration: 0.22,
+      ease: 'back.out(1.3)',
+      clearProps: 'transform,opacity',
+    }, 0);
     gsap.to('.atv-preview-card', {
       y: -6,
       duration: 2.6,
@@ -915,15 +917,17 @@ function renderCatalogo() {
     });
     tl.from('.atv-toolbar', {
       opacity: 0,
-      y: 12,
-      duration: 0.35,
-    }, '-=0.2');
+      y: 10,
+      duration: 0.2,
+      clearProps: 'transform,opacity',
+    }, 0);
     tl.from('.atv-card', {
       opacity: 0,
-      y: 18,
-      stagger: 0.025,
-      duration: 0.35,
-    }, '-=0.2');
+      y: 12,
+      stagger: { amount: 0.12 },
+      duration: 0.2,
+      clearProps: 'transform,opacity',
+    }, 0.04);
   }
 }
 
@@ -942,7 +946,7 @@ function mapaOrientacaoDaTrilha(atividadeAtual) {
     const concluida = Boolean(progresso[item.id]?.concluida);
     const ehAtual = item.id === atividadeAtual.id;
     let classeEstado = 'estado-nao-iniciado';
-    let iconeEstado = 'circle-dashed';
+    let iconeEstado = 'radio_button_unchecked';
     let rotuloEstado = 'Não iniciado';
 
     if (concluida) {

@@ -295,7 +295,8 @@ body.pagina-mundo-digital {
   aspect-ratio: 1 / 1;
   padding: 16px;
   box-sizing: border-box;
-  background: #0d2818; /* PCB Verde Escuro clássico */
+  background: #0d2818;
+  /* PCB Verde Escuro clássico */
   background-image: radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.12) 0%, #061e12 85%);
   border-radius: 16px;
   border: 3px solid #064e3b;
@@ -410,8 +411,13 @@ button.md-slot-componente {
 }
 
 @keyframes girarCooler {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* 2. Slots de Memória RAM DDR5 */
@@ -716,7 +722,7 @@ button.md-slot-componente {
   box-sizing: border-box;
 }
 
-.md-etapa-item > span:not(.md-etapa-icone) {
+.md-etapa-item>span:not(.md-etapa-icone) {
   min-width: 0;
   overflow-wrap: break-word;
   word-break: break-word;
@@ -848,11 +854,19 @@ button.md-slot-componente {
   position: absolute;
   top: 0;
   left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.md-pulso-eletrico::before {
+  content: '';
+  display: block;
   width: 40px;
   height: 100%;
   background: #38bdf8;
   border-radius: 4px;
-  opacity: 0;
 }
 
 .md-pulso-eletrico.animando {
@@ -861,8 +875,13 @@ button.md-slot-componente {
 }
 
 @keyframes pulsoBarramento {
-  0% { left: 0%; }
-  100% { left: 90%; }
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(calc(100% - 40px));
+  }
 }
 
 .md-cpu-explicacao {
@@ -996,12 +1015,21 @@ button.md-slot-componente {
   position: absolute;
   top: -8px;
   left: 0;
+  width: 100%;
+  height: 20px;
+  display: none;
+  pointer-events: none;
+}
+
+.md-pacote-animado::before {
+  content: '';
+  display: block;
   width: 20px;
   height: 20px;
   border-radius: 50%;
   background: #38bdf8;
   border: 2px solid #ffffff;
-  display: none;
+  box-sizing: border-box;
 }
 
 .md-pacote-animado.viajando {
@@ -1019,8 +1047,13 @@ button.md-slot-componente {
 }
 
 @keyframes viagemPacote {
-  0% { left: 0%; opacity: 1; }
-  100% { left: 100%; opacity: 1; }
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(calc(100% - 20px));
+  }
 }
 
 /* Painel de Inspeção do Pacote */
@@ -1125,6 +1158,7 @@ button.md-slot-componente {
 /* ---------- Responsividade ---------- */
 
 @media (max-width: 960px) {
+
   .md-laboratorio-grid,
   .md-cpu-simulador-grid,
   .md-inspecao-grid {
@@ -1165,30 +1199,38 @@ button.md-slot-componente {
   .md-secao {
     padding: 44px 14px;
   }
+
   .md-container {
     padding-inline: 14px;
   }
+
   .md-hero {
     padding: 44px 14px 48px;
   }
+
   .md-placa-container {
     min-height: 320px;
     overflow: hidden;
     padding: 12px 6px;
   }
+
   .md-placa-mae-3d.vista-isometrica {
     transform: rotateX(32deg) rotateZ(-14deg) scale(0.72) translateY(-4px);
   }
+
   .md-placa-mae-3d.vista-lateral {
     transform: rotateX(62deg) rotateZ(-8deg) scale(0.78);
   }
+
   .md-cpu-palco {
     min-height: 240px;
     padding: 12px;
   }
+
   .md-linha-conexao {
     height: 20px;
   }
+
   .md-roteador-bloco {
     padding: 12px;
   }
@@ -1198,29 +1240,36 @@ button.md-slot-componente {
   .md-secao {
     padding: 32px 10px;
   }
+
   .md-topo-conteudo {
     padding-inline: 10px;
   }
+
   .md-logo img {
     height: 36px;
   }
+
   .md-acoes .btn {
     min-height: 44px;
     padding: 8px 10px;
     font-size: 0.82rem;
   }
+
   .md-palco-topo {
     flex-direction: column;
     align-items: stretch;
   }
+
   .md-status-post {
     width: 100%;
     justify-content: center;
     box-sizing: border-box;
   }
+
   .md-controles-vista {
     width: 100%;
   }
+
   .btn-vista {
     flex: 1 1 auto;
     justify-content: center;
@@ -1228,45 +1277,56 @@ button.md-slot-componente {
     font-size: 0.78rem;
     min-height: 44px;
   }
+
   .md-card-holografico,
   .md-card-missao {
     padding: 16px 12px;
     border-radius: 14px;
     box-sizing: border-box;
   }
+
   .md-card-missao .md-acoes-montagem {
     flex-direction: column;
   }
+
   .btn-acao-montar,
   .btn-reset-montar {
     width: 100%;
     box-sizing: border-box;
   }
+
   .md-lista-specs {
     grid-template-columns: 1fr;
   }
+
   .md-controles-ciclo {
     flex-direction: column;
   }
+
   .md-controles-ciclo .btn-md-primario,
   .md-controles-ciclo .btn-md-contorno {
     width: 100%;
     box-sizing: border-box;
   }
+
   .md-placa-container {
     min-height: 290px;
     padding: 8px 4px;
   }
+
   .md-placa-mae-3d.vista-isometrica {
     transform: rotateX(26deg) rotateZ(-10deg) scale(0.60) translateY(-2px);
   }
+
   .md-placa-mae-3d.vista-lateral {
     transform: rotateX(60deg) rotateZ(-6deg) scale(0.68);
   }
+
   .md-hero-cta {
     flex-direction: column;
     align-items: stretch;
   }
+
   .btn-md-primario,
   .btn-md-contorno {
     width: 100%;
@@ -1274,13 +1334,16 @@ button.md-slot-componente {
     min-height: 44px;
     box-sizing: border-box;
   }
+
   .md-painel-controles {
     padding: 14px 10px;
   }
+
   .md-slot-gpu {
     width: min(100%, 180px);
     font-size: 0.7rem;
   }
+
   .md-slot-ssd {
     width: min(100%, 90px);
     font-size: 0.7rem;
@@ -1291,22 +1354,145 @@ button.md-slot-componente {
   .md-secao {
     padding: 24px 8px;
   }
+
   .md-etapa-item {
     padding: 8px 10px;
     gap: 8px;
     font-size: 0.82rem;
   }
+
   .md-placa-mae-3d.vista-isometrica {
     transform: rotateX(22deg) rotateZ(-8deg) scale(0.50);
   }
+
   .md-placa-mae-3d.vista-lateral {
     transform: rotateX(58deg) rotateZ(-4deg) scale(0.58);
   }
+
   .md-placa-container {
     min-height: 250px;
     padding: 4px;
   }
+
   .md-hero {
     padding: 32px 8px 36px;
   }
+}
+
+/* Alto Contraste (WCAG 2.2 AAA): contraste estrito para simulação 3D de hardware e redes */
+html.a11y-alto-contraste body.pagina-mundo-digital,
+html.a11y-alto-contraste .md-hero,
+html.a11y-alto-contraste .md-secao,
+html.a11y-alto-contraste .md-rodape {
+  background: #ffffff !important;
+  background-image: none !important;
+  color: #000000 !important;
+  border-color: #000000 !important;
+}
+
+html.a11y-alto-contraste .md-painel-lateral,
+html.a11y-alto-contraste .md-laboratorio-palco,
+html.a11y-alto-contraste .md-card-holografico,
+html.a11y-alto-contraste .md-spec-item,
+html.a11y-alto-contraste .md-analogia-box,
+html.a11y-alto-contraste .md-card-missao,
+html.a11y-alto-contraste .md-cpu-arquitetura,
+html.a11y-alto-contraste .md-cpu-bloco,
+html.a11y-alto-contraste .md-cpu-explicacao,
+html.a11y-alto-contraste .md-cpu-palco,
+html.a11y-alto-contraste .md-rede-simulador,
+html.a11y-alto-contraste .md-no-rede,
+html.a11y-alto-contraste .md-roteador-bloco,
+html.a11y-alto-contraste .md-etapa-item,
+html.a11y-alto-contraste .md-placa-container,
+html.a11y-alto-contraste .md-placa-mae-3d,
+html.a11y-alto-contraste .md-passo-ciclo,
+html.a11y-alto-contraste .md-passo-ciclo.ativo,
+html.a11y-alto-contraste .md-inspecao-cabecalho,
+html.a11y-alto-contraste .md-status-post,
+html.a11y-alto-contraste .md-status-post.ligado,
+html.a11y-alto-contraste .md-slot-componente,
+html.a11y-alto-contraste .md-slot-cpu,
+html.a11y-alto-contraste .md-cpu-chip,
+html.a11y-alto-contraste .md-slot-ram,
+html.a11y-alto-contraste .md-ram-pente,
+html.a11y-alto-contraste .md-slot-ssd,
+html.a11y-alto-contraste .md-slot-gpu,
+html.a11y-alto-contraste .md-slot-io,
+html.a11y-alto-contraste .md-etiqueta-componente {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 2px solid #000000 !important;
+  box-shadow: none !important;
+}
+
+html.a11y-alto-contraste .md-titulo,
+html.a11y-alto-contraste .md-titulo span,
+html.a11y-alto-contraste .md-descricao,
+html.a11y-alto-contraste .md-titulo-secao,
+html.a11y-alto-contraste .md-subtitulo-secao,
+html.a11y-alto-contraste .md-desc-secao,
+html.a11y-alto-contraste .md-titulo-componente,
+html.a11y-alto-contraste .md-detalhes-corpo,
+html.a11y-alto-contraste .md-detalhes-corpo p,
+html.a11y-alto-contraste .md-categoria-bncc,
+html.a11y-alto-contraste .md-analogia-titulo,
+html.a11y-alto-contraste .md-analogia-texto,
+html.a11y-alto-contraste .md-spec-rotulo,
+html.a11y-alto-contraste .md-spec-valor,
+html.a11y-alto-contraste .md-cpu-bloco-titulo,
+html.a11y-alto-contraste .md-cpu-bloco-conteudo,
+html.a11y-alto-contraste .md-passo-titulo,
+html.a11y-alto-contraste .md-passo-desc,
+html.a11y-alto-contraste .md-no-nome,
+html.a11y-alto-contraste .md-no-ip,
+html.a11y-alto-contraste .md-status-post,
+html.a11y-alto-contraste .md-status-post span,
+html.a11y-alto-contraste .md-card-missao-titulo,
+html.a11y-alto-contraste .md-progresso-montagem,
+html.a11y-alto-contraste .md-inspecao-chave,
+html.a11y-alto-contraste .md-inspecao-valor,
+html.a11y-alto-contraste .md-etiqueta-componente,
+html.a11y-alto-contraste .md-rodape-info,
+html.a11y-alto-contraste .md-rodape-info p,
+html.a11y-alto-contraste .md-rodape-col,
+html.a11y-alto-contraste .md-rodape-col h3,
+html.a11y-alto-contraste .md-rodape-col a,
+html.a11y-alto-contraste .md-rodape-fim,
+html.a11y-alto-contraste .md-cpu-explicacao h3,
+html.a11y-alto-contraste .md-cpu-explicacao p,
+html.a11y-alto-contraste .md-painel-controles,
+html.a11y-alto-contraste .md-painel-controles span,
+html.a11y-alto-contraste .md-painel-controles strong {
+  color: #000000 !important;
+}
+
+html.a11y-alto-contraste .md-badge-eixo,
+html.a11y-alto-contraste .md-tag-hab,
+html.a11y-alto-contraste .md-tag-hab strong,
+html.a11y-alto-contraste .md-icone-componente-grande,
+html.a11y-alto-contraste .md-etapa-icone,
+html.a11y-alto-contraste .md-passo-numero,
+html.a11y-alto-contraste .md-controles-vista button,
+html.a11y-alto-contraste .md-controles-ciclo button,
+html.a11y-alto-contraste .md-acoes-montagem button {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 2px solid #000000 !important;
+}
+
+html.a11y-alto-contraste .btn-md-primario,
+html.a11y-alto-contraste .md-controles-vista button.ativo,
+html.a11y-alto-contraste .md-cpu-bloco.ativo,
+html.a11y-alto-contraste .md-cpu-bloco.ativo .md-cpu-bloco-titulo,
+html.a11y-alto-contraste .md-cpu-bloco.ativo .md-cpu-bloco-conteudo {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border-color: #000000 !important;
+}
+
+html.a11y-alto-contraste .btn-md-contorno {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 2px solid #000000 !important;
 }

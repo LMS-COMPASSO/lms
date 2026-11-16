@@ -5,7 +5,20 @@
 import '/js/icones-universais.js';
 import { montarSeletorIdioma, traduzirDocumento } from '/js/i18n.js';
 
+export function sincronizarPreferenciasAcessibilidadeLocal() {
+  if (typeof document === 'undefined' || typeof localStorage === 'undefined') return;
+  ['alto-contraste', 'fonte-ampliada', 'reduzir-movimento'].forEach((chave) => {
+    try {
+      const ativo = localStorage.getItem(`lms_a11y_${chave}`) === '1';
+      document.documentElement.classList.toggle(`a11y-${chave}`, ativo);
+    } catch {}
+  });
+}
+
+sincronizarPreferenciasAcessibilidadeLocal();
+
 export function inicializarMenuUniversal() {
+  sincronizarPreferenciasAcessibilidadeLocal();
   const caminhoAtual = window.location.pathname.replace(/\/$/, '') || '/';
   const navLinks = document.querySelectorAll('.pub-nav a');
 
@@ -55,7 +68,7 @@ export function inicializarMenuUniversal() {
           )
         );
         if (ehGoogleAcademico) {
-          botaoEntrar.innerHTML = '<span class="material-symbols-outlined icon-xs" aria-hidden="true">dashboard</span> Painel <span class="badge badge-google-topbar" style="margin-left:4px;">Google Acadêmico</span>';
+          botaoEntrar.innerHTML = '<span class="material-symbols-outlined icon-xs" aria-hidden="true">dashboard</span> Painel <span class="badge badge-google-topbar badge-google-topbar-inline">Google Acadêmico</span>';
         } else {
           botaoEntrar.innerHTML = '<span class="material-symbols-outlined icon-xs" aria-hidden="true">dashboard</span> Painel';
         }
@@ -116,12 +129,52 @@ export function inicializarMenuUniversal() {
 }
 
 /**
+ * Torna contêineres .tabela-scroll focáveis via teclado apenas quando há overflow
+ * horizontal real (WCAG 2.1.1 / scrollable-region-focusable sem tabindex estático em HTML).
+ */
+export function configurarRegioesScrollTabela() {
+  if (typeof document === 'undefined') return;
+  const regioes = document.querySelectorAll('.tabela-scroll');
+  if (!regioes.length) return;
+
+  regioes.forEach((regiao) => {
+    const atualizarTabIndex = () => {
+      const temOverflow = regiao.scrollWidth > regiao.clientWidth + 2;
+      if (temOverflow) {
+        regiao.setAttribute('tabindex', '0');
+      } else {
+        regiao.removeAttribute('tabindex');
+      }
+    };
+
+    if (regiao.dataset.scrollTabelaConfigurado === 'true') {
+      atualizarTabIndex();
+      return;
+    }
+    regiao.dataset.scrollTabelaConfigurado = 'true';
+
+    atualizarTabIndex();
+    window.addEventListener('resize', atualizarTabIndex, { passive: true });
+    if (typeof ResizeObserver !== 'undefined') {
+      try {
+        const ro = new ResizeObserver(atualizarTabIndex);
+        ro.observe(regiao);
+        if (regiao.firstElementChild) ro.observe(regiao.firstElementChild);
+      } catch {
+        // Fallback em navegadores sem ResizeObserver
+      }
+    }
+  });
+}
+
+/**
  * Habilita rolagem suave horizontal via roda do mouse (wheel) e touch,
  * com indicadores visuais dinâmicos de fade (mask-image) e auto-centralização
  * do item ativo ao carregar ou redimensionar.
  */
 export function habilitarRolagemHorizontalMenus(seletor = '.pub-nav, .dashboard-nav-tabs, .atv-pills-modalidades, .sp-abas-controle, .wf-breadcrumb-lista, .planos-periodo-pills, .menu-scroll-horizontal, [data-scroll-horizontal]') {
   if (typeof document === 'undefined') return;
+  configurarRegioesScrollTabela();
   const menus = document.querySelectorAll(seletor);
   if (!menus.length) return;
 

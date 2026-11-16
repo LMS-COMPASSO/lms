@@ -9,10 +9,18 @@
 .modo-publico .atv-conteudo { width: 100%; max-width: 1120px; margin: 0 auto; padding: 32px 20px 56px; }
 .modo-app #topo-publico,
 .modo-app #rodape-publico { display: none; }
+.modo-app #topbar-container:empty { min-height: 64px; margin-bottom: 16px; }
+@media (min-width: 1025px) {
+  .modo-app #sidebar-container:empty {
+    flex: 0 0 var(--sidebar-largura);
+    width: var(--sidebar-largura);
+    min-height: 100vh;
+  }
+}
 .modo-publico #sidebar-container,
 .modo-publico #topbar-container { display: none; }
 
-.atv-raiz { max-width: 1040px; }
+.atv-raiz { max-width: 1040px; min-height: 110vh; }
 .modo-publico .atv-raiz { max-width: none; }
 
 /* ---------- Hero Spotlight CinemaOS ---------- */
@@ -62,7 +70,8 @@
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
+  min-height: 28px;
   margin-bottom: 16px;
 }
 
@@ -207,6 +216,7 @@
 
 .atv-spotlight-progresso-card {
   background: rgba(15, 23, 42, 0.65);
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 14px;
@@ -275,6 +285,7 @@
   padding: 28px 22px;
   border-radius: 20px;
   background: rgba(255, 255, 255, 0.05);
+  -webkit-backdrop-filter: blur(14px);
   backdrop-filter: blur(14px);
   border: 1px solid rgba(255, 255, 255, 0.15);
   box-shadow: 0 20px 45px rgba(0, 0, 0, 0.4);
@@ -427,7 +438,6 @@
   align-items: center;
   gap: 6px;
   overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
   padding: 2px 0;
   scrollbar-width: none;
 }
@@ -1048,6 +1058,7 @@
   justify-content: center;
   position: relative;
   aspect-ratio: 1;
+  -webkit-user-select: none;
   user-select: none;
   transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
 }
@@ -1355,6 +1366,7 @@
   letter-spacing: 0.04em;
   color: #94a3b8;
   cursor: pointer;
+  -webkit-user-select: none;
   user-select: none;
 }
 
@@ -1904,6 +1916,7 @@
   white-space: nowrap;
   direction: ltr;
   vertical-align: middle;
+  -webkit-user-select: none;
   user-select: none;
   font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }
@@ -2275,7 +2288,6 @@
   max-width: 100%;
   place-items: center;
   overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
   box-sizing: border-box;
 }
 .py3d-2d-grade {
@@ -2409,6 +2421,7 @@
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 0.9rem;
   line-height: 1.55;
+  -webkit-user-select: none;
   user-select: none;
 }
 .py3d-editor-linhas li.linha-ativa {
@@ -3028,6 +3041,68 @@ body.suporta-tema-sistema[data-tema="escuro"] .atv-direcao {
     border-color: #3b82f6;
     color: #f1f5f9;
   }
+}
+
+/* ==========================================================================
+   MODO ALTO CONTRASTE — Atividades Dinâmicas (resiliente a Tema Escuro)
+   ========================================================================== */
+html.a11y-alto-contraste body.pagina-atividades,
+html.a11y-alto-contraste body .atv-spotlight,
+html.a11y-alto-contraste body .atv-spotlight-kicker,
+html.a11y-alto-contraste body .atv-spotlight-meta li,
+html.a11y-alto-contraste body .atv-spotlight-meta li.atv-meta-bncc,
+html.a11y-alto-contraste body .atv-spotlight-progresso-card,
+html.a11y-alto-contraste body .atv-preview-card,
+html.a11y-alto-contraste body .btn-spotlight-ghost,
+html.a11y-alto-contraste body .atv-toolbar,
+html.a11y-alto-contraste body.pagina-atividades .atv-busca-campo input,
+html.a11y-alto-contraste body.pagina-atividades .atv-pill,
+html.a11y-alto-contraste body.pagina-atividades .atv-pill-tab,
+html.a11y-alto-contraste body.pagina-atividades .atv-pill-tab *,
+html.a11y-alto-contraste body.pagina-atividades .atv-chip-filtro,
+html.a11y-alto-contraste body .atv-btn-filtros-gaveta,
+html.a11y-alto-contraste body .atv-gaveta-filtros,
+html.a11y-alto-contraste body .atv-select-habilidade,
+html.a11y-alto-contraste body .atv-card,
+html.a11y-alto-contraste body .atv-badge-eixo,
+html.a11y-alto-contraste body .atv-meta li,
+html.a11y-alto-contraste body .atv-hab-card,
+html.a11y-alto-contraste body .atv-fora,
+html.a11y-alto-contraste body .atv-intruso,
+html.a11y-alto-contraste body .atv-feedback,
+html.a11y-alto-contraste body .atv-problema,
+html.a11y-alto-contraste body .atv-direcao {
+  background: #ffffff !important;
+  background-image: none !important;
+  color: #000000 !important;
+  border-color: #000000 !important;
+  box-shadow: none !important;
+}
+
+html.a11y-alto-contraste .atv-spotlight-backdrop {
+  display: none !important;
+}
+
+html.a11y-alto-contraste body .atv-raiz * {
+  color: #000000 !important;
+}
+
+html.a11y-alto-contraste body.pagina-atividades .btn-spotlight-play,
+html.a11y-alto-contraste body.pagina-atividades .btn-spotlight-play *,
+html.a11y-alto-contraste body.pagina-atividades .atv-pill.ativo,
+html.a11y-alto-contraste body.pagina-atividades .atv-pill.ativo *,
+html.a11y-alto-contraste body.pagina-atividades .atv-pill-tab.ativo,
+html.a11y-alto-contraste body.pagina-atividades .atv-pill-tab.ativo *,
+html.a11y-alto-contraste body.pagina-atividades .atv-chip-filtro.ativo,
+html.a11y-alto-contraste body.pagina-atividades .atv-chip-filtro.ativo *,
+html.a11y-alto-contraste body.pagina-atividades .atv-filtro[aria-pressed='true'],
+html.a11y-alto-contraste body.pagina-atividades .atv-filtro[aria-pressed='true'] *,
+html.a11y-alto-contraste body.pagina-atividades .atv-raiz .btn-primario,
+html.a11y-alto-contraste body.pagina-atividades .atv-raiz .btn-primario * {
+  background: #000000 !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  border-color: #000000 !important;
 }
 
 

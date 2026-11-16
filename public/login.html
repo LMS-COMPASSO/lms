@@ -44,8 +44,8 @@
               </span>
             </div>
 
-            <h2 style="font-size: 1.15rem; margin: 0 0 6px 0; color: var(--cor-texto);">Acesso com Conta Acadêmica</h2>
-            <p class="texto-suave" style="font-size: 0.88rem; margin: 0 0 14px 0;">
+            <h2 class="login-card-titulo">Acesso com Conta Acadêmica</h2>
+            <p class="texto-suave login-card-desc">
               Acesso direto para redes públicas e privadas parceiras sem necessidade de senha manual.
             </p>
 
@@ -66,8 +66,8 @@
           </div>
 
           <div class="mt-14">
-            <div id="google-gis-btn-wrap" class="mb-8" style="min-height: 44px;">
-              <div id="google-gis-container" class="flex-centro mb-8" style="display: none; width: 100%;"></div>
+            <div id="google-gis-btn-wrap" class="google-gis-btn-wrap mb-8">
+              <div id="google-gis-container" class="google-gis-container mb-8"></div>
               <button type="button" id="btn-login-google-academic" class="btn-google-academic btn-bloco" aria-label="Entrar com Google Acadêmico" onclick="acionarLoginGoogle()">
                 <svg class="google-g-icon" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                   <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -78,7 +78,7 @@
                 <span>Entrar com Google Acadêmico</span>
               </button>
             </div>
-            <p id="google-status-subtexto" class="texto-centro texto-suave m-0" style="font-size: 0.78rem;">
+            <p id="google-status-subtexto" class="texto-centro texto-suave google-status-subtexto">
               Redes municipais, estaduais, federais e colégios parceiros
             </p>
           </div>
@@ -91,8 +91,8 @@
         <!-- Card 2: Acesso Convencional -->
         <div class="card-login-convencional">
           <div>
-            <h2 style="font-size: 1.15rem; margin: 0 0 6px 0; color: var(--cor-texto);">Email e Senha</h2>
-            <p class="texto-suave" style="font-size: 0.88rem; margin: 0 0 16px 0;">Para usuários com cadastro individual no LMS</p>
+            <h2 class="login-card-titulo">Email e Senha</h2>
+            <p class="texto-suave login-card-desc-ampla">Para usuários com cadastro individual no LMS</p>
 
             <form id="form-login">
               <div class="form-grupo">
@@ -131,36 +131,36 @@
             <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
             <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
           </svg>
-          <strong id="titulo-modal-google" style="font-size: 1.05rem;">Acesso Institucional Google</strong>
+          <strong id="titulo-modal-google" class="modal-google-titulo">Acesso Institucional Google</strong>
         </div>
         <button type="button" class="btn btn-xs btn-neutro" onclick="fecharModalGoogle()" aria-label="Fechar janela">Fechar</button>
       </div>
 
       <!-- Container do botão nativo do Google GIS no modal quando configurado -->
-      <div id="modal-google-gis-container" class="mb-14" style="display: none; justify-content: center;"></div>
+      <div id="modal-google-gis-container" class="modal-google-gis-container mb-14"></div>
 
       <!-- Instruções de configuração de secret quando o Client ID ainda não estiver cadastrado -->
-      <div id="banner-config-cloudflare" class="google-config-banner" style="display: none;">
+      <div id="banner-config-cloudflare" class="google-config-banner">
         <div class="flex-linha gap-8 mb-6">
           <span class="material-symbols-outlined icon-xs text-primaria" aria-hidden="true">tune</span>
-          <strong style="font-size: 0.88rem;">Integração Google Console Pendente</strong>
+          <strong class="google-config-titulo">Integração Google Console Pendente</strong>
         </div>
-        <p class="texto-suave mb-6" style="font-size: 0.82rem; line-height: 1.4;">
+        <p class="texto-suave mb-6 google-config-desc">
           Para ativar o login do Google em 1 clique na Cloudflare com verificação criptográfica, configure o secret e utilize Email e Senha enquanto isso:
         </p>
         <code class="codigo-secret-cmd">npx wrangler secret put GOOGLE_CLIENT_ID</code>
       </div>
 
       <div id="bloco-google-simulado" hidden>
-        <p class="texto-suave mb-14" style="font-size: 0.86rem;">
+        <p class="texto-suave mb-14 texto-nota-auth">
           Informe seu e-mail escolar institucional para validar acesso em modo de desenvolvimento local:
         </p>
 
         <form id="form-google-custom" onsubmit="event.preventDefault(); submeterEmailCustomGoogle();">
           <div class="form-grupo mb-12">
-            <label for="input-email-google-custom" style="font-size: 0.86rem; font-weight: 600;">E-mail Institucional</label>
+            <label for="input-email-google-custom" class="label-email-google">E-mail Institucional</label>
             <input type="email" id="input-email-google-custom" placeholder="seu.nome@escola.edu.br" required spellcheck="false" autocomplete="email">
-            <small class="texto-suave" style="font-size: 0.76rem; display: block; margin-top: 4px;">
+            <small class="texto-suave hint-email-google">
               Aceita domínios @*.edu.br, @*.gov.br, @*.sp.gov.br e redes conveniadas.
             </small>
           </div>

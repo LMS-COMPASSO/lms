@@ -632,7 +632,7 @@ function montarLayout(paginaAtiva) {
           <span class="wf-badge-ponto" aria-hidden="true"></span>
         </button>
 
-        <button type="button" class="wf-tool-btn" aria-label="Configurações de acessibilidade e exibição" title="Configurações (Engrenagem)" onclick="alternarPainelWayfinding('painel-wf-config')">
+        <button type="button" class="wf-tool-btn" aria-label="Ajustes: configurações de acessibilidade e exibição" title="Ajustes e configurações de acessibilidade" onclick="alternarPainelWayfinding('painel-wf-config')">
           <span class="material-symbols-outlined icon-sm" aria-hidden="true">settings</span>
           <span class="wf-tool-label">Ajustes</span>
         </button>
@@ -642,10 +642,10 @@ function montarLayout(paginaAtiva) {
           <span class="wf-tool-label">Ajuda</span>
         </button>
 
-        <a href="/perfil.html" class="topbar-usuario-link" title="Meu Perfil: ${escaparHtml(usuario.nome)} (${escaparHtml(usuario.perfil)}${ehGoogleAcademico ? ' · Google Acadêmico' : ''})" aria-label="Meu Perfil: ${escaparHtml(usuario.nome)}">
+        <a href="/perfil.html" class="topbar-usuario-link" title="Meu Perfil: ${escaparHtml(usuario.nome)} (${escaparHtml(usuario.perfil)}${ehGoogleAcademico ? ' · Google Acadêmico' : ''})">
           <span class="material-symbols-outlined icon-sm" aria-hidden="true">account_circle</span>
           <div class="texto-direita topbar-usuario">
-            <strong>${escaparHtml(usuario.nome)}</strong>
+            <span class="somente-leitor">Meu perfil: </span><strong>${escaparHtml(usuario.nome)}</strong>
             <div class="flex-linha gap-4 justify-end">
               <span class="badge badge-${escaparHtml(usuario.perfil)}">${escaparHtml(usuario.perfil)}</span>
               ${ehGoogleAcademico ? `
@@ -733,8 +733,8 @@ function montarLayout(paginaAtiva) {
           <span>Reduzir Animações e Transições</span>
         </label>
       </div>
-      <div class="wf-tema-seletor mt-12 pt-12" style="border-top: 1px solid var(--cor-borda);">
-        <label style="font-weight: 700; margin-bottom: 6px; display: block; font-size: 0.85rem;">Tema de Exibição</label>
+      <div class="wf-tema-seletor mt-12 pt-12">
+        <label class="wf-tema-rotulo">Tema de Exibição</label>
         <div class="flex-linha gap-8 flex-wrap">
           <button type="button" class="btn btn-xs btn-neutro wf-btn-tema ${!lerTemaSalvoSeguro() ? 'ativo' : ''}" id="btn-tema-auto" onclick="definirTemaLMS('auto'); atualizarBotoesTema();" title="Seguir preferência do sistema operacional">
             <span class="material-symbols-outlined icon-xs">devices</span> Automático

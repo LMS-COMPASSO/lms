@@ -35,7 +35,7 @@
               <input type="search" id="busca" class="max-w-220" title="Buscar curso por título ou palavra-chave" aria-label="Buscar curso" placeholder="Buscar curso...">
             </div>
           </div>
-          <button type="button" class="btn btn-primario flex-inline-icon oculto-aluno" onclick="abrirModalCurso()"><span class="material-symbols-outlined icon-xs">add</span> Novo Curso</button>
+          <button type="button" class="btn btn-primario flex-inline-icon oculto-aluno" onclick="abrirModalCurso()"><span class="material-symbols-outlined icon-xs" aria-hidden="true">add</span> Novo Curso</button>
         </div>
       </div>
 
@@ -46,7 +46,7 @@
   <!-- Modal de curso -->
   <div id="modal-curso" class="modal-overlay oculto">
     <div class="modal-conteudo">
-      <h3 id="titulo-modal">Novo Curso</h3>
+      <h2 id="titulo-modal">Novo Curso</h2>
       <form id="form-curso">
         <input type="hidden" id="curso-id">
         <div class="form-grupo">
@@ -136,7 +136,7 @@
                 </span>
                 <span class="texto-suave flex-inline-icon"><span class="material-symbols-outlined icon-xs" aria-hidden="true">schedule</span> ${Number(c.carga_horaria) || 0}h</span>
               </div>
-              <h3 class="mt-8 mb-10">${escaparHtml(c.titulo)}</h3>
+              <h2 class="mt-8 mb-10 cursos-card-titulo">${escaparHtml(c.titulo)}</h2>
               <p class="texto-suave">${escaparHtml(c.descricao || 'Sem descrição.')}</p>
               <div class="curso-meta-info texto-suave">
                 <div><span class="material-symbols-outlined icon-xs" aria-hidden="true">${iconeEixo}</span> <span>${escaparHtml(c.eixo_bncc)}</span></div>

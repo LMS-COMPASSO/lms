@@ -404,7 +404,7 @@ body.pagina-cultura-digital {
 }
 
 .cd-balao-enviado .cd-balao-hora {
-  color: #cbd5e1;
+  color: #f8fafc;
 }
 
 /* Área de Decisão do Estudante */
@@ -729,7 +729,8 @@ body.pagina-cultura-digital {
     height: auto;
   }
   .cd-chat-sidebar {
-    max-height: 220px;
+    max-height: none;
+    overflow: visible;
   }
   .cd-cofre-grid,
   .cd-pegada-grid,
@@ -755,7 +756,7 @@ body.pagina-cultura-digital {
     padding: 44px 14px 48px;
   }
   .cd-chat-sidebar {
-    max-height: 180px;
+    max-height: none;
     padding: 10px;
   }
   .cd-chat-input-area {
@@ -823,3 +824,97 @@ body.pagina-cultura-digital {
     padding: 14px 10px;
   }
 }
+
+/* Alto Contraste (WCAG 2.2 AAA): contraste estrito para Cultura Digital */
+html.a11y-alto-contraste body.pagina-cultura-digital,
+html.a11y-alto-contraste .cd-hero,
+html.a11y-alto-contraste .cd-secao,
+html.a11y-alto-contraste .cd-rodape {
+  background: #ffffff !important;
+  background-image: none !important;
+  color: #000000 !important;
+  border-color: #000000 !important;
+}
+
+html.a11y-alto-contraste .cd-chat-app,
+html.a11y-alto-contraste .cd-chat-sidebar,
+html.a11y-alto-contraste .cd-chat-janela,
+html.a11y-alto-contraste .cd-chat-topo,
+html.a11y-alto-contraste .cd-chat-mensagens,
+html.a11y-alto-contraste .cd-chat-input-area,
+html.a11y-alto-contraste .cd-chat-decisao,
+html.a11y-alto-contraste .cd-item-conversa,
+html.a11y-alto-contraste .cd-balao,
+html.a11y-alto-contraste .cd-cofre-painel,
+html.a11y-alto-contraste .cd-cofre-dicas,
+html.a11y-alto-contraste .cd-cofre-card,
+html.a11y-alto-contraste .cd-dica-bloco,
+html.a11y-alto-contraste .cd-pegada-visual,
+html.a11y-alto-contraste .cd-pegada-card,
+html.a11y-alto-contraste .cd-opcao-pegada,
+html.a11y-alto-contraste .cd-req-item {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 2px solid #000000 !important;
+  box-shadow: none !important;
+}
+
+html.a11y-alto-contraste .cd-titulo,
+html.a11y-alto-contraste .cd-titulo span,
+html.a11y-alto-contraste .cd-descricao,
+html.a11y-alto-contraste .cd-titulo-secao,
+html.a11y-alto-contraste .cd-desc-secao,
+html.a11y-alto-contraste .cd-sidebar-titulo,
+html.a11y-alto-contraste .cd-conversa-nome,
+html.a11y-alto-contraste .cd-conversa-previa,
+html.a11y-alto-contraste .cd-contato-nome,
+html.a11y-alto-contraste .cd-contato-status,
+html.a11y-alto-contraste .cd-balao-hora,
+html.a11y-alto-contraste .cd-decisao-rotulo,
+html.a11y-alto-contraste .cd-chat-decisao span,
+html.a11y-alto-contraste .cd-label-senha,
+html.a11y-alto-contraste .cd-status-senha-txt,
+html.a11y-alto-contraste .cd-tempo-quebra,
+html.a11y-alto-contraste .cd-dica-titulo,
+html.a11y-alto-contraste .cd-dica-texto,
+html.a11y-alto-contraste .cd-pegada-status-titulo,
+html.a11y-alto-contraste .cd-pegada-status-desc,
+html.a11y-alto-contraste .cd-opcao-pegada span,
+html.a11y-alto-contraste .cd-req-item span,
+html.a11y-alto-contraste .cd-rodape-info,
+html.a11y-alto-contraste .cd-rodape-info p,
+html.a11y-alto-contraste .cd-rodape-col,
+html.a11y-alto-contraste .cd-rodape-col h3,
+html.a11y-alto-contraste .cd-rodape-col a,
+html.a11y-alto-contraste .cd-rodape-fim {
+  color: #000000 !important;
+}
+
+html.a11y-alto-contraste .cd-badge-eixo,
+html.a11y-alto-contraste .cd-tag-hab,
+html.a11y-alto-contraste .cd-tag-hab strong,
+html.a11y-alto-contraste .cd-badge-tema,
+html.a11y-alto-contraste .cd-pontos-cidadania,
+html.a11y-alto-contraste .cd-avatar-conversa,
+html.a11y-alto-contraste .cd-pegada-icone-grande {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 1.5px solid #000000 !important;
+}
+
+html.a11y-alto-contraste .btn-cd-primario,
+html.a11y-alto-contraste .cd-item-conversa.ativo,
+html.a11y-alto-contraste .cd-item-conversa.ativo .cd-conversa-nome,
+html.a11y-alto-contraste .cd-item-conversa.ativo .cd-conversa-previa {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border-color: #000000 !important;
+}
+
+html.a11y-alto-contraste .btn-cd-contorno,
+html.a11y-alto-contraste .cd-opcoes-decisao button {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 2px solid #000000 !important;
+}
+
