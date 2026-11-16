@@ -8,8 +8,8 @@ Esta pasta reúne todos os guias técnicos, pedagógicos, estratégicos e materi
 
 | Documento | Descrição | Público-Alvo |
 | --- | --- | --- |
-| **[`docs/bncc-computacao.md`](file:///home/thiago/lms/docs/bncc-computacao.md)** | Diretrizes curriculares dos 3 eixos da BNCC Computação (Resolução CNE/CP nº 1/2022). | Professores e Coordenadores |
-| **[`docs/compartilhamento/`](file:///home/thiago/lms/docs/compartilhamento/)** | Modelos para compartilhamento, murais escolares e geração de QR Codes de divulgação. | Escolas e Secretarias |
+| **[`docs/bncc-computacao.md`](./bncc-computacao.md)** | Diretrizes curriculares dos 3 eixos da BNCC Computação (Resolução CNE/CP nº 1/2022). | Professores e Coordenadores |
+| **[`docs/compartilhamento/`](./compartilhamento/)** | Modelos para compartilhamento, murais escolares e geração de QR Codes de divulgação. | Escolas e Secretarias |
 
 ---
 
@@ -17,10 +17,10 @@ Esta pasta reúne todos os guias técnicos, pedagógicos, estratégicos e materi
 
 | Documento | Descrição | Público-Alvo |
 | --- | --- | --- |
-| **[`docs/backend-cloudflare.md`](file:///home/thiago/lms/docs/backend-cloudflare.md)** | Arquitetura serverless no Cloudflare Workers, banco D1 SQLite e Wrangler CLI. | Desenvolvedores Backend |
-| **[`docs/frontend-guia.md`](file:///home/thiago/lms/docs/frontend-guia.md)** | Design system nativo, componentes, autenticação JWT e acessibilidade. | Desenvolvedores Frontend |
-| **[`docs/api-endpoints.md`](file:///home/thiago/lms/docs/api-endpoints.md)** | Catálogo completo de rotas REST, parâmetros, cabeçalhos e respostas JSON. | Integradores de API |
-| **[`docs/faq-troubleshooting.md`](file:///home/thiago/lms/docs/faq-troubleshooting.md)** | Resolução de problemas frequentes (portas, tokens, seeds e migrations). | Todos os Desenvolvedores |
+| **[`docs/backend-cloudflare.md`](./backend-cloudflare.md)** | Arquitetura serverless no Cloudflare Workers, banco D1 SQLite e Wrangler CLI. | Desenvolvedores Backend |
+| **[`docs/frontend-guia.md`](./frontend-guia.md)** | Design system nativo, componentes, autenticação JWT e acessibilidade. | Desenvolvedores Frontend |
+| **[`docs/api-endpoints.md`](./api-endpoints.md)** | Catálogo completo de rotas REST, parâmetros, cabeçalhos e respostas JSON. | Integradores de API |
+| **[`docs/faq-troubleshooting.md`](./faq-troubleshooting.md)** | Resolução de problemas frequentes (portas, tokens, seeds e migrations). | Todos os Desenvolvedores |
 
 ---
 

@@ -23,10 +23,10 @@ jobs:
 
     steps:
       - name: Baixar código
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Configurar Node.js
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 22
 
@@ -35,38 +35,54 @@ jobs:
         run: |
           npm audit --audit-level=high || echo "audit_failed=true" >> "$GITHUB_OUTPUT"
 
-      - name: Abrir Issue automática em caso de vulnerabilidades altas/críticas
-        if: steps.npm-audit.outputs.audit_failed == 'true'
-        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
+      - name: Atualizar ou fechar Issue automática de vulnerabilidades npm
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
+        env:
+          AUDIT_FAILED: ${{ steps.npm-audit.outputs.audit_failed }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const titulo = '🚨 [Segurança] Vulnerabilidades identificadas em dependências (npm audit)';
-            const corpo = `
-            O monitoramento semanal detectou vulnerabilidades com nível **high** ou **critical** nas dependências do projeto.
-
-            ### Ações Recomendadas:
-            1. Executar localmente: \`npm audit\` para inspecionar os pacotes afetados.
-            2. Executar: \`npm audit fix\` ou atualizar manualmente as versões no \`package.json\`.
-            3. Validar se há updates pendentes abertos pelo Dependabot.
-            `;
-
             const { data: issues } = await github.rest.issues.listForRepo({
               owner: context.repo.owner,
               repo: context.repo.repo,
               state: 'open',
               labels: ['segurança'],
             });
+            const existentes = issues.filter(i => i.title.includes('[Segurança] Vulnerabilidades identificadas'));
 
-            const jaExiste = issues.some(i => i.title.includes('[Segurança] Vulnerabilidades identificadas'));
-            if (!jaExiste) {
-              await github.rest.issues.create({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                title: titulo,
-                body: corpo.trim(),
-                labels: ['segurança', 'manutenção'],
-              });
+            if (process.env.AUDIT_FAILED === 'true') {
+              if (existentes.length === 0) {
+                const corpo = [
+                  'O monitoramento semanal detectou vulnerabilidades com nível **high** ou **critical** nas dependências do projeto.',
+                  '',
+                  '### Ações Recomendadas:',
+                  '1. Executar localmente: `npm audit` para inspecionar os pacotes afetados.',
+                  '2. Executar: `npm audit fix` ou atualizar manualmente as versões no `package.json`.',
+                  '3. Validar se há updates pendentes abertos pelo Dependabot.',
+                ].join('\n');
+                await github.rest.issues.create({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  title: '🚨 [Segurança] Vulnerabilidades identificadas em dependências (npm audit)',
+                  body: corpo,
+                  labels: ['segurança', 'manutenção'],
+                });
+              }
+            } else {
+              for (const issue of existentes) {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.number,
+                  body: '✅ Encerrada automaticamente: nenhuma vulnerabilidade `high` ou `critical` encontrada pelo `npm audit`.',
+                });
+                await github.rest.issues.update({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.number,
+                  state: 'closed',
+                });
+              }
             }
 
   # ============================================================================
@@ -82,13 +98,13 @@ jobs:
 
     steps:
       - name: Baixar código
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Checagem de integridade de links internos e externos
         id: lychee
         uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2
         with:
-          # Ignora links de exemplo locais/privados ou portas de desenvolvimento
+          # Ignora links de exemplo locais/privados, domínio de produção e rotas de API dinâmicas
           args: >-
             --verbose
             --no-progress
@@ -96,35 +112,55 @@ jobs:
             --exclude '^http://localhost'
             --exclude '^http://127.0.0.1'
             --exclude '^https://lms-compasso.workers.dev'
-            --exclude '^/api/'
+            --exclude '/api/'
             public/**/*.html *.md docs/**/*.md
           fail: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Notificar em Issue se houver links quebrados
-        if: steps.lychee.outputs.exit_code != 0
-        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
+      - name: Atualizar ou fechar Issue de links quebrados
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
         env:
-          LYCHEE_REPORT: ${{ steps.lychee.outputs.report }}
+          LYCHEE_EXIT_CODE: ${{ steps.lychee.outputs.exit_code }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const report = process.env.LYCHEE_REPORT || 'Links com erro encontrados nos arquivos do repositório.';
+            const fs = require('fs');
+            const exitCode = String(process.env.LYCHEE_EXIT_CODE || '0');
             const { data: issues } = await github.rest.issues.listForRepo({
               owner: context.repo.owner,
               repo: context.repo.repo,
               state: 'open',
               labels: ['bug', 'documentação'],
             });
+            const existentes = issues.filter(i => i.title.includes('[Monitoramento] Links quebrados detectados'));
 
-            const jaExiste = issues.some(i => i.title.includes('[Monitoramento] Links quebrados detectados'));
-            if (!jaExiste) {
-              await github.rest.issues.create({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                title: '🔗 [Monitoramento] Links quebrados detectados no projeto',
-                body: `### Relatório Semanal de Links Quebrados\n\nForam identificados links inacessíveis ou quebrados nos arquivos HTML/Markdown do LMS.\n\n\`\`\`\n${report.slice(0, 3000)}\n\`\`\``,
-                labels: ['bug', 'documentação'],
-              });
+            if (exitCode !== '0') {
+              const report = fs.existsSync('lychee/out.md')
+                ? fs.readFileSync('lychee/out.md', 'utf8').trim()
+                : 'Links com erro encontrados nos arquivos do repositório.';
+              if (existentes.length === 0) {
+                await github.rest.issues.create({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  title: '🔗 [Monitoramento] Links quebrados detectados no projeto',
+                  body: `### Relatório Semanal de Links Quebrados\n\nForam identificados links inacessíveis ou quebrados nos arquivos HTML/Markdown do LMS.\n\n\`\`\`\n${report.slice(0, 3000)}\n\`\`\``,
+                  labels: ['bug', 'documentação'],
+                });
+              }
+            } else {
+              for (const issue of existentes) {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.number,
+                  body: '✅ Encerrada automaticamente: verificação semanal do Lychee concluída sem links quebrados.',
+                });
+                await github.rest.issues.update({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.number,
+                  state: 'closed',
+                });
+              }
             }

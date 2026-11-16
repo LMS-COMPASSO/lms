@@ -235,3 +235,71 @@ test('i18n: Estrutura semântica e acessibilidade WAI-ARIA do seletor', () => {
     assert.ok(opt.attributes.lang, 'Cada opção de idioma deve declarar atributo lang');
   });
 });
+
+test('i18n: data-i18n-html renderiza apenas <span>/<em> sem innerHTML e ignora chaves ausentes/XSS', () => {
+  localStorage.setItem(CHAVE_STORAGE_IDIOMA, 'pt');
+
+  function criarNoMock(tag) {
+    const filhos = [];
+    const attrs = {};
+    let texto = '';
+    let atribuiuInnerHtml = false;
+    return {
+      tagName: tag.toUpperCase(),
+      attributes: attrs,
+      children: filhos,
+      set innerHTML(_v) {
+        atribuiuInnerHtml = true;
+      },
+      get _usouInnerHtml() {
+        return atribuiuInnerHtml;
+      },
+      get textContent() {
+        return texto || filhos.map((f) => (f.nodeType === 3 ? f.textContent : f.textContent)).join('');
+      },
+      set textContent(v) {
+        texto = String(v);
+        filhos.length = 0;
+      },
+      setAttribute: (k, v) => { attrs[k] = String(v); },
+      getAttribute: (k) => attrs[k] ?? null,
+      appendChild: (f) => { filhos.push(f); return f; },
+    };
+  }
+
+  const elHero = criarNoMock('h1');
+  elHero.setAttribute('data-i18n-html', 'md.heroTitulo');
+
+  const elDica = criarNoMock('p');
+  elDica.setAttribute('data-i18n-html', 'cd.dica2Desc');
+
+  const elMalicioso = criarNoMock('p');
+  elMalicioso.setAttribute('data-i18n-html', '<img src=x onerror=alert(1)>');
+  elMalicioso.textContent = 'Conteúdo preservado';
+
+  global.document = {
+    documentElement: { lang: 'pt-BR', dir: 'ltr' },
+    createElement: criarNoMock,
+    createTextNode: (tVal) => ({ nodeType: 3, textContent: String(tVal) }),
+    getElementById: () => null,
+    querySelector: () => null,
+    querySelectorAll: (sel) => {
+      if (sel === '[data-i18n-html]') return [elHero, elDica, elMalicioso];
+      return [];
+    },
+  };
+
+  traduzirDocumento();
+
+  assert.equal(elHero._usouInnerHtml, false, 'Não deve atribuir innerHTML');
+  assert.equal(elHero.children.length, 2);
+  assert.equal(elHero.children[0].textContent, 'Mundo Digital: ');
+  assert.equal(elHero.children[1].tagName, 'SPAN');
+  assert.equal(elHero.children[1].textContent, 'Hardware & Redes');
+
+  assert.equal(elDica._usouInnerHtml, false, 'Não deve atribuir innerHTML em em');
+  assert.ok(elDica.children.some((c) => c.tagName === 'EM'), 'Deve criar nó <em> seguro');
+
+  assert.equal(elMalicioso._usouInnerHtml, false);
+  assert.equal(elMalicioso.textContent, 'Conteúdo preservado', 'Chave inexistente no DOM não deve ser ecoada');
+});

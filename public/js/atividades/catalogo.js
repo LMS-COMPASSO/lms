@@ -8,7 +8,7 @@
  *   - decompor.js  → dividir um problema grande em partes menores
  *   - robo.js      → programar um robô em um mapa (sequência de comandos)
  *
- * Para criar uma nova atividade, siga o guia em docs/atividades-dinamicas.md.
+ * Para criar uma nova atividade, siga o guia em docs/frontend-guia.md.
  * ============================================================================
  */
 

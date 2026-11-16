@@ -402,7 +402,7 @@ function inicializarPegadaDigital() {
     if (riscoCount === 0) {
       iconeWrap.style.background = "rgba(34, 197, 94, 0.15)";
       iconeWrap.style.color = "#4ade80";
-      tituloEl.innerHTML = t('cd.pegadaLimpaTitulo');
+      tituloEl.textContent = t('cd.pegadaLimpaTitulo');
       descEl.textContent = t('cd.pegadaLimpaDesc');
     } else if (riscoCount <= 2) {
       iconeWrap.style.background = "rgba(251, 191, 36, 0.15)";

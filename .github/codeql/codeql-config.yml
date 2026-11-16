@@ -1,0 +1,6 @@
+name: "Configuração CodeQL — LMS COMPASSO"
+
+paths-ignore:
+  - '.github/skills/**'
+  - '.agent/skills/**'
+  - '.gemini/skills/**'

@@ -20,7 +20,7 @@ updates:
         patterns:
           - "@*"
           - "wrangler"
-          - "shadcn"
+          - "puppeteer"
         update-types:
           - "minor"
           - "patch"

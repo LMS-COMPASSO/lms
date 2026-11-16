@@ -157,17 +157,19 @@ try {
     let match;
 
     while ((match = regexRefs.exec(conteudo)) !== null) {
-      let ref = match[1].trim();
+      const ref = match[1].trim();
+      const refLower = ref.toLowerCase();
 
-      // Ignora links externos, âncoras locais, esquemas de dados, javascript, templates e rotas de API do Worker
+      // Ignora links externos, âncoras locais, esquemas especiais, templates e rotas de API do Worker
       if (
-        ref.startsWith('http://') ||
-        ref.startsWith('https://') ||
-        ref.startsWith('//') ||
-        ref.startsWith('#') ||
-        ref.startsWith('mailto:') ||
-        ref.startsWith('data:') ||
-        ref.startsWith('javascript:') ||
+        refLower.startsWith('http://') ||
+        refLower.startsWith('https://') ||
+        refLower.startsWith('//') ||
+        refLower.startsWith('#') ||
+        refLower.startsWith('mailto:') ||
+        refLower.startsWith('data:') ||
+        refLower.startsWith('javascript:') ||
+        refLower.startsWith('vbscript:') ||
         ref.startsWith('/api/') ||
         ref.includes('${')
       ) {

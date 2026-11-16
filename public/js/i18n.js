@@ -2666,6 +2666,71 @@ function anunciarTrocaIdioma(nomeNativo) {
 }
 
 /**
+ * Busca uma chave estritamente no dicionário para elementos com markup inline,
+ * evitando ecoar atributos arbitrários do DOM ou propriedades de protótipo.
+ */
+function buscarTraducaoEstrita(chave) {
+  if (!chave || typeof chave !== 'string') return null;
+  const idioma = obterIdiomaAtual();
+  const candidatos = [DICIONARIO[idioma], DICIONARIO.pt, DICIONARIO.en];
+  for (const dict of candidatos) {
+    if (dict && Object.hasOwn(dict, chave)) {
+      return dict[chave];
+    }
+  }
+  return null;
+}
+
+/**
+ * Renderiza texto com markup inline restrito (<span> e <em> sem atributos)
+ * criando nós DOM diretamente, sem atribuição a innerHTML.
+ */
+function definirConteudoInlineSeguro(el, conteudo) {
+  if (
+    typeof document?.createElement !== 'function' ||
+    typeof document?.createTextNode !== 'function' ||
+    typeof el.appendChild !== 'function'
+  ) {
+    el.textContent = conteudo;
+    return;
+  }
+
+  const padraoTag = /<(span|em)>([\s\S]*?)<\/\1>/gi;
+  el.textContent = '';
+  let ultimoIndice = 0;
+  let match;
+
+  while ((match = padraoTag.exec(conteudo)) !== null) {
+    if (match.index > ultimoIndice) {
+      el.appendChild(document.createTextNode(conteudo.slice(ultimoIndice, match.index)));
+    }
+    const noTag = document.createElement(match[1].toLowerCase());
+    noTag.textContent = match[2];
+    el.appendChild(noTag);
+    ultimoIndice = match.index + match[0].length;
+  }
+
+  if (ultimoIndice < conteudo.length) {
+    el.appendChild(document.createTextNode(conteudo.slice(ultimoIndice)));
+  }
+}
+
+/**
+ * Atualiza o rótulo de links/botões preservando o ícone existente sem innerHTML.
+ */
+function definirRotuloComIcone(el, texto) {
+  const icone = el.querySelector?.('.material-symbols-outlined, svg');
+  if (icone && typeof document?.createTextNode === 'function' && typeof el.appendChild === 'function') {
+    const iconePreservado = typeof icone.cloneNode === 'function' ? icone.cloneNode(true) : icone;
+    el.textContent = '';
+    el.appendChild(iconePreservado);
+    if (texto) el.appendChild(document.createTextNode(` ${texto}`));
+    return;
+  }
+  el.textContent = texto;
+}
+
+/**
  * Varre o documento e atualiza elementos com data-i18n e links padrão de cabeçalho/rodapé
  */
 export function traduzirDocumento() {
@@ -2686,13 +2751,13 @@ export function traduzirDocumento() {
     }
   });
 
-  // 1.1 Elementos com markup HTML interno (data-i18n-html)
+  // 1.1 Elementos com markup HTML inline restrito (data-i18n-html)
   const elementosHtml = document.querySelectorAll?.('[data-i18n-html]') || [];
   elementosHtml.forEach((el) => {
     const chave = el.getAttribute?.('data-i18n-html');
     if (!chave) return;
-    const traducao = t(chave);
-    if (traducao) el.innerHTML = traducao;
+    const traducao = buscarTraducaoEstrita(chave);
+    if (traducao) definirConteudoInlineSeguro(el, traducao);
   });
 
   // Atualiza título da página para rotas conhecidas
@@ -2741,9 +2806,7 @@ export function traduzirDocumento() {
     const href = link.getAttribute?.('href');
     const chave = mapaRotasNav[href];
     if (chave) {
-      const spanIcone = link.querySelector?.('.material-symbols-outlined, svg');
-      const iconeHtml = spanIcone ? spanIcone.outerHTML : '';
-      link.innerHTML = `${iconeHtml} ${t(chave)}`.trim();
+      definirRotuloComIcone(link, t(chave));
     }
   });
 
@@ -2752,20 +2815,17 @@ export function traduzirDocumento() {
   if (btnBuscar) {
     btnBuscar.setAttribute('aria-label', t('nav.buscarAriaLabel'));
     btnBuscar.setAttribute('title', t('nav.buscarAriaLabel'));
-    const icone = btnBuscar.querySelector?.('.material-symbols-outlined, svg');
-    btnBuscar.innerHTML = `${icone ? icone.outerHTML : ''} ${t('nav.buscar')}`.trim();
+    definirRotuloComIcone(btnBuscar, t('nav.buscar'));
   }
 
   const btnEntrar = document.getElementById?.('acao-entrar');
   if (btnEntrar && !btnEntrar.href?.includes?.('/dashboard.html') && !btnEntrar.href?.includes?.('/cursos.html')) {
-    const icone = btnEntrar.querySelector?.('.material-symbols-outlined, svg');
-    btnEntrar.innerHTML = `${icone ? icone.outerHTML : ''} ${t('nav.entrar')}`.trim();
+    definirRotuloComIcone(btnEntrar, t('nav.entrar'));
   }
 
   const btnCadastrar = document.getElementById?.('acao-cadastrar');
   if (btnCadastrar) {
-    const icone = btnCadastrar.querySelector?.('.material-symbols-outlined, svg');
-    btnCadastrar.innerHTML = `${icone ? icone.outerHTML : ''} ${t('nav.criarConta')}`.trim();
+    definirRotuloComIcone(btnCadastrar, t('nav.criarConta'));
   }
 
   // 5. Rodapé público
