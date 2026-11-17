@@ -95,6 +95,9 @@ export async function criarUsuario(request, env, db) {
   if (!nome || !email || !senha || !['administrador', 'instrutor', 'aluno'].includes(perfil)) {
     return jsonErro('Nome, email, senha e perfil válido são obrigatórios.', 400);
   }
+  if (senha.length < 6) {
+    return jsonErro('A senha deve ter ao menos 6 caracteres.', 400);
+  }
   if (!validarFormatoEmail(email)) {
     return jsonErro('Email inválido.', 400);
   }
@@ -162,7 +165,9 @@ export async function atualizarUsuario(request, env, db, targetId) {
 }
 
 /**
- * Desativação lógica do usuário (mantém o histórico escolar sem permitir novos logins).
+ * Desativação lógica do usuário (mantém o histórico escolar sem permitir novos logins)
+ * e anonimização de registros de pesquisa SUS vinculada (LGPD Art. 16, II — conservação
+ * estatística por órgão de pesquisa com desvinculação nominal do titular).
  */
 export async function desativarUsuario(request, env, db, targetId) {
   const { payload } = await authorizeUser(request, env, db);
@@ -170,7 +175,16 @@ export async function desativarUsuario(request, env, db, targetId) {
 
   const id = parseIdPositivo(targetId, 'ID do usuário');
   await db.prepare('UPDATE usuarios SET ativo = 0, atualizado_em = CURRENT_TIMESTAMP WHERE id = ?').bind(id).run();
-  return jsonResponse({ mensagem: 'Usuário desativado com sucesso.' });
+
+  try {
+    await db.prepare(
+      "UPDATE avaliacoes_usabilidade_sus SET usuario_id = NULL, nome_participante = 'Participante Anonimizado (LGPD Art. 16, II)' WHERE usuario_id = ?",
+    ).bind(id).run();
+  } catch {
+    // Ignora caso a tabela SUS ainda não exista ou em mocks reduzidos
+  }
+
+  return jsonResponse({ mensagem: 'Usuário desativado e registros de pesquisa SUS anonimizados (LGPD Art. 16, II).' });
 }
 
 /**

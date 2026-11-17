@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28" width="280" height="280" fill="none" role="img" aria-labelledby="ic-lgpd-title">
+  <title id="ic-lgpd-title">Ícone Governança Jurídica e LGPD — Notion</title>
+  <style>
+    .lgpd-stroke { stroke: #2c5282; }
+    .lgpd-accent { stroke: #276749; }
+    @media (prefers-color-scheme: dark) {
+      .lgpd-stroke { stroke: #93c5fd; }
+      .lgpd-accent { stroke: #6ee7b7; }
+    }
+  </style>
+  <rect class="lgpd-stroke" x="6" y="12" width="16" height="12" rx="2.5" stroke-width="2"/>
+  <path class="lgpd-stroke" d="M 9.5 12 V 8.5 A 4.5 4.5 0 0 1 18.5 8.5 V 12" stroke-width="2" stroke-linecap="round"/>
+  <circle class="lgpd-accent" cx="14" cy="18" r="2" stroke-width="2"/>
+</svg>

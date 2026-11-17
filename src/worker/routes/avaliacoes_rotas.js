@@ -53,6 +53,34 @@ export async function obterAvaliacao(request, env, db, avaliacaoId) {
     return jsonErro('Avaliação não encontrada.', 404);
   }
 
+  let cursoInfo = null;
+  try {
+    cursoInfo = await queryOne(
+      db,
+      'SELECT av.id, c.instrutor_id, c.status FROM avaliacoes av JOIN modulos m ON av.modulo_id = m.id JOIN cursos c ON m.curso_id = c.id WHERE av.id = ?',
+      [id],
+    );
+  } catch {
+    cursoInfo = null;
+  }
+
+  if (cursoInfo) {
+    if (payload.perfil === 'aluno' && cursoInfo.status && cursoInfo.status !== 'publicado') {
+      return jsonErro('Acesso negado. Este curso ainda não está publicado.', 403);
+    }
+    if (
+      payload.perfil === 'instrutor'
+      && cursoInfo.instrutor_id
+      && cursoInfo.instrutor_id !== payload.id
+      && cursoInfo.status === 'rascunho'
+    ) {
+      return jsonErro('Acesso negado a avaliação em rascunho de outro instrutor.', 403);
+    }
+  }
+
+  const podeVerGabarito = payload.perfil === 'administrador'
+    || (payload.perfil === 'instrutor' && (!cursoInfo || !cursoInfo.instrutor_id || cursoInfo.instrutor_id === payload.id));
+
   const questoes = await queryAll(
     db,
     'SELECT id, enunciado, tipo, pontos, ordem FROM questoes WHERE avaliacao_id = ? ORDER BY ordem ASC, id ASC',
@@ -62,9 +90,9 @@ export async function obterAvaliacao(request, env, db, avaliacaoId) {
   for (const questao of questoes) {
     questao.alternativas = await queryAll(
       db,
-      payload.perfil === 'aluno'
-        ? 'SELECT id, texto FROM alternativas WHERE questao_id = ?'
-        : 'SELECT id, texto, correta FROM alternativas WHERE questao_id = ?',
+      podeVerGabarito
+        ? 'SELECT id, texto, correta FROM alternativas WHERE questao_id = ?'
+        : 'SELECT id, texto FROM alternativas WHERE questao_id = ?',
       [questao.id],
     );
   }
@@ -200,15 +228,19 @@ export async function responderAvaliacao(request, env, db, avaliacaoId) {
     return jsonErro('Número máximo de tentativas atingido para esta avaliação.', 403);
   }
 
-  // Busca as questões para calcular a pontuação
+  // Busca as questões para calcular a pontuação com deduplicação por questão (evita replay de questaoId)
   const questoes = await queryAll(db, 'SELECT id, pontos FROM questoes WHERE avaliacao_id = ?', [id]);
   const respostas = Array.isArray(body.respostas) ? body.respostas : [];
   const totalPontos = questoes.reduce((soma, q) => soma + Number(q.pontos), 0) || 1;
+  const questoesProcessadas = new Set();
 
   let pontosObtidos = 0;
   for (const resposta of respostas) {
-    const questao = questoes.find((q) => q.id === Number(resposta.questaoId));
+    const questaoIdNum = Number(resposta?.questaoId);
+    if (!Number.isSafeInteger(questaoIdNum) || questoesProcessadas.has(questaoIdNum)) continue;
+    const questao = questoes.find((q) => q.id === questaoIdNum);
     if (!questao) continue;
+    questoesProcessadas.add(questaoIdNum);
 
     const alternativaCorreta = await queryOne(
       db,
@@ -216,12 +248,12 @@ export async function responderAvaliacao(request, env, db, avaliacaoId) {
       [questao.id],
     );
 
-    if (alternativaCorreta && Number(alternativaCorreta.id) === Number(resposta.alternativaId)) {
+    if (alternativaCorreta && Number(alternativaCorreta.id) === Number(resposta?.alternativaId)) {
       pontosObtidos += Number(questao.pontos);
     }
   }
 
-  const notaCalculada = Math.round((pontosObtidos / totalPontos) * 1000) / 100;
+  const notaCalculada = Math.min(10, Math.round((pontosObtidos / totalPontos) * 1000) / 100);
   const aprovado = notaCalculada >= Number(avaliacao.nota_minima);
 
   await db.prepare(`

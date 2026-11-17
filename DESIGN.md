@@ -5,19 +5,49 @@ colors:
   primary: "#2c5282"
   primary-dark: "#1a365d"
   primary-accent: "#2563eb"
+  primary-public: "#0369a1"
+  primary-public-hover: "#025985"
+  primary-sky: "#0284c7"
+  primary-sky-dark: "#075985"
+  primary-cyan: "#38bdf8"
+  primary-cyan-light: "#7dd3fc"
+  primary-blue-light: "#60a5fa"
+  primary-blue-border: "#3b82f6"
   secondary: "#276749"
+  secondary-public: "#047857"
+  secondary-deep: "#065f46"
+  secondary-mid: "#059669"
   secondary-light: "#38a169"
+  secondary-mint: "#10b981"
+  secondary-dark-accent: "#34d399"
   warning: "#b7791f"
+  warning-amber: "#d97706"
+  warning-gold: "#f59e0b"
+  warning-dark-accent: "#fbbf24"
   danger: "#c53030"
+  danger-solid: "#dc2626"
+  danger-dark: "#b91c1c"
+  danger-light: "#ef4444"
+  danger-dark-text: "#f87171"
+  danger-bg: "#fef2f2"
+  danger-border: "#fecaca"
+  danger-soft: "#fed7d7"
   success: "#15803d"
+  success-bright: "#16a34a"
   info: "#0369a1"
   neutral-bg: "#f4f6fa"
+  surface-alt: "#f8fafc"
+  surface-subtle: "#f1f5f9"
   card-bg: "#ffffff"
   text-main: "#1a202c"
+  text-heading: "#0f172a"
+  text-body-slate: "#334155"
   text-muted: "#475569"
+  text-subtle: "#64748b"
   border: "#e2e8f0"
   border-subtle: "#cbd5e1"
   focus-ring: "#dd6b20"
+  high-contrast-ink: "#000000"
   axis-pensamento: "#1d4ed8"
   axis-pensamento-bg: "#eff6ff"
   axis-pensamento-border: "#93c5fd"
@@ -28,29 +58,97 @@ colors:
   axis-cultura-bg: "#fffbeb"
   axis-cultura-border: "#fcd34d"
   dark-bg: "#0b1120"
+  dark-surface-alt: "#070c18"
+  dark-surface-deep: "#090e1a"
   dark-card-bg: "#111827"
   dark-border: "#1e293b"
+  dark-border-elevated: "#273549"
+  dark-navy: "#1e3a8a"
+  dark-indigo: "#1e40af"
   dark-text-main: "#f1f5f9"
   dark-text-muted: "#94a3b8"
   dark-primary-link: "#93c5fd"
+  student-accent: "#7c3aed"
+  student-indigo: "#4f46e5"
+  student-lavender: "#c084fc"
+  google-blue: "#4285f4"
+  google-blue-hover: "#0b57d0"
+  cyan-info: "#0891b2"
 typography:
+  hero:
+    fontFamily: "Segoe UI, Roboto, system-ui, sans-serif"
+    fontSize: "clamp(2rem, 1.65rem + 1.8vw, 3.5rem)"
+    fontWeight: 800
+    lineHeight: 1.12
+    letterSpacing: "-0.03em"
+  banner-title:
+    fontFamily: "Segoe UI, Roboto, system-ui, sans-serif"
+    fontSize: "clamp(2.2rem, 2.35rem + 0.5vw, 3.4rem)"
+    fontWeight: 800
+    lineHeight: 1.15
   display:
     fontFamily: "Segoe UI, Roboto, system-ui, sans-serif"
     fontSize: "clamp(1.6rem, 1.2rem + 1.8vw, 2.4rem)"
     fontWeight: 700
     lineHeight: 1.2
     letterSpacing: "-0.01em"
+  display-lg:
+    fontFamily: "Segoe UI, Roboto, system-ui, sans-serif"
+    fontSize: "clamp(1.75rem, 2.8vw, 2.75rem)"
+    fontWeight: 800
+    lineHeight: 1.18
+  display-xl:
+    fontFamily: "Segoe UI, Roboto, system-ui, sans-serif"
+    fontSize: "clamp(2.6rem, 2.8vw, 2.7rem)"
+    fontWeight: 800
+    lineHeight: 1.15
+  display-md:
+    fontFamily: "Segoe UI, Roboto, system-ui, sans-serif"
+    fontSize: "clamp(1.8rem, 2vw + 0.5rem, 2.5rem)"
+    fontWeight: 800
+    lineHeight: 1.2
+  display-sm:
+    fontFamily: "Segoe UI, Roboto, system-ui, sans-serif"
+    fontSize: "clamp(2.2rem, 2.25rem, 2.3rem)"
+    fontWeight: 700
+    lineHeight: 1.22
+  display-alt:
+    fontFamily: "Segoe UI, Roboto, system-ui, sans-serif"
+    fontSize: "2.35rem"
+    fontWeight: 800
+    lineHeight: 1.2
+  kpi:
+    fontFamily: "Segoe UI, Roboto, system-ui, sans-serif"
+    fontSize: "clamp(1.55rem, 1.8vw, 1.95rem)"
+    fontWeight: 800
+    lineHeight: 1.1
   h2:
     fontFamily: "Segoe UI, Roboto, system-ui, sans-serif"
     fontSize: "clamp(1.3rem, 1.05rem + 1.2vw, 1.85rem)"
     fontWeight: 700
     lineHeight: 1.25
     letterSpacing: "normal"
+  h2-alt:
+    fontFamily: "Segoe UI, Roboto, system-ui, sans-serif"
+    fontSize: "clamp(1.35rem, 1.4rem, 1.45rem)"
+    fontWeight: 700
+    lineHeight: 1.25
   h3:
     fontFamily: "Segoe UI, Roboto, system-ui, sans-serif"
-    fontSize: "clamp(1.1rem, 0.95rem + 0.7vw, 1.35rem)"
+    fontSize: "clamp(1.1rem, 0.95rem + 0.7vw, 1.4rem)"
     fontWeight: 600
     lineHeight: 1.3
+    letterSpacing: "normal"
+  h4:
+    fontFamily: "Segoe UI, Roboto, system-ui, sans-serif"
+    fontSize: "1.2rem"
+    fontWeight: 600
+    lineHeight: 1.35
+  lead:
+    fontFamily: "Segoe UI, Roboto, system-ui, sans-serif"
+    fontSize: "clamp(1.15rem, 1.1rem + 0.3vw, 1.25rem)"
+    fontWeight: 400
+    lineHeight: 1.6
     letterSpacing: "normal"
   body:
     fontFamily: "Segoe UI, Roboto, system-ui, sans-serif"
@@ -58,35 +156,100 @@ typography:
     fontWeight: 400
     lineHeight: 1.55
     letterSpacing: "normal"
+  body-compact:
+    fontFamily: "Segoe UI, Roboto, system-ui, sans-serif"
+    fontSize: "0.96rem"
+    fontWeight: 400
+    lineHeight: 1.5
+  body-base:
+    fontFamily: "Segoe UI, Roboto, system-ui, sans-serif"
+    fontSize: "1rem"
+    fontWeight: 400
+    lineHeight: 1.5
+    letterSpacing: "normal"
   small:
     fontFamily: "Segoe UI, Roboto, system-ui, sans-serif"
-    fontSize: "clamp(0.8rem, 0.77rem + 0.15vw, 0.88rem)"
+    fontSize: "clamp(0.8rem, 0.82rem + 0.1vw, 0.88rem)"
     fontWeight: 400
     lineHeight: 1.45
     letterSpacing: "normal"
+  caption:
+    fontFamily: "Segoe UI, Roboto, system-ui, sans-serif"
+    fontSize: "clamp(0.76rem, 0.78rem + 0.1vw, 0.84rem)"
+    fontWeight: 600
+    lineHeight: 1.4
+    letterSpacing: "0.02em"
+  micro-sm:
+    fontFamily: "Segoe UI, Roboto, system-ui, sans-serif"
+    fontSize: "clamp(0.72rem, 0.74rem, 0.75rem)"
+    fontWeight: 700
+    lineHeight: 1.4
   micro:
     fontFamily: "Segoe UI, Roboto, system-ui, sans-serif"
     fontSize: "0.6875rem"
     fontWeight: 700
     lineHeight: 1.4
     letterSpacing: "0.04em"
+  micro-badge:
+    fontFamily: "Segoe UI, Roboto, system-ui, sans-serif"
+    fontSize: "clamp(0.6rem, 0.62rem, 0.65rem)"
+    fontWeight: 700
+    lineHeight: 1.3
+  micro-xs:
+    fontFamily: "Segoe UI, Roboto, system-ui, sans-serif"
+    fontSize: "0.55rem"
+    fontWeight: 700
+    lineHeight: 1.2
   code:
     fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
     fontSize: "0.88rem"
     fontWeight: 500
     lineHeight: 1.5
     letterSpacing: "normal"
+  icons-md:
+    fontFamily: "Material Symbols Outlined, sans-serif"
+    fontSize: "22px"
+    fontWeight: 400
+    lineHeight: 1
   icons:
     fontFamily: "Material Symbols Outlined, sans-serif"
     fontSize: "24px"
     fontWeight: 400
     lineHeight: 1
     letterSpacing: "normal"
+  icons-lg:
+    fontFamily: "Material Symbols Outlined, sans-serif"
+    fontSize: "28px"
+    fontWeight: 400
+    lineHeight: 1
+  icons-xl:
+    fontFamily: "Material Symbols Outlined, sans-serif"
+    fontSize: "36px"
+    fontWeight: 400
+    lineHeight: 1
+  icons-display:
+    fontFamily: "Material Symbols Outlined, sans-serif"
+    fontSize: "40px"
+    fontWeight: 400
+    lineHeight: 1
+  icons-hero:
+    fontFamily: "Material Symbols Outlined, sans-serif"
+    fontSize: "48px"
+    fontWeight: 400
+    lineHeight: 1
 rounded:
+  2xs: "2px"
+  xs: "4px"
   sm: "6px"
+  sm-alt: "8px"
   md: "10px"
+  card-sm: "12px"
+  tile: "14px"
   lg: "16px"
+  card: "18px"
   xl: "20px"
+  2xl: "24px"
+  banner: "28px"
   full: "9999px"
 spacing:
   space-1: "4px"

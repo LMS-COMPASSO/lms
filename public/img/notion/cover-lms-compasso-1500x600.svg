@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 600" width="1500" height="600" role="img" aria-labelledby="cover-title cover-desc">
+  <title id="cover-title">LMS COMPASSO — Capa Institucional Notion</title>
+  <desc id="cover-desc">Banner 1500x600 com zona segura central 900x350 destacando a marca LMS COMPASSO e os 3 eixos da BNCC Computação.</desc>
+  <defs>
+    <linearGradient id="bg-compasso" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b1120"/>
+      <stop offset="55%" stop-color="#1a365d"/>
+      <stop offset="100%" stop-color="#2c5282"/>
+    </linearGradient>
+    <radialGradient id="glow-azul" cx="72%" cy="35%" r="48%">
+      <stop offset="0%" stop-color="#2563eb" stop-opacity="0.32"/>
+      <stop offset="100%" stop-color="#2563eb" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow-verde" cx="25%" cy="75%" r="45%">
+      <stop offset="0%" stop-color="#38a169" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#38a169" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="tech-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#93c5fd" stroke-opacity="0.07" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <!-- Fundo 1500x600 -->
+  <rect width="1500" height="600" fill="url(#bg-compasso)"/>
+  <rect width="1500" height="600" fill="url(#tech-grid)"/>
+  <rect width="1500" height="600" fill="url(#glow-azul)"/>
+  <rect width="1500" height="600" fill="url(#glow-verde)"/>
+
+  <!-- Ornamentos periféricos seguros (fora do corte crítico) -->
+  <circle cx="1360" cy="110" r="140" fill="none" stroke="#93c5fd" stroke-opacity="0.12" stroke-width="1.5" stroke-dasharray="6 8"/>
+  <circle cx="140" cy="490" r="120" fill="none" stroke="#6ee7b7" stroke-opacity="0.12" stroke-width="1.5"/>
+
+  <!-- Zona Segura Central: 900x350px (x=300..1200, y=125..475) -->
+  <g id="safe-zone" data-safe-area="300 125 900 350">
+    <!-- Cartão editorial translúcido dentro da safe area -->
+    <rect x="316" y="141" width="868" height="318" rx="20" fill="#0f172a" fill-opacity="0.62" stroke="#93c5fd" stroke-opacity="0.26" stroke-width="1.5"/>
+
+    <!-- Emblema Compasso Isométrico à esquerda na safe area -->
+    <g transform="translate(366, 210)">
+      <rect x="0" y="0" width="160" height="160" rx="28" fill="#111827" stroke="#2563eb" stroke-opacity="0.55" stroke-width="2"/>
+      <path d="M 102 104 A 38 38 0 1 1 54 67" fill="none" stroke="#38a169" stroke-width="6" stroke-linecap="round"/>
+      <path d="M 80 34 L 58 112 M 80 34 L 102 112" fill="none" stroke="#f8fafc" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M 96 92 L 102 112" fill="none" stroke="#38a169" stroke-width="7" stroke-linecap="round"/>
+      <circle cx="80" cy="34" r="9" fill="#f8fafc"/>
+      <circle cx="80" cy="34" r="3.5" fill="#1a365d"/>
+      <circle cx="54" cy="67" r="6" fill="#fbbf24"/>
+      <circle cx="42" cy="96" r="6" fill="#60a5fa"/>
+      <circle cx="68" cy="124" r="6" fill="#6ee7b7"/>
+    </g>
+
+    <!-- Bloco tipográfico centralizado verticalmente na zona segura -->
+    <g transform="translate(560, 198)">
+      <rect x="0" y="0" width="290" height="32" rx="16" fill="#1d4ed8" fill-opacity="0.35" stroke="#93c5fd" stroke-opacity="0.45" stroke-width="1"/>
+      <text x="145" y="21" text-anchor="middle" font-family="Segoe UI, Roboto, system-ui, sans-serif" font-size="13" font-weight="700" letter-spacing="1.4" fill="#93c5fd">BNCC COMPUTAÇÃO · IFMA</text>
+
+      <text x="0" y="84" font-family="Segoe UI, Roboto, system-ui, sans-serif" font-size="46" font-weight="700" letter-spacing="-0.5" fill="#f8fafc">LMS COMPASSO</text>
+      <text x="0" y="122" font-family="Segoe UI, Roboto, system-ui, sans-serif" font-size="20" font-weight="400" fill="#cbd5e1">Arquitetura Serverless, Legal-Tech &amp; Design System</text>
+
+      <!-- Pílulas dos 3 Eixos BNCC -->
+      <g transform="translate(0, 154)">
+        <rect x="0" y="0" width="198" height="36" rx="10" fill="#1d4ed8" fill-opacity="0.28" stroke="#60a5fa" stroke-width="1.2"/>
+        <circle cx="18" cy="18" r="5" fill="#60a5fa"/>
+        <text x="32" y="23" font-family="Segoe UI, Roboto, system-ui, sans-serif" font-size="13" font-weight="600" fill="#f1f5f9">Pensamento Comp.</text>
+
+        <rect x="210" y="0" width="154" height="36" rx="10" fill="#047857" fill-opacity="0.28" stroke="#6ee7b7" stroke-width="1.2"/>
+        <circle cx="228" cy="18" r="5" fill="#6ee7b7"/>
+        <text x="242" y="23" font-family="Segoe UI, Roboto, system-ui, sans-serif" font-size="13" font-weight="600" fill="#f1f5f9">Mundo Digital</text>
+
+        <rect x="376" y="0" width="160" height="36" rx="10" fill="#b45309" fill-opacity="0.28" stroke="#fcd34d" stroke-width="1.2"/>
+        <circle cx="394" cy="18" r="5" fill="#fcd34d"/>
+        <text x="408" y="23" font-family="Segoe UI, Roboto, system-ui, sans-serif" font-size="13" font-weight="600" fill="#f1f5f9">Cultura Digital</text>
+      </g>
+    </g>
+  </g>
+</svg>

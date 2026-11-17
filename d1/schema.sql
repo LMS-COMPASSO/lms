@@ -227,3 +227,7 @@ CREATE INDEX IF NOT EXISTS idx_desempenho_hab_cod ON desempenho_habilidades(habi
 CREATE INDEX IF NOT EXISTS idx_desempenho_hab_curso ON desempenho_habilidades(curso_id);
 CREATE INDEX IF NOT EXISTS idx_submissoes_python_user ON submissoes_python(usuario_id);
 CREATE INDEX IF NOT EXISTS idx_submissoes_python_atv ON submissoes_python(atividade_id);
+CREATE INDEX IF NOT EXISTS idx_tentativas_avaliacao_id ON tentativas_avaliacao(avaliacao_id);
+CREATE INDEX IF NOT EXISTS idx_progresso_aula_id ON progresso_aulas(aula_id);
+CREATE INDEX IF NOT EXISTS idx_sus_tipo ON avaliacoes_usabilidade_sus(participante_tipo);
+CREATE INDEX IF NOT EXISTS idx_sus_criado_em ON avaliacoes_usabilidade_sus(criado_em);

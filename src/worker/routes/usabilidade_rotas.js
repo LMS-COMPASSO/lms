@@ -54,6 +54,9 @@ export async function garantirTabelaUsabilidadeSus(db) {
           FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE SET NULL
         )
       `).run();
+
+      await db.prepare('CREATE INDEX IF NOT EXISTS idx_sus_tipo ON avaliacoes_usabilidade_sus(participante_tipo)').run();
+      await db.prepare('CREATE INDEX IF NOT EXISTS idx_sus_criado_em ON avaliacoes_usabilidade_sus(criado_em)').run();
     }
   } catch {
     // Ignora caso mocks restritos não suportem sqlite_master

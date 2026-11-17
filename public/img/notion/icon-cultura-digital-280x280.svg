@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28" width="280" height="280" fill="none" role="img" aria-labelledby="ic-cd-title">
+  <title id="ic-cd-title">Ícone Cultura Digital — Notion</title>
+  <style>
+    .cd-stroke { stroke: #b45309; }
+    .cd-accent { stroke: #d97706; }
+    @media (prefers-color-scheme: dark) {
+      .cd-stroke { stroke: #fcd34d; }
+      .cd-accent { stroke: #fbbf24; }
+    }
+  </style>
+  <path class="cd-stroke" d="M 14 3.5 L 22.5 7 V 13.5 C 22.5 18.8 18.8 22.6 14 24.5 C 9.2 22.6 5.5 18.8 5.5 13.5 V 7 L 14 3.5 Z" stroke-width="2" stroke-linejoin="round"/>
+  <path class="cd-accent" d="M 10.5 14 L 13 16.5 L 18 11.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

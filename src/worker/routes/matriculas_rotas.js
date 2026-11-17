@@ -51,7 +51,7 @@ export async function listarMatriculas(request, env, db, url) {
 
   if (cursoId) {
     sql += ' AND m.curso_id = ?';
-    params.push(Number(cursoId));
+    params.push(parseIdPositivo(cursoId, 'curso_id'));
   }
   if (status) {
     sql += ' AND m.status = ?';

@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320" width="480" height="320" fill="none" role="img" aria-labelledby="onb-title onb-desc">
+  <title id="onb-title">Ecossistema dos 3 Eixos da BNCC Computação</title>
+  <desc id="onb-desc">Ilustração modular conectando Pensamento Computacional, Mundo Digital e Cultura Digital ao compasso central.</desc>
+
+  <!-- Conexões entre módulos -->
+  <path d="M 148 92 L 240 160 L 332 92 M 240 160 L 240 248" stroke="var(--cor-borda, #cbd5e1)" stroke-width="3" stroke-dasharray="6 5" stroke-linecap="round"/>
+
+  <!-- Nó 1: Pensamento Computacional -->
+  <g transform="translate(64, 38)">
+    <rect width="128" height="72" rx="12" fill="var(--cor-cartao, #ffffff)" stroke="var(--cor-secao-pensamento, #1d4ed8)" stroke-width="2.5"/>
+    <circle cx="24" cy="26" r="8" fill="var(--cor-secao-pensamento, #1d4ed8)" fill-opacity="0.2" stroke="var(--cor-secao-pensamento, #1d4ed8)" stroke-width="2"/>
+    <path d="M 42 26 H 104 M 20 48 H 88" stroke="currentColor" stroke-opacity="0.65" stroke-width="3.5" stroke-linecap="round"/>
+  </g>
+
+  <!-- Nó 2: Mundo Digital -->
+  <g transform="translate(288, 38)">
+    <rect width="128" height="72" rx="12" fill="var(--cor-cartao, #ffffff)" stroke="var(--cor-secao-mundo, #047857)" stroke-width="2.5"/>
+    <rect x="18" y="18" width="18" height="18" rx="3" stroke="var(--cor-secao-mundo, #047857)" stroke-width="2"/>
+    <path d="M 46 26 H 108 M 18 50 H 92" stroke="currentColor" stroke-opacity="0.65" stroke-width="3.5" stroke-linecap="round"/>
+  </g>
+
+  <!-- Nó 3: Cultura Digital -->
+  <g transform="translate(176, 224)">
+    <rect width="128" height="68" rx="12" fill="var(--cor-cartao, #ffffff)" stroke="var(--cor-secao-cultura, #b45309)" stroke-width="2.5"/>
+    <path d="M 30 20 L 40 24 V 31 C 40 36 36 39 30 42 C 24 39 20 36 20 31 V 24 Z" stroke="var(--cor-secao-cultura, #b45309)" stroke-width="2"/>
+    <path d="M 52 28 H 106 M 20 50 H 96" stroke="currentColor" stroke-opacity="0.65" stroke-width="3.5" stroke-linecap="round"/>
+  </g>
+
+  <!-- Compasso Central -->
+  <circle cx="240" cy="158" r="42" fill="var(--cor-cartao, #ffffff)" stroke="var(--cor-primaria, #2c5282)" stroke-width="3"/>
+  <path d="M 254 170 A 20 20 0 1 1 226 144" stroke="var(--cor-secundaria-suave, #38a169)" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M 240 132 L 228 172 M 240 132 L 252 172" stroke="var(--cor-primaria, #2c5282)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="240" cy="132" r="4" fill="var(--cor-primaria, #2c5282)"/>
+</svg>

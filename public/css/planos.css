@@ -145,6 +145,18 @@ body.suporta-tema-sistema[data-tema="escuro"] .planos-topo {
   color: #f1f5f9;
 }
 
+@media (prefers-color-scheme: dark) {
+  :root:not([data-tema="claro"]) .planos-titulo {
+    color: #ffffff;
+  }
+  :root:not([data-tema="claro"]) .planos-subtitulo {
+    color: #94a3b8;
+  }
+  :root:not([data-tema="claro"]) .planos-periodo-rotulo {
+    color: #f1f5f9;
+  }
+}
+
 .planos-periodo-pills {
   display: inline-flex;
   align-items: center;
@@ -368,6 +380,24 @@ body.suporta-tema-sistema[data-tema="escuro"] .planos-periodo-btn.ativo {
   color: #34d399;
 }
 
+@media (prefers-color-scheme: dark) {
+  :root:not([data-tema="claro"]) .plano-titulo {
+    color: #ffffff;
+  }
+  :root:not([data-tema="claro"]) .plano-desc {
+    color: #94a3b8;
+  }
+  :root:not([data-tema="claro"]) .plano-preco-principal {
+    color: #ffffff;
+  }
+  :root:not([data-tema="claro"]) .plano-preco-moeda {
+    color: #cbd5e1;
+  }
+  :root:not([data-tema="claro"]) .plano-preco-sub {
+    color: #34d399;
+  }
+}
+
 /* ---------- Botões dos Planos ---------- */
 .plano-btn {
   display: block;
@@ -452,6 +482,18 @@ body.suporta-tema-sistema[data-tema="escuro"] .planos-periodo-btn.ativo {
 }
 
 @media (prefers-color-scheme: dark) {
+  :root:not([data-tema="claro"]) .plano-btn-secundario {
+    background: #1e293b;
+    color: #f8fafc;
+    border-color: #334155;
+  }
+  :root:not([data-tema="claro"]) .plano-btn-secundario:hover {
+    background: #334155;
+    color: #ffffff;
+  }
+  :root:not([data-tema="claro"]) .plano-feature-item {
+    color: #cbd5e1;
+  }
   :root:not([data-tema="claro"]) .plano-check-icon {
     color: #6ee7b7;
   }
@@ -583,6 +625,18 @@ body.suporta-tema-sistema[data-tema="escuro"] .planos-periodo-btn.ativo {
 }
 
 @media (prefers-color-scheme: dark) {
+  :root:not([data-tema="claro"]) .plano-slider-num {
+    color: #ffffff;
+  }
+  :root:not([data-tema="claro"]) .plano-slider-label {
+    color: #cbd5e1;
+  }
+  :root:not([data-tema="claro"]) .plano-range-input {
+    background: #334155;
+  }
+  :root:not([data-tema="claro"]) .plano-tick-label {
+    color: #94a3b8;
+  }
   :root:not([data-tema="claro"]) .plano-tick-label.ativo {
     color: #6ee7b7;
   }
@@ -799,6 +853,36 @@ body.suporta-tema-sistema[data-tema="escuro"] .planos-periodo-btn.ativo {
   color: #cbd5e1;
 }
 
+@media (prefers-color-scheme: dark) {
+  :root:not([data-tema="claro"]) .secao-bmc-contratos {
+    border-top-color: rgba(255, 255, 255, 0.08);
+  }
+  :root:not([data-tema="claro"]) .bmc-titulo {
+    color: #ffffff;
+  }
+  :root:not([data-tema="claro"]) .bmc-desc {
+    color: #94a3b8;
+  }
+  :root:not([data-tema="claro"]) .bmc-card {
+    background: rgba(17, 24, 39, 0.75);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+  :root:not([data-tema="claro"]) .bmc-card-titulo {
+    color: #f1f5f9;
+  }
+  :root:not([data-tema="claro"]) .bmc-card-texto {
+    color: #94a3b8;
+  }
+  :root:not([data-tema="claro"]) .bmc-banner-titulo {
+    color: #ffffff;
+  }
+  :root:not([data-tema="claro"]) .bmc-banner-texto {
+    color: #cbd5e1;
+  }
+}
+
 .bmc-banner-acoes {
   display: flex;
   gap: 12px;
@@ -922,6 +1006,26 @@ body.suporta-tema-sistema[data-tema="escuro"] .planos-periodo-btn.ativo {
 :root[data-tema="escuro"] .modal-contrato {
   background: #0f172a;
   border-color: rgba(255, 255, 255, 0.12);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-tema="claro"]) .planos-faq-titulo {
+    color: #ffffff;
+  }
+  :root:not([data-tema="claro"]) .planos-faq-item {
+    background: rgba(17, 24, 39, 0.75);
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+  :root:not([data-tema="claro"]) .planos-faq-pergunta {
+    color: #f1f5f9;
+  }
+  :root:not([data-tema="claro"]) .planos-faq-resposta {
+    color: #94a3b8;
+  }
+  :root:not([data-tema="claro"]) .modal-contrato {
+    background: #0f172a;
+    border-color: rgba(255, 255, 255, 0.12);
+  }
 }
 
 .modal-fechar-btn {

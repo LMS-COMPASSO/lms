@@ -21,6 +21,8 @@ import {
   jsonResponse,
   jsonErro,
   readJsonBody,
+  queryAll,
+  queryOne,
   getUserByEmail,
   getUserProfile,
   authorizeUser,
@@ -42,6 +44,57 @@ const DUMMY_PBKDF2_HASH = 'pbkdf2_sha256$100000$dHVtbXlzYWx0MTIzNDU2Nw$dHVtbXloY
 const tentativasFalhasLogin = new Map();
 export const LIMITE_TENTATIVAS_FALHAS = 5;
 export const JANELA_BLOQUEIO_MS = 15 * 60 * 1000; // 15 minutos
+export const MAX_ENTRADAS_RATE_LIMIT = 5000;
+
+const exportacoesLgpdPorUsuario = new Map();
+export const LIMITE_EXPORTACOES_LGPD = 5;
+export const JANELA_EXPORTACAO_LGPD_MS = 60 * 60 * 1000; // 1 hora
+
+/**
+ * Remove registros expirados de um Map de rate limiting e, se necessário, descarta
+ * os mais antigos para impedir crescimento ilimitado de memória (memory leak / OOM em Workers).
+ */
+function podarMapaJanela(mapa, janelaMs, agora = Date.now()) {
+  for (const [chave, reg] of mapa.entries()) {
+    const bloqueioAtivo = reg.bloqueadoAte && agora < reg.bloqueadoAte;
+    const inicioJanela = reg.primeiroErroEm ?? reg.inicioJanelaEm ?? 0;
+    if (!bloqueioAtivo && agora - inicioJanela > janelaMs) {
+      mapa.delete(chave);
+    }
+  }
+  while (mapa.size >= MAX_ENTRADAS_RATE_LIMIT) {
+    const chaveMaisAntiga = mapa.keys().next().value;
+    if (chaveMaisAntiga === undefined) break;
+    mapa.delete(chaveMaisAntiga);
+  }
+}
+
+export function podarMapaRateLimit(agora = Date.now()) {
+  podarMapaJanela(tentativasFalhasLogin, JANELA_BLOQUEIO_MS, agora);
+}
+
+export function resetarRateLimitExportacaoLgpd() {
+  exportacoesLgpdPorUsuario.clear();
+}
+
+export function verificarERegistrarRateLimitExportacaoLgpd(usuarioId) {
+  const agora = Date.now();
+  const chave = String(usuarioId);
+  if (exportacoesLgpdPorUsuario.size >= MAX_ENTRADAS_RATE_LIMIT) {
+    podarMapaJanela(exportacoesLgpdPorUsuario, JANELA_EXPORTACAO_LGPD_MS, agora);
+  }
+  let reg = exportacoesLgpdPorUsuario.get(chave);
+  if (!reg || agora - reg.inicioJanelaEm > JANELA_EXPORTACAO_LGPD_MS) {
+    reg = { contagem: 0, inicioJanelaEm: agora };
+  }
+  if (reg.contagem >= LIMITE_EXPORTACOES_LGPD) {
+    const segundosRestantes = Math.max(1, Math.ceil((reg.inicioJanelaEm + JANELA_EXPORTACAO_LGPD_MS - agora) / 1000));
+    return { bloqueado: true, retryAfter: segundosRestantes };
+  }
+  reg.contagem += 1;
+  exportacoesLgpdPorUsuario.set(chave, reg);
+  return { bloqueado: false, retryAfter: 0 };
+}
 
 export function verificarRateLimitLogin(ip, email) {
   const agora = Date.now();
@@ -62,6 +115,9 @@ export function verificarRateLimitLogin(ip, email) {
 
 export function registrarTentativaFalhaLogin(ip, email) {
   const agora = Date.now();
+  if (tentativasFalhasLogin.size >= MAX_ENTRADAS_RATE_LIMIT) {
+    podarMapaRateLimit(agora);
+  }
   for (const chave of [ip, email].filter(Boolean)) {
     const reg = tentativasFalhasLogin.get(chave) || { contagem: 0, primeiroErroEm: agora, bloqueadoAte: 0 };
     if (agora - reg.primeiroErroEm > JANELA_BLOQUEIO_MS) {
@@ -588,6 +644,102 @@ export async function loginComGoogle(request, env, db) {
     token,
     contaAcademica: ehAcademico,
     dominioInstitucional,
+  });
+}
+
+/**
+ * Exporta todos os dados pessoais e registros pedagógicos do titular autenticado
+ * para atendimento direto ao Art. 18, incisos II e V, da LGPD (Acesso e Portabilidade).
+ */
+export async function exportarMeusDadosLgpd(request, env, db) {
+  const { user } = await authorizeUser(request, env, db);
+  const usuarioId = user.id;
+
+  const statusRateLimit = verificarERegistrarRateLimitExportacaoLgpd(usuarioId);
+  if (statusRateLimit.bloqueado) {
+    return new Response(
+      JSON.stringify({
+        erro: 'Limite de exportações LGPD atingido (máximo de 5 por hora). Aguarde antes de solicitar um novo pacote.',
+      }),
+      {
+        status: 429,
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+          'Retry-After': String(statusRateLimit.retryAfter),
+          ...CORS_HEADERS,
+        },
+      },
+    );
+  }
+
+  const consultarSeguro = async (fn, padrao) => {
+    try {
+      return await fn();
+    } catch {
+      return padrao;
+    }
+  };
+
+  const perfil = await getUserProfile(db, usuarioId);
+  const preferencias = await consultarSeguro(
+    () => queryOne(db, 'SELECT alto_contraste, fonte_ampliada, reduzir_movimento, tema, atualizado_em FROM preferencias_usuario WHERE usuario_id = ?', [usuarioId]),
+    null,
+  );
+  const matriculas = await consultarSeguro(
+    () => queryAll(db, 'SELECT m.id, m.curso_id, c.titulo AS curso_titulo, m.status, m.progresso_percentual, m.data_matricula, m.data_conclusao FROM matriculas m LEFT JOIN cursos c ON c.id = m.curso_id WHERE m.usuario_id = ?', [usuarioId]),
+    [],
+  );
+  const progressoAulas = await consultarSeguro(
+    () => queryAll(db, 'SELECT pa.matricula_id, pa.aula_id, pa.concluida, pa.data_conclusao FROM progresso_aulas pa JOIN matriculas m ON m.id = pa.matricula_id WHERE m.usuario_id = ?', [usuarioId]),
+    [],
+  );
+  const tentativasAvaliacao = await consultarSeguro(
+    () => queryAll(db, 'SELECT ta.matricula_id, ta.avaliacao_id, ta.nota, ta.aprovado, ta.data_tentativa FROM tentativas_avaliacao ta JOIN matriculas m ON m.id = ta.matricula_id WHERE m.usuario_id = ?', [usuarioId]),
+    [],
+  );
+  const certificados = await consultarSeguro(
+    () => queryAll(db, 'SELECT cert.codigo_validacao, cert.url_arquivo, cert.data_emissao, c.titulo AS curso_titulo FROM certificados cert JOIN matriculas m ON m.id = cert.matricula_id LEFT JOIN cursos c ON c.id = m.curso_id WHERE m.usuario_id = ?', [usuarioId]),
+    [],
+  );
+  const medalhas = await consultarSeguro(
+    () => queryAll(db, 'SELECT md.codigo, md.titulo, md.eixo_bncc, um.conquistada_em FROM usuario_medalhas um JOIN medalhas md ON md.id = um.medalha_id WHERE um.usuario_id = ?', [usuarioId]),
+    [],
+  );
+  const desempenhoHabilidades = await consultarSeguro(
+    () => queryAll(db, 'SELECT curso_id, habilidade_codigo, origem_tipo, origem_id, pontuacao, nivel_atingido, registrado_em FROM desempenho_habilidades WHERE usuario_id = ?', [usuarioId]),
+    [],
+  );
+  const submissoesPython = await consultarSeguro(
+    () => queryAll(db, 'SELECT atividade_id, codigo_python, sucesso, tentativas, estrelas, parceiro_dupla, papel_dupla, criado_em FROM submissoes_python WHERE usuario_id = ?', [usuarioId]),
+    [],
+  );
+  const avaliacoesUsabilidadeSus = await consultarSeguro(
+    () => queryAll(db, 'SELECT participante_tipo, escola_turma, sus_score, tempo_segundos, tarefas_concluidas, criado_em FROM avaliacoes_usabilidade_sus WHERE usuario_id = ?', [usuarioId]),
+    [],
+  );
+
+  return jsonResponse({
+    formato: 'application/json',
+    fundamentoLegal: 'LGPD (Lei nº 13.709/2018) Art. 18, incisos II e V — Acesso e Portabilidade de Dados',
+    exportadoEm: new Date().toISOString(),
+    controlador: {
+      nome: 'Startup LMS COMPASSO · Projeto de Inovação SUAP/IFMA nº 14246/2025 (IFMA Campus Grajaú)',
+      encarregadoDpo: 'dpo@lms-compasso.edu.br',
+      politicaPrivacidade: '/privacy',
+      termosServico: '/terms',
+    },
+    dadosTitular: {
+      perfil,
+      preferencias,
+      matriculas,
+      progressoAulas,
+      tentativasAvaliacao,
+      certificados,
+      medalhas,
+      desempenhoHabilidades,
+      submissoesPython,
+      avaliacoesUsabilidadeSus,
+    },
   });
 }
 

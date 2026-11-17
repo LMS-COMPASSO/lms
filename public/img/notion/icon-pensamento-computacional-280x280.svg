@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28" width="280" height="280" fill="none" role="img" aria-labelledby="ic-pc-title">
+  <title id="ic-pc-title">Ícone Pensamento Computacional — Notion</title>
+  <style>
+    .pc-stroke { stroke: #1d4ed8; }
+    .pc-accent { stroke: #2563eb; }
+    @media (prefers-color-scheme: dark) {
+      .pc-stroke { stroke: #93c5fd; }
+      .pc-accent { stroke: #60a5fa; }
+    }
+  </style>
+  <rect class="pc-stroke" x="4" y="4" width="7" height="7" rx="2" stroke-width="2"/>
+  <rect class="pc-stroke" x="17" y="4" width="7" height="7" rx="2" stroke-width="2"/>
+  <rect class="pc-accent" x="10.5" y="17" width="7" height="7" rx="2" stroke-width="2"/>
+  <path class="pc-stroke" d="M 7.5 11 V 14 H 20.5 V 11 M 14 14 V 17" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

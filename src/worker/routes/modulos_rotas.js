@@ -26,8 +26,30 @@ import {
  * Retorna todos os módulos pertencentes a um curso, ordenados pela ordem definida.
  */
 export async function listarModulosDoCurso(request, env, db, cursoId) {
-  await authorizeUser(request, env, db);
+  const { payload } = await authorizeUser(request, env, db);
   const id = parseIdPositivo(cursoId, 'cursoId');
+
+  let cursoInfo = null;
+  try {
+    cursoInfo = await queryOne(db, 'SELECT id, status, instrutor_id FROM cursos WHERE id = ?', [id]);
+  } catch {
+    cursoInfo = null;
+  }
+
+  if (cursoInfo) {
+    if (payload.perfil === 'aluno' && cursoInfo.status && cursoInfo.status !== 'publicado') {
+      return jsonErro('Acesso negado. Este curso ainda não está publicado.', 403);
+    }
+    if (
+      payload.perfil === 'instrutor'
+      && cursoInfo.instrutor_id
+      && cursoInfo.instrutor_id !== payload.id
+      && cursoInfo.status === 'rascunho'
+    ) {
+      return jsonErro('Acesso negado a módulos em rascunho de outro instrutor.', 403);
+    }
+  }
+
   const modulos = await queryAll(
     db,
     'SELECT * FROM modulos WHERE curso_id = ? ORDER BY ordem ASC, id ASC',
@@ -98,7 +120,12 @@ export async function atualizarModulo(request, env, db, moduloId) {
   const campos = [];
   const params = [];
 
-  if (body.titulo !== undefined) { campos.push('titulo = ?'); params.push(String(body.titulo)); }
+  if (body.titulo !== undefined) {
+    const tituloLimpo = String(body.titulo).trim();
+    if (!tituloLimpo) return jsonErro('Título do módulo não pode ser vazio.', 400);
+    campos.push('titulo = ?');
+    params.push(tituloLimpo);
+  }
   if (body.descricao !== undefined) { campos.push('descricao = ?'); params.push(body.descricao); }
   if (body.ordem !== undefined) { campos.push('ordem = ?'); params.push(Number(body.ordem)); }
 

@@ -1,0 +1,309 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-16T22:02:00-03:00",
+  "title": "Design System: LMS COMPASSO",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Azul Institucional Compasso",
+        "canonical": "#2c5282",
+        "tonalRamp": [
+          "#070d18",
+          "#0f274a",
+          "#172554",
+          "#1a365d",
+          "#1e3a8a",
+          "#1e40af",
+          "#0b57d0",
+          "#2c5282",
+          "#0e7490",
+          "#0891b2",
+          "#0369a1",
+          "#025985",
+          "#075985",
+          "#0284c7",
+          "#0ea5e9",
+          "#2563eb",
+          "#3b82f6",
+          "#4285f4",
+          "#60a5fa",
+          "#38bdf8",
+          "#7dd3fc",
+          "#93c5fd",
+          "#a8c7fa",
+          "#bae6fd",
+          "#bfdbfe",
+          "#bee3f8",
+          "#dbeafe",
+          "#e0f2fe",
+          "#eff6ff"
+        ]
+      },
+      "secondary": {
+        "role": "secondary",
+        "displayName": "Verde Esmeralda & Teal Pedagógico",
+        "canonical": "#047857",
+        "tonalRamp": [
+          "#061e12",
+          "#0d2818",
+          "#064e3b",
+          "#14532d",
+          "#1c4532",
+          "#065f46",
+          "#276749",
+          "#047857",
+          "#166534",
+          "#15803d",
+          "#16a34a",
+          "#059669",
+          "#10b981",
+          "#22c55e",
+          "#38a169",
+          "#34d399",
+          "#48bb78",
+          "#4ade80",
+          "#68d391",
+          "#6ee7b7",
+          "#86efac",
+          "#a3e635",
+          "#a7f3d0",
+          "#bbf7d0",
+          "#c6f6d5",
+          "#d1fae5",
+          "#dcfce7",
+          "#ecfdf5",
+          "#115e59",
+          "#0d9488",
+          "#14b8a6",
+          "#2dd4bf",
+          "#5eead4",
+          "#99f6e4",
+          "#ccfbf1"
+        ]
+      },
+      "warning": {
+        "role": "tertiary",
+        "displayName": "Âmbar Cultura Digital",
+        "canonical": "#b45309",
+        "tonalRamp": [
+          "#2a1b08",
+          "#713f12",
+          "#78350f",
+          "#854d0e",
+          "#9c4221",
+          "#92400e",
+          "#b45309",
+          "#b7791f",
+          "#ca8a04",
+          "#dd6b20",
+          "#d97706",
+          "#ea580c",
+          "#eab308",
+          "#f59e0b",
+          "#facc15",
+          "#fbbf24",
+          "#fcd34d",
+          "#fde047",
+          "#fde68a",
+          "#feebc8",
+          "#fef08a",
+          "#fef3c7",
+          "#fef9c3",
+          "#fffbeb"
+        ]
+      },
+      "danger": {
+        "role": "error",
+        "displayName": "Vermelho & Rosa Validação",
+        "canonical": "#c53030",
+        "tonalRamp": [
+          "#822727",
+          "#991b1b",
+          "#9f1239",
+          "#b91c1c",
+          "#c53030",
+          "#dc2626",
+          "#e11d48",
+          "#ef4444",
+          "#f43f5e",
+          "#fb7185",
+          "#f87171",
+          "#fca5a5",
+          "#fda4af",
+          "#fecaca",
+          "#fecdd3",
+          "#fed7d7",
+          "#fee2e2",
+          "#fff5f5"
+        ]
+      },
+      "neutral": {
+        "role": "neutral",
+        "displayName": "Ardósia Escolar & Superfícies",
+        "canonical": "#f4f6fa",
+        "tonalRamp": [
+          "#000000",
+          "#030712",
+          "#050811",
+          "#060a12",
+          "#070c18",
+          "#070d18",
+          "#080d19",
+          "#090d16",
+          "#090e1a",
+          "#0b1120",
+          "#0f172a",
+          "#111827",
+          "#131d36",
+          "#1a202c",
+          "#1e293b",
+          "#273549",
+          "#2d3748",
+          "#334155",
+          "#374151",
+          "#475569",
+          "#64748b",
+          "#94a3b8",
+          "#cbd5e1",
+          "#e2e8f0",
+          "#f1f5f9",
+          "#f4f6fa",
+          "#f8fafc",
+          "#ffffff"
+        ]
+      },
+      "student": {
+        "role": "accent",
+        "displayName": "Índigo & Lilás Estudante",
+        "canonical": "#7c3aed",
+        "tonalRamp": [
+          "#1e1b4b",
+          "#3730a3",
+          "#4338ca",
+          "#4f46e5",
+          "#553c9a",
+          "#6366f1",
+          "#7c3aed",
+          "#818cf8",
+          "#8b5cf6",
+          "#a855f7",
+          "#a5b4fc",
+          "#c084fc",
+          "#c4b5fd",
+          "#c7d2fe",
+          "#d8b4fe",
+          "#ddd6fe",
+          "#e9d8fd",
+          "#db2777",
+          "#ec4899",
+          "#f472b6"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display / H1",
+        "purpose": "Títulos principais de página com escala fluida clamp()."
+      },
+      "h2": {
+        "displayName": "Headline / H2",
+        "purpose": "Títulos de seção pedagógica e documental."
+      },
+      "h3": {
+        "displayName": "Title / H3",
+        "purpose": "Títulos de módulo, cartão e subseções."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Texto corrido limitado a 65-75ch para leitura escolar confortável."
+      },
+      "small": {
+        "displayName": "Small / Label",
+        "purpose": "Metadados, rótulos auxiliares e legendas."
+      },
+      "code": {
+        "displayName": "Code / BNCC",
+        "purpose": "Códigos de habilidades BNCC (EF05CO01), IPs e snippets Python."
+      }
+    },
+    "shadows": [
+      {
+        "name": "card-rest",
+        "value": "0 2px 8px rgba(15, 23, 42, 0.06)",
+        "purpose": "Cartões de atividades e painéis em repouso."
+      },
+      {
+        "name": "card-hover",
+        "value": "0 8px 20px rgba(15, 23, 42, 0.12)",
+        "purpose": "Elevação táctil ao passar o mouse em elementos interativos."
+      },
+      {
+        "name": "holo-dark",
+        "value": "0 16px 36px rgba(0, 0, 0, 0.6)",
+        "purpose": "Painel holográfico do laboratório 3D Mundo Digital."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out-expo",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Transições rápidas e precisas de chips, abas e cartões."
+      }
+    ],
+    "breakpoints": [
+      { "name": "mobile", "value": "360px" },
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "xl", "value": "1280px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Ação dominante de página com alvo tátil mínimo de 44px.",
+      "html": "<button class=\"ds-btn-primary\" type=\"button\">Explorar Atividades</button>",
+      "css": ".ds-btn-primary { min-height: 44px; padding: 10px 18px; border-radius: 6px; border: none; background: #2c5282; color: #ffffff; font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: background-color 0.18s ease, transform 0.18s ease; } .ds-btn-primary:hover { background: #1a365d; transform: translateY(-1px); } .ds-btn-primary:focus-visible { outline: 3px solid #dd6b20; outline-offset: 2px; }"
+    },
+    {
+      "name": "BNCC Activity Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Cartão pedagógico plano com borda sutil e contraste WCAG AA.",
+      "html": "<article class=\"ds-card\"><span class=\"ds-badge\">EF01CO01</span><h4>Sequência Lógica</h4><p>Organize passos do cotidiano.</p></article>",
+      "css": ".ds-card { background: #ffffff; color: #0f172a; border: 1px solid #e2e8f0; border-radius: 10px; padding: 20px; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06); } .ds-card h4 { margin: 8px 0 6px; font-size: 1.1rem; } .ds-card p { margin: 0; font-size: 0.92rem; color: #475569; } .ds-badge { display: inline-block; padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; background: #eff6ff; color: #0369a1; border: 1px solid #93c5fd; }"
+    },
+    {
+      "name": "Likert Scale Option",
+      "kind": "input",
+      "refersTo": "likert-option",
+      "description": "Opção de avaliação psicométrica SUS com área táctil 48x44px.",
+      "html": "<button class=\"ds-likert\" type=\"button\" aria-pressed=\"true\">4</button>",
+      "css": ".ds-likert { min-width: 44px; min-height: 48px; padding: 6px 4px; border-radius: 6px; border: 1px solid #cbd5e1; background: #ffffff; color: #0f172a; font-weight: 700; cursor: pointer; } .ds-likert[aria-pressed=\"true\"] { background: #2c5282; color: #ffffff; border-color: #2c5282; } .ds-likert:focus-visible { outline: 3px solid #dd6b20; outline-offset: 2px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "A Bússola Pedagógica Acessível",
+    "overview": "O LMS COMPASSO adota uma linguagem visual sóbria, pedagógica, altamente legível e estritamente acessível (WCAG 2.2 Nível AA), desenvolvida sob medida para a Educação Básica pública brasileira.",
+    "keyCharacteristics": [
+      "Baixa sobrecarga cognitiva e sinalização clara de wayfinding",
+      "Resiliência mobile em smartphones Galaxy A03/A05 (360px)",
+      "Tipografia nativa sem bloqueio de rede",
+      "Identificadores cromáticos exclusivos para os 3 eixos da BNCC Computação"
+    ],
+    "rules": [],
+    "dos": [
+      "Sempre respeite alvos de toque mínimos de 44x44px para botões principais e 48px em formulários móveis.",
+      "Sempre utilize a escala fluida com clamp() e espaçamento modular em múltiplos de 4/8px.",
+      "Sempre envolva tabelas de diário de classe e dados pedagógicos em contêineres .tabela-scroll."
+    ],
+    "donts": [
+      "Nunca utilize larguras fixas em pixels (width: 400px) sem declarar max-width: 100%.",
+      "Nunca aplique overflow-x: hidden no elemento body para disfarçar elementos transbordando.",
+      "Nunca use fontes estáticas menores que 16px em inputs móveis."
+    ]
+  }
+}

@@ -46,6 +46,7 @@ async function rotearAuth(partes, metodo, request, env, db) {
   if (acao === 'google' && metodo === 'POST') return authRoutes.loginComGoogle(request, env, db);
   if (acao === 'me' && metodo === 'GET') return authRoutes.obterMeuPerfil(request, env, db);
   if (acao === 'alterar-senha' && metodo === 'POST') return authRoutes.alterarSenha(request, env, db);
+  if (acao === 'exportar-dados' && metodo === 'GET') return authRoutes.exportarMeusDadosLgpd(request, env, db);
 
   return jsonErro('Endpoint de autenticação não encontrado.', 404);
 }
@@ -335,8 +336,25 @@ export default {
 
     // Serve o frontend estático se não for chamada de API (MDN: cabeçalhos de segurança obrigatórios em assets)
     if (!rota.startsWith('/api')) {
+      const reescritaLegal = {
+        '/terms': '/terms.html',
+        '/terms/': '/terms.html',
+        '/termos': '/terms.html',
+        '/termos/': '/terms.html',
+        '/privacy': '/privacy.html',
+        '/privacy/': '/privacy.html',
+        '/privacidade': '/privacy.html',
+        '/privacidade/': '/privacidade.html',
+      };
+      // Normaliza rotas amigáveis jurídicas (/terms e /privacy)
+      const rotaAsset = reescritaLegal[rota] === '/privacidade.html'
+        ? '/privacy.html'
+        : reescritaLegal[rota];
       if (env.ASSETS) {
-        const respostaAsset = await env.ASSETS.fetch(request);
+        const reqAsset = rotaAsset
+          ? new Request(new URL(rotaAsset, url.origin).toString(), request)
+          : request;
+        const respostaAsset = await env.ASSETS.fetch(reqAsset);
         return aplicarCabecalhosSeguranca(respostaAsset);
       }
       return aplicarCabecalhosSeguranca(new Response('Frontend não configurado. Binding ASSETS ausente no worker.', {

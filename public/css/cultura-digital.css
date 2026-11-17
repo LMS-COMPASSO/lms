@@ -502,7 +502,7 @@ body.pagina-cultura-digital {
 .cd-termometro-forca {
   height: 10px;
   background: #1e293b;
-  border-radius: 5px;
+  border-radius: var(--radius-full, 9999px);
   margin: 16px 0 10px;
   overflow: hidden;
 }
@@ -511,7 +511,7 @@ body.pagina-cultura-digital {
   height: 100%;
   width: 20%;
   background: #ef4444;
-  border-radius: 5px;
+  border-radius: var(--radius-full, 9999px);
   transition: width 0.3s ease, background 0.3s ease;
 }
 

@@ -1,3 +1,25 @@
 {
-  "buildPath": "code"
+  "buildPath": "code",
+  "hook": {
+    "enabled": true,
+    "limits": {
+      "maxFindings": 5,
+      "maxChars": 8000
+    }
+  },
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "marquee",
+        "value": "*",
+        "files": [
+          "public/mundo-digital.html"
+        ],
+        "createdAt": "2026-11-17T00:52:56.050Z",
+        "reason": "Simulacao didatica literal de pulso eletrico no barramento da CPU e pacotes TCP/IP no laboratorio Mundo Digital"
+      }
+    ]
+  }
 }

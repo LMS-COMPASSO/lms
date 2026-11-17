@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 220" width="320" height="220" fill="none" role="img" aria-labelledby="empty-title empty-desc">
+  <title id="empty-title">Nenhuma atividade encontrada na trilha</title>
+  <desc id="empty-desc">Ilustração vetorial de bússola e mapa de etapas vazio utilizando variáveis de tema do LMS COMPASSO.</desc>
+
+  <!-- Halo de fundo geométrico -->
+  <circle cx="160" cy="110" r="82" fill="var(--cor-primaria, #2c5282)" fill-opacity="0.08"/>
+  <circle cx="160" cy="110" r="64" stroke="var(--cor-borda, #cbd5e1)" stroke-width="2" stroke-dasharray="6 6"/>
+
+  <!-- Cartão de trilha estilizado -->
+  <rect x="74" y="56" width="172" height="108" rx="12" fill="var(--cor-cartao, #ffffff)" stroke="currentColor" stroke-opacity="0.22" stroke-width="2"/>
+  <path d="M 96 86 H 178" stroke="currentColor" stroke-opacity="0.35" stroke-width="4" stroke-linecap="round"/>
+  <path d="M 96 106 H 154" stroke="currentColor" stroke-opacity="0.2" stroke-width="4" stroke-linecap="round"/>
+  <path d="M 96 126 H 136" stroke="currentColor" stroke-opacity="0.2" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- Compasso explorador no centro -->
+  <circle cx="204" cy="122" r="32" fill="var(--cor-cartao, #ffffff)" stroke="var(--cor-primaria, #2c5282)" stroke-width="3"/>
+  <path d="M 218 134 A 18 18 0 1 1 190 108" stroke="var(--cor-secundaria-suave, #38a169)" stroke-width="3" stroke-linecap="round"/>
+  <path d="M 204 103 L 195 133 M 204 103 L 213 133" stroke="var(--cor-primaria, #2c5282)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="204" cy="103" r="3.5" fill="var(--cor-primaria, #2c5282)"/>
+  <circle cx="190" cy="108" r="3" fill="var(--cor-alerta, #b7791f)"/>
+</svg>

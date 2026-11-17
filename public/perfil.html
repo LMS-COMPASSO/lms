@@ -59,6 +59,24 @@
         </div>
       </div>
 
+      <div class="cartao mt-16" id="secao-lgpd-privacidade">
+        <div class="flex-entre flex-wrap gap-10">
+          <div>
+            <h2 class="flex-inline-icon"><span class="material-symbols-outlined icon-sm" aria-hidden="true">shield</span> Privacidade e Portabilidade de Dados (LGPD Art. 18)</h2>
+            <p class="texto-suave">Consulte nossos documentos legais ou baixe uma cópia completa dos seus dados pessoais, matrículas, medalhas, habilidades e submissões Python em JSON.</p>
+          </div>
+          <div class="flex-linha flex-wrap gap-8">
+            <button type="button" class="btn btn-sm btn-primario flex-inline-icon" id="btn-exportar-dados-lgpd" onclick="exportarMeusDadosLgpd()">
+              <span class="material-symbols-outlined icon-xs" aria-hidden="true">download</span>
+              <span>Exportar meus dados (JSON)</span>
+            </button>
+            <a href="/privacy.html" class="btn btn-sm btn-neutro">Política de Privacidade</a>
+            <a href="/terms.html" class="btn btn-sm btn-neutro">Termos de Serviço</a>
+          </div>
+        </div>
+        <p id="status-exportacao-lgpd" class="texto-suave mt-8 oculto" role="status" aria-live="polite"></p>
+      </div>
+
       <div class="cartao mt-16" id="secao-medalhas">
         <div class="flex-entre flex-wrap gap-10">
           <div>
@@ -242,6 +260,38 @@
         ? dadosGamificacao.medalhas.filter((m) => m.eixo_bncc === eixo)
         : dadosGamificacao.medalhas;
       renderizarMedalhas(filtradas);
+    };
+
+    window.exportarMeusDadosLgpd = async function() {
+      const statusEl = document.getElementById('status-exportacao-lgpd');
+      const btn = document.getElementById('btn-exportar-dados-lgpd');
+      try {
+        if (btn) btn.disabled = true;
+        if (statusEl) {
+          statusEl.textContent = 'Gerando pacote JSON de portabilidade LGPD…';
+          statusEl.classList.remove('oculto');
+        }
+        const pacote = await api('/auth/exportar-dados');
+        const blob = new Blob([JSON.stringify(pacote, null, 2)], { type: 'application/json;charset=utf-8' });
+        const urlBlob = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = urlBlob;
+        link.download = `lms-compasso-meus-dados-lgpd-${usuario.id}.json`;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(urlBlob);
+        if (statusEl) {
+          statusEl.textContent = 'Pacote de dados LGPD baixado com sucesso.';
+        }
+      } catch (err) {
+        if (statusEl) {
+          statusEl.textContent = `Não foi possível exportar os dados: ${err.message}`;
+          statusEl.classList.remove('oculto');
+        }
+      } finally {
+        if (btn) btn.disabled = false;
+      }
     };
 
     carregarMedalhas();

@@ -1462,12 +1462,12 @@
 .folha h2 { margin: 18px 0 8px; font-size: 13pt; }
 .folha p { margin: 0 0 8px; font-size: 11pt; line-height: 1.4; }
 .folha-cartoes { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8mm; margin-top: 8mm; }
-.folha-cartao { display: flex; align-items: center; gap: 4mm; min-height: 20mm; padding: 4mm; border: 1.5px dashed #000; border-radius: 3mm; font-size: 12pt; font-weight: 600; break-inside: avoid; }
+.folha-cartao { display: flex; align-items: center; gap: 4mm; min-height: 20mm; padding: 4mm; border: 1.5px dashed #000; border-radius: var(--radius-md, 10px); font-size: 12pt; font-weight: 600; break-inside: avoid; }
 .folha-cartao .folha-emoji { font-size: 20pt; }
 .folha-cartoes.compactos { grid-template-columns: repeat(4, 1fr); }
 .folha-cartoes.compactos .folha-cartao { justify-content: center; min-height: 16mm; font-size: 18pt; }
 .folha-partes { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6mm; margin-top: 6mm; }
-.folha-parte { min-height: 34mm; padding: 4mm; border: 2px solid #000; border-radius: 3mm; font-weight: 700; break-inside: avoid; }
+.folha-parte { min-height: 34mm; padding: 4mm; border: 2px solid #000; border-radius: var(--radius-md, 10px); font-weight: 700; break-inside: avoid; }
 .folha-mapa { display: grid; grid-template-columns: repeat(var(--colunas), 22mm); width: max-content; margin: 6mm 0; border-top: 1.5px solid #000; border-left: 1.5px solid #000; }
 .folha-celula { display: grid; place-items: center; width: 22mm; height: 22mm; border-right: 1.5px solid #000; border-bottom: 1.5px solid #000; font-size: 20pt; }
 .folha-gabarito { margin-top: 8mm; padding-top: 4mm; border-top: 2px solid #000; break-before: page; }

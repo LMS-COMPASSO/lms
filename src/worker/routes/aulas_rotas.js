@@ -45,12 +45,38 @@ export async function listarAulasDoModulo(request, env, db, moduloId) {
  * Retorna os detalhes e conteúdo de uma aula individual.
  */
 export async function obterAula(request, env, db, aulaId) {
-  await authorizeUser(request, env, db);
+  const { payload } = await authorizeUser(request, env, db);
   const id = parseIdPositivo(aulaId, 'aulaId');
   const aula = await queryOne(db, 'SELECT * FROM aulas WHERE id = ?', [id]);
   if (!aula) {
     return jsonErro('Aula não encontrada.', 404);
   }
+
+  let cursoInfo = null;
+  try {
+    cursoInfo = await queryOne(
+      db,
+      'SELECT a.id, c.instrutor_id, c.status FROM aulas a JOIN modulos m ON a.modulo_id = m.id JOIN cursos c ON m.curso_id = c.id WHERE a.id = ?',
+      [id],
+    );
+  } catch {
+    cursoInfo = null;
+  }
+
+  if (cursoInfo) {
+    if (payload.perfil === 'aluno' && cursoInfo.status && cursoInfo.status !== 'publicado') {
+      return jsonErro('Acesso negado. Este curso ainda não está publicado.', 403);
+    }
+    if (
+      payload.perfil === 'instrutor'
+      && cursoInfo.instrutor_id
+      && cursoInfo.instrutor_id !== payload.id
+      && cursoInfo.status === 'rascunho'
+    ) {
+      return jsonErro('Acesso negado a aula em rascunho de outro instrutor.', 403);
+    }
+  }
+
   return jsonResponse(aula);
 }
 
