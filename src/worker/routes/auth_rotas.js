@@ -357,6 +357,37 @@ async function obterChavesPublicasGoogle(env = {}, forcarAtualizacao = false) {
   return keys;
 }
 
+function validarClaimsTokenGoogle(claims, clientIdEsperado) {
+  if (!['https://accounts.google.com', 'accounts.google.com'].includes(claims.iss)) {
+    throw new ErroHttp('Emissor do token Google inválido.', 401);
+  }
+  if (claims.email_verified !== true || !claims.email) {
+    throw new ErroHttp('A conta Google precisa possuir e-mail verificado.', 401);
+  }
+  const audValido = Array.isArray(claims.aud)
+    ? claims.aud.includes(clientIdEsperado)
+    : claims.aud === clientIdEsperado;
+  if (!audValido) {
+    throw new ErroHttp('Token do Google não autorizado para esta aplicação (Client ID incompatível).', 401);
+  }
+  if (typeof claims.exp !== 'number' || claims.exp * 1000 < Date.now() - 300_000) {
+    throw new ErroHttp('Token do Google expirado. Faça login novamente.', 401);
+  }
+}
+
+async function buscarChaveJwkGoogle(kid, env) {
+  let chaves = await obterChavesPublicasGoogle(env, false);
+  let jwk = chaves.find((k) => k.kid === kid);
+  if (!jwk && !env?.__GOOGLE_JWKS) {
+    chaves = await obterChavesPublicasGoogle(env, true);
+    jwk = chaves.find((k) => k.kid === kid);
+  }
+  if (!jwk) {
+    throw new ErroHttp('Chave pública de assinatura do Google não encontrada.', 401);
+  }
+  return jwk;
+}
+
 /**
  * Verifica criptograficamente um ID Token RS256 do Google Identity Services (JWKS, iss, aud, exp e email_verified).
  */
@@ -374,44 +405,18 @@ export async function verificarTokenGoogle(credential, clientIdEsperado, env = {
   if (!header || !claims) {
     throw new ErroHttp('Credencial do Google inválida ou malformada.', 400);
   }
-
   if (header.alg !== 'RS256' || !header.kid) {
     throw new ErroHttp('Cabeçalho do token Google inválido.', 401);
   }
 
-  if (!['https://accounts.google.com', 'accounts.google.com'].includes(claims.iss)) {
-    throw new ErroHttp('Emissor do token Google inválido.', 401);
-  }
-
-  if (claims.email_verified !== true || !claims.email) {
-    throw new ErroHttp('A conta Google precisa possuir e-mail verificado.', 401);
-  }
-
-  const audValido = Array.isArray(claims.aud)
-    ? claims.aud.includes(clientIdEsperado)
-    : claims.aud === clientIdEsperado;
-  if (!audValido) {
-    throw new ErroHttp('Token do Google não autorizado para esta aplicação (Client ID incompatível).', 401);
-  }
-
-  if (typeof claims.exp !== 'number' || claims.exp * 1000 < Date.now() - 300_000) {
-    throw new ErroHttp('Token do Google expirado. Faça login novamente.', 401);
-  }
-
-  let chaves = await obterChavesPublicasGoogle(env, false);
-  let jwk = chaves.find((k) => k.kid === header.kid);
-  if (!jwk && !env?.__GOOGLE_JWKS) {
-    chaves = await obterChavesPublicasGoogle(env, true);
-    jwk = chaves.find((k) => k.kid === header.kid);
-  }
-  if (!jwk) {
-    throw new ErroHttp('Chave pública de assinatura do Google não encontrada.', 401);
-  }
+  validarClaimsTokenGoogle(claims, clientIdEsperado);
+  const jwk = await buscarChaveJwkGoogle(header.kid, env);
 
   let assinaturaBytes;
   try {
     assinaturaBytes = base64UrlDecode(partes[2]);
-  } catch {
+  } catch (erroBase64) {
+    console.warn('Falha ao decodificar assinatura Google Base64URL:', erroBase64?.message || erroBase64);
     throw new ErroHttp('Assinatura do token Google inválida.', 401);
   }
 
@@ -513,16 +518,108 @@ export function obterConfigAuth(request, env) {
   });
 }
 
+async function trocarAuthCodeGooglePorToken(body, googleClientIdEsperado, env, request) {
+  if (!body.code || !googleClientIdEsperado || !env?.GOOGLE_CLIENT_SECRET) return;
+  try {
+    const redirectUri = body.redirect_uri || (request?.url ? new URL(request.url).origin + '/login.html' : '');
+    const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        code: body.code,
+        client_id: googleClientIdEsperado,
+        client_secret: env.GOOGLE_CLIENT_SECRET,
+        redirect_uri: redirectUri,
+        grant_type: 'authorization_code',
+      }),
+    });
+    if (tokenRes.ok) {
+      const tokenData = await tokenRes.json();
+      if (tokenData.id_token) {
+        body.credential = tokenData.id_token;
+      }
+    }
+  } catch (err) {
+    console.warn('Erro ao trocar authorization code com Google:', err);
+  }
+}
+
+async function extrairPerfilGoogleDeCredencial(body, googleClientIdEsperado, permitirModoSimulado, env) {
+  if (body.credential) {
+    const claims = googleClientIdEsperado
+      ? await verificarTokenGoogle(body.credential, googleClientIdEsperado, env)
+      : decodificarTokenGoogle(body.credential);
+    if (!claims) {
+      return { erro: jsonErro('Credencial do Google inválida ou malformada.', 400) };
+    }
+    const emailBruto = claims.email || '';
+    return {
+      email: String(emailBruto).trim().toLowerCase(),
+      nome: String(claims.name || claims.given_name || (emailBruto ? emailBruto.split('@')[0] : '')).trim(),
+      sub: claims.sub || '',
+      avatarUrl: claims.picture || null,
+      hd: claims.hd || '',
+    };
+  }
+
+  if (body.email) {
+    if (!permitirModoSimulado) {
+      return { erro: jsonErro('Credencial do Google é obrigatória em ambiente com Google Client ID configurado.', 401) };
+    }
+    const emailBruto = String(body.email).trim().toLowerCase();
+    return {
+      email: emailBruto,
+      nome: String(body.nome || body.name || emailBruto.split('@')[0]).trim(),
+      sub: body.sub || body.google_id || `google_${Date.now()}`,
+      avatarUrl: body.avatar_url || body.picture || null,
+      hd: body.hd || (emailBruto.includes('@') ? emailBruto.split('@')[1] : ''),
+    };
+  }
+
+  return { email: '', nome: '', sub: '', avatarUrl: null, hd: '' };
+}
+
+async function resolverOuCadastrarUsuarioGoogle(db, { email, nome, avatarUrl }) {
+  const existente = await getUserByEmail(db, email);
+  if (existente) {
+    if (!existente.ativo) {
+      return { erro: jsonErro('Este usuário está desativado. Contate a administração.', 403) };
+    }
+    if (!existente.avatar_url && avatarUrl) {
+      try {
+        await db.prepare('UPDATE usuarios SET avatar_url = ?, atualizado_em = CURRENT_TIMESTAMP WHERE id = ?')
+          .bind(avatarUrl, existente.id).run();
+        existente.avatar_url = avatarUrl;
+      } catch (erroAvatar) {
+        console.warn('Falha ao atualizar avatar Google do usuário:', erroAvatar?.message || erroAvatar);
+      }
+    }
+    return { usuario: existente };
+  }
+
+  const papel = detectarPerfilAcademico(email);
+  const senhaAleatoria = await hashSenha(`google_auth_placeholder_${crypto.randomUUID()}`);
+  const resultado = await db.prepare(
+    'INSERT INTO usuarios (nome, email, senha_hash, perfil, avatar_url, ativo) VALUES (?, ?, ?, ?, ?, 1)',
+  ).bind(nome, email, senhaAleatoria, papel, avatarUrl).run();
+
+  return {
+    usuario: {
+      id: resultado.meta.last_row_id,
+      nome,
+      email,
+      perfil: papel,
+      avatar_url: avatarUrl,
+      ativo: 1,
+    },
+  };
+}
+
 /**
  * Autentica ou cadastra automaticamente um usuário via Google (com suporte especial a contas acadêmicas e Google Workspace for Education).
  */
 export async function loginComGoogle(request, env, db) {
   const body = await readJsonBody(request);
-  let email = '';
-  let nome = '';
-  let sub = '';
-  let avatarUrl = null;
-  let hd = '';
   const googleClientIdEsperado = String(env?.GOOGLE_CLIENT_ID || '').trim();
   const permitirModoSimulado = !googleClientIdEsperado && String(env?.ALLOW_UNVERIFIED_GOOGLE_DEV || '') === 'true';
 
@@ -530,99 +627,22 @@ export async function loginComGoogle(request, env, db) {
     return jsonErro('Login com Google não está configurado neste ambiente. Configure GOOGLE_CLIENT_ID ou utilize email e senha.', 503);
   }
 
-  // Suporte a troca de Authorization Code OAuth2 (caso enviado pelo frontend com Google Console)
-  if (body.code && googleClientIdEsperado && env?.GOOGLE_CLIENT_SECRET) {
-    try {
-      const redirectUri = body.redirect_uri || (request?.url ? new URL(request.url).origin + '/login.html' : '');
-      const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({
-          code: body.code,
-          client_id: googleClientIdEsperado,
-          client_secret: env.GOOGLE_CLIENT_SECRET,
-          redirect_uri: redirectUri,
-          grant_type: 'authorization_code',
-        }),
-      });
-      if (tokenRes.ok) {
-        const tokenData = await tokenRes.json();
-        if (tokenData.id_token) {
-          body.credential = tokenData.id_token;
-        }
-      }
-    } catch (err) {
-      console.warn('Erro ao trocar authorization code com Google:', err);
-    }
+  await trocarAuthCodeGooglePorToken(body, googleClientIdEsperado, env, request);
+  const perfilGoogle = await extrairPerfilGoogleDeCredencial(body, googleClientIdEsperado, permitirModoSimulado, env);
+  if (perfilGoogle.erro) {
+    return perfilGoogle.erro;
   }
-
-  if (body.credential) {
-    const claims = googleClientIdEsperado
-      ? await verificarTokenGoogle(body.credential, googleClientIdEsperado, env)
-      : decodificarTokenGoogle(body.credential);
-
-    if (!claims) {
-      return jsonErro('Credencial do Google inválida ou malformada.', 400);
-    }
-
-    if (claims.email) {
-      email = claims.email;
-      nome = claims.name || claims.given_name || email.split('@')[0];
-      sub = claims.sub || '';
-      avatarUrl = claims.picture || null;
-      hd = claims.hd || '';
-    }
-  } else if (body.email) {
-    if (!permitirModoSimulado) {
-      return jsonErro('Credencial do Google é obrigatória em ambiente com Google Client ID configurado.', 401);
-    }
-    email = body.email;
-    nome = body.nome || body.name || email.split('@')[0];
-    sub = body.sub || body.google_id || `google_${Date.now()}`;
-    avatarUrl = body.avatar_url || body.picture || null;
-    hd = body.hd || (email.includes('@') ? email.split('@')[1] : '');
-  }
-
-  email = String(email || '').trim().toLowerCase();
-  nome = String(nome || '').trim();
-
-  if (!email) {
+  if (!perfilGoogle.email) {
     return jsonErro('Email institucional do Google ou credencial inválida.', 400);
   }
 
   const segredo = exigirSegredoJwt(env.JWT_SECRET);
-  const ehAcademico = verificarDominioAcademico(email, hd);
-  const dominioInstitucional = hd || (email.includes('@') ? email.split('@')[1] : '');
+  const ehAcademico = verificarDominioAcademico(perfilGoogle.email, perfilGoogle.hd);
+  const dominioInstitucional = perfilGoogle.hd || (perfilGoogle.email.includes('@') ? perfilGoogle.email.split('@')[1] : '');
 
-  let usuario = await getUserByEmail(db, email);
-
-  if (usuario) {
-    if (!usuario.ativo) {
-      return jsonErro('Este usuário está desativado. Contate a administração.', 403);
-    }
-    if (!usuario.avatar_url && avatarUrl) {
-      try {
-        await db.prepare('UPDATE usuarios SET avatar_url = ?, atualizado_em = CURRENT_TIMESTAMP WHERE id = ?')
-          .bind(avatarUrl, usuario.id).run();
-        usuario.avatar_url = avatarUrl;
-      } catch {}
-    }
-  } else {
-    const papel = detectarPerfilAcademico(email);
-    const senhaAleatoria = await hashSenha(`google_auth_placeholder_${crypto.randomUUID()}`);
-
-    const resultado = await db.prepare(
-      "INSERT INTO usuarios (nome, email, senha_hash, perfil, avatar_url, ativo) VALUES (?, ?, ?, ?, ?, 1)",
-    ).bind(nome, email, senhaAleatoria, papel, avatarUrl).run();
-
-    usuario = {
-      id: resultado.meta.last_row_id,
-      nome,
-      email,
-      perfil: papel,
-      avatar_url: avatarUrl,
-      ativo: 1,
-    };
+  const { usuario, erro } = await resolverOuCadastrarUsuarioGoogle(db, perfilGoogle);
+  if (erro) {
+    return erro;
   }
 
   const dadosSessao = {
@@ -630,11 +650,11 @@ export async function loginComGoogle(request, env, db) {
     nome: usuario.nome,
     email: usuario.email,
     perfil: usuario.perfil,
-    avatar_url: usuario.avatar_url || avatarUrl,
+    avatar_url: usuario.avatar_url || perfilGoogle.avatarUrl,
     metodo_auth: 'google_academico',
     conta_academica: ehAcademico,
     dominio_institucional: dominioInstitucional,
-    google_id: sub,
+    google_id: perfilGoogle.sub,
   };
 
   const token = await signJwt(dadosSessao, segredo);
@@ -717,6 +737,14 @@ export async function exportarMeusDadosLgpd(request, env, db) {
     () => queryAll(db, 'SELECT participante_tipo, escola_turma, sus_score, tempo_segundos, tarefas_concluidas, criado_em FROM avaliacoes_usabilidade_sus WHERE usuario_id = ?', [usuarioId]),
     [],
   );
+  const workspaceItens = await consultarSeguro(
+    () => queryAll(
+      db,
+      'SELECT id, titulo, status, eixo_bncc, habilidade_codigo, curso_id, prioridade, prazo, cover_id, icone_id, template_origem, blocos_json, ordem, criado_em, atualizado_em FROM estudante_workspace_itens WHERE usuario_id = ?',
+      [usuarioId],
+    ),
+    [],
+  );
 
   return jsonResponse({
     formato: 'application/json',
@@ -739,6 +767,7 @@ export async function exportarMeusDadosLgpd(request, env, db) {
       desempenhoHabilidades,
       submissoesPython,
       avaliacoesUsabilidadeSus,
+      workspaceItens,
     },
   });
 }

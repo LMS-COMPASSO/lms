@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LMS COMPASSO — Cartão de Compartilhamento e Acesso</title>
+  <meta name="i18n-title" content="share.metaTitulo">
   <link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -53,6 +54,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 12px;
       background: #0f172a;
       color: #ffffff;
       padding: 12px 20px;
@@ -72,6 +74,8 @@
     .botoes-acao {
       display: flex;
       gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
     }
 
     .btn-acao {
@@ -92,6 +96,18 @@
     .btn-imprimir { background: #2563eb; color: #ffffff; }
     .btn-baixar { background: #047857; color: #ffffff; }
     .btn-voltar { background: #334155; color: #ffffff; }
+
+    /* Estilos compactos do seletor de idiomas na barra superior de compartilhamento */
+    .seletor-idioma-wrapper { position: relative; display: inline-flex; align-items: center; }
+    .btn-seletor-idioma { display: inline-flex; align-items: center; gap: 4px; padding: 7px 10px; border-radius: 6px; border: 1px solid #475569; background: #1e293b; color: #ffffff; cursor: pointer; min-height: 44px; min-width: 44px; }
+    .dropdown-idiomas-popover { position: absolute; top: calc(100% + 8px); right: 0; background: #ffffff; color: #0f172a; border: 1px solid #cbd5e1; border-radius: 10px; box-shadow: 0 12px 32px rgba(15,23,42,0.18); z-index: 50; min-width: 190px; padding: 6px; }
+    .dropdown-idiomas-popover[hidden] { display: none; }
+    .lista-idiomas { list-style: none; margin: 0; padding: 0; max-height: 280px; overflow-y: auto; }
+    .opcao-idioma { display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; }
+    .opcao-idioma:hover, .opcao-idioma.selecionado { background: #eff6ff; color: #1d4ed8; font-weight: 600; }
+    .opcao-idioma .check-idioma { opacity: 0; }
+    .opcao-idioma.selecionado .check-idioma { opacity: 1; }
+    .somente-leitor { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); }
 
     @media screen and (max-width: 820px) {
       body {
@@ -570,17 +586,18 @@
   <div class="barra-acoes-tela no-print">
     <div class="titulo-acao">
       <span class="material-symbols-outlined icon-pdf-cyan">picture_as_pdf</span>
-      <span>Cartão de Compartilhamento Oficial do LMS COMPASSO</span>
+      <span data-i18n="share.barraTitulo">Cartão de Compartilhamento Oficial do LMS COMPASSO</span>
     </div>
     <div class="botoes-acao">
+      <div id="compartilhar-idioma"></div>
       <button type="button" class="btn-acao btn-imprimir" onclick="window.print()">
-        <span class="material-symbols-outlined icon-16">print</span> Imprimir / Salvar PDF
+        <span class="material-symbols-outlined icon-16">print</span> <span data-i18n="share.btnImprimir">Imprimir / Salvar PDF</span>
       </button>
       <a href="/lms-compasso-compartilhamento.pdf" download class="btn-acao btn-baixar">
-        <span class="material-symbols-outlined icon-16">download</span> Baixar PDF Pronto
+        <span class="material-symbols-outlined icon-16">download</span> <span data-i18n="share.btnBaixar">Baixar PDF Pronto</span>
       </a>
       <a href="/dashboard.html" class="btn-acao btn-voltar">
-        <span class="material-symbols-outlined icon-16">arrow_back</span> Voltar ao Dashboard
+        <span class="material-symbols-outlined icon-16">arrow_back</span> <span data-i18n="share.btnVoltar">Voltar ao Dashboard</span>
       </a>
     </div>
   </div>
@@ -609,16 +626,16 @@
       <div class="topo-meta">
         <span class="tag-institucional">
           <span class="material-symbols-outlined icon-12">verified</span>
-          Diretrizes BNCC Computação
+          <span data-i18n="share.tagDiretrizes">Diretrizes BNCC Computação</span>
         </span>
-        <span class="tag-ano">Ano Letivo 2026</span>
+        <span class="tag-ano" data-i18n="share.anoLetivo">Ano Letivo 2026</span>
       </div>
     </header>
 
     <!-- 2. Título e Apresentação -->
     <section class="banner-titulo">
-      <h1>Plataforma de Ensino da <span>Computação na Educação Básica</span></h1>
-      <p>
+      <h1 data-i18n-html="share.bannerTitulo">Plataforma de Ensino da <span>Computação na Educação Básica</span></h1>
+      <p data-i18n="share.bannerDesc">
         Ambiente virtual interativo desenvolvido para apoiar escolas, professores e secretarias de educação
         no desenvolvimento das habilidades de pensamento computacional, cultura digital e mundo digital.
       </p>
@@ -634,17 +651,17 @@
         </svg>
         <span class="legenda-scan">
           <span class="material-symbols-outlined icon-14">photo_camera</span>
-          Aponte a Câmera
+          <span data-i18n="share.aponteCamera">Aponte a Câmera</span>
         </span>
       </div>
 
       <div class="info-acesso">
         <span class="badge-acesso">
           <span class="material-symbols-outlined icon-14">public</span>
-          Demonstração Aberta em Produção
+          <span data-i18n="share.demoAberta">Demonstração Aberta em Produção</span>
         </span>
-        <h2>Acesse a Plataforma Online</h2>
-        <p>
+        <h2 data-i18n="share.acesseTitulo">Acesse a Plataforma Online</h2>
+        <p data-i18n="share.acesseDesc">
           Escaneie o QR Code ao lado ou utilize o endereço oficial direto pelo navegador do seu computador, tablet ou smartphone:
         </p>
         <div class="caixa-url">
@@ -652,10 +669,10 @@
           <span class="material-symbols-outlined icon-18">open_in_new</span>
         </div>
         <div class="chips-dispositivos">
-          <span class="chip-disp"><span class="material-symbols-outlined icon-12">smartphone</span> Celular</span>
-          <span class="chip-disp"><span class="material-symbols-outlined icon-12">tablet</span> Tablet</span>
-          <span class="chip-disp"><span class="material-symbols-outlined icon-12">laptop</span> Computador</span>
-          <span class="chip-disp"><span class="material-symbols-outlined icon-12">tv</span> Lousa Digital</span>
+          <span class="chip-disp"><span class="material-symbols-outlined icon-12">smartphone</span> <span data-i18n="share.chipCelular">Celular</span></span>
+          <span class="chip-disp"><span class="material-symbols-outlined icon-12">tablet</span> <span data-i18n="share.chipTablet">Tablet</span></span>
+          <span class="chip-disp"><span class="material-symbols-outlined icon-12">laptop</span> <span data-i18n="share.chipComputador">Computador</span></span>
+          <span class="chip-disp"><span class="material-symbols-outlined icon-12">tv</span> <span data-i18n="share.chipLousa">Lousa Digital</span></span>
         </div>
       </div>
     </section>
@@ -665,9 +682,9 @@
       <div class="secao-cabecalho">
         <h3>
           <span class="material-symbols-outlined icon-18 icon-azul">hub</span>
-          Os 3 Eixos Estruturantes da BNCC Computação
+          <span data-i18n="share.eixosTitulo">Os 3 Eixos Estruturantes da BNCC Computação</span>
         </h3>
-        <span>Ensino Fundamental I e II</span>
+        <span data-i18n="share.eixosSub">Ensino Fundamental I e II</span>
       </div>
 
       <div class="grid-3-eixos">
@@ -675,39 +692,39 @@
           <div>
             <div class="card-eixo-topo">
               <div class="card-eixo-icone"><span class="material-symbols-outlined icon-16">psychology</span></div>
-              <div class="card-eixo-titulo">Pensamento Computacional</div>
+              <div class="card-eixo-titulo" data-i18n="eixo.pensamento-computacional">Pensamento Computacional</div>
             </div>
-            <p class="card-eixo-desc">
+            <p class="card-eixo-desc" data-i18n="share.eixo1Desc">
               Resolução de problemas por meio de algoritmos, decomposição, identificação de padrões e lógica com simulação em blocos.
             </p>
           </div>
-          <span class="card-eixo-badge">1º ao 9º Ano</span>
+          <span class="card-eixo-badge" data-i18n="share.eixo1Badge">1º ao 9º Ano</span>
         </div>
 
         <div class="card-eixo mundo">
           <div>
             <div class="card-eixo-topo">
               <div class="card-eixo-icone"><span class="material-symbols-outlined icon-16">memory</span></div>
-              <div class="card-eixo-titulo">Mundo Digital</div>
+              <div class="card-eixo-titulo" data-i18n="eixo.mundo-digital">Mundo Digital</div>
             </div>
-            <p class="card-eixo-desc">
+            <p class="card-eixo-desc" data-i18n="share.eixo2Desc">
               Compreensão física e lógica dos dispositivos, codificação de dados, funcionamento da internet e segurança de sistemas.
             </p>
           </div>
-          <span class="card-eixo-badge">4º ao 9º Ano</span>
+          <span class="card-eixo-badge" data-i18n="share.eixo2Badge">4º ao 9º Ano</span>
         </div>
 
         <div class="card-eixo cultura">
           <div>
             <div class="card-eixo-topo">
               <div class="card-eixo-icone"><span class="material-symbols-outlined icon-16">public</span></div>
-              <div class="card-eixo-titulo">Cultura Digital</div>
+              <div class="card-eixo-titulo" data-i18n="eixo.cultura-digital">Cultura Digital</div>
             </div>
-            <p class="card-eixo-desc">
+            <p class="card-eixo-desc" data-i18n="share.eixo3Desc">
               Cidadania ativa na rede, conduta ética, combate à desinformação, ciberbullying e proteção consciente de dados pessoais.
             </p>
           </div>
-          <span class="card-eixo-badge">Fundamental Geral</span>
+          <span class="card-eixo-badge" data-i18n="share.eixo3Badge">Fundamental Geral</span>
         </div>
       </div>
     </section>
@@ -717,41 +734,41 @@
       <div class="secao-cabecalho">
         <h3>
           <span class="material-symbols-outlined icon-18 icon-verde">auto_awesome</span>
-          Diferenciais e Recursos para Escolas e Redes
+          <span data-i18n="share.destaquesTitulo">Diferenciais e Recursos para Escolas e Redes</span>
         </h3>
-        <span>Gestão &amp; Sala de Aula</span>
+        <span data-i18n="share.destaquesSub">Gestão &amp; Sala de Aula</span>
       </div>
 
       <div class="grid-destaques">
         <div class="item-destaque">
           <div class="icone-destaque"><span class="material-symbols-outlined">extension</span></div>
           <div class="texto-destaque">
-            <h4>Simulador de Blocos Integrado</h4>
-            <p>Ambiente tipo Scratch/Blockly nativo para Ensino Fundamental II, com alternância de blocos visuais para código textual.</p>
+            <h4 data-i18n="share.d1Titulo">Simulador de Blocos Integrado</h4>
+            <p data-i18n="share.d1Desc">Ambiente tipo Scratch/Blockly nativo para Ensino Fundamental II, com alternância de blocos visuais para código textual.</p>
           </div>
         </div>
 
         <div class="item-destaque">
           <div class="icone-destaque destaque-avaliacao"><span class="material-symbols-outlined">assessment</span></div>
           <div class="texto-destaque">
-            <h4>Relatório Pedagógico &amp; Diário (CSV)</h4>
-            <p>Acompanhamento por turma de cada habilidade BNCC consolidada, com exportação formatada para diários de classe escolares.</p>
+            <h4 data-i18n="share.d2Titulo">Relatório Pedagógico &amp; Diário (CSV)</h4>
+            <p data-i18n="share.d2Desc">Acompanhamento por turma de cada habilidade BNCC consolidada, com exportação formatada para diários de classe escolares.</p>
           </div>
         </div>
 
         <div class="item-destaque">
           <div class="icone-destaque destaque-gamificacao"><span class="material-symbols-outlined">military_tech</span></div>
           <div class="texto-destaque">
-            <h4>Gamificação por Eixo BNCC</h4>
-            <p>Medalhas e selos digitais conquistados pelos alunos ao concluírem trilhas nos 3 eixos, promovendo engajamento e protagonismo.</p>
+            <h4 data-i18n="share.d3Titulo">Gamificação por Eixo BNCC</h4>
+            <p data-i18n="share.d3Desc">Medalhas e selos digitais conquistados pelos alunos ao concluírem trilhas nos 3 eixos, promovendo engajamento e protagonismo.</p>
           </div>
         </div>
 
         <div class="item-destaque">
           <div class="icone-destaque destaque-certificados"><span class="material-symbols-outlined">workspace_premium</span></div>
           <div class="texto-destaque">
-            <h4>Certificados com Verificação Pública</h4>
-            <p>Emissão instantânea com carga horária, eixo temático e código validador autêntico para prestação de contas das secretarias.</p>
+            <h4 data-i18n="share.d4Titulo">Certificados com Verificação Pública</h4>
+            <p data-i18n="share.d4Desc">Emissão instantânea com carga horária, eixo temático e código validador autêntico para prestação de contas das secretarias.</p>
           </div>
         </div>
       </div>
@@ -761,15 +778,25 @@
     <footer class="rodape-a4">
       <div class="rodape-esquerda">
         <span class="material-symbols-outlined icon-14 icon-azul">cloud</span>
-        <span>Arquitetura Edge Serverless na Cloudflare (Workers + D1) • Custo zero para escolas</span>
+        <span data-i18n="share.rodapeArq">Arquitetura Edge Serverless na Cloudflare (Workers + D1) • Custo zero para escolas</span>
       </div>
       <div class="rodape-direita">
-        <div><strong>LMS COMPASSO</strong> — Código Aberto sob Licença MIT</div>
-        <div>Repositório: github.com/LMS-COMPASSO/lms</div>
+        <div data-i18n-html="share.rodapeMit"><strong>LMS COMPASSO</strong> — Código Aberto sob Licença MIT</div>
+        <div data-i18n="share.rodapeRepo">Repositório: github.com/LMS-COMPASSO/lms</div>
       </div>
     </footer>
   </div>
   </div>
   </main>
+
+  <script type="module">
+    import { montarSeletorIdioma, traduzirDocumento } from '/js/i18n.js';
+
+    const containerIdioma = document.getElementById('compartilhar-idioma');
+    if (containerIdioma) {
+      montarSeletorIdioma(containerIdioma);
+    }
+    traduzirDocumento();
+  </script>
 </body>
 </html>

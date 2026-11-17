@@ -359,8 +359,9 @@ a.btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex: 0 0 auto;
   gap: 3px;
-  min-height: 40px;
+  min-height: 44px;
   min-width: 44px;
   padding: 6px 8px;
   background: transparent;
@@ -399,6 +400,7 @@ a.btn {
   top: calc(100% + 12px);
   right: 0;
   min-width: 190px;
+  max-width: calc(100vw - 24px);
   background: #ffffff;
   border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 14px;
@@ -1418,6 +1420,10 @@ body.suporta-tema-sistema[data-tema="escuro"] .pub-metrica span {
     padding: 6px 8px;
     font-size: 0.8rem;
   }
+
+  .pub-acoes .btn-seletor-idioma {
+    flex: 0 0 auto;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1708,6 +1714,11 @@ html.a11y-alto-contraste body .pub-acoes .btn-primario * {
   border-radius: var(--radius-md, 10px);
 }
 
+.legal-tabela-wrap:focus-visible {
+  outline: 2px solid var(--cor-primaria);
+  outline-offset: 2px;
+}
+
 .legal-tabela {
   width: 100%;
   border-collapse: collapse;
@@ -1744,7 +1755,14 @@ html.a11y-alto-contraste body .pub-acoes .btn-primario * {
 
 @media (max-width: 900px) {
   .legal-layout {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .legal-toc,
+  .legal-artigo,
+  .legal-tabela-wrap {
+    min-width: 0;
+    max-width: 100%;
   }
 
   .legal-toc {

@@ -34,6 +34,7 @@ import * as userRoutes from './routes/usuarios_rotas.js';
 import * as dashboardRoutes from './routes/dashboard_rotas.js';
 import * as gamificationRoutes from './routes/gamificacao_rotas.js';
 import * as usabilityRoutes from './routes/usabilidade_rotas.js';
+import * as workspaceRoutes from './routes/workspace_rotas.js';
 
 /**
  * Roteia requisições do domínio de Autenticação (/api/auth/*)
@@ -269,6 +270,64 @@ async function rotearGamificacao(partes, metodo, request, env, db, url) {
   return jsonErro('Endpoint de gamificação não encontrado.', 404);
 }
 
+const WORKSPACE_COLECAO_HANDLERS = {
+  GET: (request, env, db, url) => workspaceRoutes.listarWorkspaceItens(request, env, db, url),
+  POST: (request, env, db) => workspaceRoutes.criarWorkspaceItem(request, env, db),
+  DELETE: (request, env, db) => workspaceRoutes.apagarTodosWorkspaceItens(request, env, db),
+};
+
+const WORKSPACE_ITEM_HANDLERS = {
+  GET: (request, env, db, id) => workspaceRoutes.obterWorkspaceItem(request, env, db, id),
+  PUT: (request, env, db, id) => workspaceRoutes.atualizarWorkspaceItem(request, env, db, id),
+  DELETE: (request, env, db, id) => workspaceRoutes.excluirWorkspaceItem(request, env, db, id),
+};
+
+/**
+ * Roteia requisições do Workspace estilo Notion e Hub de Ideias (/api/workspace/*)
+ */
+async function rotearWorkspace(partes, metodo, request, env, db, url) {
+  if (partes.length === 2 && WORKSPACE_COLECAO_HANDLERS[metodo]) {
+    return WORKSPACE_COLECAO_HANDLERS[metodo](request, env, db, url);
+  }
+
+  if (partes.length === 4 && partes[3] === 'status' && metodo === 'PATCH') {
+    return workspaceRoutes.atualizarStatusWorkspaceItem(request, env, db, partes[2]);
+  }
+
+  if (partes.length === 3 && WORKSPACE_ITEM_HANDLERS[metodo]) {
+    return WORKSPACE_ITEM_HANDLERS[metodo](request, env, db, partes[2]);
+  }
+
+  return jsonErro('Endpoint de workspace não encontrado.', 404);
+}
+
+const ROTEADORES_DOMINIO = {
+  auth: (partes, metodo, request, env, db) => rotearAuth(partes, metodo, request, env, db),
+  usuarios: rotearUsuarios,
+  cursos: rotearCursos,
+  modulos: rotearModulos,
+  aulas: rotearAulas,
+  avaliacoes: rotearAvaliacoes,
+  matriculas: rotearMatriculas,
+  certificados: rotearCertificados,
+  dashboard: rotearDashboard,
+  gamificacao: rotearGamificacao,
+  workspace: rotearWorkspace,
+  preferencias: (_partes, metodo, request, env, db) => {
+    if (metodo === 'GET') return userRoutes.obterPreferencias(request, env, db);
+    if (metodo === 'PUT' || metodo === 'POST') return userRoutes.salvarPreferencias(request, env, db);
+    return jsonErro('Método não permitido.', 405);
+  },
+  usabilidade: (partes, metodo, request, env, db) => {
+    if (partes.length !== 3 || partes[2] !== 'sus') {
+      return jsonErro('Endpoint de usabilidade não encontrado.', 404);
+    }
+    if (metodo === 'GET') return usabilityRoutes.obterRelatorioUsabilidadeSus(request, env, db);
+    if (metodo === 'POST') return usabilityRoutes.submeterAvaliacaoSus(request, env, db);
+    return jsonErro('Endpoint de usabilidade não encontrado.', 404);
+  },
+};
+
 /**
  * Despacha a requisição para o roteador correspondente com base nos segmentos da URL.
  */
@@ -284,40 +343,11 @@ async function despacharRotaApi(partes, metodo, request, env, db, url) {
     });
   }
 
-  switch (dominio) {
-    case 'auth':
-      return rotearAuth(partes, metodo, request, env, db);
-    case 'usuarios':
-      return rotearUsuarios(partes, metodo, request, env, db, url);
-    case 'cursos':
-      return rotearCursos(partes, metodo, request, env, db, url);
-    case 'modulos':
-      return rotearModulos(partes, metodo, request, env, db);
-    case 'aulas':
-      return rotearAulas(partes, metodo, request, env, db);
-    case 'avaliacoes':
-      return rotearAvaliacoes(partes, metodo, request, env, db);
-    case 'matriculas':
-      return rotearMatriculas(partes, metodo, request, env, db, url);
-    case 'certificados':
-      return rotearCertificados(partes, metodo, request, env, db, url);
-    case 'dashboard':
-      return rotearDashboard(partes, metodo, request, env, db, url);
-    case 'gamificacao':
-      return rotearGamificacao(partes, metodo, request, env, db, url);
-    case 'preferencias':
-      if (metodo === 'GET') return userRoutes.obterPreferencias(request, env, db);
-      if (metodo === 'PUT' || metodo === 'POST') return userRoutes.salvarPreferencias(request, env, db);
-      return jsonErro('Método não permitido.', 405);
-    case 'usabilidade':
-      if (partes.length === 3 && partes[2] === 'sus') {
-        if (metodo === 'GET') return usabilityRoutes.obterRelatorioUsabilidadeSus(request, env, db);
-        if (metodo === 'POST') return usabilityRoutes.submeterAvaliacaoSus(request, env, db);
-      }
-      return jsonErro('Endpoint de usabilidade não encontrado.', 404);
-    default:
-      return jsonErro('Endpoint não encontrado.', 404);
+  const roteador = ROTEADORES_DOMINIO[dominio];
+  if (!roteador) {
+    return jsonErro('Endpoint não encontrado.', 404);
   }
+  return roteador(partes, metodo, request, env, db, url);
 }
 
 export default {
@@ -344,17 +374,21 @@ export default {
         '/privacy': '/privacy.html',
         '/privacy/': '/privacy.html',
         '/privacidade': '/privacy.html',
-        '/privacidade/': '/privacidade.html',
+        '/privacidade/': '/privacy.html',
       };
       // Normaliza rotas amigáveis jurídicas (/terms e /privacy)
-      const rotaAsset = reescritaLegal[rota] === '/privacidade.html'
-        ? '/privacy.html'
-        : reescritaLegal[rota];
+      const rotaAsset = reescritaLegal[rota];
       if (env.ASSETS) {
         const reqAsset = rotaAsset
           ? new Request(new URL(rotaAsset, url.origin).toString(), request)
           : request;
-        const respostaAsset = await env.ASSETS.fetch(reqAsset);
+        let respostaAsset = await env.ASSETS.fetch(reqAsset);
+        if (rotaAsset && respostaAsset.status >= 300 && respostaAsset.status < 400) {
+          const destinoLocal = respostaAsset.headers.get('Location');
+          if (destinoLocal) {
+            respostaAsset = await env.ASSETS.fetch(new Request(new URL(destinoLocal, url.origin).toString(), request));
+          }
+        }
         return aplicarCabecalhosSeguranca(respostaAsset);
       }
       return aplicarCabecalhosSeguranca(new Response('Frontend não configurado. Binding ASSETS ausente no worker.', {
@@ -375,8 +409,9 @@ export default {
     // Garante existência do admin padrão inicial uma única vez por isolate
     try {
       await garantirAdminPadraoUmaVez(db, env);
-    } catch {
-      // Ignora erro inicial antes do schema
+    } catch (erroInitAdmin) {
+      // Tabela pode ainda não existir antes da primeira migração; segue fluxo normal da API
+      console.warn('Aviso ao verificar usuário admin padrão:', erroInitAdmin?.message || erroInitAdmin);
     }
 
     // Divide a URL em segmentos para roteamento didático sem regex

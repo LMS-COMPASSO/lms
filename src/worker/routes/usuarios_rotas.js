@@ -165,7 +165,8 @@ export async function atualizarUsuario(request, env, db, targetId) {
 }
 
 /**
- * Desativação lógica do usuário (mantém o histórico escolar sem permitir novos logins)
+ * Desativação lógica do usuário (mantém o histórico escolar sem permitir novos logins),
+ * exclusão definitiva das notas/ideias pessoais do Workspace (LGPD Art. 18, VI)
  * e anonimização de registros de pesquisa SUS vinculada (LGPD Art. 16, II — conservação
  * estatística por órgão de pesquisa com desvinculação nominal do titular).
  */
@@ -177,6 +178,12 @@ export async function desativarUsuario(request, env, db, targetId) {
   await db.prepare('UPDATE usuarios SET ativo = 0, atualizado_em = CURRENT_TIMESTAMP WHERE id = ?').bind(id).run();
 
   try {
+    await db.prepare('DELETE FROM estudante_workspace_itens WHERE usuario_id = ?').bind(id).run();
+  } catch {
+    // Ignora caso a tabela workspace ainda não exista ou em mocks reduzidos
+  }
+
+  try {
     await db.prepare(
       "UPDATE avaliacoes_usabilidade_sus SET usuario_id = NULL, nome_participante = 'Participante Anonimizado (LGPD Art. 16, II)' WHERE usuario_id = ?",
     ).bind(id).run();
@@ -184,7 +191,9 @@ export async function desativarUsuario(request, env, db, targetId) {
     // Ignora caso a tabela SUS ainda não exista ou em mocks reduzidos
   }
 
-  return jsonResponse({ mensagem: 'Usuário desativado e registros de pesquisa SUS anonimizados (LGPD Art. 16, II).' });
+  return jsonResponse({
+    mensagem: 'Usuário desativado, itens do Workspace removidos e registros SUS anonimizados (LGPD Art. 16, II e Art. 18, VI).',
+  });
 }
 
 /**

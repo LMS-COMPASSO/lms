@@ -101,6 +101,50 @@ export async function obterAvaliacao(request, env, db, avaliacaoId) {
   return jsonResponse(avaliacao);
 }
 
+function validarQuestoesAvaliacao(questoes) {
+  for (const questao of questoes) {
+    const tipoQ = String(questao?.tipo || 'multipla_escolha');
+    if (!TIPOS_QUESTAO_VALIDOS.includes(tipoQ)) {
+      return 'Tipo de questão inválido. Use "multipla_escolha", "verdadeiro_falso" ou "dissertativa".';
+    }
+    if (!String(questao?.enunciado || '').trim()) {
+      return 'Todas as questões devem possuir enunciado.';
+    }
+  }
+  return null;
+}
+
+async function inserirQuestoesEAlternativas(db, avaliacaoId, questoes) {
+  const insertsAlternativas = [];
+  for (const [indice, questao] of questoes.entries()) {
+    const resultadoQuestao = await db.prepare(`
+      INSERT INTO questoes (avaliacao_id, enunciado, tipo, pontos, ordem)
+      VALUES (?, ?, ?, ?, ?)
+    `).bind(
+      avaliacaoId,
+      questao.enunciado,
+      questao.tipo || 'multipla_escolha',
+      Number(questao.pontos || 1),
+      indice,
+    ).run();
+
+    const questaoId = resultadoQuestao.meta.last_row_id;
+    const alternativas = Array.isArray(questao.alternativas) ? questao.alternativas : [];
+    for (const alt of alternativas) {
+      insertsAlternativas.push(
+        db.prepare(`
+          INSERT INTO alternativas (questao_id, texto, correta)
+          VALUES (?, ?, ?)
+        `).bind(questaoId, alt.texto, alt.correta ? 1 : 0),
+      );
+    }
+  }
+
+  if (insertsAlternativas.length > 0) {
+    await db.batch(insertsAlternativas);
+  }
+}
+
 /**
  * Cria uma nova avaliação com suas questões e alternativas, validando propriedade do curso (IDOR).
  */
@@ -123,67 +167,27 @@ export async function criarAvaliacao(request, env, db, moduloId) {
 
   const body = await readJsonBody(request);
   const titulo = String(body.titulo || '').trim();
-
   if (!titulo) {
     return jsonErro('Título da avaliação é obrigatório.', 400);
   }
 
   const questoes = Array.isArray(body.questoes) ? body.questoes : [];
-  for (const questao of questoes) {
-    const tipoQ = String(questao?.tipo || 'multipla_escolha');
-    if (!TIPOS_QUESTAO_VALIDOS.includes(tipoQ)) {
-      return jsonErro('Tipo de questão inválido. Use "multipla_escolha", "verdadeiro_falso" ou "dissertativa".', 400);
-    }
-    if (!String(questao?.enunciado || '').trim()) {
-      return jsonErro('Todas as questões devem possuir enunciado.', 400);
-    }
+  const erroQuestoes = validarQuestoesAvaliacao(questoes);
+  if (erroQuestoes) {
+    return jsonErro(erroQuestoes, 400);
   }
 
-  const notaMinima = Math.min(10, Math.max(0, Number.isFinite(Number(body.nota_minima)) ? Number(body.nota_minima) : 6));
+  const notaBruta = Number(body.nota_minima);
+  const notaMinima = Math.min(10, Math.max(0, Number.isFinite(notaBruta) ? notaBruta : 6));
   const tentativasPermitidas = Math.max(1, Number.parseInt(body.tentativas_permitidas, 10) || 3);
 
   const assessment = await db.prepare(`
     INSERT INTO avaliacoes (modulo_id, titulo, descricao, nota_minima, tentativas_permitidas)
     VALUES (?, ?, ?, ?, ?)
-  `).bind(
-    id,
-    titulo,
-    body.descricao || null,
-    notaMinima,
-    tentativasPermitidas,
-  ).run();
+  `).bind(id, titulo, body.descricao || null, notaMinima, tentativasPermitidas).run();
 
   const avaliacaoId = assessment.meta.last_row_id;
-  const insertsAlternativas = [];
-
-  for (const [indice, questao] of questoes.entries()) {
-    const resultadoQuestao = await db.prepare(`
-      INSERT INTO questoes (avaliacao_id, enunciado, tipo, pontos, ordem)
-      VALUES (?, ?, ?, ?, ?)
-    `).bind(
-      avaliacaoId,
-      questao.enunciado,
-      questao.tipo || 'multipla_escolha',
-      Number(questao.pontos || 1),
-      indice,
-    ).run();
-
-    const questaoId = resultadoQuestao.meta.last_row_id;
-    const alternativas = Array.isArray(questao.alternativas) ? questao.alternativas : [];
-
-    for (const alt of alternativas) {
-      insertsAlternativas.push(
-        db.prepare(`
-          INSERT INTO alternativas (questao_id, texto, correta)
-          VALUES (?, ?, ?)
-        `).bind(questaoId, alt.texto, alt.correta ? 1 : 0),
-      );
-    }
-  }
-
-  if (insertsAlternativas.length > 0) {
-    await db.batch(insertsAlternativas);
-  }
+  await inserirQuestoesEAlternativas(db, avaliacaoId, questoes);
 
   return jsonResponse({ id: avaliacaoId, titulo }, 201);
 }

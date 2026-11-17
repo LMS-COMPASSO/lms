@@ -10,6 +10,7 @@
 
 import { anunciar, criarFeedback, h } from './dom.js';
 import { tocarSom, criarBotaoSom } from './som.js';
+import { t, atvBlocoRotulo, atvConclusao, atvInstrucao } from './traducao.js';
 
 export function jogadorBlocos(atividade, ctx) {
   let tentativas = 0;
@@ -285,7 +286,7 @@ export function jogadorBlocos(atividade, ctx) {
       painelWorkspace.appendChild(
         h('div', { class: 'blocos-vazio' },
           h('span', { class: 'material-symbols-outlined' }, 'drag_indicator'),
-          h('p', {}, 'Clique nos blocos ao lado para adicionar ao seu programa.'),
+          h('p', {}, t('blocos.workspaceVazio')),
         ),
       );
     } else {
@@ -296,7 +297,7 @@ export function jogadorBlocos(atividade, ctx) {
       painelWorkspace.appendChild(listaEl);
     }
 
-    painelCodigo.textContent = `// Código JavaScript gerado pelo seu algoritmo:\n\n${gerarCodigoTexto(programa) || '// Adicione blocos para ver o código.'}`;
+    painelCodigo.textContent = `${t('blocos.codigoCabecalho')}\n\n${gerarCodigoTexto(programa) || t('blocos.codigoVazio')}`;
   }
 
   function criarElementoBloco(cmd, listaMae, idx) {
@@ -306,7 +307,7 @@ export function jogadorBlocos(atividade, ctx) {
     const el = h('div', { class: 'bloco-item', style: `--bloco-cor: ${cor}` });
 
     const topo = h('div', { class: 'bloco-topo' });
-    topo.appendChild(h('span', { class: 'bloco-rotulo' }, modelo?.rotulo || cmd.tipo));
+    topo.appendChild(h('span', { class: 'bloco-rotulo' }, atvBlocoRotulo(atividade.id, modelo) || cmd.tipo));
 
     if (cmd.tipo === 'repetir') {
       const inputVezes = h('input', {
@@ -315,12 +316,13 @@ export function jogadorBlocos(atividade, ctx) {
         max: '12',
         value: cmd.vezes || 4,
         class: 'bloco-input-vezes',
+        'aria-label': t('blocos.vezesAria'),
         onchange: (e) => {
           cmd.vezes = Math.max(1, Math.min(12, Number(e.target.value) || 1));
           atualizarListaWorkspace();
         },
       });
-      topo.appendChild(h('span', { class: 'bloco-vezes-wrap' }, 'repetir ', inputVezes, ' vezes:'));
+      topo.appendChild(h('span', { class: 'bloco-vezes-wrap' }, `${t('blocos.repetirPrefixo')} `, inputVezes, ` ${t('blocos.repetirSufixo')}`));
     }
 
     const acoes = h('div', { class: 'bloco-acoes' });
@@ -329,7 +331,8 @@ export function jogadorBlocos(atividade, ctx) {
     if (idx > 0) {
       acoes.appendChild(h('button', {
         class: 'btn-bloco-acao',
-        title: 'Mover para cima',
+        title: t('blocos.moverCima'),
+        'aria-label': t('blocos.moverCima'),
         onclick: () => {
           tocarSom('mover');
           [listaMae[idx - 1], listaMae[idx]] = [listaMae[idx], listaMae[idx - 1]];
@@ -342,7 +345,8 @@ export function jogadorBlocos(atividade, ctx) {
     if (idx < listaMae.length - 1) {
       acoes.appendChild(h('button', {
         class: 'btn-bloco-acao',
-        title: 'Mover para baixo',
+        title: t('blocos.moverBaixo'),
+        'aria-label': t('blocos.moverBaixo'),
         onclick: () => {
           tocarSom('mover');
           [listaMae[idx + 1], listaMae[idx]] = [listaMae[idx], listaMae[idx + 1]];
@@ -354,7 +358,8 @@ export function jogadorBlocos(atividade, ctx) {
     // Botão remover
     acoes.appendChild(h('button', {
       class: 'btn-bloco-remover',
-      title: 'Excluir bloco',
+      title: t('blocos.excluir'),
+      'aria-label': t('blocos.excluir'),
       onclick: () => {
         tocarSom('click');
         listaMae.splice(idx, 1);
@@ -371,7 +376,7 @@ export function jogadorBlocos(atividade, ctx) {
       cmd.filhos = cmd.filhos || [];
 
       if (cmd.filhos.length === 0) {
-        filhosWrap.appendChild(h('p', { class: 'bloco-filhos-vazio' }, 'Encaixe blocos aqui dentro:'));
+        filhosWrap.appendChild(h('p', { class: 'bloco-filhos-vazio' }, t('blocos.filhosVazio')));
       } else {
         cmd.filhos.forEach((filhoCmd, fIdx) => {
           filhosWrap.appendChild(criarElementoBloco(filhoCmd, cmd.filhos, fIdx));
@@ -388,7 +393,7 @@ export function jogadorBlocos(atividade, ctx) {
             cmd.filhos.push({ id: `cmd-${Date.now()}-${Math.random()}`, tipo: bDisp.id });
             atualizarListaWorkspace();
           },
-        }, `+ ${bDisp.rotulo}`));
+        }, `+ ${atvBlocoRotulo(atividade.id, bDisp)}`));
       });
 
       filhosWrap.appendChild(seletorFilho);
@@ -402,8 +407,8 @@ export function jogadorBlocos(atividade, ctx) {
   async function executarAlgoritmo() {
     if (executando) return;
     if (programa.length === 0) {
-      feedback.erro('Programa vazio', 'Adicione blocos ao seu programa antes de executar.');
-      anunciar('Programa vazio. Adicione blocos para começar.');
+      feedback.erro(t('blocos.progVazioTitulo'), t('blocos.progVazioDesc'));
+      anunciar(t('blocos.progVazioAria'));
       return;
     }
 
@@ -432,7 +437,7 @@ export function jogadorBlocos(atividade, ctx) {
         if (typeof window !== 'undefined' && window.gsap) {
           window.gsap.to(canvasPalco, { x: -6, repeat: 4, yoyo: true, duration: 0.05, clearProps: 'x' });
         }
-        feedback.erro('Colisão!', 'O robô bateu em um obstáculo. Reveja seu caminho e tente novamente.');
+        feedback.erro(t('blocos.colisaoTitulo'), t('blocos.colisaoDesc'));
         break;
       }
 
@@ -516,7 +521,7 @@ export function jogadorBlocos(atividade, ctx) {
       const cur = dirs.indexOf(estadoSimulacao.dir);
       estadoSimulacao.dir = dirs[(cur + 3) % 4];
     } else if (passo.tipo === 'falar') {
-      estadoSimulacao.fala = 'Cheguei ao meu destino!';
+      estadoSimulacao.fala = t('blocos.falaCheguei');
     }
   }
 
@@ -541,7 +546,7 @@ export function jogadorBlocos(atividade, ctx) {
       const cores = ['#ef4444', '#10b981', '#f59e0b', '#8b5cf6', '#06b6d4'];
       estadoSimulacao.cor = cores[Math.floor(Math.random() * cores.length)];
     } else if (passo.tipo === 'falar') {
-      estadoSimulacao.fala = 'Desenho finalizado!';
+      estadoSimulacao.fala = t('blocos.falaDesenho');
     }
   }
 
@@ -552,7 +557,7 @@ export function jogadorBlocos(atividade, ctx) {
       if (estadoSimulacao.x === meta.alvo.x && estadoSimulacao.y === meta.alvo.y) {
         void finalizarComVitoria(3);
       } else {
-        feedback.info('Quase lá!', 'O robô não colidiu, mas ainda não chegou ao alvo 🎯. Tente estender o programa.');
+        feedback.info(t('ordenar.quaseLa'), t('blocos.naoChegouAlvo'));
       }
       return;
     }
@@ -561,7 +566,7 @@ export function jogadorBlocos(atividade, ctx) {
       // Checa se usou laço se exigido
       const temLoop = programa.some((p) => p.tipo === 'repetir' && p.filhos?.length > 0);
       if (meta.exigirLoop && !temLoop) {
-        feedback.info('Boa tentativa!', 'Você desenhou, mas a missão exige usar o bloco "Repetir [N] vezes" para tornar o código conciso e elegante.');
+        feedback.info(t('blocos.boaTentativa'), t('blocos.exigeLoop'));
         return;
       }
 
@@ -572,7 +577,7 @@ export function jogadorBlocos(atividade, ctx) {
         else if (tentativas <= 4) estrelas = 2;
         void finalizarComVitoria(estrelas);
       } else {
-        feedback.info('Desenho incompleto', `O robô traçou ${estadoSimulacao.ladosContados} lados, mas a figura exige ${meta.lados}.`);
+        feedback.info(t('blocos.incompletoTitulo'), t('blocos.incompletoDesc', { tracados: estadoSimulacao.ladosContados, meta: meta.lados }));
       }
     }
   }
@@ -582,8 +587,9 @@ export function jogadorBlocos(atividade, ctx) {
     if (typeof window !== 'undefined' && window.gsap) {
       window.gsap.fromTo(canvasPalco, { scale: 0.95 }, { scale: 1, duration: 0.4, ease: 'back.out(2)' });
     }
-    feedback.sucesso('Missão Concluída! ⭐⭐⭐', atividade.conclusao);
-    anunciar(`Parabéns! ${atividade.conclusao}`);
+    const textoConclusao = atvConclusao(atividade);
+    feedback.sucesso(t('blocos.missaoConcluida'), textoConclusao);
+    anunciar(t('blocos.anuncioVitoria', { conclusao: textoConclusao }));
 
     let pontuacaoEstrelas = 7.0;
     if (estrelas === 3) pontuacaoEstrelas = 10.0;
@@ -612,12 +618,12 @@ export function jogadorBlocos(atividade, ctx) {
 
   // Montagem do painel de blocos disponíveis (Paleta)
   const paletaEl = h('div', { class: 'blocos-paleta' });
-  paletaEl.appendChild(h('h3', { class: 'blocos-secao-titulo' }, 'Paleta de Blocos'));
+  paletaEl.appendChild(h('h3', { class: 'blocos-secao-titulo' }, t('blocos.paletaTitulo')));
 
   const categorias = [
-    { id: 'movimento', titulo: 'Movimento' },
-    { id: 'controle', titulo: 'Controle e Laços' },
-    { id: 'aparencia', titulo: 'Aparência e Arte' },
+    { id: 'movimento', titulo: t('blocos.cat.movimento') },
+    { id: 'controle', titulo: t('blocos.cat.controle') },
+    { id: 'aparencia', titulo: t('blocos.cat.aparencia') },
   ];
 
   for (const cat of categorias) {
@@ -641,7 +647,7 @@ export function jogadorBlocos(atividade, ctx) {
           });
           atualizarListaWorkspace();
         },
-      }, b.rotulo));
+      }, atvBlocoRotulo(atividade.id, b)));
     });
 
     paletaEl.appendChild(grupo);
@@ -653,7 +659,7 @@ export function jogadorBlocos(atividade, ctx) {
       h('button', {
         class: 'btn btn-primario btn-sm flex-inline-icon',
         onclick: () => executarAlgoritmo(),
-      }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'play_arrow'), ' Executar Programa'),
+      }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'play_arrow'), ` ${t('blocos.executarPrograma')}`),
       h('button', {
         class: 'btn btn-contorno-escuro btn-sm flex-inline-icon',
         onclick: () => {
@@ -662,7 +668,7 @@ export function jogadorBlocos(atividade, ctx) {
           feedback.limpar();
           desenharPalco();
         },
-      }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'refresh'), ' Reiniciar Palco'),
+      }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'refresh'), ` ${t('blocos.reiniciarPalco')}`),
       h('button', {
         class: 'btn btn-contorno-escuro btn-sm flex-inline-icon',
         onclick: () => {
@@ -675,12 +681,12 @@ export function jogadorBlocos(atividade, ctx) {
             painelWorkspace.classList.remove('oculto');
           }
         },
-      }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'code'), ' Ver Código'),
+      }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'code'), ` ${t('blocos.verCodigo')}`),
       criarBotaoSom(),
     ),
     h('div', { class: 'blocos-dica-meta' },
       h('span', { class: 'material-symbols-outlined icon-xs' }, 'info'),
-      h('span', {}, atividade.instrucao),
+      h('span', {}, atvInstrucao(atividade)),
     ),
   );
 
@@ -692,14 +698,14 @@ export function jogadorBlocos(atividade, ctx) {
     h('div', { class: 'blocos-coluna-esquerda' },
       paletaEl,
       h('div', { class: 'blocos-workspace-wrap' },
-        h('h3', { class: 'blocos-secao-titulo' }, 'Área do Programa (Algoritmo)'),
+        h('h3', { class: 'blocos-secao-titulo' }, t('blocos.areaPrograma')),
         painelWorkspace,
         painelCodigo,
       ),
     ),
     h('div', { class: 'blocos-coluna-direita' },
       h('div', { class: 'blocos-palco-wrap' },
-        h('h3', { class: 'blocos-secao-titulo' }, 'Palco de Execução'),
+        h('h3', { class: 'blocos-secao-titulo' }, t('blocos.palcoExecucao')),
         canvasPalco,
         balaoFala,
       ),

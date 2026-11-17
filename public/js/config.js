@@ -28,16 +28,40 @@ window.LMS_API_BASE = overrideApi || DEFAULT_API;
 // GERENCIADOR DE TEMA ESCURO / CLARO / SISTEMA AUTOMÁTICO (WCAG 2.2 AA)
 // ============================================================================
 (function () {
+  function lerStorageSeguro(chave, padrao = null) {
+    try {
+      return localStorage.getItem(chave);
+    } catch (erroStorage) {
+      console.warn(`Leitura localStorage indisponível (${chave}):`, erroStorage?.message || erroStorage);
+      return padrao;
+    }
+  }
+
+  function gravarStorageSeguro(chave, valor) {
+    try {
+      localStorage.setItem(chave, valor);
+    } catch (erroStorage) {
+      console.warn(`Gravação localStorage indisponível (${chave}):`, erroStorage?.message || erroStorage);
+    }
+  }
+
+  function removerStorageSeguro(chave) {
+    try {
+      localStorage.removeItem(chave);
+    } catch (erroStorage) {
+      console.warn(`Remoção localStorage indisponível (${chave}):`, erroStorage?.message || erroStorage);
+    }
+  }
+
+  function prefereTemaEscuroSistema() {
+    return Boolean(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  }
+
   function aplicarTema(tema) {
     let temaFinal = tema;
     if (!temaFinal) {
-      try {
-        const temaSalvo = localStorage.getItem('lms_tema');
-        const prefereEscuro = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-        temaFinal = temaSalvo || (prefereEscuro ? 'escuro' : 'claro');
-      } catch {
-        temaFinal = 'claro';
-      }
+      const temaSalvo = lerStorageSeguro('lms_tema', null);
+      temaFinal = temaSalvo || (prefereTemaEscuroSistema() ? 'escuro' : 'claro');
     }
     document.documentElement.setAttribute('data-tema', temaFinal);
     if (document.body) {
@@ -52,47 +76,44 @@ window.LMS_API_BASE = overrideApi || DEFAULT_API;
   function aplicarPreferenciasA11yLocais() {
     if (typeof document === 'undefined') return;
     ['alto-contraste', 'fonte-ampliada', 'reduzir-movimento'].forEach(function (chave) {
-      try {
-        if (localStorage.getItem('lms_a11y_' + chave) === '1') {
-          document.documentElement.classList.add('a11y-' + chave);
-        }
-      } catch {}
+      if (lerStorageSeguro('lms_a11y_' + chave) === '1') {
+        document.documentElement.classList.add('a11y-' + chave);
+      }
     });
   }
   aplicarPreferenciasA11yLocais();
 
-  if (typeof window !== 'undefined') {
-    window.obterTemaAtual = function () {
-      return document.documentElement.getAttribute('data-tema') || 'claro';
-    };
+  if (typeof window === 'undefined') return;
 
-    window.definirTemaLMS = function (tema) {
-      if (tema === 'auto') {
-        try { localStorage.removeItem('lms_tema'); } catch {}
-        const prefereEscuro = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-        aplicarTema(prefereEscuro ? 'escuro' : 'claro');
-      } else {
-        try { localStorage.setItem('lms_tema', tema); } catch {}
-        aplicarTema(tema);
-      }
-      try {
-        window.dispatchEvent(new CustomEvent('temaAlterado', { detail: { tema } }));
-      } catch {}
-    };
+  window.obterTemaAtual = function () {
+    return document.documentElement.getAttribute('data-tema') || 'claro';
+  };
 
-    if (window.matchMedia) {
-      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-        try {
-          if (!localStorage.getItem('lms_tema')) {
-            aplicarTema(e.matches ? 'escuro' : 'claro');
-            window.dispatchEvent(new CustomEvent('temaAlterado', { detail: { tema: e.matches ? 'escuro' : 'claro' } }));
-          }
-        } catch {}
-      });
+  window.definirTemaLMS = function (tema) {
+    if (tema === 'auto') {
+      removerStorageSeguro('lms_tema');
+      aplicarTema(prefereTemaEscuroSistema() ? 'escuro' : 'claro');
+    } else {
+      gravarStorageSeguro('lms_tema', tema);
+      aplicarTema(tema);
     }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', () => aplicarTema());
+    try {
+      window.dispatchEvent(new CustomEvent('temaAlterado', { detail: { tema } }));
+    } catch (erroEvento) {
+      console.warn('Falha ao notificar troca de tema:', erroEvento?.message || erroEvento);
     }
+  };
+
+  if (window.matchMedia) {
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      if (lerStorageSeguro('lms_tema')) return;
+      const temaSistema = e.matches ? 'escuro' : 'claro';
+      aplicarTema(temaSistema);
+      window.dispatchEvent(new CustomEvent('temaAlterado', { detail: { tema: temaSistema } }));
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => aplicarTema());
   }
 })();

@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Planos &amp; Assinaturas — LMS COMPASSO</title>
-<meta name="description" content="Conheça os planos, assinaturas e modelos de contratação institucional do LMS COMPASSO: plano educacional gratuito, planos escaláveis por alunos e contratação pública via Marco Legal das Startups e Dispensa de Licitação.">
+<meta name="i18n-title" content="planosPage.metaTitulo">
+<meta name="description" data-i18n-attr="content:planosPage.metaDesc" content="Conheça os planos, assinaturas e modelos de contratação institucional do LMS COMPASSO: plano educacional gratuito, planos escaláveis por alunos e contratação pública via Marco Legal das Startups e Dispensa de Licitação.">
 <link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,23 +15,23 @@
 <link rel="stylesheet" href="/css/planos.css">
 </head>
 <body class="pagina-planos">
-  <a class="pular-conteudo" href="#conteudo">Pular para o conteúdo principal</a>
+  <a class="pular-conteudo" href="#conteudo" data-i18n="a11y.pularConteudo">Pular para o conteúdo principal</a>
 
   <!-- Topo de Navegação -->
   <header class="planos-topo" role="banner">
     <div class="planos-topo-conteudo">
-      <a href="/" class="pub-logo" aria-label="LMS COMPASSO — página inicial">
-        <img src="/img/logo.svg" alt="LMS COMPASSO — BNCC Computação" width="220" height="52" class="logo-tema-claro">
-        <img src="/img/logo-branco.svg" alt="LMS COMPASSO — BNCC Computação" width="220" height="52" class="logo-tema-escuro">
+      <a href="/" class="pub-logo" aria-label="LMS COMPASSO — página inicial" data-i18n-aria-label="nav.logoAriaLabel">
+        <img src="/img/logo.svg" alt="LMS COMPASSO — BNCC Computação" data-i18n-attr="alt:nav.logoAlt" width="220" height="52" class="logo-tema-claro">
+        <img src="/img/logo-branco.svg" alt="LMS COMPASSO — BNCC Computação" data-i18n-attr="alt:nav.logoAlt" width="220" height="52" class="logo-tema-escuro">
       </a>
       <div class="planos-topo-acoes">
-        <a href="/" class="btn btn-sm btn-neutro flex-inline-icon" title="Voltar para a página inicial">
+        <a href="/" class="btn btn-sm btn-neutro flex-inline-icon" title="Voltar para a página inicial" data-i18n-title="planosPage.voltarInicioTitle">
           <span class="material-symbols-outlined icon-xs" aria-hidden="true">arrow_back</span>
-          <span>Voltar</span>
+          <span data-i18n="comum.voltar">Voltar</span>
         </a>
         <a href="/login.html" class="btn btn-sm btn-primario flex-inline-icon" id="btn-login-planos">
           <span class="material-symbols-outlined icon-xs" aria-hidden="true">account_circle</span>
-          <span>Entrar</span>
+          <span data-i18n="nav.entrar">Entrar</span>
         </a>
       </div>
     </div>
@@ -39,29 +40,29 @@
   <main id="conteudo" class="planos-secao-principal" tabindex="-1">
     <a href="/" class="planos-voltar-link">
       <span class="material-symbols-outlined icon-xs" aria-hidden="true">arrow_back</span>
-      <span>Voltar</span>
+      <span data-i18n="comum.voltar">Voltar</span>
     </a>
 
     <!-- Cabeçalho Principal -->
     <div class="planos-cabecalho">
-      <h1 class="planos-titulo">Planos</h1>
-      <p class="planos-subtitulo">
+      <h1 class="planos-titulo" data-i18n="planosPage.titulo">Planos</h1>
+      <p class="planos-subtitulo" data-i18n="planosPage.subtitulo">
         Planos educacionais escaláveis desenhados para professores, escolas e redes de ensino aplicarem a BNCC Computação com atividades digitais e desplugadas (Resolução CNE nº 2/2025).
       </p>
 
       <!-- Seletor de Período de Cobrança -->
-      <div class="planos-periodo-wrap" role="group" aria-label="Período de cobrança">
-        <span class="planos-periodo-rotulo">Período de cobrança:</span>
+      <div class="planos-periodo-wrap" role="group" aria-label="Período de cobrança" data-i18n-aria-label="planosPage.periodoAria">
+        <span class="planos-periodo-rotulo" data-i18n="planosPage.periodoRotulo">Período de cobrança:</span>
         <div class="planos-periodo-pills">
           <button type="button" class="planos-periodo-btn" id="btn-periodo-mes" onclick="selecionarPeriodo('mes')">
-            <span>Mês</span>
+            <span data-i18n="planosPage.periodoMes">Mês</span>
           </button>
           <button type="button" class="planos-periodo-btn" id="btn-periodo-semestre" onclick="selecionarPeriodo('semestre')">
-            <span>6 meses</span>
+            <span data-i18n="planosPage.periodo6Meses">6 meses</span>
             <span class="planos-desconto-tag">-35%</span>
           </button>
           <button type="button" class="planos-periodo-btn ativo" id="btn-periodo-ano" onclick="selecionarPeriodo('ano')">
-            <span>1 ano</span>
+            <span data-i18n="planosPage.periodo1Ano">1 ano</span>
             <span class="planos-desconto-tag">-50%</span>
           </button>
         </div>
@@ -69,52 +70,52 @@
     </div>
 
     <!-- Grade de Cards de Planos -->
-    <section class="planos-grid" aria-label="Opções de Planos de Assinatura">
+    <section class="planos-grid" aria-label="Opções de Planos de Assinatura" data-i18n-aria-label="planosPage.opcoesAria">
       <!-- Card 1: Assinatura Gratuita -->
       <article class="plano-card" aria-labelledby="titulo-plano-gratis">
         <div>
-          <h2 class="plano-titulo" id="titulo-plano-gratis">Assinatura gratuita</h2>
-          <p class="plano-desc">
+          <h2 class="plano-titulo" id="titulo-plano-gratis" data-i18n="planosPage.gratisTitulo">Assinatura gratuita</h2>
+          <p class="plano-desc" data-i18n-html="planosPage.gratisDesc">
             Para lançar cursos gratuitos e atrair um público de <strong>Até 200 alunos</strong>.
           </p>
 
           <div class="plano-preco-box">
-            <div class="plano-preco-principal">Grátis</div>
-            <div class="plano-preco-sub">Sem necessidade de cartão de crédito</div>
+            <div class="plano-preco-principal" data-i18n="planosPage.gratisPreco">Grátis</div>
+            <div class="plano-preco-sub" data-i18n="planosPage.gratisSub">Sem necessidade de cartão de crédito</div>
           </div>
 
-          <a href="/registrar.html?plano=gratis" class="plano-btn" id="btn-ativar-gratis">
+          <a href="/registrar.html?plano=gratis" class="plano-btn" id="btn-ativar-gratis" data-i18n="planosPage.gratisBtn">
             Ativar
           </a>
 
-          <ul class="plano-features" aria-label="Recursos inclusos no plano gratuito">
+          <ul class="plano-features" aria-label="Recursos inclusos no plano gratuito" data-i18n-aria-label="planosPage.gratisFeaturesAria">
             <li class="plano-feature-item">
               <span class="material-symbols-outlined plano-check-icon" aria-hidden="true">check_circle</span>
-              <span><strong>1 academia</strong> (escola ou polo cadastrado)</span>
+              <span data-i18n-html="planosPage.gf1"><strong>1 academia</strong> (escola ou polo cadastrado)</span>
             </li>
             <li class="plano-feature-item">
               <span class="material-symbols-outlined plano-check-icon" aria-hidden="true">check_circle</span>
-              <span><strong>1 curso</strong> ou trilha ativa</span>
+              <span data-i18n-html="planosPage.gf2"><strong>1 curso</strong> ou trilha ativa</span>
             </li>
             <li class="plano-feature-item">
               <span class="material-symbols-outlined plano-check-icon" aria-hidden="true">check_circle</span>
-              <span><strong>1 instrutor</strong> com painel de gestão</span>
+              <span data-i18n-html="planosPage.gf3"><strong>1 instrutor</strong> com painel de gestão</span>
             </li>
             <li class="plano-feature-item">
               <span class="material-symbols-outlined plano-check-icon" aria-hidden="true">check_circle</span>
-              <span><strong>1 GB</strong> espaço de armazenamento de arquivos</span>
+              <span data-i18n-html="planosPage.gf4"><strong>1 GB</strong> espaço de armazenamento de arquivos</span>
             </li>
             <li class="plano-feature-item">
               <span class="material-symbols-outlined plano-check-icon" aria-hidden="true">check_circle</span>
-              <span><strong>30 dias de suporte por chat</strong> <span class="plano-info-tag" title="Suporte direto pela equipe técnica e comunidade de educadores">ⓘ</span></span>
+              <span><span data-i18n-html="planosPage.gf5"><strong>30 dias de suporte por chat</strong></span> <span class="plano-info-tag" title="Suporte direto pela equipe técnica e comunidade de educadores" data-i18n-title="planosPage.gf5Info">ⓘ</span></span>
             </li>
             <li class="plano-feature-item">
               <span class="material-symbols-outlined plano-check-icon" aria-hidden="true">check_circle</span>
-              <span>Catálogo completo da BNCC Computação (3 eixos estruturantes)</span>
+              <span data-i18n="planosPage.gf6">Catálogo completo da BNCC Computação (3 eixos estruturantes)</span>
             </li>
             <li class="plano-feature-item">
               <span class="material-symbols-outlined plano-check-icon" aria-hidden="true">check_circle</span>
-              <span>Fichas desplugadas em PDF para impressão A4 sem tela</span>
+              <span data-i18n="planosPage.gf7">Fichas desplugadas em PDF para impressão A4 sem tela</span>
             </li>
           </ul>
         </div>
@@ -122,17 +123,17 @@
 
       <!-- Card 2: Plano Escalável Interativo com Slider -->
       <article class="plano-card plano-destaque" aria-labelledby="titulo-plano-escola">
-        <span class="plano-badge-popular">Mais Escolhido</span>
+        <span class="plano-badge-popular" data-i18n="planosPage.badgePopular">Mais Escolhido</span>
         <div>
           <!-- Slider Interativo de Alunos -->
           <div class="plano-slider-topo">
             <div class="plano-slider-contador">
               <span class="plano-slider-num" id="contador-alunos">1 000</span>
-              <span class="plano-slider-label">alunos</span>
+              <span class="plano-slider-label" data-i18n="planosPage.alunosLabel">alunos</span>
             </div>
 
             <div class="plano-slider-container">
-              <label for="slider-alunos" class="sr-only">Selecione o número de alunos atendidos</label>
+              <label for="slider-alunos" class="sr-only" data-i18n="planosPage.sliderLabelSr">Selecione o número de alunos atendidos</label>
               <input
                 type="range"
                 id="slider-alunos"
@@ -147,6 +148,7 @@
                 aria-valuenow="1000"
                 aria-valuetext="1 000 alunos"
                 aria-label="Controle de quantidade de alunos atendidos na escola"
+                data-i18n-aria-label="planosPage.sliderAria"
               >
               <div class="plano-slider-ticks" aria-hidden="true">
                 <button type="button" class="plano-tick-label ativo" tabindex="-1" onclick="definirPassoSlider(0)">1k</button>
@@ -165,26 +167,26 @@
           <div class="plano-preco-box">
             <div class="plano-preco-principal">
               <span id="valor-preco">150</span>
-              <span class="plano-preco-moeda">BRL / mês</span>
+              <span class="plano-preco-moeda" data-i18n="planosPage.moedaMes">BRL / mês</span>
             </div>
             <div class="plano-preco-sub" id="legenda-economia">
               Pagamento anual mais barato 150 BRL / mês (-50%)
             </div>
           </div>
 
-          <button type="button" class="plano-btn" id="btn-comprar-plano" onclick="abrirModalContrato()">
+          <button type="button" class="plano-btn" id="btn-comprar-plano" onclick="abrirModalContrato()" data-i18n="planosPage.comprarBtn">
             Comprar
           </button>
 
           <!-- Lista de Recursos Escaláveis -->
-          <ul class="plano-features" aria-label="Recursos inclusos no plano avançado">
+          <ul class="plano-features" aria-label="Recursos inclusos no plano avançado" data-i18n-aria-label="planosPage.proFeaturesAria">
             <li class="plano-feature-item">
               <span class="material-symbols-outlined plano-check-icon" aria-hidden="true">check_circle</span>
               <span id="feat-academias">Até 2 academias</span>
             </li>
             <li class="plano-feature-item">
               <span class="material-symbols-outlined plano-check-icon" aria-hidden="true">check_circle</span>
-              <span><strong>Cursos ilimitados</strong></span>
+              <span data-i18n-html="planosPage.pfCursos"><strong>Cursos ilimitados</strong></span>
             </li>
             <li class="plano-feature-item">
               <span class="material-symbols-outlined plano-check-icon" aria-hidden="true">check_circle</span>
@@ -192,47 +194,47 @@
             </li>
             <li class="plano-feature-item">
               <span class="material-symbols-outlined plano-check-icon" aria-hidden="true">check_circle</span>
-              <span><strong id="feat-storage">15 GB</strong> espaço de armazenamento de arquivos <a href="#faq-planos" class="plano-info-tag">Comprar mais</a></span>
+              <span><strong id="feat-storage">15 GB</strong> <span data-i18n="planosPage.pfStorageText">espaço de armazenamento de arquivos</span> <a href="#faq-planos" class="plano-info-tag" data-i18n="planosPage.pfComprarMais">Comprar mais</a></span>
             </li>
             <li class="plano-feature-item">
               <span class="material-symbols-outlined plano-check-icon" aria-hidden="true">check_circle</span>
-              <span>Link personalizado do curso</span>
+              <span data-i18n="planosPage.pf1">Link personalizado do curso</span>
             </li>
             <li class="plano-feature-item">
               <span class="material-symbols-outlined plano-check-icon" aria-hidden="true">check_circle</span>
-              <span>Cursos pagos e turmas institucionais</span>
+              <span data-i18n="planosPage.pf2">Cursos pagos e turmas institucionais</span>
             </li>
             <li class="plano-feature-item">
               <span class="material-symbols-outlined plano-check-icon" aria-hidden="true">check_circle</span>
-              <span>Sem o logo da LMS COMPASSO (marca própria da escola)</span>
+              <span data-i18n="planosPage.pf3">Sem o logo da LMS COMPASSO (marca própria da escola)</span>
             </li>
             <li class="plano-feature-item">
               <span class="material-symbols-outlined plano-check-icon" aria-hidden="true">check_circle</span>
-              <span>Número ilimitado de lições de casa e atividades</span>
+              <span data-i18n="planosPage.pf4">Número ilimitado de lições de casa e atividades</span>
             </li>
             <li class="plano-feature-item">
               <span class="material-symbols-outlined plano-check-icon" aria-hidden="true">check_circle</span>
-              <span>Diário Escolar (CSV) com consolidação de habilidades</span>
+              <span data-i18n="planosPage.pf5">Diário Escolar (CSV) com consolidação de habilidades</span>
             </li>
             <li class="plano-feature-item">
               <span class="material-symbols-outlined plano-check-icon" aria-hidden="true">check_circle</span>
-              <span>Auditoria de Tempo de Tela e Desplugadas (Resolução CNE nº 2/2025)</span>
+              <span data-i18n="planosPage.pf6">Auditoria de Tempo de Tela e Desplugadas (Resolução CNE nº 2/2025)</span>
             </li>
             <li class="plano-feature-item">
               <span class="material-symbols-outlined plano-check-icon" aria-hidden="true">check_circle</span>
-              <span>Visualização e edição do histórico do curso</span>
+              <span data-i18n="planosPage.pf7">Visualização e edição do histórico do curso</span>
             </li>
             <li class="plano-feature-item">
               <span class="material-symbols-outlined plano-check-icon" aria-hidden="true">check_circle</span>
-              <span>Tempo limite para conclusão do curso</span>
+              <span data-i18n="planosPage.pf8">Tempo limite para conclusão do curso</span>
             </li>
             <li class="plano-feature-item">
               <span class="material-symbols-outlined plano-check-icon" aria-hidden="true">check_circle</span>
-              <span>Avaliações de alunos e métricas SUS no curso</span>
+              <span data-i18n="planosPage.pf9">Avaliações de alunos e métricas SUS no curso</span>
             </li>
             <li class="plano-feature-item">
               <span class="material-symbols-outlined plano-check-icon" aria-hidden="true">check_circle</span>
-              <span>Cursos recomendados e trilhas progressivas</span>
+              <span data-i18n="planosPage.pf10">Cursos recomendados e trilhas progressivas</span>
             </li>
           </ul>
         </div>
@@ -246,12 +248,12 @@
       <div class="bmc-cabecalho">
         <span class="bmc-tag">
           <span class="material-symbols-outlined icon-xs" aria-hidden="true">verified_user</span>
-          <span>Modelo de Negócio BMC &amp; Governança</span>
+          <span data-i18n="planosPage.bmcTag">Modelo de Negócio BMC &amp; Governança</span>
         </span>
-        <h2 class="bmc-titulo" id="titulo-bmc-contratos">
+        <h2 class="bmc-titulo" id="titulo-bmc-contratos" data-i18n="planosPage.bmcTitulo">
           Conceitos do Projeto BMC &amp; Contratos Institucionais
         </h2>
-        <p class="bmc-desc">
+        <p class="bmc-desc" data-i18n-html="planosPage.bmcDesc">
           O LMS COMPASSO foi estruturado sobre o <strong>Business Model Canvas (BMC)</strong> da inovação educacional pública e privada, oferecendo modelos flexíveis de contratação compatíveis com a administração pública e proteção de dados de menores.
         </p>
       </div>
@@ -262,8 +264,8 @@
           <div class="bmc-card-icone">
             <span class="material-symbols-outlined" aria-hidden="true">gavel</span>
           </div>
-          <h3 class="bmc-card-titulo">Dispensa de Licitação</h3>
-          <p class="bmc-card-texto">
+          <h3 class="bmc-card-titulo" data-i18n="planosPage.bmc1Titulo">Dispensa de Licitação</h3>
+          <p class="bmc-card-texto" data-i18n-html="planosPage.bmc1Desc">
             Contratação direta facilitada para escolas e municípios com base no <strong>Art. 75, inciso II da Lei nº 14.133/2021</strong>, com emissão de nota fiscal de serviços e faturamento por empenho.
           </p>
         </div>
@@ -272,8 +274,8 @@
           <div class="bmc-card-icone">
             <span class="material-symbols-outlined" aria-hidden="true">rocket_launch</span>
           </div>
-          <h3 class="bmc-card-titulo">Marco Legal das Startups</h3>
-          <p class="bmc-card-texto">
+          <h3 class="bmc-card-titulo" data-i18n="planosPage.bmc2Titulo">Marco Legal das Startups</h3>
+          <p class="bmc-card-texto" data-i18n-html="planosPage.bmc2Desc">
             Amparo pelo <strong>Art. 13 da Lei Complementar nº 182/2021</strong> (Contrato Público de Solução Inovadora - CPSI) para testes e validação de impacto educacional e proficiência na BNCC.
           </p>
         </div>
@@ -282,8 +284,8 @@
           <div class="bmc-card-icone">
             <span class="material-symbols-outlined" aria-hidden="true">shield</span>
           </div>
-          <h3 class="bmc-card-titulo">Conformidade com a LGPD</h3>
-          <p class="bmc-card-texto">
+          <h3 class="bmc-card-titulo" data-i18n="planosPage.bmc3Titulo">Conformidade com a LGPD</h3>
+          <p class="bmc-card-texto" data-i18n="planosPage.bmc3Desc">
             Proteção rigorosa de dados de crianças e adolescentes (Art. 14 da Lei nº 13.709/2018). Dados não comercializados, criptografia PBKDF2 e isolamento relacional por escola.
           </p>
         </div>
@@ -292,8 +294,8 @@
           <div class="bmc-card-icone">
             <span class="material-symbols-outlined" aria-hidden="true">cloud_sync</span>
           </div>
-          <h3 class="bmc-card-titulo">SLA 99,9% &amp; Sem Multa</h3>
-          <p class="bmc-card-texto">
+          <h3 class="bmc-card-titulo" data-i18n="planosPage.bmc4Titulo">SLA 99,9% &amp; Sem Multa</h3>
+          <p class="bmc-card-texto" data-i18n="planosPage.bmc4Desc">
             Infraestrutura em nuvem Cloudflare Workers + D1 com alta disponibilidade. Sem multas de fidelidade oculta e com exportação total dos dados em CSV/JSON a qualquer momento.
           </p>
         </div>
@@ -302,63 +304,63 @@
       <!-- Banner de Simulação de Contrato e Adesão Formal -->
       <div class="bmc-banner-adesao">
         <div class="bmc-banner-info">
-          <h3 class="bmc-banner-titulo">Precisa de Proposta Formal ou Minuta para a sua Escola?</h3>
-          <p class="bmc-banner-texto">
+          <h3 class="bmc-banner-titulo" data-i18n="planosPage.bannerTitulo">Precisa de Proposta Formal ou Minuta para a sua Escola?</h3>
+          <p class="bmc-banner-texto" data-i18n="planosPage.bannerDesc">
             Gere uma minuta contratual formal pré-preenchida com justificativa pedagógica alinhada à Resolução CNE nº 2/2025 para aprovação na diretoria escolar ou setor de compras.
           </p>
         </div>
         <div class="bmc-banner-acoes">
           <button type="button" class="btn btn-primario flex-inline-icon" onclick="abrirModalContrato()">
             <span class="material-symbols-outlined icon-xs" aria-hidden="true">description</span>
-            <span>Gerar Minuta de Proposta</span>
+            <span data-i18n="planosPage.bannerBtnMinuta">Gerar Minuta de Proposta</span>
           </button>
           <a href="mailto:contato@lms-bncc.edu.br?subject=Solicitacao%20de%20Proposta%20Institucional%20LMS%20COMPASSO" class="btn btn-neutro flex-inline-icon">
             <span class="material-symbols-outlined icon-xs" aria-hidden="true">mail</span>
-            <span>Falar com Consultor</span>
+            <span data-i18n="planosPage.bannerBtnConsultor">Falar com Consultor</span>
           </a>
         </div>
       </div>
 
       <!-- FAQ Acordeão de Contratos e Planos -->
       <div class="planos-faq-secao" id="faq-planos">
-        <h3 class="planos-faq-titulo">Perguntas Frequentes sobre Planos e Contratação</h3>
+        <h3 class="planos-faq-titulo" data-i18n="planosPage.faqTitulo">Perguntas Frequentes sobre Planos e Contratação</h3>
         <div class="planos-faq-lista">
           <div class="planos-faq-item">
             <button type="button" class="planos-faq-pergunta" onclick="alternarFaq(this)">
-              <span>Como funciona a contratação por escolas públicas e secretarias de educação?</span>
+              <span data-i18n="planosPage.faq1Q">Como funciona a contratação por escolas públicas e secretarias de educação?</span>
               <span class="material-symbols-outlined planos-faq-icone" aria-hidden="true">expand_more</span>
             </button>
-            <div class="planos-faq-resposta">
+            <div class="planos-faq-resposta" data-i18n-html="planosPage.faq1A">
               A contratação por órgãos públicos pode ser efetuada via <strong>Dispensa de Licitação por Valor (Art. 75, II da Lei 14.133/2021)</strong> ou pelo <strong>Marco Legal das Startups (LC 182/2021)</strong>. Fornecemos proposta comercial, certidões negativas de débito (CND), minuta padrão de contrato e faturamento por empenho prévio com ordem bancária.
             </div>
           </div>
 
           <div class="planos-faq-item">
             <button type="button" class="planos-faq-pergunta" onclick="alternarFaq(this)">
-              <span>Como o LMS COMPASSO atende à Resolução CNE nº 2/2025 de tempo de tela?</span>
+              <span data-i18n="planosPage.faq2Q">Como o LMS COMPASSO atende à Resolução CNE nº 2/2025 de tempo de tela?</span>
               <span class="material-symbols-outlined planos-faq-icone" aria-hidden="true">expand_more</span>
             </button>
-            <div class="planos-faq-resposta">
+            <div class="planos-faq-resposta" data-i18n="planosPage.faq2A">
               O sistema monitora automaticamente o equilíbrio entre atividades em tela (simulador de robô e blocos) e atividades desplugadas (folhas e fichas físicas em PDF). Caso uma turma ultrapasse 30 minutos contínuos de tela, o painel pedagógico emite alertas sugerindo dinâmicas corporais e tarefas coletivas sem telas.
             </div>
           </div>
 
           <div class="planos-faq-item">
             <button type="button" class="planos-faq-pergunta" onclick="alternarFaq(this)">
-              <span>O que acontece se o número de alunos aumentar durante o ano letivo?</span>
+              <span data-i18n="planosPage.faq3Q">O que acontece se o número de alunos aumentar durante o ano letivo?</span>
               <span class="material-symbols-outlined planos-faq-icone" aria-hidden="true">expand_more</span>
             </button>
-            <div class="planos-faq-resposta">
+            <div class="planos-faq-resposta" data-i18n="planosPage.faq3A">
               O plano pode ser redimensionado a qualquer momento de forma proporcional (pró-rata). Novos alunos matriculados mantêm o acesso a todas as atividades e certificados já emitidos sem interrupção de serviço.
             </div>
           </div>
 
           <div class="planos-faq-item">
             <button type="button" class="planos-faq-pergunta" onclick="alternarFaq(this)">
-              <span>Quais são as formas de pagamento disponíveis?</span>
+              <span data-i18n="planosPage.faq4Q">Quais são as formas de pagamento disponíveis?</span>
               <span class="material-symbols-outlined planos-faq-icone" aria-hidden="true">expand_more</span>
             </button>
-            <div class="planos-faq-resposta">
+            <div class="planos-faq-resposta" data-i18n="planosPage.faq4A">
               Aceitamos Nota de Empenho Pública, Boleto Bancário com prazo para instituições de ensino, PIX instantâneo e Cartão Corporativo. Os planos anuais contam com 50% de desconto e os semestrais com 35% de desconto.
             </div>
           </div>
@@ -370,48 +372,48 @@
   <!-- Modal Interativo de Minuta de Proposta e Contrato -->
   <div id="modal-contrato-proposta" class="modal-overlay-contrato" role="dialog" aria-modal="true" aria-labelledby="modal-titulo" hidden>
     <div class="modal-contrato">
-      <button type="button" class="modal-fechar-btn" onclick="fecharModalContrato()" aria-label="Fechar janela">
+      <button type="button" class="modal-fechar-btn" onclick="fecharModalContrato()" aria-label="Fechar janela" data-i18n-aria-label="comum.fecharJanela">
         <span class="material-symbols-outlined">close</span>
       </button>
 
       <div class="flex-inline-icon gap-8 mb-12">
         <span class="material-symbols-outlined icon-md icone-destaque-primario" aria-hidden="true">description</span>
-        <h3 id="modal-titulo" class="m-0">Simulador de Proposta &amp; Contrato Escolar</h3>
+        <h3 id="modal-titulo" class="m-0" data-i18n="planosPage.modalTitulo">Simulador de Proposta &amp; Contrato Escolar</h3>
       </div>
-      <p class="texto-suave texto-pequeno mb-16">
+      <p class="texto-suave texto-pequeno mb-16" data-i18n="planosPage.modalDesc">
         Gere uma proposta institucional instantânea pré-preenchida com os dados da sua escola e os parâmetros selecionados no painel.
       </p>
 
       <form id="form-proposta-contrato" onsubmit="event.preventDefault(); gerarMinutaDocumento();">
         <div class="form-grupo">
-          <label for="campo-nome-escola">Nome da Escola / Instituição ou Município:</label>
-          <input type="text" id="campo-nome-escola" placeholder="Ex.: E.M. Darcy Ribeiro ou Secretaria Municipal de Educação" required>
+          <label for="campo-nome-escola" data-i18n="planosPage.campoEscola">Nome da Escola / Instituição ou Município:</label>
+          <input type="text" id="campo-nome-escola" placeholder="Ex.: E.M. Darcy Ribeiro ou Secretaria Municipal de Educação" data-i18n-placeholder="planosPage.placeholderEscola" required>
         </div>
 
         <div class="grid-2col gap-12">
           <div class="form-grupo">
-            <label for="campo-gestor-responsavel">Nome do(a) Gestor(a) ou Solicitante:</label>
-            <input type="text" id="campo-gestor-responsavel" placeholder="Ex.: Profª Mariana Souza" required>
+            <label for="campo-gestor-responsavel" data-i18n="planosPage.campoGestor">Nome do(a) Gestor(a) ou Solicitante:</label>
+            <input type="text" id="campo-gestor-responsavel" placeholder="Ex.: Profª Mariana Souza" data-i18n-placeholder="planosPage.placeholderGestor" required>
           </div>
           <div class="form-grupo">
-            <label for="campo-email-contato">E-mail Institucional:</label>
-            <input type="email" id="campo-email-contato" placeholder="gestao@escola.edu.br" required>
+            <label for="campo-email-contato" data-i18n="planosPage.campoEmail">E-mail Institucional:</label>
+            <input type="email" id="campo-email-contato" placeholder="gestao@escola.edu.br" data-i18n-placeholder="planosPage.placeholderEmail" required>
           </div>
         </div>
 
         <div class="cartao mt-12 mb-16 p-16 planos-resumo-box">
-          <h4 class="m-0 mb-8 planos-resumo-titulo">Resumo da Configuração Selecionada:</h4>
-          <p class="m-0 texto-pequeno"><strong>Capacidade de Alunos:</strong> <span id="modal-resumo-alunos">1 000 alunos</span></p>
-          <p class="m-0 texto-pequeno"><strong>Ciclo de Faturamento:</strong> <span id="modal-resumo-periodo">Anual (50% de desconto)</span></p>
-          <p class="m-0 texto-pequeno"><strong>Investimento Mensal Estimado:</strong> <span id="modal-resumo-valor">150 BRL / mês</span></p>
-          <p class="m-0 texto-pequeno"><strong>Armazenamento &amp; Polos:</strong> <span id="modal-resumo-storage">15 GB · Até 2 polos</span></p>
+          <h4 class="m-0 mb-8 planos-resumo-titulo" data-i18n="planosPage.modalResumoTitulo">Resumo da Configuração Selecionada:</h4>
+          <p class="m-0 texto-pequeno"><strong data-i18n="planosPage.modalCapacidade">Capacidade de Alunos:</strong> <span id="modal-resumo-alunos">1 000 alunos</span></p>
+          <p class="m-0 texto-pequeno"><strong data-i18n="planosPage.modalCiclo">Ciclo de Faturamento:</strong> <span id="modal-resumo-periodo">Anual (50% de desconto)</span></p>
+          <p class="m-0 texto-pequeno"><strong data-i18n="planosPage.modalInvestimento">Investimento Mensal Estimado:</strong> <span id="modal-resumo-valor">150 BRL / mês</span></p>
+          <p class="m-0 texto-pequeno"><strong data-i18n="planosPage.modalArmazenamento">Armazenamento &amp; Polos:</strong> <span id="modal-resumo-storage">15 GB · Até 2 polos</span></p>
         </div>
 
         <div class="flex-entre flex-wrap gap-10">
-          <button type="button" class="btn btn-neutro" onclick="fecharModalContrato()">Cancelar</button>
+          <button type="button" class="btn btn-neutro" onclick="fecharModalContrato()" data-i18n="comum.cancelar">Cancelar</button>
           <button type="submit" class="btn btn-primario flex-inline-icon">
             <span class="material-symbols-outlined icon-xs" aria-hidden="true">print</span>
-            <span>Imprimir Minuta Formal</span>
+            <span data-i18n="planosPage.modalImprimir">Imprimir Minuta Formal</span>
           </button>
         </div>
       </form>
@@ -425,69 +427,92 @@
         <div class="pub-rodape-logo">
           <img src="/img/logo-branco.svg" alt="LMS COMPASSO" width="180" height="42">
         </div>
-        <p class="pub-rodape-desc">
+        <p class="pub-rodape-desc" data-i18n="planosPage.rodapeDesc">
           Plataforma educacional para o ensino da Computação no Ensino Fundamental. Desenvolvida sob o projeto de inovação tecnológica SUAP/IFMA nº 14246/2025.
         </p>
       </div>
 
       <div class="pub-rodape-coluna">
-        <h4 class="pub-rodape-titulo">Navegação</h4>
+        <h4 class="pub-rodape-titulo" data-i18n="bv.rodapeNav">Navegação</h4>
         <ul class="pub-rodape-links">
-          <li><a href="/">Página Inicial</a></li>
-          <li><a href="/boas-vindas.html">Boas-vindas &amp; Parceiros</a></li>
-          <li><a href="/planos.html" aria-current="page">Planos &amp; Assinaturas</a></li>
-          <li><a href="/atividades.html">Atividades BNCC</a></li>
-          <li><a href="/login.html">Área do Professor / Aluno</a></li>
+          <li><a href="/" data-i18n="rodape.paginaInicial">Página Inicial</a></li>
+          <li><a href="/boas-vindas.html" data-i18n="rodape.boasVindas">Boas-vindas &amp; Parceiros</a></li>
+          <li><a href="/planos.html" aria-current="page" data-i18n="rodape.planosAssinaturas">Planos &amp; Assinaturas</a></li>
+          <li><a href="/atividades.html" data-i18n="planosPage.rodapeAtvBncc">Atividades BNCC</a></li>
+          <li><a href="/login.html" data-i18n="planosPage.rodapeAreaProf">Área do Professor / Aluno</a></li>
         </ul>
       </div>
 
       <div class="pub-rodape-coluna">
-        <h4 class="pub-rodape-titulo">Legislação &amp; CNE</h4>
+        <h4 class="pub-rodape-titulo" data-i18n="planosPage.rodapeLegislacao">Legislação &amp; CNE</h4>
         <ul class="pub-rodape-links">
-          <li><a href="/dashboard.html">Resolução CNE/CEB nº 2/2025</a></li>
-          <li><a href="/mundo-digital.html">Resolução CNE/CP nº 1/2022</a></li>
-          <li><a href="#informacoes-contratos">Marco Legal das Startups (LC 182/2021)</a></li>
-          <li><a href="#informacoes-contratos">Lei de Licitações (Art. 75 Lei 14.133)</a></li>
+          <li><a href="/dashboard.html" data-i18n="planosPage.rodapeCne2">Resolução CNE/CEB nº 2/2025</a></li>
+          <li><a href="/mundo-digital.html" data-i18n="planosPage.rodapeCne1">Resolução CNE/CP nº 1/2022</a></li>
+          <li><a href="#informacoes-contratos" data-i18n="planosPage.rodapeStartups">Marco Legal das Startups (LC 182/2021)</a></li>
+          <li><a href="#informacoes-contratos" data-i18n="planosPage.rodapeLicitacoes">Lei de Licitações (Art. 75 Lei 14.133)</a></li>
         </ul>
       </div>
 
       <div class="pub-rodape-coluna">
-        <h4 class="pub-rodape-titulo">Governança</h4>
+        <h4 class="pub-rodape-titulo" data-i18n="planosPage.rodapeGovernanca">Governança</h4>
         <ul class="pub-rodape-links">
-          <li><a href="https://github.com/LMS-COMPASSO/lms" target="_blank" rel="noopener noreferrer">Repositório GitHub</a></li>
-          <li><a href="/compartilhar.html">Gerador de Cadernos PDF</a></li>
-          <li><a href="/perfil.html">Preferências de Acessibilidade</a></li>
+          <li><a href="https://github.com/LMS-COMPASSO/lms" target="_blank" rel="noopener noreferrer" data-i18n="planosPage.rodapeRepo">Repositório GitHub</a></li>
+          <li><a href="/compartilhar.html" data-i18n="planosPage.rodapeCadernos">Gerador de Cadernos PDF</a></li>
+          <li><a href="/perfil.html" data-i18n="planosPage.rodapePrefs">Preferências de Acessibilidade</a></li>
         </ul>
       </div>
     </div>
     <div class="pub-rodape-base">
       <div class="pub-container flex-entre flex-wrap gap-8">
-        <p class="m-0 texto-pequeno">© 2026 LMS COMPASSO — Todos os direitos reservados. Licença MIT Open-Source.</p>
-        <p class="m-0 texto-pequeno">Alinhado à BNCC Computação e diretrizes de tempo de tela saudável.</p>
+        <p class="m-0 texto-pequeno" data-i18n="planosPage.rodapeCopyright">© 2026 LMS COMPASSO — Todos os direitos reservados. Licença MIT Open-Source.</p>
+        <p class="m-0 texto-pequeno" data-i18n="planosPage.rodapeTela">Alinhado à BNCC Computação e diretrizes de tempo de tela saudável.</p>
       </div>
     </div>
   </footer>
 
   <script src="/js/config.js"></script>
-  <script>
-    // Dados de Escala de Alunos e Valores
+  <script type="module">
+    import {
+      t,
+      obterIdiomaAtual,
+      formatarNumero,
+      montarSeletorIdioma,
+      traduzirDocumento,
+    } from '/js/i18n.js';
+
     const TIERS_ALUNOS = [
-      { alunos: 1000, label: '1 000', precoBaseMes: 300, academias: 'Até 2 academias', storage: '15 GB', instrutores: '10 instrutores' },
-      { alunos: 2000, label: '2 000', precoBaseMes: 560, academias: 'Até 3 academias', storage: '30 GB', instrutores: '20 instrutores' },
-      { alunos: 5000, label: '5 000', precoBaseMes: 1200, academias: 'Até 5 academias', storage: '60 GB', instrutores: '50 instrutores' },
-      { alunos: 10000, label: '10 000', precoBaseMes: 2100, academias: 'Até 10 academias', storage: '120 GB', instrutores: 'Instrutores ilimitados' },
-      { alunos: 17000, label: '17 000', precoBaseMes: 3200, academias: 'Até 15 academias', storage: '180 GB', instrutores: 'Instrutores ilimitados' },
-      { alunos: 25000, label: '25 000', precoBaseMes: 4200, academias: 'Até 25 academias', storage: '250 GB', instrutores: 'Instrutores ilimitados' },
-      { alunos: 50000, label: '50 000', precoBaseMes: 7500, academias: 'Até 50 academias', storage: '500 GB', instrutores: 'Instrutores ilimitados' },
-      { alunos: 100000, label: '100 000', precoBaseMes: 13000, academias: 'Rede Completa (Sem limite)', storage: '1 TB', instrutores: 'Instrutores ilimitados' }
+      { alunos: 1000, precoBaseMes: 300, academiasN: 2, storage: '15 GB', instrutoresN: 10 },
+      { alunos: 2000, precoBaseMes: 560, academiasN: 3, storage: '30 GB', instrutoresN: 20 },
+      { alunos: 5000, precoBaseMes: 1200, academiasN: 5, storage: '60 GB', instrutoresN: 50 },
+      { alunos: 10000, precoBaseMes: 2100, academiasN: 10, storage: '120 GB', instrutoresN: null },
+      { alunos: 17000, precoBaseMes: 3200, academiasN: 15, storage: '180 GB', instrutoresN: null },
+      { alunos: 25000, precoBaseMes: 4200, academiasN: 25, storage: '250 GB', instrutoresN: null },
+      { alunos: 50000, precoBaseMes: 7500, academiasN: 50, storage: '500 GB', instrutoresN: null },
+      { alunos: 100000, precoBaseMes: 13000, academiasN: null, storage: '1 TB', instrutoresN: null },
     ];
 
-    let periodoAtual = 'ano'; // 'mes' | 'semestre' | 'ano'
+    let periodoAtual = 'ano';
     let indiceTierAtual = 0;
+
+    function formatarAcademias(tier) {
+      return tier.academiasN === null
+        ? t('planosPage.redeCompleta', {}, 'Rede Completa (Sem limite)')
+        : t('planosPage.ateAcademias', { n: tier.academiasN }, `Até ${tier.academiasN} academias`);
+    }
+
+    function formatarInstrutores(tier) {
+      return tier.instrutoresN === null
+        ? t('planosPage.instrutoresIlimitados', {}, 'Instrutores ilimitados')
+        : t('planosPage.nInstrutores', { n: tier.instrutoresN }, `${tier.instrutoresN} instrutores`);
+    }
+
+    function obterMoedaMes() {
+      return t('planosPage.moedaMes', {}, 'BRL / mês');
+    }
 
     function selecionarPeriodo(periodo) {
       periodoAtual = periodo;
-      document.querySelectorAll('.planos-periodo-btn').forEach(btn => btn.classList.remove('ativo'));
+      document.querySelectorAll('.planos-periodo-btn').forEach((btn) => btn.classList.remove('ativo'));
       const btnAlvo = document.getElementById(`btn-periodo-${periodo}`);
       if (btnAlvo) btnAlvo.classList.add('ativo');
       recalcularPrecos();
@@ -502,28 +527,41 @@
     }
 
     function atualizarTierAlunos(indice) {
-      indiceTierAtual = Number.parseInt(indice, 10);
+      indiceTierAtual = Number.parseInt(indice, 10) || 0;
       const tier = TIERS_ALUNOS[indiceTierAtual];
       if (!tier) return;
+
+      const labelAlunos = formatarNumero(tier.alunos);
+      const textoAlunos = `${labelAlunos} ${t('planosPage.alunosLabel', {}, 'alunos')}`;
 
       const slider = document.getElementById('slider-alunos');
       if (slider) {
         slider.setAttribute('aria-valuenow', String(tier.alunos));
-        slider.setAttribute('aria-valuetext', `${tier.label} alunos`);
+        slider.setAttribute('aria-valuetext', textoAlunos);
       }
-      document.getElementById('contador-alunos').textContent = tier.label;
-      document.getElementById('feat-academias').innerHTML = `<strong>${tier.academias}</strong>`;
-      document.getElementById('feat-instrutores').innerHTML = `<strong>${tier.instrutores}</strong>`;
+      document.getElementById('contador-alunos').textContent = labelAlunos;
+
+      const elAcad = document.getElementById('feat-academias');
+      elAcad.textContent = '';
+      const strongAcad = document.createElement('strong');
+      strongAcad.textContent = formatarAcademias(tier);
+      elAcad.appendChild(strongAcad);
+
+      const elInst = document.getElementById('feat-instrutores');
+      elInst.textContent = '';
+      const strongInst = document.createElement('strong');
+      strongInst.textContent = formatarInstrutores(tier);
+      elInst.appendChild(strongInst);
+
       document.getElementById('feat-storage').textContent = tier.storage;
 
-      // Atualiza estado ativo nos marcadores
       const ticks = document.querySelectorAll('.plano-tick-label');
       ticks.forEach((tick, i) => {
-        if (i === indiceTierAtual) tick.classList.add('ativo');
-        else tick.classList.remove('ativo');
+        tick.classList.toggle('ativo', i === indiceTierAtual);
       });
 
       recalcularPrecos();
+      atualizarResumoModal();
     }
 
     function recalcularPrecos() {
@@ -531,48 +569,65 @@
       if (!tier) return;
 
       let fatorDesconto = 1.0;
-      let textoEconomia = 'Faturamento mensal sem fidelidade';
+      let textoEconomia = t('planosPage.economiaMensal', {}, 'Faturamento mensal sem fidelidade');
+      const moeda = obterMoedaMes();
 
       if (periodoAtual === 'semestre') {
-        fatorDesconto = 0.65; // -35%
-        const precoSemestral = Math.round(tier.precoBaseMes * fatorDesconto);
-        textoEconomia = `Pagamento semestral com desconto: ${precoSemestral} BRL / mês (-35%)`;
+        fatorDesconto = 0.65;
+        const precoSemestral = formatarNumero(Math.round(tier.precoBaseMes * fatorDesconto));
+        textoEconomia = t(
+          'planosPage.economiaSemestral',
+          { preco: precoSemestral, moeda },
+          `Pagamento semestral com desconto: ${precoSemestral} ${moeda} (-35%)`,
+        );
       } else if (periodoAtual === 'ano') {
-        fatorDesconto = 0.50; // -50%
-        const precoAnual = Math.round(tier.precoBaseMes * fatorDesconto);
-        textoEconomia = `Pagamento anual mais barato ${precoAnual} BRL / mês (-50%)`;
+        fatorDesconto = 0.50;
+        const precoAnual = formatarNumero(Math.round(tier.precoBaseMes * fatorDesconto));
+        textoEconomia = t(
+          'planosPage.economiaAnual',
+          { preco: precoAnual, moeda },
+          `Pagamento anual mais barato ${precoAnual} ${moeda} (-50%)`,
+        );
       }
 
       const valorFinal = Math.round(tier.precoBaseMes * fatorDesconto);
-      document.getElementById('valor-preco').textContent = valorFinal.toLocaleString('pt-BR');
-      document.getElementById('legenda-economia').textContent = textoEconomia;
+      const valorEl = document.getElementById('valor-preco');
+      const legendaEl = document.getElementById('legenda-economia');
+      if (valorEl) valorEl.textContent = formatarNumero(valorFinal);
+      if (legendaEl) legendaEl.textContent = textoEconomia;
     }
 
     function alternarFaq(btn) {
       const item = btn.closest('.planos-faq-item');
-      if (item) {
-        item.classList.toggle('aberto');
-      }
+      if (item) item.classList.toggle('aberto');
     }
 
-    function abrirModalContrato() {
-      const modal = document.getElementById('modal-contrato-proposta');
+    function atualizarResumoModal() {
       const tier = TIERS_ALUNOS[indiceTierAtual];
+      if (!tier) return;
       const periodoNomes = {
-        mes: 'Mensal (Preço regular)',
-        semestre: 'Semestral (35% de desconto)',
-        ano: 'Anual (50% de desconto)'
+        mes: t('planosPage.cicloMensal', {}, 'Mensal (Preço regular)'),
+        semestre: t('planosPage.cicloSemestral', {}, 'Semestral (35% de desconto)'),
+        ano: t('planosPage.cicloAnual', {}, 'Anual (50% de desconto)'),
       };
 
       let valorFinal = tier.precoBaseMes;
       if (periodoAtual === 'semestre') valorFinal = Math.round(tier.precoBaseMes * 0.65);
       if (periodoAtual === 'ano') valorFinal = Math.round(tier.precoBaseMes * 0.50);
 
-      document.getElementById('modal-resumo-alunos').textContent = `${tier.label} alunos`;
-      document.getElementById('modal-resumo-periodo').textContent = periodoNomes[periodoAtual];
-      document.getElementById('modal-resumo-valor').textContent = `${valorFinal} BRL / mês`;
-      document.getElementById('modal-resumo-storage').textContent = `${tier.storage} · ${tier.academias}`;
+      const elAlunos = document.getElementById('modal-resumo-alunos');
+      const elPeriodo = document.getElementById('modal-resumo-periodo');
+      const elValor = document.getElementById('modal-resumo-valor');
+      const elStorage = document.getElementById('modal-resumo-storage');
+      if (elAlunos) elAlunos.textContent = `${formatarNumero(tier.alunos)} ${t('planosPage.alunosLabel', {}, 'alunos')}`;
+      if (elPeriodo) elPeriodo.textContent = periodoNomes[periodoAtual];
+      if (elValor) elValor.textContent = `${formatarNumero(valorFinal)} ${obterMoedaMes()}`;
+      if (elStorage) elStorage.textContent = `${tier.storage} · ${formatarAcademias(tier)}`;
+    }
 
+    function abrirModalContrato() {
+      atualizarResumoModal();
+      const modal = document.getElementById('modal-contrato-proposta');
       if (modal) modal.hidden = false;
     }
 
@@ -583,19 +638,20 @@
 
     function gerarMinutaDocumento() {
       const escaparTexto = (valor) => String(valor ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-      const escola = escaparTexto(document.getElementById('campo-nome-escola').value);
-      const gestor = escaparTexto(document.getElementById('campo-gestor-responsavel').value);
+      const escola = escaparTexto(document.getElementById('campo-nome-escola')?.value || '');
+      const gestor = escaparTexto(document.getElementById('campo-gestor-responsavel')?.value || '');
       const tier = TIERS_ALUNOS[indiceTierAtual];
+      const lang = obterIdiomaAtual() === 'pt' ? 'pt-BR' : obterIdiomaAtual();
       fecharModalContrato();
 
       const janela = window.open('', '_blank', 'noopener');
       if (!janela) return;
       janela.document.write(`
         <!DOCTYPE html>
-        <html lang="pt-BR">
+        <html lang="${escaparTexto(lang)}">
         <head>
           <meta charset="UTF-8">
-          <title>Minuta de Proposta Contratual — ${escola}</title>
+          <title>${escaparTexto(t('planosPage.minutaDocTitulo', { escola }, `Minuta de Proposta Contratual — ${escola}`))}</title>
           <style>
             body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 40px; color: #0f172a; line-height: 1.6; max-width: 800px; margin: 0 auto; }
             h1 { font-size: 1.6rem; color: #0369a1; border-bottom: 2px solid #0369a1; padding-bottom: 8px; }
@@ -603,43 +659,69 @@
             table { width: 100%; border-collapse: collapse; margin: 20px 0; }
             th, td { border: 1px solid #cbd5e1; padding: 10px 14px; text-align: left; }
             th { background: #f1f5f9; }
-            .badge { display: inline-block; padding: 4px 8px; background: #e0f2fe; color: #0369a1; border-radius: 4px; font-weight: bold; font-size: 0.85rem; }
             .btn-imprimir { padding: 10px 20px; background: #0369a1; color: white; border: none; border-radius: 6px; cursor: pointer; margin-bottom: 20px; font-weight: bold; }
             .assinatura-gestor { margin-top: 40px; border-top: 1px solid #94a3b8; padding-top: 10px; }
             @media print { body { padding: 0; } button { display: none; } }
           </style>
         </head>
         <body>
-          <button onclick="window.print()" class="btn-imprimir">Imprimir Proposta / Salvar PDF</button>
-          <h1>LMS COMPASSO — Proposta de Adesão e Minuta de Contrato</h1>
-          <p><strong>Instituição Solicitante:</strong> ${escola}</p>
-          <p><strong>Responsável Pedagógico(a):</strong> ${gestor}</p>
-          <p><strong>Embasamento Legal:</strong> Dispensa de Licitação (Art. 75, II da Lei 14.133/2021) e Marco Legal das Startups (LC 182/2021)</p>
-          <p><strong>Conformidade Curricular:</strong> Resolução CNE/CP nº 1/2022 e Resolução CNE/CEB nº 2/2025 (Diretrizes de Equilíbrio Saudável de Telas)</p>
+          <button onclick="window.print()" class="btn-imprimir">${escaparTexto(t('planosPage.minutaImprimirBtn', {}, 'Imprimir Proposta / Salvar PDF'))}</button>
+          <h1>${escaparTexto(t('planosPage.minutaH1', {}, 'LMS COMPASSO — Proposta de Adesão e Minuta de Contrato'))}</h1>
+          <p><strong>${escaparTexto(t('planosPage.minutaInstLabel', {}, 'Instituição Solicitante:'))}</strong> ${escola}</p>
+          <p><strong>${escaparTexto(t('planosPage.minutaRespLabel', {}, 'Responsável Pedagógico(a):'))}</strong> ${gestor}</p>
+          <p><strong>${escaparTexto(t('planosPage.minutaLegalLabel', {}, 'Embasamento Legal:'))}</strong> ${escaparTexto(t('planosPage.minutaLegalVal', {}, 'Dispensa de Licitação (Art. 75, II da Lei 14.133/2021) e Marco Legal das Startups (LC 182/2021)'))}</p>
+          <p><strong>${escaparTexto(t('planosPage.minutaBnccLabel', {}, 'Conformidade Curricular:'))}</strong> ${escaparTexto(t('planosPage.minutaBnccVal', {}, 'Resolução CNE/CP nº 1/2022 e Resolução CNE/CEB nº 2/2025 (Diretrizes de Equilíbrio Saudável de Telas)'))}</p>
 
-          <h2>Especificações do Plano Contratado</h2>
+          <h2>${escaparTexto(t('planosPage.minutaEspecTitulo', {}, 'Especificações do Plano Contratado'))}</h2>
           <table>
-            <tr><th>Item</th><th>Especificação</th></tr>
-            <tr><td>Capacidade de Estudantes</td><td>Até ${escaparTexto(tier.label)} alunos matriculados</td></tr>
-            <tr><td>Armazenamento em Nuvem D1</td><td>${escaparTexto(tier.storage)}</td></tr>
-            <tr><td>Polos Escolares</td><td>${escaparTexto(tier.academias)}</td></tr>
-            <tr><td>Ciclo de Faturamento</td><td>${escaparTexto(periodoAtual.toUpperCase())}</td></tr>
-            <tr><td>Módulos Pedagógicos</td><td>3 Eixos BNCC (Pensamento Computacional, Mundo Digital, Cultura Digital) + Laboratório 3D Python</td></tr>
-            <tr><td>Atividades Desplugadas</td><td>Acesso ilimitado e gerador de fichas em PDF (sem telas)</td></tr>
-            <tr><td>Relatórios de Governança</td><td>Exportação de Diário Escolar (CSV) com registro de habilidades</td></tr>
+            <tr><th>${escaparTexto(t('planosPage.minutaColItem', {}, 'Item'))}</th><th>${escaparTexto(t('planosPage.minutaColEspec', {}, 'Especificação'))}</th></tr>
+            <tr><td>${escaparTexto(t('planosPage.minutaItemAlunos', {}, 'Capacidade de Estudantes'))}</td><td>${escaparTexto(t('planosPage.minutaValAlunos', { n: formatarNumero(tier.alunos) }, `Até ${formatarNumero(tier.alunos)} alunos matriculados`))}</td></tr>
+            <tr><td>${escaparTexto(t('planosPage.minutaItemStorage', {}, 'Armazenamento em Nuvem D1'))}</td><td>${escaparTexto(tier.storage)}</td></tr>
+            <tr><td>${escaparTexto(t('planosPage.minutaItemPolos', {}, 'Polos Escolares'))}</td><td>${escaparTexto(formatarAcademias(tier))}</td></tr>
+            <tr><td>${escaparTexto(t('planosPage.minutaItemCiclo', {}, 'Ciclo de Faturamento'))}</td><td>${escaparTexto(t(`planosPage.cicloNome.${periodoAtual}`, {}, periodoAtual.toUpperCase()))}</td></tr>
+            <tr><td>${escaparTexto(t('planosPage.minutaItemModulos', {}, 'Módulos Pedagógicos'))}</td><td>${escaparTexto(t('planosPage.minutaValModulos', {}, '3 Eixos BNCC (Pensamento Computacional, Mundo Digital, Cultura Digital) + Laboratório 3D Python'))}</td></tr>
+            <tr><td>${escaparTexto(t('planosPage.minutaItemDesplug', {}, 'Atividades Desplugadas'))}</td><td>${escaparTexto(t('planosPage.minutaValDesplug', {}, 'Acesso ilimitado e gerador de fichas em PDF (sem telas)'))}</td></tr>
+            <tr><td>${escaparTexto(t('planosPage.minutaItemRel', {}, 'Relatórios de Governança'))}</td><td>${escaparTexto(t('planosPage.minutaValRel', {}, 'Exportação de Diário Escolar (CSV) com registro de habilidades'))}</td></tr>
           </table>
 
-          <h2>Garantias e SLA</h2>
-          <p>Disponibilidade garantida de 99,9% via infraestrutura Cloudflare. Conformidade total com a Lei Geral de Proteção de Dados (LGPD - Lei 13.709/2018) com custódia inviolável de dados de menores de idade.</p>
-          <p class="assinatura-gestor">Assinatura do(a) Gestor(a) Escolar: ___________________________________________</p>
+          <h2>${escaparTexto(t('planosPage.minutaSlaTitulo', {}, 'Garantias e SLA'))}</h2>
+          <p>${escaparTexto(t('planosPage.minutaSlaTexto', {}, 'Disponibilidade garantida de 99,9% via infraestrutura Cloudflare. Conformidade total com a Lei Geral de Proteção de Dados (LGPD - Lei 13.709/2018) com custódia inviolável de dados de menores de idade.'))}</p>
+          <p class="assinatura-gestor">${escaparTexto(t('planosPage.minutaAssinatura', {}, 'Assinatura do(a) Gestor(a) Escolar: ___________________________________________'))}</p>
         </body>
         </html>
       `);
       janela.document.close();
     }
 
-    // Inicialização
-    document.addEventListener('DOMContentLoaded', () => {
+    function atualizarBotaoSessaoPlanos() {
+      try {
+        const usuario = localStorage.getItem('lms_usuario');
+        const btnLogin = document.getElementById('btn-login-planos');
+        if (usuario && btnLogin) {
+          btnLogin.href = '/dashboard.html';
+          const iconeSpan = document.createElement('span');
+          iconeSpan.className = 'material-symbols-outlined icon-xs';
+          iconeSpan.setAttribute('aria-hidden', 'true');
+          iconeSpan.textContent = 'dashboard';
+          const textoSpan = document.createElement('span');
+          textoSpan.textContent = t('planosPage.meuPainel', {}, 'Meu Painel');
+          btnLogin.replaceChildren(iconeSpan, textoSpan);
+        }
+      } catch (erroSessao) {
+        console.warn('Sessão indisponível na página de planos:', erroSessao?.message || erroSessao);
+      }
+    }
+
+    const iniciarPlanos = () => {
+      const containerAcoes = document.querySelector('.planos-topo-acoes');
+      if (containerAcoes) {
+        montarSeletorIdioma(containerAcoes, { claro: true });
+        const sel = containerAcoes.querySelector('.seletor-idioma-wrapper');
+        const btnLogin = document.getElementById('btn-login-planos');
+        if (sel && btnLogin) containerAcoes.insertBefore(sel, btnLogin);
+      }
+      traduzirDocumento();
+
       const slider = document.getElementById('slider-alunos');
       if (slider) {
         atualizarTierAlunos(slider.value);
@@ -648,17 +730,29 @@
         recalcularPrecos();
       }
 
-      // Atualiza botão entrar se usuário já estiver autenticado
-      try {
-        const usuario = localStorage.getItem('lms_usuario');
-        if (usuario) {
-          const btnLogin = document.getElementById('btn-login-planos');
-          if (btnLogin) {
-            btnLogin.href = '/dashboard.html';
-            btnLogin.innerHTML = '<span class="material-symbols-outlined icon-xs" aria-hidden="true">dashboard</span><span>Meu Painel</span>';
-          }
-        }
-      } catch {}
+      atualizarBotaoSessaoPlanos();
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', iniciarPlanos);
+    } else {
+      iniciarPlanos();
+    }
+
+    window.addEventListener('lms:idioma-alterado', () => {
+      atualizarTierAlunos(indiceTierAtual);
+      atualizarBotaoSessaoPlanos();
+    });
+
+    Object.assign(window, {
+      selecionarPeriodo,
+      definirPassoSlider,
+      atualizarTierAlunos,
+      recalcularPrecos,
+      alternarFaq,
+      abrirModalContrato,
+      fecharModalContrato,
+      gerarMinutaDocumento,
     });
   </script>
 </body>

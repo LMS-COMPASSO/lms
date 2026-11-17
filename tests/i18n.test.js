@@ -1,5 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
 
 import {
   CHAVE_STORAGE_IDIOMA,
@@ -9,6 +11,10 @@ import {
   definirIdioma,
   t,
   obterInfoIdioma,
+  obterLocaleIntl,
+  formatarData,
+  formatarNumero,
+  definirRotuloComIcone,
   traduzirDocumento,
   montarSeletorIdioma,
 } from '../public/js/i18n.js';
@@ -118,8 +124,8 @@ test('i18n: definirIdioma atualiza lang no documentElement e dispara evento', ()
     querySelectorAll: () => [],
     querySelector: () => null,
     getElementById: () => null,
-    createElement: () => ({ setAttribute: () => {}, appendChild: () => {} }),
-    body: { appendChild: () => {} },
+    createElement: () => ({ setAttribute: () => { }, appendChild: () => { } }),
+    body: { appendChild: () => { } },
   };
   global.document = fakeDoc;
   global.window = {
@@ -137,8 +143,11 @@ test('i18n: definirIdioma atualiza lang no documentElement e dispara evento', ()
   definirIdioma('en');
   assert.equal(fakeDoc.documentElement.lang, 'en', 'WCAG 3.1.1: lang deve ser atualizado para "en"');
   assert.equal(localStorage.getItem(CHAVE_STORAGE_IDIOMA), 'en');
-  assert.equal(eventosDisparados.length, 1);
-  assert.equal(eventosDisparados[0].detail.idioma, 'en');
+  const evtOficial = eventosDisparados.find((e) => e.type === 'lms:idioma-alterado');
+  const evtLegado = eventosDisparados.find((e) => e.type === 'idiomaAlterado');
+  assert.ok(evtOficial, 'Deve disparar evento lms:idioma-alterado');
+  assert.ok(evtLegado, 'Deve manter compatibilidade com evento idiomaAlterado');
+  assert.equal(evtOficial.detail.idioma, 'en');
 
   // Volta para português (deve usar pt-BR)
   definirIdioma('pt');
@@ -189,7 +198,7 @@ test('i18n: Estrutura semântica e acessibilidade WAI-ARIA do seletor', () => {
       },
       addEventListener: (evt, fn) => { listeners[evt] = fn; },
       contains: () => true,
-      focus: () => {},
+      focus: () => { },
       children: filhos,
     };
     elementosCriados.push(el);
@@ -201,7 +210,7 @@ test('i18n: Estrutura semântica e acessibilidade WAI-ARIA do seletor', () => {
     querySelectorAll: () => [],
     querySelector: () => null,
     getElementById: () => null,
-    addEventListener: () => {},
+    addEventListener: () => { },
   };
 
   const containerMock = criarElementoMock('div');
@@ -302,4 +311,205 @@ test('i18n: data-i18n-html renderiza apenas <span>/<em> sem innerHTML e ignora c
 
   assert.equal(elMalicioso._usouInnerHtml, false);
   assert.equal(elMalicioso.textContent, 'Conteúdo preservado', 'Chave inexistente no DOM não deve ser ecoada');
+});
+
+test('i18n: Paridade estrita 1:1 entre os 9 dicionários, sem vazios e sem placeholders quebrados', () => {
+  const idiomas = Object.keys(DICIONARIO).sort();
+  assert.deepEqual(idiomas, ['de', 'en', 'es', 'fr', 'it', 'pt', 'ru', 'tr', 'uk']);
+
+  const basePt = DICIONARIO.pt;
+  const chavesPt = Object.keys(basePt).sort();
+  assert.ok(chavesPt.length >= 2500, `Catálogo i18n completo esperado (>=2500), encontrado ${chavesPt.length}`);
+
+  const extrairParams = (s) => [...String(s).matchAll(/\{([a-zA-Z0-9_]+)\}/g)].map((m) => m[1]).sort();
+  const extrairTags = (s) => [...String(s).matchAll(/<\/?([a-z0-9-]+)\b[^>]*>/gi)].map((m) => m[0].toLowerCase().replace(/\s+/g, '')).sort();
+
+  const chavesIdenticasPermitidas = new Set([
+    'indexPage.altLogoGoogle',
+    'md.gpu.spec2',
+    'priv.r2c2',
+    'robo.logDebugPasso',
+    'ws.editor.checklistContagem',
+  ]);
+  const cognatosEspanholPermitidos = new Set([
+    'cdetPage.marcoTitle',
+    'certPage.tabelaAria',
+    'comp.resumoEtapa',
+    'indexPage.aba2',
+    'indexPage.parceiroIfma',
+    'indexPage.parceiroPython',
+    'matPage.certificadoAria',
+    'md.pcBuilderProgresso',
+    'perfPage.a11yFonte',
+    'planosPage.pfCursos',
+    'rodape.culturaDigital',
+    'spotlight.certificado3d',
+    'spotlight.certificado3dEmitir',
+    'spotlight.certificado3dTitulo',
+    'trilha.marcoTitle',
+    'ws.tpl.canvas.desc',
+  ]);
+
+  for (const lang of idiomas) {
+    const dict = DICIONARIO[lang];
+    const chavesLang = Object.keys(dict).sort();
+    assert.deepEqual(chavesLang, chavesPt, `Dicionário "${lang}" deve possuir 100% das chaves de "pt"`);
+
+    for (const chave of chavesPt) {
+      const val = dict[chave];
+      assert.equal(typeof val, 'string', `${lang}.${chave} deve ser string`);
+      assert.ok(val.trim().length > 0, `${lang}.${chave} não pode ser vazio`);
+
+      if (lang !== 'pt') {
+        assert.deepEqual(
+          extrairParams(val),
+          extrairParams(basePt[chave]),
+          `Placeholders divergentes em ${lang}.${chave}`,
+        );
+        assert.deepEqual(
+          extrairTags(val),
+          extrairTags(basePt[chave]),
+          `Tags HTML inline divergentes em ${lang}.${chave}`,
+        );
+
+        const igualFraseLonga =
+          val.trim() === basePt[chave].trim() &&
+          basePt[chave].trim().length >= 30 &&
+          !chavesIdenticasPermitidas.has(chave) &&
+          !(lang === 'es' && cognatosEspanholPermitidos.has(chave)) &&
+          !/^(?:LMS COMPASSO|EF\d|EM\d|HTTP|TCP)/.test(basePt[chave].trim());
+        assert.equal(igualFraseLonga, false, `Possível string longa não traduzida em ${lang}.${chave}: "${val}"`);
+      }
+    }
+  }
+});
+
+test('i18n: Todas as chaves data-i18n* e meta[i18n-title] das 22 páginas HTML existem em todos os idiomas', () => {
+  const pastaPublic = path.resolve(process.cwd(), 'public');
+  const htmlFiles = fs.readdirSync(pastaPublic).filter((f) => f.endsWith('.html')).sort();
+  assert.equal(htmlFiles.length, 22, 'Deve validar exatamente 22 páginas HTML');
+
+  const idiomas = Object.keys(DICIONARIO);
+  for (const arquivo of htmlFiles) {
+    const conteudo = fs.readFileSync(path.join(pastaPublic, arquivo), 'utf8');
+    const chavesEncontradas = new Set();
+
+    const mTitle = conteudo.match(/<meta\s+name="i18n-title"\s+content="([^"]+)"/i);
+    assert.ok(mTitle, `${arquivo} deve declarar <meta name="i18n-title">`);
+    chavesEncontradas.add(mTitle[1]);
+
+    for (const m of conteudo.matchAll(/data-i18n(?:-[a-z-]+)?=(["'])([a-zA-Z0-9_.-]+)\1/g)) {
+      if (!m[0].startsWith('data-i18n-attr=')) {
+        chavesEncontradas.add(m[2]);
+      }
+    }
+    for (const m of conteudo.matchAll(/data-i18n-attr=(["'])([^"']+)\1/g)) {
+      for (const par of m[2].split(',')) {
+        const k = par.split(':')[1]?.trim();
+        if (k) chavesEncontradas.add(k);
+      }
+    }
+
+    for (const chave of chavesEncontradas) {
+      for (const lang of idiomas) {
+        assert.ok(
+          chave in DICIONARIO[lang] && DICIONARIO[lang][chave].trim().length > 0,
+          `${arquivo}: chave "${chave}" ausente ou vazia em "${lang}"`,
+        );
+      }
+    }
+  }
+});
+
+test('i18n: Intl formatarNumero/formatarData, meta[i18n-title] e definirRotuloComIcone preservando SVG', () => {
+  const storage = {};
+  global.localStorage = {
+    getItem: (k) => storage[k] || null,
+    setItem: (k, v) => { storage[k] = String(v); },
+    removeItem: (k) => { delete storage[k]; },
+  };
+
+  storage[CHAVE_STORAGE_IDIOMA] = 'pt';
+  assert.equal(obterLocaleIntl(), 'pt-BR');
+  assert.equal(formatarNumero(1234.5, { minimumFractionDigits: 1, maximumFractionDigits: 1 }), '1.234,5');
+  assert.ok(formatarData('2026-05-10T12:00:00Z').includes('2026'));
+
+  storage[CHAVE_STORAGE_IDIOMA] = 'en';
+  assert.equal(obterLocaleIntl(), 'en-US');
+  assert.equal(formatarNumero(1234.5, { minimumFractionDigits: 1, maximumFractionDigits: 1 }), '1,234.5');
+
+  // Testa atualização de document.title a partir de <meta name="i18n-title"> e preservação de <svg>
+  const metaTitulo = { getAttribute: (k) => (k === 'content' ? 'nav.inicio' : null) };
+  global.document = {
+    documentElement: { lang: 'pt-BR', dir: 'ltr' },
+    title: 'Inicial',
+    createTextNode: (tVal) => ({ nodeType: 3, textContent: String(tVal) }),
+    querySelector: (sel) => (sel === 'meta[name="i18n-title"]' ? metaTitulo : null),
+    querySelectorAll: () => [],
+    getElementById: () => null,
+  };
+
+  // 1) Botão com <svg> + <span> de texto
+  const svgIcone = {
+    nodeType: 1,
+    tagName: 'SVG',
+    nodeName: 'svg',
+    classList: { contains: () => false },
+    getAttribute: () => null,
+  };
+  const spanTexto = {
+    nodeType: 1,
+    tagName: 'SPAN',
+    nodeName: 'SPAN',
+    textContent: 'Original',
+    classList: { contains: () => false },
+    getAttribute: () => null,
+    querySelector: () => null,
+  };
+  const espacoTxt = { nodeType: 3, textContent: ' ' };
+  const btnComSpan = {
+    childNodes: [svgIcone, espacoTxt, spanTexto],
+    querySelector: (sel) => (sel.includes('svg') ? svgIcone : null),
+    appendChild: (n) => { btnComSpan.childNodes.push(n); return n; },
+    insertBefore: (n, ref) => {
+      const idx = ref ? btnComSpan.childNodes.indexOf(ref) : -1;
+      if (idx >= 0) btnComSpan.childNodes.splice(idx, 0, n);
+      else btnComSpan.childNodes.push(n);
+      return n;
+    },
+    removeChild: (n) => {
+      const idx = btnComSpan.childNodes.indexOf(n);
+      if (idx >= 0) btnComSpan.childNodes.splice(idx, 1);
+      return n;
+    },
+    setAttribute: () => { },
+    getAttribute: () => null,
+  };
+  definirRotuloComIcone(btnComSpan, 'Save Changes');
+  assert.equal(btnComSpan.childNodes[0], svgIcone, 'Ícone <svg> filho deve permanecer intacto (com span)');
+  assert.equal(spanTexto.textContent, 'Save Changes', 'Span de texto deve receber o novo rótulo');
+
+  // 2) Botão com <svg> + nó texto direto
+  const btnTextoDireto = {
+    childNodes: [svgIcone, { nodeType: 3, textContent: ' Salvar' }],
+    querySelector: (sel) => (sel.includes('svg') ? svgIcone : null),
+    appendChild: (n) => { btnTextoDireto.childNodes.push(n); return n; },
+    insertBefore: (n, ref) => {
+      const idx = ref ? btnTextoDireto.childNodes.indexOf(ref) : -1;
+      if (idx >= 0) btnTextoDireto.childNodes.splice(idx, 0, n);
+      else btnTextoDireto.childNodes.push(n);
+      return n;
+    },
+    removeChild: (n) => {
+      const idx = btnTextoDireto.childNodes.indexOf(n);
+      if (idx >= 0) btnTextoDireto.childNodes.splice(idx, 1);
+      return n;
+    },
+  };
+  definirRotuloComIcone(btnTextoDireto, 'Save Direct');
+  assert.equal(btnTextoDireto.childNodes[0], svgIcone, 'Ícone <svg> filho deve permanecer intacto (nó direto)');
+  assert.equal(btnTextoDireto.childNodes[1].textContent.trim(), 'Save Direct');
+
+  traduzirDocumento();
+  assert.equal(global.document.title, 'Home');
 });

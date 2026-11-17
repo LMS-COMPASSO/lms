@@ -16,6 +16,22 @@
 import { gerarSvgIconeHtml, resolverNomeIconeUniversal } from './icones-universais.js';
 
 /**
+ * Helper seguro de tradução com fallback em português para interoperabilidade Node/Browser.
+ */
+function tr(chave, params = {}, padrao = null) {
+  if (typeof window !== 'undefined' && typeof window.t === 'function') {
+    return window.t(chave, params, padrao ?? chave);
+  }
+  let texto = padrao ?? chave;
+  if (params && typeof params === 'object') {
+    Object.entries(params).forEach(([k, v]) => {
+      texto = String(texto).replaceAll(`{${k}}`, String(v));
+    });
+  }
+  return texto;
+}
+
+/**
  * Escapa texto HTML para evitar XSS.
  */
 function escapeHtml(texto) {
@@ -36,7 +52,7 @@ function escapeHtml(texto) {
  * @returns {string} HTML do Breadcrumb
  */
 export function Breadcrumb({ itens = [], mobileVoltar = null }) {
-  const itemVoltar = mobileVoltar || (itens.length > 1 ? itens[itens.length - 2] : { href: '/', rotulo: 'Início' });
+  const itemVoltar = mobileVoltar || (itens.length > 1 ? itens[itens.length - 2] : { href: '/', rotulo: tr('wf.inicio', {}, 'Início') });
   const itensHtml = itens.map((item, index) => {
     const ehUltimo = index === itens.length - 1;
     const iconeHtml = item.icone ? `<span class="material-symbols-outlined icon-xs" aria-hidden="true">${escapeHtml(item.icone)}</span> ` : '';
@@ -47,11 +63,12 @@ export function Breadcrumb({ itens = [], mobileVoltar = null }) {
     return `<li><a href="${escapeHtml(item.href || '#')}" class="wf-breadcrumb-link">${iconeHtml}<span>${escapeHtml(item.rotulo)}</span></a></li>`;
   }).join('');
 
+  const tituloVoltar = tr('comp.voltarPara', { rotulo: itemVoltar.rotulo }, `Voltar para ${itemVoltar.rotulo}`);
   return `
-    <nav class="comp-breadcrumb atv-breadcrumbs" aria-label="Você está aqui">
-      <a href="${escapeHtml(itemVoltar.href || '/')}" class="wf-breadcrumb-mobile-voltar seta-voltar" title="Voltar para ${escapeHtml(itemVoltar.rotulo)}">
+    <nav class="comp-breadcrumb atv-breadcrumbs" aria-label="${escapeHtml(tr('wf.voceEstaAqui', {}, 'Você está aqui'))}">
+      <a href="${escapeHtml(itemVoltar.href || '/')}" class="wf-breadcrumb-mobile-voltar seta-voltar" title="${escapeHtml(tituloVoltar)}">
         <span class="material-symbols-outlined icon-xs" aria-hidden="true">arrow_back</span>
-        <span>Voltar para ${escapeHtml(itemVoltar.rotulo)}</span>
+        <span>${escapeHtml(tituloVoltar)}</span>
       </a>
       <ol class="wf-breadcrumb-lista">
         ${itensHtml}
@@ -82,8 +99,8 @@ export function NavMenu({ itens = [], ativo = '' }) {
   }).join('');
 
   return `
-    <nav class="comp-nav-menu sidebar-nav" aria-label="Menu principal">
-      <div class="nav-secao-rotulo">Onde posso ir</div>
+    <nav class="comp-nav-menu sidebar-nav" aria-label="${escapeHtml(tr('comp.menuPrincipal', {}, 'Menu principal'))}">
+      <div class="nav-secao-rotulo">${escapeHtml(tr('layout.ondePossoIr', {}, 'Onde posso ir'))}</div>
       ${linksHtml}
     </nav>
   `.trim();
@@ -121,7 +138,7 @@ export function Icon({ nome, tamanho = 'md', rotulo = null, decorativo = true, c
  * @param {Array<{ etapa: number, titulo: string, estado: 'concluido'|'em-andamento'|'nao-iniciado'|'bloqueado', href?: string }>} [props.marcos=[]]
  * @returns {string} HTML da barra e marcos de progresso
  */
-export function ProgressTrail({ etapaAtual = 1, totalEtapas = 6, titulo = 'Trilha de Aprendizagem', marcos = [] }) {
+export function ProgressTrail({ etapaAtual = 1, totalEtapas = 6, titulo = tr('comp.trilhaAprendizagem', {}, 'Trilha de Aprendizagem'), marcos = [] }) {
   const percentual = Math.round((Math.max(1, etapaAtual) / Math.max(1, totalEtapas)) * 100);
 
   const iconesEstado = {
@@ -132,56 +149,62 @@ export function ProgressTrail({ etapaAtual = 1, totalEtapas = 6, titulo = 'Trilh
   };
 
   const rotulosEstado = {
-    concluido: 'Concluído',
-    'em-andamento': 'Em andamento',
-    'nao-iniciado': 'Não iniciado',
-    bloqueado: 'Bloqueado',
+    concluido: tr('layout.estadoConcluido', {}, 'Concluído'),
+    'em-andamento': tr('layout.estadoEmAndamento', {}, 'Em andamento'),
+    'nao-iniciado': tr('layout.estadoNaoIniciado', {}, 'Não iniciado'),
+    bloqueado: tr('layout.estadoBloqueado', {}, 'Bloqueado'),
   };
 
   const marcosHtml = marcos.map((m) => {
     const estado = m.estado || 'nao-iniciado';
     const icone = iconesEstado[estado] || 'circle-dashed';
-    const rotulo = rotulosEstado[estado] || 'Não iniciado';
+    const rotulo = rotulosEstado[estado] || rotulosEstado['nao-iniciado'];
     const ehAtual = m.etapa === etapaAtual;
 
     const conteudo = `
       <span class="material-symbols-outlined icon-xs" aria-hidden="true">${icone}</span>
-      <span>Etapa ${m.etapa}: ${escapeHtml(m.titulo)}</span>
+      <span>${escapeHtml(tr('comp.etapaTitulo', { etapa: m.etapa, titulo: m.titulo }, `Etapa ${m.etapa}: ${m.titulo}`))}</span>
     `;
 
     if (m.href) {
       return `
-        <li class="trilha-marco-item estado-${estado} ${ehAtual ? 'voce-esta-aqui' : ''}" ${ehAtual ? 'aria-current="step"' : ''} title="${escapeHtml(m.titulo)} (${rotulo})">
+        <li class="trilha-marco-item estado-${estado} ${ehAtual ? 'voce-esta-aqui' : ''}" ${ehAtual ? 'aria-current="step"' : ''} title="${escapeHtml(m.titulo)} (${escapeHtml(rotulo)})">
           <a href="${escapeHtml(m.href)}" class="trilha-marco-link">${conteudo}</a>
         </li>
       `;
     }
 
     return `
-      <li class="trilha-marco-item estado-${estado} ${ehAtual ? 'voce-esta-aqui' : ''}" ${ehAtual ? 'aria-current="step"' : ''} title="${escapeHtml(m.titulo)} (${rotulo})">
+      <li class="trilha-marco-item estado-${estado} ${ehAtual ? 'voce-esta-aqui' : ''}" ${ehAtual ? 'aria-current="step"' : ''} title="${escapeHtml(m.titulo)} (${escapeHtml(rotulo)})">
         ${conteudo}
       </li>
     `;
   }).join('');
+
+  const resumoProgresso = tr(
+    'comp.resumoEtapa',
+    { titulo, atual: etapaAtual, total: totalEtapas, percentual },
+    `${titulo} — Etapa ${etapaAtual} de ${totalEtapas} (${percentual}%)`,
+  );
 
   return `
     <section class="comp-progress-trail progresso-etapas-box" aria-label="${escapeHtml(titulo)}">
       <div class="progresso-etapas-topo">
         <span class="progresso-etapas-contador">
           <span class="material-symbols-outlined icon-xs" aria-hidden="true">explore</span>
-          <span>${escapeHtml(titulo)} — Etapa ${etapaAtual} de ${totalEtapas} (${percentual}%)</span>
+          <span>${escapeHtml(resumoProgresso)}</span>
         </span>
         <div class="flex-linha flex-wrap gap-8">
-          <span class="estado-progresso-pill estado-concluido"><span class="material-symbols-outlined icon-xs" aria-hidden="true">check_circle</span> Concluído</span>
-          <span class="estado-progresso-pill estado-em-andamento"><span class="material-symbols-outlined icon-xs" aria-hidden="true">schedule</span> Em andamento</span>
-          <span class="estado-progresso-pill estado-nao-iniciado"><span class="material-symbols-outlined icon-xs" aria-hidden="true">circle-dashed</span> Não iniciado</span>
-          <span class="estado-progresso-pill estado-bloqueado"><span class="material-symbols-outlined icon-xs" aria-hidden="true">lock</span> Bloqueado</span>
+          <span class="estado-progresso-pill estado-concluido"><span class="material-symbols-outlined icon-xs" aria-hidden="true">check_circle</span> ${escapeHtml(rotulosEstado.concluido)}</span>
+          <span class="estado-progresso-pill estado-em-andamento"><span class="material-symbols-outlined icon-xs" aria-hidden="true">schedule</span> ${escapeHtml(rotulosEstado['em-andamento'])}</span>
+          <span class="estado-progresso-pill estado-nao-iniciado"><span class="material-symbols-outlined icon-xs" aria-hidden="true">circle-dashed</span> ${escapeHtml(rotulosEstado['nao-iniciado'])}</span>
+          <span class="estado-progresso-pill estado-bloqueado"><span class="material-symbols-outlined icon-xs" aria-hidden="true">lock</span> ${escapeHtml(rotulosEstado.bloqueado)}</span>
         </div>
       </div>
       <div class="progresso-etapas-barra" role="progressbar" aria-label="${escapeHtml(titulo)}" aria-valuenow="${etapaAtual}" aria-valuemin="1" aria-valuemax="${totalEtapas}">
         <div class="progresso-etapas-preenchimento" style="width: ${percentual}%;"></div>
       </div>
-      ${marcosHtml ? `<ol class="trilha-marcos" aria-label="Marcos da trilha">${marcosHtml}</ol>` : ''}
+      ${marcosHtml ? `<ol class="trilha-marcos" aria-label="${escapeHtml(tr('comp.marcosTrilha', {}, 'Marcos da trilha'))}">${marcosHtml}</ol>` : ''}
     </section>
   `.trim();
 }
@@ -232,20 +255,23 @@ export function SectionHeader({ secao = 'pensamento', titulo, subtitulo = '', ba
  * @returns {string} HTML da barra de direção Voltar / Próximo
  */
 export function BackNextBar({ voltar, avancar = null, mapaEtapaTexto = '', onClickMapa = "alternarPainelWayfinding('painel-wf-mapa')" }) {
+  const titleVoltar = tr('comp.voltarPara', { rotulo: voltar.rotulo }, `Voltar para ${voltar.rotulo}`);
+  const labelVoltar = tr('layout.voltarPrefixo', { rotulo: voltar.rotulo }, `Voltar: ${voltar.rotulo}`);
+  const titleAvancar = avancar ? tr('layout.avancarPara', { rotulo: avancar.rotulo }, `Avançar para ${avancar.rotulo}`) : '';
   return `
-    <div class="comp-back-next-bar wf-como-volto-avanco" role="group" aria-label="Voltar ou avançar">
+    <div class="comp-back-next-bar wf-como-volto-avanco" role="group" aria-label="${escapeHtml(tr('comp.voltarOuAvancar', {}, 'Voltar ou avançar'))}">
       ${mapaEtapaTexto ? `
-        <button type="button" class="btn btn-neutro btn-sm wf-nav-btn" onclick="${escapeHtml(onClickMapa)}" title="Ver Mapa do Curso">
+        <button type="button" class="btn btn-neutro btn-sm wf-nav-btn" onclick="${escapeHtml(onClickMapa)}" title="${escapeHtml(tr('comp.verMapaCurso', {}, 'Ver Mapa do Curso'))}">
           <span class="material-symbols-outlined icon-xs" aria-hidden="true">map</span>
           <span>${escapeHtml(mapaEtapaTexto)}</span>
         </button>
       ` : ''}
-      <a href="${escapeHtml(voltar.href)}" class="btn btn-neutro btn-sm wf-nav-btn seta-voltar" title="Voltar para ${escapeHtml(voltar.rotulo)}">
+      <a href="${escapeHtml(voltar.href)}" class="btn btn-neutro btn-sm wf-nav-btn seta-voltar" title="${escapeHtml(titleVoltar)}">
         <span class="material-symbols-outlined icon-xs" aria-hidden="true">arrow_back</span>
-        <span>Voltar: ${escapeHtml(voltar.rotulo)}</span>
+        <span>${escapeHtml(labelVoltar)}</span>
       </a>
       ${avancar ? `
-        <a href="${escapeHtml(avancar.href)}" class="btn btn-primario btn-sm wf-nav-btn seta-proximo" title="Avançar para ${escapeHtml(avancar.rotulo)}">
+        <a href="${escapeHtml(avancar.href)}" class="btn btn-primario btn-sm wf-nav-btn seta-proximo" title="${escapeHtml(titleAvancar)}">
           <span>${escapeHtml(avancar.rotulo)}</span>
           <span class="material-symbols-outlined icon-xs" aria-hidden="true">arrow_forward</span>
         </a>
@@ -263,17 +289,17 @@ export function BackNextBar({ voltar, avancar = null, mapaEtapaTexto = '', onCli
  * @param {{ href?: string, rotulo: string, onClick?: string }} [props.acaoPrimaria]
  * @param {{ href?: string, rotulo: string, onClick?: string }} [props.acaoSecundaria]
  * @param {boolean} [props.comBusca=true]
- * @param {string} [props.placeholderBusca='Buscar por código BNCC ou tema...']
+ * @param {string} [props.placeholderBusca]
  * @returns {string} HTML do estado vazio ou erro
  */
 export function EmptyState({
   icone = 'explore',
   titulo,
   descricao,
-  acaoPrimaria = { href: '/', rotulo: 'Ir para o início' },
+  acaoPrimaria = { href: '/', rotulo: tr('vazio.irInicio', {}, 'Ir para o início') },
   acaoSecundaria = null,
   comBusca = true,
-  placeholderBusca = 'Buscar por código BNCC (ex.: EF05CO01) ou tema...',
+  placeholderBusca = tr('comp.placeholderBuscaBncc', {}, 'Buscar por código BNCC (ex.: EF05CO01) ou tema...'),
 }) {
   const acaoPrimariaHtml = acaoPrimaria.href
     ? `<a href="${escapeHtml(acaoPrimaria.href)}" class="btn btn-primario flex-inline-icon"><span class="material-symbols-outlined icon-xs" aria-hidden="true">home</span> ${escapeHtml(acaoPrimaria.rotulo)}</a>`
@@ -296,10 +322,10 @@ export function EmptyState({
 
       ${comBusca ? `
         <form class="estado-saida-busca" onsubmit="event.preventDefault(); const q = this.q.value.trim(); window.location.href = q ? '/atividades.html?busca=' + encodeURIComponent(q) : '/atividades.html';">
-          <input type="search" name="q" placeholder="${escapeHtml(placeholderBusca)}" aria-label="Buscar na plataforma">
+          <input type="search" name="q" placeholder="${escapeHtml(placeholderBusca)}" aria-label="${escapeHtml(tr('comp.buscarPlataforma', {}, 'Buscar na plataforma'))}">
           <button type="submit" class="btn btn-primario flex-inline-icon">
             <span class="material-symbols-outlined icon-xs" aria-hidden="true">search</span>
-            <span>Buscar</span>
+            <span>${escapeHtml(tr('nav.buscar', {}, 'Buscar'))}</span>
           </button>
         </form>
       ` : ''}
@@ -315,8 +341,8 @@ export function EmptyState({
 export function ErrorState(props) {
   return EmptyState({
     icone: 'warning',
-    titulo: props.titulo || 'Página não encontrada (Erro 404)',
-    descricao: props.descricao || 'O recurso solicitado não existe ou mudou de endereço. Use a busca ou retorne ao início.',
+    titulo: props.titulo || tr('comp.erro404Titulo', {}, 'Página não encontrada (Erro 404)'),
+    descricao: props.descricao || tr('comp.erro404Desc', {}, 'O recurso solicitado não existe ou mudou de endereço. Use a busca ou retorne ao início.'),
     ...props,
   });
 }

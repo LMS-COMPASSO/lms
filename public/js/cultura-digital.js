@@ -158,7 +158,7 @@ document.addEventListener("DOMContentLoaded", () => {
   inicializarPegadaDigital();
 
   // Escuta trocas de idioma em tempo real via menu universal
-  window.addEventListener('idiomaAlterado', () => {
+  window.addEventListener('lms:idioma-alterado', () => {
     const pontosBadge = document.getElementById("pontos-cidadania-badge");
     if (pontosBadge) {
       pontosBadge.textContent = t('cd.pontosCidadania', { pontos: pontosCidadaniaTotal });
@@ -307,6 +307,30 @@ function inicializarChatInterativo() {
   carregarCenario("phishing");
 }
 
+function calcularForcaSenha(senha) {
+  const criterios = {
+    tam: senha.length >= 8,
+    maiusc: /[A-Z]/.test(senha),
+    num: /\d/.test(senha),
+    simbolo: /[^A-Za-z\d]/.test(senha),
+  };
+  const pontuacao = Object.values(criterios).filter(Boolean).length + (senha.length >= 12 ? 1 : 0);
+
+  if (senha.length === 0) {
+    return { criterios, largura: '0%', corBarra: '#ef4444', statusChave: 'cd.senhaStatusPadrao', corTexto: '#94a3b8', quebraChave: 'cd.tempoQuebraPadrao' };
+  }
+  if (pontuacao <= 1) {
+    return { criterios, largura: '20%', corBarra: '#ef4444', statusChave: 'cd.senhaMuitoFraca', corTexto: '#ef4444', quebraChave: 'cd.quebrada0001' };
+  }
+  if (pontuacao === 2) {
+    return { criterios, largura: '40%', corBarra: '#f97316', statusChave: 'cd.senhaFraca', corTexto: '#f97316', quebraChave: 'cd.quebradaMinutos' };
+  }
+  if (pontuacao === 3) {
+    return { criterios, largura: '70%', corBarra: '#eab308', statusChave: 'cd.senhaMedia', corTexto: '#eab308', quebraChave: 'cd.quebradaAnos' };
+  }
+  return { criterios, largura: '100%', corBarra: '#22c55e', statusChave: 'cd.senhaExcelente', corTexto: '#4ade80', quebraChave: 'cd.quebrada500Anos' };
+}
+
 /* ---------------------------------------------------------------------------
  * 2. Laboratório de Senhas Seguras ("Cofre Digital")
  * ------------------------------------------------------------------------ */
@@ -315,67 +339,27 @@ function inicializarTestadorSenha() {
   const barraForca = document.getElementById("barra-forca-senha");
   const statusTxt = document.getElementById("status-senha-txt");
   const tempoQuebra = document.getElementById("tempo-quebra-txt");
-
-  const reqTam = document.getElementById("req-tamanho");
-  const reqMaiusc = document.getElementById("req-maiuscula");
-  const reqNum = document.getElementById("req-numero");
-  const reqSimbolo = document.getElementById("req-simbolo");
+  const elementosReq = {
+    tam: document.getElementById("req-tamanho"),
+    maiusc: document.getElementById("req-maiuscula"),
+    num: document.getElementById("req-numero"),
+    simbolo: document.getElementById("req-simbolo"),
+  };
 
   if (!inputSenha) return;
 
   function atualizarForcaSenha() {
-    const senha = inputSenha.value;
-
-    const tem8Char = senha.length >= 8;
-    const temMaiusc = /[A-Z]/.test(senha);
-    const temNum = /\d/.test(senha);
-    const temSimb = /[^A-Za-z\d]/.test(senha);
-
-    if (reqTam) reqTam.classList.toggle("atendido", tem8Char);
-    if (reqMaiusc) reqMaiusc.classList.toggle("atendido", temMaiusc);
-    if (reqNum) reqNum.classList.toggle("atendido", temNum);
-    if (reqSimbolo) reqSimbolo.classList.toggle("atendido", temSimb);
-
-    let pontuacao = 0;
-    if (tem8Char) pontuacao++;
-    if (temMaiusc) pontuacao++;
-    if (temNum) pontuacao++;
-    if (temSimb) pontuacao++;
-    if (senha.length >= 12) pontuacao++;
-
+    const analise = calcularForcaSenha(inputSenha.value);
+    Object.entries(elementosReq).forEach(([chave, el]) => {
+      el?.classList.toggle("atendido", analise.criterios[chave]);
+    });
     if (!barraForca || !statusTxt || !tempoQuebra) return;
 
-    if (senha.length === 0) {
-      barraForca.style.width = "0%";
-      barraForca.style.background = "#ef4444";
-      statusTxt.textContent = t('cd.senhaStatusPadrao');
-      statusTxt.style.color = "#94a3b8";
-      tempoQuebra.textContent = t('cd.tempoQuebraPadrao');
-    } else if (pontuacao <= 1) {
-      barraForca.style.width = "20%";
-      barraForca.style.background = "#ef4444";
-      statusTxt.textContent = t('cd.senhaMuitoFraca');
-      statusTxt.style.color = "#ef4444";
-      tempoQuebra.textContent = t('cd.quebrada0001');
-    } else if (pontuacao === 2) {
-      barraForca.style.width = "40%";
-      barraForca.style.background = "#f97316";
-      statusTxt.textContent = t('cd.senhaFraca');
-      statusTxt.style.color = "#f97316";
-      tempoQuebra.textContent = t('cd.quebradaMinutos');
-    } else if (pontuacao === 3) {
-      barraForca.style.width = "70%";
-      barraForca.style.background = "#eab308";
-      statusTxt.textContent = t('cd.senhaMedia');
-      statusTxt.style.color = "#eab308";
-      tempoQuebra.textContent = t('cd.quebradaAnos');
-    } else {
-      barraForca.style.width = "100%";
-      barraForca.style.background = "#22c55e";
-      statusTxt.textContent = t('cd.senhaExcelente');
-      statusTxt.style.color = "#4ade80";
-      tempoQuebra.textContent = t('cd.quebrada500Anos');
-    }
+    barraForca.style.width = analise.largura;
+    barraForca.style.background = analise.corBarra;
+    statusTxt.textContent = t(analise.statusChave);
+    statusTxt.style.color = analise.corTexto;
+    tempoQuebra.textContent = t(analise.quebraChave);
   }
 
   atualizarSenhaFn = atualizarForcaSenha;

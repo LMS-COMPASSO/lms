@@ -26,7 +26,23 @@ import { anunciar, h } from './atividades/dom.js';
 import { criarJogador } from './atividades/jogadores.js';
 import { imprimirFichas } from './atividades/impressao.js';
 import { renderizarIcone } from './atividades/icones.js';
-import { t } from '/js/i18n.js';
+import {
+  t,
+  pluralT,
+  habTexto,
+  habAnos,
+  atvTitulo,
+  atvResumo,
+  atvInstrucao,
+  atvProfessor,
+  tituloCurtoPy3d,
+} from './atividades/traducao.js';
+import {
+  movimentoReduzidoAtivo,
+  animarFlip,
+  animarRevelacaoScroll,
+  executarComMatchMedia,
+} from '/js/animacoes-gsap.js';
 
 const raiz = document.getElementById('atividades-raiz');
 const parametros = new URLSearchParams(window.location.search);
@@ -35,7 +51,7 @@ const aulaId = Number(parametros.get('aula')) || null;
 const cursoId = Number(parametros.get('curso')) || null;
 const chaveProgresso = `lms_atividades_progresso:${usuario ? usuario.id : 'visitante'}`;
 const chaveUltimaAtividade = `lms_ultima_atividade:${usuario ? usuario.id : 'visitante'}`;
-const reduzirMovimento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const reduzirMovimento = movimentoReduzidoAtivo();
 
 const TituloPagina = usuario ? 'h2' : 'h1';
 const TituloCartao = usuario ? 'h3' : 'h2';
@@ -88,10 +104,10 @@ function salvarSubmissaoPythonLocal(atividade, dados = {}) {
     const nova = {
       id: Date.now(),
       usuario_id: usuario?.id || 0,
-      aluno_nome: usuario?.nome || 'Estudante Visitante',
+      aluno_nome: usuario?.nome || t('atvPage.visitante', {}, 'Estudante Visitante'),
       aluno_email: usuario?.email || 'visitante@escola.edu.br',
       atividade_id: atividade.id,
-      atividade_titulo: atividade.titulo,
+      atividade_titulo: atvTitulo(atividade),
       codigo_python: dados.codigoPython,
       sucesso: 1,
       tentativas: dados.tentativas || 1,
@@ -123,7 +139,7 @@ async function abrirCertificadoPython3d(evento, parceiroDupla = null) {
   const url = obterUrlCertificadoPython3d(parceiroDupla);
   try {
     const resp = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
-    if (!resp.ok) throw new Error('Falha ao abrir certificado');
+    if (!resp.ok) throw new Error(t('atvPage.erroCertificado'));
     const html = await resp.text();
     const blobUrl = URL.createObjectURL(new Blob([html], { type: 'text/html;charset=utf-8' }));
     window.open(blobUrl, '_blank', 'noopener');
@@ -133,86 +149,17 @@ async function abrirCertificadoPython3d(evento, parceiroDupla = null) {
   }
 }
 
-function bannerExploradorPython3d() {
-  const concluidas3d = contarPython3dConcluidas();
-  const total3d = ATIVIDADES_PYTHON_3D.length;
-  const conquistado = concluidas3d >= total3d && total3d > 0;
-
-  return h(
-    'section',
-    {
-      class: `atv-explorador-banner ${conquistado ? 'conquistado' : ''}`,
-      'aria-label': 'Progresso da Insígnia e Certificado Explorador Python 3D',
-    },
-    h(
-      'div',
-      { class: 'atv-explorador-esquerda' },
-      h(
-        'div',
-        { class: 'atv-explorador-icone', 'aria-hidden': 'true' },
-        h('span', { class: 'material-symbols-outlined icon-lg' }, conquistado ? 'workspace_premium' : 'deployed_code'),
-      ),
-      h(
-        'div',
-        { class: 'atv-explorador-info' },
-        h(
-          'h3',
-          {},
-          conquistado
-            ? 'Insígnia Conquistada: Explorador Python 3D! (+150 XP)'
-            : `Trilha Explorador Python 3D (${concluidas3d} de ${total3d} missões concluídas)`,
-        ),
-        h(
-          'p',
-          {},
-          conquistado
-            ? 'Parabéns! Você dominou todas as 6 missões tridimensionais de algoritmos em Python. Seu certificado oficial já está liberado.'
-            : 'Complete os 6 desafios do Laboratório 3D Python (individualmente ou em modo Dupla) para conquistar a medalha e o Certificado Explorador Python 3D.',
-        ),
-        h(
-          'div',
-          { class: 'atv-explorador-chips' },
-          ATIVIDADES_PYTHON_3D.map((atv) => {
-            const ok = Boolean(progresso[atv.id]?.concluida);
-            return h(
-              'span',
-              { class: `atv-chip-py3d ${ok ? 'ok' : ''}` },
-              `${ok ? '✓ ' : ''}${atv.titulo.replace('Python 3D: ', '')}`,
-            );
-          }),
-        ),
-      ),
-    ),
-    h(
-      'div',
-      { class: 'atv-explorador-acoes' },
-      h(
-        'a',
-        {
-          class: `btn ${conquistado ? 'btn-primario' : 'btn-neutro'} btn-sm flex-inline-icon`,
-          href: obterUrlCertificadoPython3d(),
-          target: '_blank',
-          rel: 'noopener',
-          onclick: (e) => abrirCertificadoPython3d(e),
-        },
-        h('span', { class: 'material-symbols-outlined icon-xs', 'aria-hidden': 'true' }, 'workspace_premium'),
-        conquistado ? 'Emitir Certificado Python 3D' : 'Visualizar Certificado Python 3D',
-      ),
-    ),
-  );
-}
-
 /**
  * Calcula o nível de domínio de uma habilidade BNCC com base nas atividades concluídas.
  */
 function nivelDominioHabilidade(codigo) {
   const relacionadas = ATIVIDADES.filter((a) => a.habilidades.includes(codigo));
-  if (relacionadas.length === 0) return { rotulo: 'Disponível', classe: 'dominio-disponivel', percentual: 0 };
+  if (relacionadas.length === 0) return { rotulo: t('hab.dominio.disponivel'), classe: 'dominio-disponivel', percentual: 0 };
   const concluidas = relacionadas.filter((a) => progresso[a.id]?.concluida).length;
   const percentual = Math.round((concluidas / relacionadas.length) * 100);
-  if (percentual === 100) return { rotulo: 'Consolidada', classe: 'dominio-consolidada', percentual };
-  if (percentual > 0) return { rotulo: 'Em progresso', classe: 'dominio-progresso', percentual };
-  return { rotulo: 'Não iniciada', classe: 'dominio-disponivel', percentual: 0 };
+  if (percentual === 100) return { rotulo: t('hab.dominio.consolidada'), classe: 'dominio-consolidada', percentual };
+  if (percentual > 0) return { rotulo: t('hab.dominio.progresso'), classe: 'dominio-progresso', percentual };
+  return { rotulo: t('hab.dominio.naoIniciada'), classe: 'dominio-disponivel', percentual: 0 };
 }
 
 /* ---------------------------------------------------------------------------
@@ -272,11 +219,11 @@ function cartaoDaAtividade(atividade) {
           estadoBadge,
         ),
       ),
-      h(TituloCartao, {}, t(`atv.${atividade.id}.titulo`, {}, atividade.titulo)),
-      h('p', {}, t(`atv.${atividade.id}.resumo`, {}, atividade.resumo)),
+      h(TituloCartao, {}, atvTitulo(atividade)),
+      h('p', {}, atvResumo(atividade)),
       h(
         'ul',
-        { class: 'atv-meta', 'aria-label': 'Metadados e habilidades BNCC' },
+        { class: 'atv-meta', 'aria-label': t('atvPage.metaCardsAria') },
         [
           t(`tipo.${atividade.tipo}`, {}, TIPOS[atividade.tipo].rotulo),
           t(`faixa.${atividade.faixa}`, {}, atividade.anos),
@@ -292,7 +239,7 @@ function cartaoDaAtividade(atividade) {
           'a',
           { class: `btn ${concluida ? 'btn-neutro' : 'btn-primario'} seta-proximo`, href: `/atividades.html?id=${encodeURIComponent(atividade.id)}` },
           concluida ? t('card.jogarDeNovo') : t('card.comecar'),
-          h('span', { class: 'somente-leitor' }, `: ${t(`atv.${atividade.id}.titulo`, {}, atividade.titulo)}`),
+          h('span', { class: 'somente-leitor' }, `: ${atvTitulo(atividade)}`),
           h('span', { class: 'material-symbols-outlined icon-xs', 'aria-hidden': 'true' }, 'arrow_forward'),
         ),
       ),
@@ -373,11 +320,11 @@ function bannerSpotlight(destaqueObj, concluidas, total) {
           h('span', { class: 'secao-pista-badge', 'data-secao': secaoEixo }, t(`eixo.${atividade.eixo}`, {}, eixoInfo.rotulo)),
           estadoBadge,
         ),
-        h(TituloPagina, { class: 'atv-spotlight-titulo' }, t(`atv.${atividade.id}.titulo`, {}, atividade.titulo)),
-        h('p', { class: 'atv-spotlight-resumo' }, t(`atv.${atividade.id}.resumo`, {}, atividade.resumo)),
+        h(TituloPagina, { class: 'atv-spotlight-titulo' }, atvTitulo(atividade)),
+        h('p', { class: 'atv-spotlight-resumo' }, atvResumo(atividade)),
         h(
           'ul',
-          { class: 'atv-spotlight-meta', 'aria-label': 'Metadados da atividade em destaque' },
+          { class: 'atv-spotlight-meta', 'aria-label': t('spotlight.metaAriaLabel') },
           [
             t(`tipo.${atividade.tipo}`, {}, TIPOS[atividade.tipo].rotulo),
             t(`faixa.${atividade.faixa}`, {}, atividade.anos),
@@ -427,10 +374,20 @@ function bannerSpotlight(destaqueObj, concluidas, total) {
             h('span', { class: 'material-symbols-outlined icon-xs', 'aria-hidden': 'true' }, 'workspace_premium'),
             t('spotlight.certificado3d', { concluidas: concluidas3d, total: total3d }),
           ),
+          h(
+            'a',
+            {
+              class: 'btn-spotlight-ghost',
+              href: '/workspace.html',
+              title: t('spotlight.workspaceTitle'),
+            },
+            h('span', { class: 'material-symbols-outlined icon-xs', 'aria-hidden': 'true' }, 'lightbulb'),
+            t('spotlight.meuWorkspace'),
+          ),
         ),
         h(
           'div',
-          { class: 'atv-spotlight-progresso-card', role: 'region', 'aria-label': 'Progresso na trilha' },
+          { class: 'atv-spotlight-progresso-card', role: 'region', 'aria-label': t('spotlight.progressoAriaLabel') },
           h(
             'div',
             { class: 'atv-spotlight-progresso-rotulos' },
@@ -445,7 +402,7 @@ function bannerSpotlight(destaqueObj, concluidas, total) {
               'aria-valuenow': String(percentualTotal),
               'aria-valuemin': '0',
               'aria-valuemax': '100',
-              'aria-label': `Progresso da trilha: ${percentualTotal}%`,
+              'aria-label': t('spotlight.progressoValorAria', { percentual: percentualTotal }),
             },
             h('div', { class: 'progress-bar-fill', style: `width: ${percentualTotal}%` }),
           ),
@@ -470,7 +427,7 @@ function bannerSpotlight(destaqueObj, concluidas, total) {
             'div',
             { class: 'atv-preview-legenda' },
             h('span', { class: 'atv-preview-badge' }, t(`tipo.${atividade.tipo}`, {}, TIPOS[atividade.tipo].rotulo)),
-            h('strong', {}, t(`atv.${atividade.id}.titulo`, {}, atividade.titulo)),
+            h('strong', {}, atvTitulo(atividade)),
             h(
               'span',
               { class: 'atv-preview-cta' },
@@ -484,98 +441,111 @@ function bannerSpotlight(destaqueObj, concluidas, total) {
   );
 }
 
-function renderCatalogo() {
-  document.title = 'Atividades dinâmicas e Laboratório 3D Python — LMS COMPASSO';
-  document.body.setAttribute('data-secao', 'pensamento');
-
-  const filtro = {
-    busca: (parametros.get('busca') || '').trim().toLowerCase(),
-    tipo: parametros.get('tipo') || 'todos',
-    conceito: 'todos',
-    faixa: parametros.get('faixa') || 'todas',
-    habilidade: parametros.get('hab') || 'todas',
-  };
-
-  const concluidasTotal = contarConcluidas(progresso, ATIVIDADES);
-  const totalGeral = ATIVIDADES.length;
-
-  // Atividade Destaque para o Hero CinemaOS
-  const ultimaId = lerUltimaVisitada();
-  let atividadeDestaque = null;
-  let tipoDestaque = 'recomendada';
-
+function escolherAtividadeDestaqueCatalogo(ultimaId) {
   if (ultimaId) {
-    const atv = buscarAtividade(ultimaId);
-    if (atv && !progresso[atv.id]?.concluida) {
-      atividadeDestaque = atv;
-      tipoDestaque = 'retomar';
+    const retomada = buscarAtividade(ultimaId);
+    if (retomada && !progresso[retomada.id]?.concluida) {
+      return { atividade: retomada, tipo: 'retomar' };
     }
   }
-
-  if (!atividadeDestaque) {
-    atividadeDestaque = ATIVIDADES.find((a) => !progresso[a.id]?.concluida);
+  const pendente = ATIVIDADES.find((a) => !progresso[a.id]?.concluida);
+  if (pendente) {
+    return { atividade: pendente, tipo: 'recomendada' };
   }
+  const primeira3d = ATIVIDADES.find((a) => a.id === 'python3d-sequencia-labirinto') || ATIVIDADES[0];
+  return { atividade: primeira3d, tipo: 'concluida' };
+}
 
-  if (!atividadeDestaque) {
-    atividadeDestaque = ATIVIDADES.find((a) => a.id === 'py3d-labirinto-1') || ATIVIDADES[0];
-    tipoDestaque = 'concluida';
-  }
+function atividadeCorrespondeFiltro(atividade, filtro) {
+  if (filtro.tipo !== 'todos' && atividade.tipo !== filtro.tipo) return false;
+  if (filtro.conceito !== 'todos' && atividade.conceito !== filtro.conceito) return false;
+  if (filtro.faixa !== 'todas' && atividade.faixa !== filtro.faixa) return false;
+  if (filtro.habilidade !== 'todas' && !atividade.habilidades.includes(filtro.habilidade)) return false;
 
-  // Lista de atividades
-  const lista = h('ul', { class: 'atv-grade', id: 'lista-atividades' });
+  const termo = filtro.busca;
+  if (!termo) return true;
+  const campos = [
+    atvTitulo(atividade),
+    atvResumo(atividade),
+    atividade.titulo,
+    atividade.resumo,
+    ...(atividade.habilidades || []),
+  ];
+  return campos.some((c) => String(c || '').toLowerCase().includes(termo));
+}
 
-  // Input de busca com ícone e botão limpar
-  const inputBusca = h('input', {
-    type: 'search',
-    class: 'atv-input-busca',
-    value: filtro.busca,
-    placeholder: t('toolbar.buscaPlaceholder'),
-    'aria-label': t('toolbar.buscaAriaLabel'),
-    oninput: (e) => {
-      filtro.busca = e.target.value.trim().toLowerCase();
-      btnLimparBusca.style.display = filtro.busca ? 'inline-flex' : 'none';
-      atualizar();
-    },
-  });
-
-  const btnLimparBusca = h(
-    'button',
-    {
-      type: 'button',
-      class: 'atv-busca-limpar',
-      'aria-label': t('toolbar.limparBusca'),
-      style: filtro.busca ? 'display: inline-flex;' : 'display: none;',
-      onclick: () => {
-        filtro.busca = '';
-        inputBusca.value = '';
-        btnLimparBusca.style.display = 'none';
-        atualizar();
-        inputBusca.focus();
-      },
-    },
-    h('span', { class: 'material-symbols-outlined icon-xs', 'aria-hidden': 'true' }, 'close'),
+function construirBreadcrumbsCatalogo() {
+  return h(
+    'nav',
+    { class: 'atv-breadcrumbs', 'aria-label': t('wf.voceEstaAqui') },
+    h(
+      'a',
+      { class: 'wf-breadcrumb-mobile-voltar seta-voltar', href: '/cursos.html' },
+      h('span', { class: 'material-symbols-outlined icon-xs', 'aria-hidden': 'true' }, 'arrow_back'),
+      t('wf.voltarTrilhas'),
+    ),
+    h(
+      'ol',
+      {},
+      h('li', {}, h('a', { href: '/' }, t('wf.inicio'))),
+      h('li', {}, h('a', { href: '/cursos.html' }, t('wf.pensamentoComputacional'))),
+      h('li', { 'aria-current': 'page' }, t('wf.atividadesLab3d')),
+    ),
   );
+}
 
-  // Categorias para a barra de pílulas segmentadas (CinemaOS Category bar)
-  const categorias = [
-    { tipo: 'todos', rotulo: t('toolbar.todas'), icone: 'apps' },
-    { tipo: 'python3d', rotulo: t('toolbar.python3d'), icone: 'deployed_code' },
-    { tipo: 'ordenar', rotulo: t('toolbar.algoritmos'), icone: 'format_list_numbered' },
-    { tipo: 'decompor', rotulo: t('toolbar.decomposicao'), icone: 'extension' },
-    { tipo: 'robo', rotulo: t('toolbar.robo'), icone: 'smart_toy' },
-    { tipo: 'blocos', rotulo: t('toolbar.blocos'), icone: 'widgets' },
-  ].filter((cat) => cat.tipo === 'todos' || ATIVIDADES.some((a) => a.tipo === cat.tipo));
+function animarEntradaCatalogo() {
+  executarComMatchMedia(
+    ({ gsap }) => {
+      const tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
+      tl.from('.atv-spotlight-conteudo > *', {
+        opacity: 0,
+        y: 12,
+        stagger: 0.02,
+        duration: 0.2,
+        clearProps: 'transform,opacity',
+      }, 0);
+      tl.from('.atv-spotlight-preview', {
+        opacity: 0,
+        scale: 0.96,
+        duration: 0.22,
+        ease: 'back.out(1.3)',
+        clearProps: 'transform,opacity',
+      }, 0);
+      gsap.to('.atv-preview-card', {
+        y: -6,
+        duration: 2.6,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+      });
+      tl.from('.atv-toolbar', {
+        opacity: 0,
+        y: 10,
+        duration: 0.2,
+        clearProps: 'transform,opacity',
+      }, 0);
+    },
+    ({ gsap }) => {
+      gsap.set('.atv-spotlight-conteudo > *, .atv-spotlight-preview, .atv-toolbar', {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        clearProps: 'transform,opacity',
+      });
+    },
+  );
+  animarRevelacaoScroll('.atv-card', { grupoPorPai: true, stagger: 0.03, y: 12 });
+}
 
+function criarGrupoPillsModalidades(categorias, filtro, atualizar) {
   const pillButtons = [];
   const pillTrack = h(
     'div',
-    { class: 'atv-pills-modalidades', role: 'tablist', 'aria-label': 'Filtrar por modalidade de atividade' },
+    { class: 'atv-pills-modalidades', role: 'tablist', 'aria-label': t('toolbar.modalidadesAria') },
     ...categorias.map((cat) => {
-      const count = cat.tipo === 'todos'
-        ? ATIVIDADES.length
-        : ATIVIDADES.filter((a) => a.tipo === cat.tipo).length;
+      const count = cat.tipo === 'todos' ? ATIVIDADES.length : ATIVIDADES.filter((a) => a.tipo === cat.tipo).length;
       const ehAtivo = filtro.tipo === cat.tipo;
-
       const btn = h(
         'button',
         {
@@ -601,34 +571,18 @@ function renderCatalogo() {
       return btn;
     }),
   );
+  return { pillButtons, pillTrack };
+}
 
-  // Dropdown de Habilidades BNCC (dentro da gaveta de filtros avançados)
-  const selectHabilidade = h(
-    'select',
-    {
-      id: 'select-hab-bncc',
-      class: 'atv-select-habilidade',
-      'aria-label': 'Filtrar por código de habilidade da BNCC Computação',
-      onchange: (e) => {
-        filtro.habilidade = e.target.value;
-        atualizarBadgeFiltros();
-        atualizar();
-      },
-    },
-    h('option', { value: 'todas' }, t('toolbar.todasHabilidades')),
-    ...Object.entries(HABILIDADES).map(([codigo, info]) => h(
-      'option',
-      { value: codigo, selected: filtro.habilidade === codigo ? 'selected' : null },
-      `${codigo} (${info.anos}) — ${info.texto.slice(0, 56)}...`,
-    )),
-  );
-
-  // Botões de Faixa de Ano (dentro da gaveta)
+function criarGrupoFaixaAno(filtro, aoAlterarFiltro) {
   const botoesFaixa = [];
-  const faixaOpcoes = [['todas', t('toolbar.todosAnos')], ...Object.entries(FAIXAS)];
+  const faixaOpcoes = [
+    ['todas', t('toolbar.todosAnos')],
+    ...Object.entries(FAIXAS).map(([valor, rotulo]) => [valor, t(`faixa.${valor}`, {}, rotulo)]),
+  ];
   const trackFaixa = h(
     'div',
-    { class: 'atv-chips-faixa', role: 'group', 'aria-label': 'Ano escolar' },
+    { class: 'atv-chips-faixa', role: 'group', 'aria-label': t('toolbar.anoAria') },
     ...faixaOpcoes.map(([valor, texto]) => {
       const ehAtivo = filtro.faixa === valor;
       const b = h(
@@ -644,8 +598,7 @@ function renderCatalogo() {
               btn.classList.toggle('ativo', ativo);
               btn.setAttribute('aria-pressed', String(ativo));
             });
-            atualizarBadgeFiltros();
-            atualizar();
+            aoAlterarFiltro();
           },
         },
         texto,
@@ -654,6 +607,97 @@ function renderCatalogo() {
       return b;
     }),
   );
+  return { botoesFaixa, faixaOpcoes, trackFaixa };
+}
+
+function criarInputBuscaCatalogo(filtro, aoAtualizarBusca) {
+  const inputBusca = h('input', {
+    type: 'search',
+    class: 'atv-input-busca',
+    value: filtro.busca,
+    placeholder: t('toolbar.buscaPlaceholder'),
+    'aria-label': t('toolbar.buscaAriaLabel'),
+    oninput: (e) => {
+      filtro.busca = e.target.value.trim().toLowerCase();
+      btnLimparBusca.style.display = filtro.busca ? 'inline-flex' : 'none';
+      aoAtualizarBusca();
+    },
+  });
+
+  const btnLimparBusca = h(
+    'button',
+    {
+      type: 'button',
+      class: 'atv-busca-limpar',
+      'aria-label': t('toolbar.limparBusca'),
+      style: filtro.busca ? 'display: inline-flex;' : 'display: none;',
+      onclick: () => {
+        filtro.busca = '';
+        inputBusca.value = '';
+        btnLimparBusca.style.display = 'none';
+        aoAtualizarBusca();
+        inputBusca.focus();
+      },
+    },
+    h('span', { class: 'material-symbols-outlined icon-xs', 'aria-hidden': 'true' }, 'close'),
+  );
+  return { inputBusca, btnLimparBusca };
+}
+
+function renderCatalogo() {
+  document.title = t('atvPage.catalogoMetaTitulo');
+  document.body.setAttribute('data-secao', 'pensamento');
+
+  const filtro = {
+    busca: (parametros.get('busca') || '').trim().toLowerCase(),
+    tipo: parametros.get('tipo') || 'todos',
+    conceito: 'todos',
+    faixa: parametros.get('faixa') || 'todas',
+    habilidade: parametros.get('hab') || 'todas',
+  };
+
+  const concluidasTotal = contarConcluidas(progresso, ATIVIDADES);
+  const totalGeral = ATIVIDADES.length;
+  const { atividade: atividadeDestaque, tipo: tipoDestaque } = escolherAtividadeDestaqueCatalogo(lerUltimaVisitada());
+  const lista = h('ul', { class: 'atv-grade', id: 'lista-atividades' });
+
+  const { inputBusca, btnLimparBusca } = criarInputBuscaCatalogo(filtro, () => atualizar());
+
+  const categorias = [
+    { tipo: 'todos', rotulo: t('toolbar.todas'), icone: 'apps' },
+    { tipo: 'python3d', rotulo: t('toolbar.python3d'), icone: 'deployed_code' },
+    { tipo: 'ordenar', rotulo: t('toolbar.algoritmos'), icone: 'format_list_numbered' },
+    { tipo: 'decompor', rotulo: t('toolbar.decomposicao'), icone: 'extension' },
+    { tipo: 'robo', rotulo: t('toolbar.robo'), icone: 'smart_toy' },
+    { tipo: 'blocos', rotulo: t('toolbar.blocos'), icone: 'widgets' },
+  ].filter((cat) => cat.tipo === 'todos' || ATIVIDADES.some((a) => a.tipo === cat.tipo));
+
+  const { pillButtons, pillTrack } = criarGrupoPillsModalidades(categorias, filtro, () => atualizar());
+
+  const selectHabilidade = h(
+    'select',
+    {
+      id: 'select-hab-bncc',
+      class: 'atv-select-habilidade',
+      'aria-label': t('toolbar.habSelectAria'),
+      onchange: (e) => {
+        filtro.habilidade = e.target.value;
+        atualizarBadgeFiltros();
+        atualizar();
+      },
+    },
+    h('option', { value: 'todas' }, t('toolbar.todasHabilidades')),
+    ...Object.entries(HABILIDADES).map(([codigo, info]) => h(
+      'option',
+      { value: codigo, selected: filtro.habilidade === codigo ? 'selected' : null },
+      `${codigo} (${habAnos(codigo, info.anos)}) — ${habTexto(codigo, info.texto).slice(0, 56)}...`,
+    )),
+  );
+
+  const { botoesFaixa, faixaOpcoes, trackFaixa } = criarGrupoFaixaAno(filtro, () => {
+    atualizarBadgeFiltros();
+    atualizar();
+  });
 
   // Indicador de filtros ativos
   const badgeFiltros = h('span', { class: 'atv-filtros-badge', style: 'display:none;' }, '0');
@@ -748,22 +792,39 @@ function renderCatalogo() {
 
   atualizarBadgeFiltros();
 
-  function atualizar(avisar = true) {
-    const termo = filtro.busca;
-    const visiveis = ATIVIDADES.filter((atividade) => {
-      const bateTipo = filtro.tipo === 'todos' || atividade.tipo === filtro.tipo;
-      const bateConceito = filtro.conceito === 'todos' || atividade.conceito === filtro.conceito;
-      const bateFaixa = filtro.faixa === 'todas' || atividade.faixa === filtro.faixa;
-      const bateHab = filtro.habilidade === 'todas' || atividade.habilidades.includes(filtro.habilidade);
-      const bateBusca = !termo
-        || atividade.titulo.toLowerCase().includes(termo)
-        || atividade.resumo.toLowerCase().includes(termo)
-        || atividade.habilidades.some((cod) => cod.toLowerCase().includes(termo));
-      return bateTipo && bateConceito && bateFaixa && bateHab && bateBusca;
+  function resetarFiltrosCatalogo() {
+    filtro.busca = '';
+    filtro.tipo = 'todos';
+    filtro.conceito = 'todos';
+    filtro.faixa = 'todas';
+    filtro.habilidade = 'todas';
+    inputBusca.value = '';
+    btnLimparBusca.style.display = 'none';
+    selectHabilidade.value = 'todas';
+    pillButtons.forEach((b, i) => {
+      const ativo = categorias[i].tipo === 'todos';
+      b.classList.toggle('ativo', ativo);
+      b.setAttribute('aria-selected', String(ativo));
     });
+    botoesFaixa.forEach((b, i) => {
+      const ativo = faixaOpcoes[i][0] === 'todas';
+      b.classList.toggle('ativo', ativo);
+      b.setAttribute('aria-pressed', String(ativo));
+    });
+    atualizarBadgeFiltros();
+    atualizar();
+  }
+
+  function atualizar(avisar = true) {
+    const visiveis = ATIVIDADES.filter((atividade) => atividadeCorrespondeFiltro(atividade, filtro));
 
     if (visiveis.length > 0) {
-      lista.replaceChildren(...visiveis.map(cartaoDaAtividade));
+      const preencher = () => lista.replaceChildren(...visiveis.map(cartaoDaAtividade));
+      if (avisar) {
+        animarFlip(() => lista.querySelectorAll('.atv-card'), preencher, { duration: 0.28, stagger: 0.015 });
+      } else {
+        preencher();
+      }
     } else {
       lista.replaceChildren(
         h(
@@ -772,46 +833,13 @@ function renderCatalogo() {
           h(
             'div',
             { class: 'estado-saida-404' },
-            h(
-              'div',
-              { class: 'estado-saida-icone', 'aria-hidden': 'true' },
-              h('span', { class: 'material-symbols-outlined icon-lg' }, 'search'),
-            ),
+            h('div', { class: 'estado-saida-icone', 'aria-hidden': 'true' }, h('span', { class: 'material-symbols-outlined icon-lg' }, 'search')),
             h('h3', {}, t('vazio.titulo')),
             h('p', {}, t('vazio.descricao')),
             h(
               'div',
               { class: 'estado-saida-acoes' },
-              h(
-                'button',
-                {
-                  type: 'button',
-                  class: 'btn btn-primario',
-                  onclick: () => {
-                    filtro.busca = '';
-                    filtro.tipo = 'todos';
-                    filtro.conceito = 'todos';
-                    filtro.faixa = 'todas';
-                    filtro.habilidade = 'todas';
-                    inputBusca.value = '';
-                    btnLimparBusca.style.display = 'none';
-                    selectHabilidade.value = 'todas';
-                    pillButtons.forEach((b, i) => {
-                      const ativo = categorias[i].tipo === 'todos';
-                      b.classList.toggle('ativo', ativo);
-                      b.setAttribute('aria-selected', String(ativo));
-                    });
-                    botoesFaixa.forEach((b, i) => {
-                      const ativo = faixaOpcoes[i][0] === 'todas';
-                      b.classList.toggle('ativo', ativo);
-                      b.setAttribute('aria-pressed', String(ativo));
-                    });
-                    atualizarBadgeFiltros();
-                    atualizar();
-                  },
-                },
-                t('vazio.mostrarTodas'),
-              ),
+              h('button', { type: 'button', class: 'btn btn-primario', onclick: resetarFiltrosCatalogo }, t('vazio.mostrarTodas')),
               h('a', { class: 'btn btn-neutro seta-voltar', href: '/' }, h('span', { class: 'material-symbols-outlined icon-xs', 'aria-hidden': 'true' }, 'home'), t('vazio.irInicio')),
             ),
           ),
@@ -820,54 +848,20 @@ function renderCatalogo() {
     }
 
     if (avisar) {
-      anunciar(`${visiveis.length} ${visiveis.length === 1 ? 'atividade encontrada' : 'atividades encontradas'}.`);
-      if (!reduzirMovimento && typeof gsap !== 'undefined') {
-        gsap.fromTo(
-          '.atv-card',
-          { opacity: 0, y: 12, scale: 0.98 },
-          { opacity: 1, y: 0, scale: 1, stagger: 0.02, duration: 0.28, ease: 'power2.out' },
-        );
-      }
+      anunciar(pluralT(visiveis.length, 'atvPage.encontradaSing', 'atvPage.encontradaPlur'));
     }
   }
 
-  // Montagem na raiz com padrão semântico (evita duplicação com a barra superior de wayfinding)
   const elementosRaiz = [];
   const temWayfindingSuperior = Boolean(document.getElementById('barra-wayfinding-universal') || document.body.classList.contains('modo-app'));
   if (!temWayfindingSuperior) {
-    elementosRaiz.push(
-      h(
-        'nav',
-        { class: 'atv-breadcrumbs', 'aria-label': t('wf.voceEstaAqui') },
-        h(
-          'a',
-          { class: 'wf-breadcrumb-mobile-voltar seta-voltar', href: '/cursos.html' },
-          h('span', { class: 'material-symbols-outlined icon-xs', 'aria-hidden': 'true' }, 'arrow_back'),
-          t('wf.voltarTrilhas'),
-        ),
-        h(
-          'ol',
-          {},
-          h('li', {}, h('a', { href: '/' }, t('wf.inicio'))),
-          h('li', {}, h('a', { href: '/cursos.html' }, t('wf.pensamentoComputacional'))),
-          h('li', { 'aria-current': 'page' }, t('wf.atividadesLab3d')),
-        ),
-      ),
-    );
+    elementosRaiz.push(construirBreadcrumbsCatalogo());
   }
 
-  elementosRaiz.push(
-    // Spotlight Hero CinemaOS
-    bannerSpotlight(
-      { atividade: atividadeDestaque, tipoDestaque },
-      concluidasTotal,
-      totalGeral,
-    ),
-  );
+  elementosRaiz.push(bannerSpotlight({ atividade: atividadeDestaque, tipoDestaque }, concluidasTotal, totalGeral));
 
   raiz.replaceChildren(
     ...elementosRaiz,
-    // Seção de Descoberta com Barra de Ferramentas CinemaOS
     h(
       'section',
       { class: 'atv-descoberta', id: 'catalogo-atividades', 'aria-label': t('toolbar.secaoAriaLabel') },
@@ -890,45 +884,7 @@ function renderCatalogo() {
   );
 
   atualizar(false);
-
-  // Orquestração de entrada fluida e rápida com GSAP (conclui em < 300ms e limpa estilos inline)
-  if (!reduzirMovimento && typeof gsap !== 'undefined') {
-    const tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
-    tl.from('.atv-spotlight-conteudo > *', {
-      opacity: 0,
-      y: 12,
-      stagger: 0.02,
-      duration: 0.2,
-      clearProps: 'transform,opacity',
-    }, 0);
-    tl.from('.atv-spotlight-preview', {
-      opacity: 0,
-      scale: 0.96,
-      duration: 0.22,
-      ease: 'back.out(1.3)',
-      clearProps: 'transform,opacity',
-    }, 0);
-    gsap.to('.atv-preview-card', {
-      y: -6,
-      duration: 2.6,
-      repeat: -1,
-      yoyo: true,
-      ease: 'sine.inOut',
-    });
-    tl.from('.atv-toolbar', {
-      opacity: 0,
-      y: 10,
-      duration: 0.2,
-      clearProps: 'transform,opacity',
-    }, 0);
-    tl.from('.atv-card', {
-      opacity: 0,
-      y: 12,
-      stagger: { amount: 0.12 },
-      duration: 0.2,
-      clearProps: 'transform,opacity',
-    }, 0.04);
-  }
+  animarEntradaCatalogo();
 }
 
 /* ---------------------------------------------------------------------------
@@ -947,16 +903,16 @@ function mapaOrientacaoDaTrilha(atividadeAtual) {
     const ehAtual = item.id === atividadeAtual.id;
     let classeEstado = 'estado-nao-iniciado';
     let iconeEstado = 'radio_button_unchecked';
-    let rotuloEstado = 'Não iniciado';
+    let rotuloEstado = t('card.naoIniciado');
 
     if (concluida) {
       classeEstado = 'estado-concluido';
       iconeEstado = 'check_circle';
-      rotuloEstado = 'Concluído';
+      rotuloEstado = t('card.concluido');
     } else if (ehAtual) {
       classeEstado = 'estado-em-andamento';
       iconeEstado = 'schedule';
-      rotuloEstado = 'Em andamento (Você está aqui)';
+      rotuloEstado = t('trilha.estadoAqui');
     }
 
     return h(
@@ -966,18 +922,18 @@ function mapaOrientacaoDaTrilha(atividadeAtual) {
         'a',
         {
           href: `/atividades.html?id=${encodeURIComponent(item.id)}`,
-          title: `Etapa ${idx + 1}: ${item.titulo} (${rotuloEstado})`,
+          title: t('trilha.marcoTitle', { etapa: idx + 1, titulo: atvTitulo(item), estado: rotuloEstado }),
           style: 'text-decoration:none; color:inherit; display:inline-flex; align-items:center; gap:6px;',
         },
         h('span', { class: 'material-symbols-outlined icon-xs', 'aria-hidden': 'true' }, iconeEstado),
-        h('span', {}, `${idx + 1}. ${item.titulo.replace('Python 3D: ', '')}`),
+        h('span', {}, `${idx + 1}. ${tituloCurtoPy3d(item)}`),
       ),
     );
   });
 
   return h(
     'section',
-    { class: 'progresso-etapas-box', 'aria-label': 'Mapa do curso e progresso na trilha de atividades' },
+    { class: 'progresso-etapas-box', 'aria-label': t('trilha.secaoAria') },
     h(
       'div',
       { class: 'progresso-etapas-topo' },
@@ -985,25 +941,25 @@ function mapaOrientacaoDaTrilha(atividadeAtual) {
         'span',
         { class: 'progresso-etapas-contador' },
         h('span', { class: 'material-symbols-outlined icon-xs', 'aria-hidden': 'true' }, 'map'),
-        `Mapa da Trilha: Etapa ${etapaNumero} de ${totalEtapas}`,
+        t('trilha.contador', { etapa: etapaNumero, total: totalEtapas }),
       ),
       proxima
-        ? h('span', { class: 'mapa-tag-proximo' }, `O que vem a seguir: ${proxima.titulo}`)
-        : h('span', { class: 'mapa-tag-aqui' }, 'Última etapa da trilha!'),
+        ? h('span', { class: 'mapa-tag-proximo' }, t('trilha.proximo', { titulo: atvTitulo(proxima) }))
+        : h('span', { class: 'mapa-tag-aqui' }, t('trilha.ultima')),
     ),
     h(
       'div',
       {
         class: 'progresso-etapas-barra',
         role: 'progressbar',
-        'aria-label': `Etapa ${etapaNumero} de ${totalEtapas}`,
+        'aria-label': t('trilha.etapaBarraAria', { etapa: etapaNumero, total: totalEtapas }),
         'aria-valuenow': String(etapaNumero),
         'aria-valuemin': '1',
         'aria-valuemax': String(totalEtapas),
       },
       h('div', { class: 'progresso-etapas-preenchimento', style: `width: ${percentual}%` }),
     ),
-    h('ol', { class: 'trilha-marcos', 'aria-label': 'Marcos da trilha de atividades' }, marcos),
+    h('ol', { class: 'trilha-marcos', 'aria-label': t('trilha.marcosAria') }, marcos),
   );
 }
 
@@ -1014,8 +970,8 @@ function mapaOrientacaoDaTrilha(atividadeAtual) {
 function mapaHabilidadesDaAtividade(atividade) {
   return h(
     'section',
-    { class: 'atv-mapa-hab-box', 'aria-label': 'Habilidades da BNCC trabalhadas nesta atividade' },
-    h('h3', { class: 'atv-mapa-hab-titulo' }, 'Habilidades BNCC Trabalhadas'),
+    { class: 'atv-mapa-hab-box', 'aria-label': t('hab.secaoAria') },
+    h('h3', { class: 'atv-mapa-hab-titulo' }, t('hab.secaoTitulo')),
     h(
       'div',
       { class: 'atv-mapa-hab-grid' },
@@ -1029,10 +985,10 @@ function mapaHabilidadesDaAtividade(atividade) {
             'div',
             { class: 'atv-hab-topo' },
             h('span', { class: 'badge-bncc-codigo' }, codigo),
-            h('span', { class: 'atv-hab-anos' }, info.anos),
+            h('span', { class: 'atv-hab-anos' }, habAnos(codigo, info.anos)),
             h('span', { class: `atv-hab-dominio ${dominio.classe}` }, `${dominio.rotulo} (${dominio.percentual}%)`),
           ),
-          h('p', { class: 'atv-hab-texto' }, info.texto),
+          h('p', { class: 'atv-hab-texto' }, habTexto(codigo, info.texto)),
         );
       }),
     ),
@@ -1040,35 +996,150 @@ function mapaHabilidadesDaAtividade(atividade) {
 }
 
 function painelDoProfessor(atividade) {
-  const { professor } = atividade;
+  const prof = atvProfessor(atividade);
   return h(
     'details',
     { class: 'atv-professor' },
-    h('summary', {}, 'Orientações para o professor e versão desplugada'),
+    h('summary', {}, t('prof.summary')),
     h(
       'div',
       { class: 'atv-professor-corpo' },
-      h('h3', {}, 'Objetivo Pedagógico'),
-      h('p', {}, professor.objetivo),
-      h('h3', {}, 'Habilidades da BNCC Computação'),
+      h('h3', {}, t('prof.objetivoTitulo')),
+      h('p', {}, prof.objetivo),
+      h('h3', {}, t('prof.habilidadesTitulo')),
       h('dl', {}, atividade.habilidades.flatMap((codigo) => [
-        h('dt', {}, `${codigo} · ${HABILIDADES[codigo].anos}`),
-        h('dd', {}, HABILIDADES[codigo].texto),
+        h('dt', {}, `${codigo} · ${habAnos(codigo, HABILIDADES[codigo].anos)}`),
+        h('dd', {}, habTexto(codigo, HABILIDADES[codigo].texto)),
       ])),
-      h('p', { class: 'atv-aviso' }, 'Alinhamento pedagógico fundamentado no Complemento à BNCC Computação.'),
-      professor.observacao ? h('p', { class: 'atv-aviso' }, professor.observacao) : null,
-      h('h3', {}, 'Versão desplugada (sem tela)'),
-      h('p', {}, professor.desplugada),
-      h('p', { class: 'mt-10' }, h('button', { type: 'button', class: 'btn btn-neutro btn-sm flex-inline-icon', onclick: () => imprimirFichas(atividade) }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'print'), ' Imprimir fichas (A4)')),
-      h('h3', {}, 'Para conversar em sala'),
-      h('ul', {}, professor.conversa.map((pergunta) => h('li', {}, pergunta))),
+      h('p', { class: 'atv-aviso' }, t('prof.alinhamento')),
+      prof.observacao ? h('p', { class: 'atv-aviso' }, prof.observacao) : null,
+      h('h3', {}, t('prof.desplugadaTitulo')),
+      h('p', {}, prof.desplugada),
+      h('p', { class: 'mt-10' }, h('button', { type: 'button', class: 'btn btn-neutro btn-sm flex-inline-icon', onclick: () => imprimirFichas(atividade) }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'print'), ` ${t('prof.imprimirFichas')}`)),
+      h('h3', {}, t('prof.conversaTitulo')),
+      h('ul', {}, prof.conversa.map((pergunta) => h('li', {}, pergunta))),
+    ),
+  );
+}
+
+function criarBotaoCertificado3dConclusao(concluiuTodas, parceiroDupla) {
+  const classeCert = concluiuTodas ? 'btn-primario' : 'btn-secundario';
+  const labelCert = concluiuTodas
+    ? t('spotlight.certificado3dEmitir', {}, 'Emitir Certificado Explorador Python 3D')
+    : t('spotlight.certificado3dVisualizar', {}, 'Visualizar Certificado Python 3D');
+  return h(
+    'a',
+    {
+      class: `btn ${classeCert} flex-inline-icon`,
+      href: obterUrlCertificadoPython3d(parceiroDupla),
+      target: '_blank',
+      rel: 'noopener',
+      onclick: (e) => abrirCertificadoPython3d(e, parceiroDupla),
+    },
+    h('span', { class: 'material-symbols-outlined icon-xs' }, 'workspace_premium'),
+    labelCert,
+  );
+}
+
+function montarAvisosConclusao(atividade, dados, concluiuTodasPython3d) {
+  const avisos = [];
+  if (atividade.tipo === 'python3d' && dados?.codigoPython) {
+    avisos.push(
+      h(
+        'p',
+        { class: 'atv-feedback sucesso flex-inline-icon' },
+        h('span', { class: 'material-symbols-outlined icon-xs' }, 'cloud_done'),
+        dados?.parceiroDupla
+          ? ` ${t('atvPage.pythonDuplaSalva', { parceiro: dados.parceiroDupla })}`
+          : ` ${t('atvPage.pythonSoloSalva')}`,
+      ),
+    );
+  }
+  if (concluiuTodasPython3d && atividade.tipo === 'python3d') {
+    avisos.push(
+      h(
+        'p',
+        { class: 'atv-feedback sucesso flex-inline-icon' },
+        h('span', { class: 'material-symbols-outlined icon-xs' }, 'military_tech'),
+        ` ${t('atvPage.insigniaPy3d', { total: ATIVIDADES_PYTHON_3D.length })}`,
+      ),
+    );
+  }
+  return avisos;
+}
+
+async function sincronizarGamificacaoConclusaoRemota(atividade, dados) {
+  if (!usuario) return;
+  try {
+    const pontuacaoEstrelas = dados?.estrelas ? Math.min(10, 4 + Number(dados.estrelas) * 2) : 10.0;
+    await api('/gamificacao/concluir-atividade', {
+      method: 'POST',
+      body: JSON.stringify({
+        atividadeId: atividade.id,
+        habilidades: Array.isArray(atividade.habilidades) ? atividade.habilidades : [],
+        pontuacao: pontuacaoEstrelas,
+        cursoId: cursoId || undefined,
+        titulo: atividade.titulo,
+        xp: atividade.tipo === 'python3d' ? 35 : 25,
+        codigoPython: dados?.codigoPython || '',
+        tentativas: dados?.tentativas || 1,
+        estrelas: dados?.estrelas || 3,
+        parceiroDupla: dados?.parceiroDupla || null,
+        papelDupla: dados?.papelDupla || null,
+      }),
+    });
+  } catch (erroGamificacao) {
+    console.warn('Gamificação mantida em armazenamento local:', erroGamificacao?.message || erroGamificacao);
+  }
+}
+
+async function sincronizarConclusaoAulaVinculada(avisos) {
+  try {
+    await api(`/aulas/${aulaId}/progresso`, { method: 'POST', body: JSON.stringify({ concluida: true }) });
+    avisos.push(h('p', { class: 'atv-feedback sucesso flex-inline-icon' }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'check_circle'), ` ${t('atvPage.aulaConcluida')}`));
+  } catch (erro) {
+    avisos.push(h('p', { class: 'atv-feedback erro' }, t('atvPage.aulaConcluidaErro', { msg: erro.message })));
+  }
+}
+
+function construirNavegacaoAtividade(atividade, anterior, proxima, rotuloEixo, codigoHabPrincipal, tituloAtividade) {
+  return h(
+    'div',
+    { class: 'atv-topo-navegacao' },
+    h(
+      'nav',
+      { class: 'atv-breadcrumbs', 'aria-label': t('wf.voceEstaAqui', {}, 'Você está aqui') /* 'aria-label': 'Você está aqui' */ },
+      h(
+        'a',
+        { class: 'wf-breadcrumb-mobile-voltar seta-voltar', href: '/atividades.html' },
+        h('span', { class: 'material-symbols-outlined icon-xs', 'aria-hidden': 'true' }, 'arrow_back'),
+        t('wf.voltarTrilhas', {}, 'Voltar para Trilhas'),
+      ),
+      h(
+        'ol',
+        {},
+        h('li', {}, h('a', { href: '/' }, t('wf.inicio', {}, 'Início'))),
+        h('li', {}, h('a', { href: '/atividades.html' }, rotuloEixo)),
+        h('li', {}, h('a', { href: `/atividades.html?hab=${encodeURIComponent(codigoHabPrincipal)}` }, codigoHabPrincipal)),
+        h('li', { 'aria-current': 'page' }, tituloAtividade),
+      ),
+    ),
+    h(
+      'div',
+      { class: 'atv-nav-sequencial' },
+      anterior
+        ? h('a', { class: 'btn btn-neutro btn-sm seta-voltar', href: `/atividades.html?id=${encodeURIComponent(anterior.id)}`, title: `${t('nav.voltar', {}, 'Voltar')}: ${t(`atv.${anterior.id}.titulo`, {}, anterior.titulo)}` }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'arrow_back'), t('nav.voltar', {}, 'Voltar'))
+        : null,
+      proxima
+        ? h('a', { class: 'btn btn-neutro btn-sm seta-proximo', href: `/atividades.html?id=${encodeURIComponent(proxima.id)}`, title: `${t('nav.proximo', {}, 'Próximo')}: ${t(`atv.${proxima.id}.titulo`, {}, proxima.titulo)}` }, t('nav.proximo', {}, 'Próximo'), h('span', { class: 'material-symbols-outlined icon-xs' }, 'arrow_forward'))
+        : null,
     ),
   );
 }
 
 function renderAtividade(atividade) {
-  const tituloAtividade = t(`atv.${atividade.id}.titulo`, {}, atividade.titulo);
-  const instrucaoAtividade = t(`atv.${atividade.id}.instrucao`, {}, atividade.instrucao);
+  const tituloAtividade = atvTitulo(atividade);
+  const instrucaoAtividade = atvInstrucao(atividade);
   document.title = `${tituloAtividade} — LMS COMPASSO`;
   const secaoEixo = obterSecaoPorEixo(atividade.eixo);
   const eixoInfo = EIXOS_BNCC[atividade.eixo] || EIXOS_BNCC['pensamento-computacional'];
@@ -1095,26 +1166,9 @@ function renderAtividade(atividade) {
 
     const concluidas3d = contarPython3dConcluidas();
     const concluiuTodasPython3d = concluidas3d >= ATIVIDADES_PYTHON_3D.length && ATIVIDADES_PYTHON_3D.length > 0;
-
-    let btnCertificado3d = null;
-    if (atividade.tipo === 'python3d') {
-      const classeCert = concluiuTodasPython3d ? 'btn-primario' : 'btn-secundario';
-      const labelCert = concluiuTodasPython3d
-        ? t('spotlight.certificado3dEmitir', {}, 'Emitir Certificado Explorador Python 3D')
-        : t('spotlight.certificado3dVisualizar', {}, 'Visualizar Certificado Python 3D');
-      btnCertificado3d = h(
-        'a',
-        {
-          class: `btn ${classeCert} flex-inline-icon`,
-          href: obterUrlCertificadoPython3d(dados?.parceiroDupla),
-          target: '_blank',
-          rel: 'noopener',
-          onclick: (e) => abrirCertificadoPython3d(e, dados?.parceiroDupla),
-        },
-        h('span', { class: 'material-symbols-outlined icon-xs' }, 'workspace_premium'),
-        labelCert,
-      );
-    }
+    const btnCertificado3d = atividade.tipo === 'python3d'
+      ? criarBotaoCertificado3dConclusao(concluiuTodasPython3d, dados?.parceiroDupla)
+      : null;
 
     const acoes = [
       proxima
@@ -1124,113 +1178,31 @@ function renderAtividade(atividade) {
       h('a', { class: 'btn btn-neutro seta-voltar', href: '/atividades.html' }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'arrow_back'), t('spotlight.verTodas', {}, 'Ver todas as atividades')),
     ];
 
-    const avisos = [];
-    if (atividade.tipo === 'python3d' && dados?.codigoPython) {
-      avisos.push(
-        h(
-          'p',
-          { class: 'atv-feedback sucesso flex-inline-icon' },
-          h('span', { class: 'material-symbols-outlined icon-xs' }, 'cloud_done'),
-          dados?.parceiroDupla
-            ? ` Solução Python em Dupla (com ${dados.parceiroDupla}) salva no portfólio da turma para avaliação docente!`
-            : ' Sua solução em código Python foi salva no portfólio da turma para visualização do professor!',
-        ),
-      );
-    }
-
-    if (concluiuTodasPython3d && atividade.tipo === 'python3d') {
-      avisos.push(
-        h(
-          'p',
-          { class: 'atv-feedback sucesso flex-inline-icon' },
-          h('span', { class: 'material-symbols-outlined icon-xs' }, 'military_tech'),
-          ' Insígnia Desbloqueada: Explorador Python 3D (6/6 missões tridimensionais concluídas)!',
-        ),
-      );
-    }
-
-    if (usuario) {
-      try {
-        const pontuacaoEstrelas = dados?.estrelas ? Math.min(10, 4 + Number(dados.estrelas) * 2) : 10.0;
-        await api('/gamificacao/concluir-atividade', {
-          method: 'POST',
-          body: JSON.stringify({
-            atividadeId: atividade.id,
-            habilidades: Array.isArray(atividade.habilidades) ? atividade.habilidades : [],
-            pontuacao: pontuacaoEstrelas,
-            cursoId: cursoId || undefined,
-            titulo: atividade.titulo,
-            xp: atividade.tipo === 'python3d' ? 35 : 25,
-            codigoPython: dados?.codigoPython || '',
-            tentativas: dados?.tentativas || 1,
-            estrelas: dados?.estrelas || 3,
-            parceiroDupla: dados?.parceiroDupla || null,
-            papelDupla: dados?.papelDupla || null,
-          }),
-        });
-      } catch {
-        // Fallback silencioso se o backend estiver offline
-      }
-    }
+    const avisos = montarAvisosConclusao(atividade, dados, concluiuTodasPython3d);
+    await sincronizarGamificacaoConclusaoRemota(atividade, dados);
 
     if (usuario?.perfil === 'aluno' && aulaId && !aulaSincronizada) {
       aulaSincronizada = true;
-      try {
-        await api(`/aulas/${aulaId}/progresso`, { method: 'POST', body: JSON.stringify({ concluida: true }) });
-        avisos.push(h('p', { class: 'atv-feedback sucesso flex-inline-icon' }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'check_circle'), ' A aula foi marcada como concluída no seu curso.'));
-      } catch (erro) {
-        avisos.push(h('p', { class: 'atv-feedback erro' }, `Não foi possível marcar a aula como concluída no curso: ${erro.message}`));
-      }
+      await sincronizarConclusaoAulaVinculada(avisos);
     }
     if (usuario && cursoId) {
-      acoes.unshift(h('a', { class: 'btn btn-secundario seta-voltar', href: `/curso-detalhe.html?id=${cursoId}` }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'arrow_back'), 'Voltar ao curso'));
+      acoes.unshift(h('a', { class: 'btn btn-secundario seta-voltar', href: `/curso-detalhe.html?id=${cursoId}` }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'arrow_back'), t('atvPage.voltarCurso')));
     }
 
     areaConclusao.replaceChildren(...avisos, h('div', { class: 'atv-acoes' }, acoes));
   }
 
-  const jogador = criarJogador(atividade, { aoConcluir, reduzirMovimento });
+  const jogador = criarJogador(atividade, { aoConcluir, reduzirMovimento, TituloPainel: usuario ? 'h4' : 'h3' });
 
   raiz.replaceChildren(
-    h(
-      'div',
-      { class: 'atv-topo-navegacao' },
-      h(
-        'nav',
-        { class: 'atv-breadcrumbs', 'aria-label': t('wf.voceEstaAqui', {}, 'Você está aqui') /* 'aria-label': 'Você está aqui' */ },
-        h(
-          'a',
-          { class: 'wf-breadcrumb-mobile-voltar seta-voltar', href: '/atividades.html' },
-          h('span', { class: 'material-symbols-outlined icon-xs', 'aria-hidden': 'true' }, 'arrow_back'),
-          t('wf.voltarTrilhas', {}, 'Voltar para Trilhas'),
-        ),
-        h(
-          'ol',
-          {},
-          h('li', {}, h('a', { href: '/' }, t('wf.inicio', {}, 'Início'))),
-          h('li', {}, h('a', { href: '/atividades.html' }, rotuloEixo)),
-          h('li', {}, h('a', { href: `/atividades.html?hab=${encodeURIComponent(codigoHabPrincipal)}` }, codigoHabPrincipal)),
-          h('li', { 'aria-current': 'page' }, tituloAtividade),
-        ),
-      ),
-      h(
-        'div',
-        { class: 'atv-nav-sequencial' },
-        anterior
-          ? h('a', { class: 'btn btn-neutro btn-sm seta-voltar', href: `/atividades.html?id=${encodeURIComponent(anterior.id)}`, title: `${t('nav.voltar', {}, 'Voltar')}: ${t(`atv.${anterior.id}.titulo`, {}, anterior.titulo)}` }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'arrow_back'), t('nav.voltar', {}, 'Voltar'))
-          : null,
-        proxima
-          ? h('a', { class: 'btn btn-neutro btn-sm seta-proximo', href: `/atividades.html?id=${encodeURIComponent(proxima.id)}`, title: `${t('nav.proximo', {}, 'Próximo')}: ${t(`atv.${proxima.id}.titulo`, {}, proxima.titulo)}` }, t('nav.proximo', {}, 'Próximo'), h('span', { class: 'material-symbols-outlined icon-xs' }, 'arrow_forward'))
-          : null,
-      ),
-    ),
+    construirNavegacaoAtividade(atividade, anterior, proxima, rotuloEixo, codigoHabPrincipal, tituloAtividade),
     mapaOrientacaoDaTrilha(atividade),
     h(
       'ul',
       { class: 'atv-chips' },
       h(
         'li',
-        { class: 'atv-chip atv-chip-eixo', title: `Eixo Estruturante BNCC: ${rotuloEixo}` },
+        { class: 'atv-chip atv-chip-eixo', title: `${t('eixoBnccLabel', {}, 'Eixo Estruturante BNCC')}: ${rotuloEixo}` },
         h('span', { class: 'material-symbols-outlined icon-xs', 'aria-hidden': 'true' }, eixoInfo.icone || 'psychology'),
         rotuloEixo,
       ),
@@ -1316,27 +1288,32 @@ function renderNaoEncontrada() {
  * Início
  * ------------------------------------------------------------------------ */
 
+function atualizarTituloTopbar() {
+  const el = document.getElementById('titulo-pagina');
+  if (el) el.textContent = t('atvPage.topbarTitulo', {}, 'Atividades & Laboratório 3D');
+}
+
+function renderizarPorRota() {
+  const currentParams = new URLSearchParams(window.location.search);
+  const idPedido = currentParams.get('id');
+  const atividadePedida = idPedido ? buscarAtividade(idPedido) : null;
+
+  if (idPedido && !atividadePedida) renderNaoEncontrada();
+  else if (atividadePedida) renderAtividade(atividadePedida);
+  else renderCatalogo();
+}
+
 document.body.classList.add(usuario ? 'modo-app' : 'modo-publico');
 if (usuario) {
   montarLayout('atividades');
-  document.getElementById('titulo-pagina').textContent = 'Atividades & Laboratório 3D';
+  atualizarTituloTopbar();
 }
 
-const idPedido = parametros.get('id');
-const atividadePedida = idPedido ? buscarAtividade(idPedido) : null;
+renderizarPorRota();
 
-if (idPedido && !atividadePedida) renderNaoEncontrada();
-else if (atividadePedida) renderAtividade(atividadePedida);
-else renderCatalogo();
-
-// Reatividade ao trocar de idioma no menu universal (WCAG 3.1.2)
-window.addEventListener('idiomaAlterado', () => {
-  const currentParams = new URLSearchParams(window.location.search);
-  const currentId = currentParams.get('id');
-  if (currentId) {
-    const atv = buscarAtividade(currentId);
-    if (atv) renderAtividade(atv);
-  } else {
-    renderCatalogo();
-  }
+// Reatividade ao trocar de idioma no seletor global (WCAG 3.1.2)
+window.addEventListener('lms:idioma-alterado', () => {
+  atualizarTituloTopbar();
+  renderizarPorRota();
 });
+window.addEventListener('lms:layout-atualizado', atualizarTituloTopbar);

@@ -229,6 +229,116 @@
       "justificativaDesambiguacao": "Unifica o símbolo do Eixo Cultura Digital e Segurança/Privacidade sem confundir com o cadeado de 'Bloqueado'.",
       "aliasesLegados": ["verified_user", "security", "gpp_good", "health_and_safety"]
     }
+  },
+  "workspaceEBloqueio": {
+    "kanban": {
+      "id": "icon-kanban",
+      "simboloUniversal": "Quadro de colunas Kanban com cartões verticais",
+      "rotuloPadrao": "Quadro Kanban",
+      "aliasesLegados": ["view_kanban"]
+    },
+    "galeria": {
+      "id": "icon-gallery",
+      "simboloUniversal": "Grade de cartões 2x2 de galeria visual",
+      "rotuloPadrao": "Galeria de Ideias",
+      "aliasesLegados": ["grid_view"]
+    },
+    "tabela": {
+      "id": "icon-table",
+      "simboloUniversal": "Tabela estruturada em linhas e colunas",
+      "rotuloPadrao": "Tabela Estruturada",
+      "aliasesLegados": ["table_view", "assessment"]
+    },
+    "ideia": {
+      "id": "icon-lightbulb",
+      "simboloUniversal": "Lâmpada acessa representando nova ideia",
+      "rotuloPadrao": "Ideia de Projeto",
+      "aliasesLegados": ["lightbulb", "tips_and_updates"]
+    },
+    "checklist": {
+      "id": "icon-checklist",
+      "simboloUniversal": "Lista de tarefas com caixa de verificação marcada",
+      "rotuloPadrao": "Bloco Checklist",
+      "aliasesLegados": ["checklist", "check_box"]
+    },
+    "toggle": {
+      "id": "icon-toggle-accordion",
+      "simboloUniversal": "Seta expansível de sanfona ao lado de texto de resumo",
+      "rotuloPadrao": "Bloco Toggle",
+      "aliasesLegados": ["arrow_right", "expand_circle_down"]
+    },
+    "callout": {
+      "id": "icon-callout",
+      "simboloUniversal": "Moldura retangular de destaque pedagógico com marcador informativo",
+      "rotuloPadrao": "Bloco Callout",
+      "aliasesLegados": ["campaign", "info"]
+    },
+    "slash_command": {
+      "id": "icon-slash-command",
+      "simboloUniversal": "Tecla quadrada com barra inclinada '/' para comando rápido",
+      "rotuloPadrao": "Comando Rápido /",
+      "aliasesLegados": ["keyboard_command_key"]
+    },
+    "etiqueta_bncc": {
+      "id": "icon-bncc-tag",
+      "simboloUniversal": "Etiqueta escolar para código de habilidade BNCC",
+      "rotuloPadrao": "Etiqueta BNCC",
+      "aliasesLegados": ["label", "sell"]
+    },
+    "laboratorio": {
+      "id": "icon-flask-lab",
+      "simboloUniversal": "Frasco Erlenmeyer de laboratório experimental",
+      "rotuloPadrao": "Ferramentas de Laboratório",
+      "aliasesLegados": ["science", "biotech"]
+    },
+    "caderno": {
+      "id": "icon-notebook",
+      "simboloUniversal": "Caderno de estudos com lombada lateral",
+      "rotuloPadrao": "Caderno de Estudos",
+      "aliasesLegados": ["menu_book", "note_alt"]
+    },
+    "template": {
+      "id": "icon-template",
+      "simboloUniversal": "Layout modular pré-estruturado em três blocos",
+      "rotuloPadrao": "Template Pedagógico",
+      "aliasesLegados": ["auto_awesome_mosaic"]
+    },
+    "capa": {
+      "id": "icon-cover-image",
+      "simboloUniversal": "Moldura de paisagem para seleção de capa",
+      "rotuloPadrao": "Capa da Página",
+      "aliasesLegados": ["image", "wallpaper"]
+    },
+    "titulo": {
+      "id": "icon-text-heading",
+      "simboloUniversal": "Tipografia de cabeçalho H2/H3",
+      "rotuloPadrao": "Bloco Título",
+      "aliasesLegados": ["title"]
+    },
+    "paragrafo": {
+      "id": "icon-text-paragraph",
+      "simboloUniversal": "Três linhas horizontais de parágrafo",
+      "rotuloPadrao": "Bloco Parágrafo",
+      "aliasesLegados": ["notes", "subject"]
+    },
+    "codigo": {
+      "id": "icon-code-snippet",
+      "simboloUniversal": "Sinalizadores angulares de código fonte </>",
+      "rotuloPadrao": "Bloco de Código",
+      "aliasesLegados": ["code", "integration_instructions"]
+    },
+    "blocos_programacao": {
+      "id": "icon-code-blocks",
+      "simboloUniversal": "Três blocos modulares de programação encaixados",
+      "rotuloPadrao": "Programação em Blocos",
+      "aliasesLegados": ["extension", "code_blocks"]
+    },
+    "compasso": {
+      "id": "icon-compass",
+      "simboloUniversal": "Bússola pedagógica circular de navegação",
+      "rotuloPadrao": "Compasso",
+      "aliasesLegados": ["explore"]
+    }
   }
 }
 

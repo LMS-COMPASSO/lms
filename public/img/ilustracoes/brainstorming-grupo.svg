@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320" width="480" height="320" fill="none" role="img" aria-labelledby="bg-title bg-desc">
+  <title id="bg-title">Brainstorming em Grupo</title>
+  <desc id="bg-desc">Ilustração editorial modular de um quadro colaborativo com cartões de ideias, lâmpada central e fluxos de conexão.</desc>
+
+  <!-- Quadro Colaborativo -->
+  <rect x="52" y="36" width="376" height="236" rx="18" fill="var(--cor-cartao, #ffffff)" stroke="var(--cor-borda, #cbd5e1)" stroke-width="2.5"/>
+  <path d="M 76 74 H 204" stroke="var(--cor-primaria, #2c5282)" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- Cartões Kanban de Ideias -->
+  <rect x="76" y="98" width="96" height="68" rx="10" fill="var(--cor-secao-pensamento-fundo, #eff6ff)" stroke="var(--cor-secao-pensamento, #1d4ed8)" stroke-width="2"/>
+  <path d="M 92 120 H 152 M 92 138 H 136" stroke="var(--cor-secao-pensamento, #1d4ed8)" stroke-width="3" stroke-linecap="round"/>
+
+  <rect x="192" y="98" width="96" height="68" rx="10" fill="var(--cor-secao-mundo-fundo, #ecfdf5)" stroke="var(--cor-secao-mundo, #047857)" stroke-width="2"/>
+  <path d="M 208 120 H 268 M 208 138 H 252" stroke="var(--cor-secao-mundo, #047857)" stroke-width="3" stroke-linecap="round"/>
+
+  <rect x="308" y="98" width="96" height="68" rx="10" fill="var(--cor-secao-cultura-fundo, #fffbeb)" stroke="var(--cor-secao-cultura, #b45309)" stroke-width="2"/>
+  <path d="M 324 120 H 384 M 324 138 H 364" stroke="var(--cor-secao-cultura, #b45309)" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Lâmpada de Ideia Central -->
+  <circle cx="240" cy="214" r="34" fill="var(--cor-cartao, #ffffff)" stroke="var(--cor-primaria, #2c5282)" stroke-width="2.5"/>
+  <path d="M 248 218 C 251 214 253 210 253 205 A 13 13 0 1 0 227 205 C 227 210 229 214 232 218 Z" stroke="var(--cor-alerta, #b7791f)" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M 234 225 H 246 M 236 231 H 244" stroke="currentColor" stroke-opacity="0.7" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Conexões dos Avatares Colaborativos -->
+  <path d="M 124 166 C 124 202 174 214 206 214 M 356 166 C 356 202 306 214 274 214" stroke="var(--cor-borda, #94a3b8)" stroke-width="2.5" stroke-dasharray="5 5" stroke-linecap="round"/>
+  <circle cx="110" cy="252" r="14" fill="var(--cor-cartao, #ffffff)" stroke="currentColor" stroke-opacity="0.65" stroke-width="2.5"/>
+  <circle cx="370" cy="252" r="14" fill="var(--cor-cartao, #ffffff)" stroke="currentColor" stroke-opacity="0.65" stroke-width="2.5"/>
+</svg>

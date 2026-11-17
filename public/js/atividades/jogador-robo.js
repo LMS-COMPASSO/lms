@@ -21,10 +21,20 @@ import {
   executarPrograma,
   lerMapa,
   menorPrograma,
-  plural,
 } from './logica.js';
 import { tocarSom, alternarSom as alternarSomModulo, somAtivo } from './som.js';
 import { renderizarIcone, renderizarIconeCelula } from './icones.js';
+import {
+  t,
+  atvDica,
+  atvFaseDesc,
+  atvFaseNome,
+  atvFaseTag,
+  atvResumo,
+  atvTema,
+  atvTitulo,
+  dirNome,
+} from './traducao.js';
 
 // Mapeamento de ângulos de rotação em graus por direção
 const ANGULOS_DIRECAO = {
@@ -34,25 +44,16 @@ const ANGULOS_DIRECAO = {
   esquerda: 270,
 };
 
-// Símbolos de bússola para a telemetria do HUD
-const BUSSOLA_SIMBOLOS = {
-  cima: '▲ NORTE',
-  direita: '► LESTE',
-  baixo: '▼ SUL',
-  esquerda: '◄ OESTE',
-};
-
-
 export function jogadorRobo(atividade, ctx) {
-  // Lista de fases da atividade (suporta tanto atividades multi-missão quanto canônicas)
-  const listaFases = atividade.fases && atividade.fases.length
+  const temFasesMulti = Boolean(atividade.fases && atividade.fases.length);
+  const listaFases = temFasesMulti
     ? atividade.fases
     : [
       {
         id: 1,
-        nome: atividade.titulo,
-        tag: 'Canônica',
-        descricao: atividade.resumo,
+        nome: atvTitulo(atividade),
+        tag: '',
+        descricao: atvResumo(atividade),
         grade: atividade.grade,
         limite: atividade.limite,
         bateriaMax: atividade.limite,
@@ -64,7 +65,7 @@ export function jogadorRobo(atividade, ctx) {
   let faseAtual = listaFases[faseIndex];
   let mapa = lerMapa(faseAtual.grade);
   let minimo = menorPrograma(mapa).length;
-  let tema = faseAtual.tema || atividade.tema;
+  let tema = atvTema(atividade.id, faseAtual.tema || atividade.tema, temFasesMulti ? faseAtual.id : null);
   const feedback = criarFeedback();
   const area = h('div');
   const fasesCompletas = new Set();
@@ -73,6 +74,10 @@ export function jogadorRobo(atividade, ctx) {
   let temporizador = null;
   let velocidade = 1; // 1 = 400ms, 2 = 220ms, 4 = 110ms
   let logsTerminal = [];
+
+  const obterNomeFase = (f, idx) => (temFasesMulti ? atvFaseNome(atividade.id, f, idx) : atvTitulo(atividade));
+  const obterTagFase = (f, idx) => (temFasesMulti ? atvFaseTag(atividade.id, f, idx) : t('robo.tagCanonica'));
+  const obterDescFase = (f, idx) => (temFasesMulti ? atvFaseDesc(atividade.id, f, idx) : atvResumo(atividade));
 
   function adicionarLog(texto) {
     const hora = new Date().toTimeString().split(' ')[0];
@@ -87,11 +92,12 @@ export function jogadorRobo(atividade, ctx) {
     mapa = lerMapa(faseAtual.grade);
     const solucao = menorPrograma(mapa);
     minimo = solucao ? solucao.length : (faseAtual.limite || 10);
-    tema = faseAtual.tema || atividade.tema;
+    tema = atvTema(atividade.id, faseAtual.tema || atividade.tema, temFasesMulti ? faseAtual.id : null);
     estado = novoEstado();
     feedback.limpar();
-    adicionarLog(`Missão iniciada: ${faseAtual.nome} (Grade ${mapa.largura}x${mapa.altura})`);
-    anunciar(`Carregada ${faseAtual.nome}`);
+    const nomeF = obterNomeFase(faseAtual, faseIndex);
+    adicionarLog(t('robo.logMissaoIniciada', { nome: nomeF, cols: mapa.largura, rows: mapa.altura }));
+    anunciar(t('robo.anuncioMissaoCarregada', { nome: nomeF }));
     renderizar();
   }
 
@@ -130,14 +136,15 @@ export function jogadorRobo(atividade, ctx) {
 
   function adicionar(direcao) {
     if (estado.programa.length >= faseAtual.limite) {
-      anunciar('Limite de comandos atingido para esta missão.');
+      anunciar(t('robo.anuncioLimite'));
       tocarSom('erro');
       return;
     }
     tocarSom('click');
     editar(() => estado.programa.push(direcao));
-    adicionarLog(`Comando adicionado: ${DIRECOES[direcao].nome.toUpperCase()}`);
-    anunciar(`Comando ${estado.programa.length}: ${DIRECOES[direcao].nome}.`);
+    const nomeD = dirNome(direcao, DIRECOES[direcao].nome);
+    adicionarLog(t('robo.logComandoAdicionado', { dir: nomeD.toUpperCase() }));
+    anunciar(t('robo.anuncioComando', { num: estado.programa.length, dir: nomeD }));
     renderizar(`dir-${direcao}`);
   }
 
@@ -145,8 +152,9 @@ export function jogadorRobo(atividade, ctx) {
     tocarSom('click');
     const cmdRemovido = estado.programa[indice];
     editar(() => estado.programa.splice(indice, 1));
-    adicionarLog(`Comando ${indice + 1} (${DIRECOES[cmdRemovido]?.nome}) removido.`);
-    anunciar(`Comando ${indice + 1} removido.`);
+    const nomeD = dirNome(cmdRemovido, DIRECOES[cmdRemovido]?.nome || '');
+    adicionarLog(t('robo.logComandoRemovido', { num: indice + 1, dir: nomeD }));
+    anunciar(t('robo.anuncioComandoRemovido', { num: indice + 1 }));
     renderizar([`cmd-${Math.min(indice, estado.programa.length - 1)}`, 'dir-cima']);
   }
 
@@ -154,8 +162,8 @@ export function jogadorRobo(atividade, ctx) {
     if (!estado.programa.length) return;
     tocarSom('click');
     editar(() => estado.programa.pop());
-    adicionarLog('Último comando desfeito.');
-    anunciar('Último comando removido.');
+    adicionarLog(t('robo.logDesfeito'));
+    anunciar(t('robo.anuncioDesfeito'));
     renderizar(['desfazer', 'dir-cima']);
   }
 
@@ -163,8 +171,8 @@ export function jogadorRobo(atividade, ctx) {
     if (!estado.programa.length) return;
     tocarSom('click');
     editar(() => { estado.programa = []; });
-    adicionarLog('Programa resetado.');
-    anunciar('Programa apagado.');
+    adicionarLog(t('robo.logLimpo'));
+    anunciar(t('robo.anuncioLimpo'));
     renderizar('dir-cima');
   }
 
@@ -173,8 +181,8 @@ export function jogadorRobo(atividade, ctx) {
     parar();
     estado = novoEstado();
     feedback.limpar();
-    adicionarLog('Simulação reiniciada na posição de origem.');
-    anunciar('Atividade reiniciada.');
+    adicionarLog(t('robo.logReiniciado'));
+    anunciar(t('jog.anuncioReiniciada'));
     renderizar('dir-cima');
   }
 
@@ -188,11 +196,11 @@ export function jogadorRobo(atividade, ctx) {
     else if (velocidade === 2) velocidade = 4;
     else velocidade = 1;
     tocarSom('click');
-    adicionarLog(`Velocidade ajustada para ${velocidade}x.`);
+    adicionarLog(t('robo.logVelocidade', { velocidade }));
     renderizar();
   }
 
-  function animarPassoGSAP(ponto, passoIndex, passoTotal) {
+  function animarPassoGSAP(ponto, passoIndex) {
     if (typeof window === 'undefined') return;
 
     // Atualiza direção do robô com base na diferença de posição
@@ -215,10 +223,10 @@ export function jogadorRobo(atividade, ctx) {
 
     if (ponto.evento === 'coletar') {
       tocarSom('item');
-      adicionarLog(`★ Item coletado em [${ponto.x + 1}, ${ponto.y + 1}]!`);
+      adicionarLog(t('robo.logColetou', { x: ponto.x + 1, y: ponto.y + 1 }));
     } else if (ponto.evento === 'obstaculo' || ponto.evento === 'borda') {
       tocarSom('erro');
-      adicionarLog(`✖ Falha: Robô colidiu no passo ${passoIndex}!`);
+      adicionarLog(t('robo.logColisao', { passo: passoIndex }));
     } else {
       tocarSom('passo');
     }
@@ -249,16 +257,15 @@ export function jogadorRobo(atividade, ctx) {
   function finalizar() {
     const execucao = estado.execucao;
     const total = estado.programa.length;
-    const dica = estado.tentativas >= 2 ? ` Dica: ${atividade.dica}` : '';
+    const dica = estado.tentativas >= 2 ? ` ${t('jog.dicaPrefixo', { dica: atvDica(atividade) })}` : '';
 
     if (execucao.resultado === 'sucesso') {
       const estrelas = calcularEstrelas(total, minimo);
       estado.concluida = true;
       fasesCompletas.add(faseAtual.id);
       tocarSom('vitoria');
-      adicionarLog(`VITÓRIA! ${faseAtual.nome} concluída em ${total} passos com ${estrelas} estrelas.`);
+      adicionarLog(t('robo.logVitoria', { nome: obterNomeFase(faseAtual, faseIndex), total, estrelas }));
 
-      // Animação de comemoração com GSAP
       if (typeof window.gsap !== 'undefined' && !ctx.reduzirMovimento) {
         window.gsap.fromTo(
           '.atv-game-hud',
@@ -269,12 +276,12 @@ export function jogadorRobo(atividade, ctx) {
 
       const temProxima = faseIndex < listaFases.length - 1;
       feedback.sucesso(
-        'Missão cumprida com maestria! 🎉',
+        t('robo.vitoriaTitulo'),
         h(
           'div',
           { class: 'atv-vitoria-box' },
-          h('span', { class: 'atv-estrelas', role: 'img', 'aria-label': `${estrelas} de 3 estrelas` }, '⭐'.repeat(estrelas) + '☆'.repeat(3 - estrelas)),
-          h('p', {}, `Seu programa utilizou ${plural(total, 'comando', 'comandos')}; a rota ideal tem ${minimo}. Bateria restante: ${estado.bateria} unidades.`),
+          h('span', { class: 'atv-estrelas', role: 'img', 'aria-label': t('robo.estrelasAria', { estrelas }) }, '⭐'.repeat(estrelas) + '☆'.repeat(3 - estrelas)),
+          h('p', {}, t(total === 1 ? 'robo.vitoriaStatsSing' : 'robo.vitoriaStatsPlur', { n: total, minimo, bateria: estado.bateria })),
           temProxima
             ? h(
               'button',
@@ -285,28 +292,29 @@ export function jogadorRobo(atividade, ctx) {
                 onclick: () => carregarFase(faseIndex + 1),
               },
               h('span', { class: 'material-symbols-outlined icon-xs' }, 'fast_forward'),
-              ` Avançar para ${listaFases[faseIndex + 1].nome}`,
+              ` ${t('robo.avancarFase', { nome: obterNomeFase(listaFases[faseIndex + 1], faseIndex + 1) })}`,
             )
-            : h('p', { class: 'texto-suave' }, 'Você dominou todas as fases desta trilha de algoritmos! Parabéns!'),
+            : h('p', { class: 'texto-suave' }, t('robo.trilhaCompleta')),
         ),
       );
       ctx.aoConcluir({ tentativas: estado.tentativas, estrelas });
     } else if (execucao.resultado === 'faltou-item') {
       tocarSom('erro');
-      adicionarLog(`Aviso: ${tema.faltouItem || 'Faltou recolher os itens antes do portão!'}`);
-      feedback.erro('Quase lá!', `${tema.faltouItem || 'O robô chegou à escola, mas esqueceu de recolher os itens!'} Planeje a rota passando pelo item antes do portão.${dica}`);
+      const motivoFaltou = tema.faltouItem || t('robo.faltouItemPadrao');
+      adicionarLog(t('robo.logAvisoFaltou', { msg: motivoFaltou }));
+      feedback.erro(t('ordenar.quaseLa'), `${motivoFaltou} ${t('robo.faltouItemInstrucao')}${dica}`);
     } else if (execucao.resultado === 'bateu-obstaculo') {
       tocarSom('erro');
-      adicionarLog(`Colisão: Obstáculo atingido no comando ${execucao.passoComErro + 1}.`);
-      feedback.erro('O robô bateu!', `No comando ${execucao.passoComErro + 1}, o robô esbarrou em ${tema.nomeObstaculo}. Procure o comando com erro, corrija e execute de novo.${dica}`);
+      adicionarLog(t('robo.logBateuObstaculo', { passo: execucao.passoComErro + 1 }));
+      feedback.erro(t('robo.bateuTitulo'), `${t('robo.bateuDesc', { passo: execucao.passoComErro + 1, obstaculo: tema.nomeObstaculo })}${dica}`);
     } else if (execucao.resultado === 'bateu-borda') {
       tocarSom('erro');
-      adicionarLog(`Borda atingida no comando ${execucao.passoComErro + 1}.`);
-      feedback.erro('O robô tentou sair do mapa!', `No comando ${execucao.passoComErro + 1}, o robô atingiu o limite da cidade. Ajuste a rota.${dica}`);
+      adicionarLog(t('robo.logBorda', { passo: execucao.passoComErro + 1 }));
+      feedback.erro(t('robo.bordaTitulo'), `${t('robo.bordaDesc', { passo: execucao.passoComErro + 1 })}${dica}`);
     } else {
       tocarSom('erro');
-      adicionarLog('Programa incompleto: o robô parou antes da meta.');
-      feedback.erro('O robô ainda não chegou', `O programa terminou antes de o robô chegar a ${tema.nomeMeta}. Faltam comandos para completar a rota.${dica}`);
+      adicionarLog(t('robo.logIncompleto'));
+      feedback.erro(t('robo.incompletoTitulo'), `${t('robo.incompletoDesc', { meta: tema.nomeMeta })}${dica}`);
     }
   }
 
@@ -314,13 +322,13 @@ export function jogadorRobo(atividade, ctx) {
     if (estado.animando) {
       parar();
       tocarSom('click');
-      adicionarLog('Execução pausada pelo usuário.');
+      adicionarLog(t('robo.logPausado'));
       renderizar('executar');
       return;
     }
     if (!estado.programa.length) {
       tocarSom('erro');
-      feedback.info('O programa está vazio', 'Selecione botões de direção no painel ou utilize as setas do teclado para montar a rota.');
+      feedback.info(t('robo.vazioTitulo'), t('robo.vazioDesc'));
       return;
     }
 
@@ -330,19 +338,19 @@ export function jogadorRobo(atividade, ctx) {
     estado.tentativas += 1;
     const ultimo = estado.execucao.trilha.length - 1;
 
-    adicionarLog(`Iniciando simulação: ${estado.programa.length} instruções.`);
+    adicionarLog(t('robo.logIniciando', { total: estado.programa.length }));
 
     if (ctx.reduzirMovimento) {
       estado.passo = ultimo;
       const pontoFinal = estado.execucao.trilha[ultimo];
-      animarPassoGSAP(pontoFinal, ultimo, ultimo);
+      animarPassoGSAP(pontoFinal, ultimo);
       finalizar();
       renderizar('executar');
       return;
     }
 
     estado.animando = true;
-    anunciar('Executando o programa na arena.');
+    anunciar(t('robo.anuncioExecutando'));
     renderizar('executar');
 
     const intervaloMs = Math.round(400 / velocidade);
@@ -350,7 +358,7 @@ export function jogadorRobo(atividade, ctx) {
     temporizador = setInterval(() => {
       estado.passo += 1;
       const ponto = estado.execucao.trilha[estado.passo];
-      if (ponto) animarPassoGSAP(ponto, estado.passo, ultimo);
+      if (ponto) animarPassoGSAP(ponto, estado.passo);
 
       if (estado.passo >= ultimo) {
         estado.passo = ultimo;
@@ -364,14 +372,14 @@ export function jogadorRobo(atividade, ctx) {
   function passoAPasso() {
     if (estado.animando) return;
     if (!estado.programa.length) {
-      feedback.info('O programa está vazio', 'Monte uma sequência de comandos antes de depurar passo a passo.');
+      feedback.info(t('robo.vazioTitulo'), t('robo.vazioDebugDesc'));
       return;
     }
     if (!estado.execucao) {
       estado.execucao = executarPrograma(mapa, estado.programa);
       estado.passo = 0;
       feedback.limpar();
-      adicionarLog('Modo depurador ativo: executando instrução por instrução.');
+      adicionarLog(t('robo.logDebugAtivo'));
     }
 
     const ultimo = estado.execucao.trilha.length - 1;
@@ -382,11 +390,12 @@ export function jogadorRobo(atividade, ctx) {
     estado.passo += 1;
 
     const ponto = estado.execucao.trilha[estado.passo];
-    if (ponto) animarPassoGSAP(ponto, estado.passo, ultimo);
+    if (ponto) animarPassoGSAP(ponto, estado.passo);
 
-    const dirNome = DIRECOES[estado.programa[estado.passo - 1]]?.nome || '';
-    adicionarLog(`[DEBUG] Passo ${estado.passo}/${ultimo}: ${dirNome.toUpperCase()} -> [${ponto.x + 1}, ${ponto.y + 1}]`);
-    anunciar(`Passo ${estado.passo}: ${dirNome}. Posição: coluna ${ponto.x + 1}, linha ${ponto.y + 1}.`);
+    const dirId = estado.programa[estado.passo - 1];
+    const dirTraduzida = dirNome(dirId, DIRECOES[dirId]?.nome || '');
+    adicionarLog(t('robo.logDebugPasso', { passo: estado.passo, ultimo, dir: dirTraduzida.toUpperCase(), x: ponto.x + 1, y: ponto.y + 1 }));
+    anunciar(t('robo.anuncioDebugPasso', { passo: estado.passo, dir: dirTraduzida, x: ponto.x + 1, y: ponto.y + 1 }));
 
     if (estado.passo === ultimo) {
       estado.tentativas += 1;
@@ -401,6 +410,10 @@ export function jogadorRobo(atividade, ctx) {
 
   // Atalhos de Teclado no estilo Gamepad
   function onKeydown(e) {
+    if (!document.body.contains(area)) return;
+    const tag = e.target?.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || e.target?.isContentEditable) return;
+
     if (['ArrowUp', 'KeyW'].includes(e.code)) {
       e.preventDefault();
       adicionar('cima');
@@ -423,9 +436,12 @@ export function jogadorRobo(atividade, ctx) {
     }
   }
 
-  // Registra teclado quando montado na página
+  // Registra teclado garantindo apenas um listener ativo mesmo após re-renderizações de idioma
   if (typeof window !== 'undefined') {
-    window.removeEventListener('keydown', onKeydown);
+    if (window.__lmsRoboKeydown) {
+      window.removeEventListener('keydown', window.__lmsRoboKeydown);
+    }
+    window.__lmsRoboKeydown = onKeydown;
     window.addEventListener('keydown', onKeydown);
   }
 
@@ -434,7 +450,7 @@ export function jogadorRobo(atividade, ctx) {
     const bateriaMax = faseAtual.bateriaMax || faseAtual.limite;
     const bateriaAtual = estado.bateria;
     const bateriaPct = Math.round((bateriaAtual / bateriaMax) * 100);
-    const busolaTexto = BUSSOLA_SIMBOLOS[estado.direcaoRobo] || '► LESTE';
+    const busolaTexto = t(`robo.bussola.${estado.direcaoRobo || 'direita'}`);
     let classeBateria = '';
     if (bateriaPct < 30) classeBateria = 'critico';
     else if (bateriaPct < 60) classeBateria = 'alerta';
@@ -448,7 +464,7 @@ export function jogadorRobo(atividade, ctx) {
         { class: 'atv-hud-linha-top' },
         h(
           'div',
-          { class: 'atv-fases-tabs', role: 'tablist', 'aria-label': 'Missões disponíveis' },
+          { class: 'atv-fases-tabs', role: 'tablist', 'aria-label': t('robo.missoesAria') },
           listaFases.map((f, idx) => {
             const ativa = idx === faseIndex;
             const concluida = fasesCompletas.has(f.id);
@@ -462,8 +478,8 @@ export function jogadorRobo(atividade, ctx) {
                 onclick: () => carregarFase(idx),
               },
               concluida ? '✔ ' : '',
-              f.nome,
-              h('small', {}, f.tag || `Fase ${idx + 1}`),
+              obterNomeFase(f, idx),
+              h('small', {}, obterTagFase(f, idx) || t('robo.faseNum', { num: idx + 1 })),
             );
           }),
         ),
@@ -475,18 +491,18 @@ export function jogadorRobo(atividade, ctx) {
             {
               type: 'button',
               class: 'btn-hud-tool',
-              title: somAtivo() ? 'Desativar áudio' : 'Ativar áudio',
+              title: somAtivo() ? t('robo.audioDesativarTitle') : t('robo.audioAtivarTitle'),
               onclick: alternarSom,
             },
             h('span', { class: 'material-symbols-outlined icon-xs' }, somAtivo() ? 'volume_up' : 'volume_off'),
-            somAtivo() ? ' Som' : ' Mudo',
+            ` ${somAtivo() ? t('robo.audioSom') : t('robo.audioMudo')}`,
           ),
           h(
             'button',
             {
               type: 'button',
               class: 'btn-hud-tool',
-              title: 'Alternar velocidade da simulação',
+              title: t('robo.velocidadeTitle'),
               onclick: alternarVelocidade,
             },
             h('span', { class: 'material-symbols-outlined icon-xs' }, 'speed'),
@@ -502,19 +518,19 @@ export function jogadorRobo(atividade, ctx) {
         h(
           'div',
           { class: 'atv-telemetria-card' },
-          h('span', { class: 'telemetria-label' }, 'POSIÇÃO X,Y'),
+          h('span', { class: 'telemetria-label' }, t('robo.hudPosicao')),
           h('strong', { class: 'telemetria-valor' }, `[ ${posicao.x + 1}, ${posicao.y + 1} ]`),
         ),
         h(
           'div',
           { class: 'atv-telemetria-card' },
-          h('span', { class: 'telemetria-label' }, 'ORIENTAÇÃO'),
+          h('span', { class: 'telemetria-label' }, t('robo.hudOrientacao')),
           h('strong', { class: 'telemetria-valor' }, busolaTexto),
         ),
         h(
           'div',
           { class: 'atv-telemetria-card atv-telemetria-bateria' },
-          h('div', { class: 'flex-espacado' }, h('span', { class: 'telemetria-label' }, 'ENERGIA (BATERIA)'), h('span', { class: 'telemetria-pct' }, `${bateriaAtual}/${bateriaMax}`)),
+          h('div', { class: 'flex-espacado' }, h('span', { class: 'telemetria-label' }, t('robo.hudBateria')), h('span', { class: 'telemetria-pct' }, `${bateriaAtual}/${bateriaMax}`)),
           h(
             'div',
             { class: 'atv-bateria-trilho' },
@@ -594,10 +610,9 @@ export function jogadorRobo(atividade, ctx) {
           class: 'atv-mapa-game',
           style: `--colunas: ${mapa.largura}; --linhas: ${mapa.altura};`,
           role: 'img',
-          'aria-label': `Arena de simulação com ${mapa.largura} colunas e ${mapa.altura} linhas. Robô na coluna ${posicao.x + 1}, linha ${posicao.y + 1}.`,
+          'aria-label': t('robo.arenaAria', { cols: mapa.largura, rows: mapa.altura, x: posicao.x + 1, y: posicao.y + 1 }),
         },
         celulas,
-        // Robô Sprite dinâmico animado via GSAP
         h(
           'div',
           {
@@ -613,10 +628,10 @@ export function jogadorRobo(atividade, ctx) {
       h(
         'div',
         { class: 'atv-legenda-game' },
-        h('span', { class: 'badge-legenda' }, renderizarIcone('smart_toy', { classe: 'cor-robo icon-sm' }), ' Robô'),
-        h('span', { class: 'badge-legenda' }, renderizarIconeCelula('M', tema), ` ${tema.nomeMeta || 'Destino'}`),
-        tema.item ? h('span', { class: 'badge-legenda' }, renderizarIconeCelula('I', tema), ` ${tema.nomeItem || 'Coletável'}`) : null,
-        h('span', { class: 'badge-legenda' }, renderizarIconeCelula('#', tema), ` ${tema.nomeObstaculo || 'Obstáculo'}`),
+        h('span', { class: 'badge-legenda' }, renderizarIcone('smart_toy', { classe: 'cor-robo icon-sm' }), ` ${t('robo.legendaRobo')}`),
+        h('span', { class: 'badge-legenda' }, renderizarIconeCelula('M', tema), ` ${tema.nomeMeta || t('robo.legendaDestino')}`),
+        tema.item ? h('span', { class: 'badge-legenda' }, renderizarIconeCelula('I', tema), ` ${tema.nomeItem || t('robo.legendaColetavel')}`) : null,
+        h('span', { class: 'badge-legenda' }, renderizarIconeCelula('#', tema), ` ${tema.nomeObstaculo || t('robo.legendaObstaculo')}`),
       ),
     );
   }
@@ -633,10 +648,10 @@ export function jogadorRobo(atividade, ctx) {
       h(
         'div',
         { class: 'flex-espacado' },
-        h(ctx.TituloPainel, {}, 'Pipeline de Algoritmo'),
-        h('span', { class: 'atv-badge-limite' }, `${estado.programa.length}/${faseAtual.limite} Comandos`),
+        h(ctx.TituloPainel || 'h3', {}, t('robo.pipelineTitulo')),
+        h('span', { class: 'atv-badge-limite' }, t('robo.pipelineLimite', { atual: estado.programa.length, limite: faseAtual.limite })),
       ),
-      h('p', { class: 'atv-contagem-suave' }, 'Adicione instruções de movimento. Toque em qualquer comando na fita para removê-lo.'),
+      h('p', { class: 'atv-contagem-suave' }, t('robo.pipelineInstrucao')),
 
       // Fita de Instruções (Pipeline)
       h(
@@ -650,6 +665,7 @@ export function jogadorRobo(atividade, ctx) {
               let classe = 'atv-fita-comando';
               if (indice === atual && estado.animando) classe += ' ativo-executando';
               if (execucao && execucao.passoComErro === indice && estado.passo >= indice + 1) classe += ' erro-colisao';
+              const nomeD = dirNome(direcao, DIRECOES[direcao].nome);
               return h(
                 'li',
                 {},
@@ -659,13 +675,13 @@ export function jogadorRobo(atividade, ctx) {
                     type: 'button',
                     class: classe,
                     'data-foco': `cmd-${indice}`,
-                    'aria-label': `Passo ${indice + 1}: ${DIRECOES[direcao].nome}. Toque para remover.`,
+                    'aria-label': t('robo.comandoRemoverAria', { num: indice + 1, dir: nomeD }),
                     disabled: bloqueado,
                     onclick: () => removerComando(indice),
                   },
                   h('span', { class: 'cmd-num' }, indice + 1),
                   h('span', { class: 'cmd-icone' }, DIRECOES[direcao].simbolo),
-                  h('span', { class: 'cmd-nome' }, DIRECOES[direcao].nome),
+                  h('span', { class: 'cmd-nome' }, nomeD),
                 ),
               );
             }),
@@ -674,7 +690,7 @@ export function jogadorRobo(atividade, ctx) {
             'div',
             { class: 'atv-fita-vazia' },
             h('span', { class: 'material-symbols-outlined icon-md' }, 'terminal'),
-            h('span', {}, 'Nenhum comando montado. Utilize o gamepad abaixo ou as setas do teclado.'),
+            h('span', {}, t('robo.fitaVazia')),
           ),
       ),
 
@@ -682,10 +698,10 @@ export function jogadorRobo(atividade, ctx) {
       h(
         'div',
         { class: 'atv-gamepad-deck' },
-        h('span', { class: 'gamepad-label' }, 'PAINEL DE DIREÇÃO (GAMEPAD / TECLADO)'),
+        h('span', { class: 'gamepad-label' }, t('robo.gamepadLabel')),
         h(
           'div',
-          { class: 'atv-gamepad-grid', role: 'group', 'aria-label': 'Comandos direcionais' },
+          { class: 'atv-gamepad-grid', role: 'group', 'aria-label': t('robo.gamepadAria') },
           Object.entries(DIRECOES).map(([nome, direcao]) => h(
             'button',
             {
@@ -696,7 +712,7 @@ export function jogadorRobo(atividade, ctx) {
               onclick: () => adicionar(nome),
             },
             h('span', { class: 'simbolo-seta' }, direcao.simbolo),
-            h('span', { class: 'nome-direcao' }, direcao.nome),
+            h('span', { class: 'nome-direcao' }, dirNome(nome, direcao.nome)),
           )),
         ),
       ),
@@ -714,7 +730,7 @@ export function jogadorRobo(atividade, ctx) {
             onclick: executar,
           },
           h('span', { class: 'material-symbols-outlined icon-xs' }, estado.animando ? 'pause' : 'play_arrow'),
-          estado.animando ? ' Pausar' : ' Executar Programa',
+          ` ${estado.animando ? t('robo.btnPausar') : t('robo.btnExecutar')}`,
         ),
         h(
           'button',
@@ -726,7 +742,7 @@ export function jogadorRobo(atividade, ctx) {
             onclick: passoAPasso,
           },
           h('span', { class: 'material-symbols-outlined icon-xs' }, 'skip_next'),
-          ' Passo a passo (Debug)',
+          ` ${t('robo.btnDebug')}`,
         ),
         h(
           'button',
@@ -738,7 +754,7 @@ export function jogadorRobo(atividade, ctx) {
             onclick: desfazer,
           },
           h('span', { class: 'material-symbols-outlined icon-xs' }, 'undo'),
-          ' Desfazer',
+          ` ${t('robo.btnDesfazer')}`,
         ),
         h(
           'button',
@@ -750,7 +766,7 @@ export function jogadorRobo(atividade, ctx) {
             onclick: limpar,
           },
           h('span', { class: 'material-symbols-outlined icon-xs' }, 'delete'),
-          ' Limpar',
+          ` ${t('robo.btnLimpar')}`,
         ),
         h(
           'button',
@@ -761,21 +777,21 @@ export function jogadorRobo(atividade, ctx) {
             onclick: recomecar,
           },
           h('span', { class: 'material-symbols-outlined icon-xs' }, 'refresh'),
-          ' Reiniciar',
+          ` ${t('robo.btnReiniciar')}`,
         ),
       ),
 
-      // Terminal Console ao Vivo (Wishlabs Telemetry Log)
+      // Terminal Console ao Vivo
       h(
         'details',
         { class: 'atv-terminal-detalhes', open: true },
-        h('summary', { class: 'terminal-cabecalho' }, h('span', { class: 'flex-inline-icon' }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'terminal'), ' Terminal de Telemetria & Logs')),
+        h('summary', { class: 'terminal-cabecalho' }, h('span', { class: 'flex-inline-icon' }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'terminal'), ` ${t('robo.terminalTitulo')}`)),
         h(
           'div',
           { class: 'atv-terminal-body' },
           logsTerminal.length
             ? logsTerminal.map((log) => h('div', { class: 'terminal-linha' }, log))
-            : h('div', { class: 'terminal-linha texto-suave' }, '> Aguardando comandos do operador...'),
+            : h('div', { class: 'terminal-linha texto-suave' }, t('robo.terminalAguardando')),
         ),
       ),
     );
@@ -801,11 +817,11 @@ export function jogadorRobo(atividade, ctx) {
                 'data-foco': 'dica',
                 onclick: () => {
                   tocarSom('click');
-                  feedback.info('Dica Pedagógica', faseAtual.descricao || atividade.dica);
+                  feedback.info(t('robo.dicaPedagogicaTitulo'), obterDescFase(faseAtual, faseIndex) || atvDica(atividade));
                 },
               },
               h('span', { class: 'material-symbols-outlined icon-xs' }, 'lightbulb'),
-              ' Consultar Dica da Missão',
+              ` ${t('robo.consultarDica')}`,
             ),
           ),
         ),
@@ -815,7 +831,7 @@ export function jogadorRobo(atividade, ctx) {
   }
 
   // Inicialização
-  adicionarLog(`Sistema iniciado: ${atividade.titulo}.`);
+  adicionarLog(t('robo.logSistemaIniciado', { titulo: atvTitulo(atividade) }));
   estado = novoEstado();
   renderizar();
   return h('div', {}, area, feedback.elemento);

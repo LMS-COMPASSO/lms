@@ -26,7 +26,9 @@ export function carregarThreeSobDemanda() {
       script.crossOrigin = 'anonymous';
       script.async = true;
       script.onload = () => resolve(window.THREE);
-      script.onerror = () => reject(new Error('Não foi possível carregar Three.js'));
+      script.onerror = () => reject(new Error((typeof window !== 'undefined' && typeof window.t === 'function')
+        ? window.t('py3d.err.threeLoad', {}, 'Não foi possível carregar Three.js')
+        : 'Não foi possível carregar Three.js'));
       document.head.appendChild(script);
     });
   }
@@ -110,7 +112,9 @@ export function criarControladorCena3D(container, cena3dConfig, { reduzirMovimen
           haste.appendChild(disco);
         });
         const rotulo = document.createElement('strong');
-        rotulo.textContent = `Pino ${nomePino}`;
+        rotulo.textContent = (typeof window !== 'undefined' && typeof window.t === 'function')
+          ? window.t('py3d.hanoi.pino', { pino: nomePino })
+          : `Pino ${nomePino}`;
         col.append(haste, rotulo);
         wrap.appendChild(col);
       });

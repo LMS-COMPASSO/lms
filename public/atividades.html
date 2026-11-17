@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Atividades dinâmicas — LMS COMPASSO</title>
-<meta name="description" content="Atividades interativas de Pensamento Computacional para o Ensino Fundamental: algoritmos do cotidiano e decomposição lógica, com versão desplugada.">
+<meta name="i18n-title" content="atvPage.metaTitulo">
+<meta name="description" data-i18n-attr="content:atvPage.metaDesc" content="Atividades interativas de Pensamento Computacional para o Ensino Fundamental: algoritmos do cotidiano e decomposição lógica, com versão desplugada.">
 <link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,26 +29,26 @@
       }
     })();
   </script>
-  <a class="pular-conteudo" href="#conteudo">Pular para o conteúdo</a>
+  <a class="pular-conteudo" href="#conteudo" data-i18n="atvPage.pular">Pular para o conteúdo</a>
 
   <!-- Cabeçalho público: some quando há uma sessão ativa (a barra lateral da plataforma assume) -->
   <header class="pub-topo" id="topo-publico">
     <div class="pub-container pub-topo-conteudo">
-      <a href="/" class="pub-logo" aria-label="LMS COMPASSO — página inicial">
-        <img src="/img/logo.svg" alt="LMS COMPASSO — BNCC Computação" width="272" height="64" class="logo-tema-claro">
-        <img src="/img/logo-branco.svg" alt="LMS COMPASSO — BNCC Computação" width="272" height="64" class="logo-tema-escuro">
+      <a href="/" class="pub-logo" aria-label="LMS COMPASSO — página inicial" data-i18n-aria-label="nav.logoAria">
+        <img src="/img/logo.svg" alt="LMS COMPASSO — BNCC Computação" width="272" height="64" class="logo-tema-claro" data-i18n-attr="alt:nav.logoAlt">
+        <img src="/img/logo-branco.svg" alt="LMS COMPASSO — BNCC Computação" width="272" height="64" class="logo-tema-escuro" data-i18n-attr="alt:nav.logoAlt">
       </a>
-      <nav class="pub-nav" aria-label="Navegação principal">
-        <a href="/"><span class="material-symbols-outlined icon-xs" aria-hidden="true">home</span> Início</a>
-        <a href="/boas-vindas.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">rocket_launch</span> Boas-vindas</a>
-        <a href="/atividades.html" aria-current="page"><span class="material-symbols-outlined icon-xs" aria-hidden="true">format_list_numbered</span> Atividades</a>
-        <a href="/mundo-digital.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">memory</span> Mundo Digital</a>
-        <a href="/cultura-digital.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">verified_user</span> Cultura Digital</a>
+      <nav class="pub-nav" aria-label="Navegação principal" data-i18n-aria-label="nav.principalAria">
+        <a href="/"><span class="material-symbols-outlined icon-xs" aria-hidden="true">home</span> <span data-i18n="nav.inicio">Início</span></a>
+        <a href="/boas-vindas.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">rocket_launch</span> <span data-i18n="nav.boasVindas">Boas-vindas</span></a>
+        <a href="/atividades.html" aria-current="page"><span class="material-symbols-outlined icon-xs" aria-hidden="true">format_list_numbered</span> <span data-i18n="nav.atividades">Atividades</span></a>
+        <a href="/mundo-digital.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">memory</span> <span data-i18n="nav.mundoDigital">Mundo Digital</span></a>
+        <a href="/cultura-digital.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">verified_user</span> <span data-i18n="nav.culturaDigital">Cultura Digital</span></a>
       </nav>
       <div class="pub-acoes">
-        <a href="/atividades.html" class="btn btn-contorno-escuro btn-sm flex-inline-icon" title="Buscar atividades BNCC" aria-label="Buscar atividades"><span class="material-symbols-outlined icon-xs" aria-hidden="true">search</span> Buscar</a>
-        <a href="/login.html" class="btn btn-contorno-escuro btn-sm flex-inline-icon" id="acao-entrar"><span class="material-symbols-outlined icon-xs" aria-hidden="true">account_circle</span> Entrar</a>
-        <a href="/registrar.html" class="btn btn-primario btn-sm flex-inline-icon" id="acao-cadastrar"><span class="material-symbols-outlined icon-xs" aria-hidden="true">person_add</span> Criar conta</a>
+        <a href="/atividades.html" class="btn btn-contorno-escuro btn-sm flex-inline-icon" title="Buscar atividades BNCC" aria-label="Buscar atividades" data-i18n-title="nav.buscarAriaLabel" data-i18n-aria-label="nav.buscarAriaLabel"><span class="material-symbols-outlined icon-xs" aria-hidden="true">search</span> <span data-i18n="nav.buscar">Buscar</span></a>
+        <a href="/login.html" class="btn btn-contorno-escuro btn-sm flex-inline-icon" id="acao-entrar"><span class="material-symbols-outlined icon-xs" aria-hidden="true">account_circle</span> <span data-i18n="nav.entrar">Entrar</span></a>
+        <a href="/registrar.html" class="btn btn-primario btn-sm flex-inline-icon" id="acao-cadastrar"><span class="material-symbols-outlined icon-xs" aria-hidden="true">person_add</span> <span data-i18n="nav.criarConta">Criar conta</span></a>
       </div>
     </div>
   </header>
@@ -57,7 +58,7 @@
     <main class="conteudo atv-conteudo" id="conteudo" tabindex="-1">
       <div id="topbar-container"></div>
       <div id="atividades-raiz" class="atv-raiz">
-        <noscript><p class="atv-intro">Esta página precisa de JavaScript para funcionar. Ative o JavaScript no navegador e recarregue.</p></noscript>
+        <noscript><p class="atv-intro" data-i18n="atvPage.noscript">Esta página precisa de JavaScript para funcionar. Ative o JavaScript no navegador e recarregue.</p></noscript>
       </div>
     </main>
   </div>
@@ -70,30 +71,30 @@
     <div class="pub-container">
       <div class="pub-rodape-grade">
         <div>
-          <img src="/img/logo-branco.svg" alt="LMS COMPASSO — BNCC Computação" width="272" height="64">
-          <p>Plataforma aberta para o ensino de Computação no Ensino Fundamental, alinhada à BNCC Computação.</p>
+          <img src="/img/logo-branco.svg" alt="LMS COMPASSO — BNCC Computação" width="272" height="64" data-i18n-attr="alt:nav.logoAlt">
+          <p data-i18n="rodape.descricao">Plataforma aberta para o ensino de Computação no Ensino Fundamental, alinhada à BNCC Computação.</p>
         </div>
         <nav aria-labelledby="rodape-plataforma">
-          <h2 id="rodape-plataforma">Plataforma</h2>
+          <h2 id="rodape-plataforma" data-i18n="rodape.plataforma">Plataforma</h2>
           <ul>
-            <li><a href="/">Página inicial</a></li>
-            <li><a href="/boas-vindas.html">Boas-vindas &amp; Parceiros</a></li>
-            <li><a href="/mundo-digital.html">Mundo Digital (Hardware 3D)</a></li>
-            <li><a href="/cultura-digital.html">Cultura Digital (Simulador Chat)</a></li>
-            <li><a href="/login.html">Entrar</a></li>
-            <li><a href="/registrar.html">Criar conta de aluno</a></li>
+            <li><a href="/" data-i18n="rodape.paginaInicial">Página inicial</a></li>
+            <li><a href="/boas-vindas.html" data-i18n="rodape.boasVindas">Boas-vindas &amp; Parceiros</a></li>
+            <li><a href="/mundo-digital.html" data-i18n="rodape.mundoDigital">Mundo Digital (Hardware 3D)</a></li>
+            <li><a href="/cultura-digital.html" data-i18n="rodape.culturaDigital">Cultura Digital (Simulador Chat)</a></li>
+            <li><a href="/login.html" data-i18n="rodape.entrar">Entrar</a></li>
+            <li><a href="/registrar.html" data-i18n="rodape.criarConta">Criar conta de aluno</a></li>
           </ul>
         </nav>
         <nav aria-labelledby="rodape-projeto">
-          <h2 id="rodape-projeto">Projeto</h2>
+          <h2 id="rodape-projeto" data-i18n="rodape.projeto">Projeto</h2>
           <ul>
-            <li><a href="https://github.com/LMS-COMPASSO/lms" rel="noopener">Código no GitHub</a></li>
-            <li><a href="https://github.com/LMS-COMPASSO/lms/blob/main/docs/frontend-guia.md" rel="noopener">Como criar atividades</a></li>
-            <li><a href="https://github.com/LMS-COMPASSO/lms/blob/main/LICENSE" rel="noopener">Licença MIT</a></li>
+            <li><a href="https://github.com/LMS-COMPASSO/lms" rel="noopener" data-i18n="rodape.codigoGithub">Código no GitHub</a></li>
+            <li><a href="https://github.com/LMS-COMPASSO/lms/blob/main/docs/frontend-guia.md" rel="noopener" data-i18n="rodape.comoCriar">Como criar atividades</a></li>
+            <li><a href="https://github.com/LMS-COMPASSO/lms/blob/main/LICENSE" rel="noopener" data-i18n="rodape.licenca">Licença MIT</a></li>
           </ul>
         </nav>
       </div>
-      <p class="pub-rodape-fim">
+      <p class="pub-rodape-fim" data-i18n="rodape.fim">
         Projeto de Inovação SUAP/IFMA nº 14246/2025 · Startup LMS COMPASSO · IFMA Campus Grajaú.
       </p>
     </div>
@@ -102,7 +103,10 @@
   <script src="/js/config.js"></script>
   <script src="/js/api.js"></script>
   <script src="/js/layout.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="/js/vendor/gsap.min.js"></script>
+  <script src="/js/vendor/ScrollTrigger.min.js"></script>
+  <script src="/js/vendor/Flip.min.js"></script>
+  <script type="module" src="/js/i18n.js"></script>
   <script type="module" src="/js/icones-universais.js"></script>
   <script type="module" src="/js/menu-universal.js"></script>
   <script type="module" src="/js/atividades.js"></script>

@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320" width="480" height="320" fill="none" role="img" aria-labelledby="pc-title pc-desc">
+  <title id="pc-title">Prototipagem de Código</title>
+  <desc id="pc-desc">Ilustração modular representando editor de código Python conectado a blocos visuais e um robô geométrico.</desc>
+
+  <!-- Janela de Código -->
+  <rect x="44" y="44" width="238" height="218" rx="16" fill="var(--cor-cartao, #ffffff)" stroke="var(--cor-secao-pensamento, #1d4ed8)" stroke-width="2.5"/>
+  <path d="M 44 82 H 282" stroke="var(--cor-borda, #cbd5e1)" stroke-width="2"/>
+  <circle cx="68" cy="63" r="5" fill="var(--cor-perigo, #c53030)"/>
+  <circle cx="86" cy="63" r="5" fill="var(--cor-alerta, #b7791f)"/>
+  <circle cx="104" cy="63" r="5" fill="var(--cor-secundaria-suave, #38a169)"/>
+
+  <!-- Linhas de Código -->
+  <path d="M 68 112 H 164" stroke="var(--cor-secao-pensamento, #1d4ed8)" stroke-width="4" stroke-linecap="round"/>
+  <path d="M 88 136 H 230" stroke="currentColor" stroke-opacity="0.65" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M 88 160 H 196" stroke="var(--cor-secundaria-suave, #38a169)" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M 68 184 H 142" stroke="currentColor" stroke-opacity="0.65" stroke-width="3.5" stroke-linecap="round"/>
+  <rect x="68" y="206" width="112" height="32" rx="8" fill="var(--cor-secao-pensamento-fundo, #eff6ff)" stroke="var(--cor-secao-pensamento, #1d4ed8)" stroke-width="2"/>
+  <path d="M 84 222 H 158" stroke="var(--cor-secao-pensamento, #1d4ed8)" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Conector -->
+  <path d="M 282 152 H 326" stroke="var(--cor-primaria, #2c5282)" stroke-width="3" stroke-dasharray="5 4" stroke-linecap="round"/>
+
+  <!-- Robô / Protótipo 3D -->
+  <g transform="translate(326, 86)">
+    <rect x="0" y="28" width="108" height="96" rx="16" fill="var(--cor-cartao, #ffffff)" stroke="var(--cor-primaria, #2c5282)" stroke-width="2.5"/>
+    <path d="M 54 6 V 28" stroke="var(--cor-primaria, #2c5282)" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="54" cy="6" r="6" fill="var(--cor-secundaria-suave, #38a169)"/>
+    <circle cx="34" cy="68" r="8" stroke="var(--cor-secao-pensamento, #1d4ed8)" stroke-width="2.5"/>
+    <circle cx="74" cy="68" r="8" stroke="var(--cor-secao-pensamento, #1d4ed8)" stroke-width="2.5"/>
+    <path d="M 32 96 H 76" stroke="currentColor" stroke-opacity="0.7" stroke-width="3.5" stroke-linecap="round"/>
+  </g>
+</svg>

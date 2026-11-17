@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mundo Digital — Laboratório 3D de Hardware e Redes — LMS COMPASSO</title>
+<meta name="i18n-title" content="md.metaTitulo">
 <meta name="description" data-i18n-attr="content:md.metaDesc" content="Laboratório interativo do Eixo Mundo Digital alinhado à BNCC Computação: explore a placa-mãe em 3D, monte componentes, compreenda o ciclo da CPU e simule o tráfego de pacotes na internet.">
 <link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,21 +20,21 @@
   <!-- Topo de Navegação Universal -->
   <header class="pub-topo">
     <div class="pub-container pub-topo-conteudo">
-      <a href="/" class="pub-logo" aria-label="LMS COMPASSO — página inicial">
-        <img src="/img/logo.svg" alt="LMS COMPASSO — BNCC Computação" width="272" height="64" class="logo-tema-claro">
-        <img src="/img/logo-branco.svg" alt="LMS COMPASSO — BNCC Computação" width="272" height="64" class="logo-tema-escuro">
+      <a href="/" class="pub-logo" aria-label="LMS COMPASSO — página inicial" data-i18n-aria-label="nav.logoAriaLabel">
+        <img src="/img/logo.svg" alt="LMS COMPASSO — BNCC Computação" data-i18n-attr="alt:nav.logoAlt" width="272" height="64" class="logo-tema-claro">
+        <img src="/img/logo-branco.svg" alt="LMS COMPASSO — BNCC Computação" data-i18n-attr="alt:nav.logoAlt" width="272" height="64" class="logo-tema-escuro">
       </a>
-      <nav class="pub-nav" aria-label="Navegação principal">
-        <a href="/"><span class="material-symbols-outlined icon-xs" aria-hidden="true">home</span> Início</a>
-        <a href="/boas-vindas.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">rocket_launch</span> Boas-vindas</a>
-        <a href="/atividades.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">format_list_numbered</span> Atividades</a>
-        <a href="/mundo-digital.html" aria-current="page"><span class="material-symbols-outlined icon-xs" aria-hidden="true">memory</span> Mundo Digital</a>
-        <a href="/cultura-digital.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">verified_user</span> Cultura Digital</a>
+      <nav class="pub-nav" aria-label="Navegação principal" data-i18n-aria-label="nav.principalAriaLabel">
+        <a href="/"><span class="material-symbols-outlined icon-xs" aria-hidden="true">home</span> <span data-i18n="nav.inicio">Início</span></a>
+        <a href="/boas-vindas.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">rocket_launch</span> <span data-i18n="nav.boasVindas">Boas-vindas</span></a>
+        <a href="/atividades.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">format_list_numbered</span> <span data-i18n="nav.atividades">Atividades</span></a>
+        <a href="/mundo-digital.html" aria-current="page"><span class="material-symbols-outlined icon-xs" aria-hidden="true">memory</span> <span data-i18n="nav.mundoDigital">Mundo Digital</span></a>
+        <a href="/cultura-digital.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">verified_user</span> <span data-i18n="nav.culturaDigital">Cultura Digital</span></a>
       </nav>
       <div class="pub-acoes">
-        <a href="/atividades.html" class="btn btn-contorno-escuro btn-sm flex-inline-icon" title="Buscar atividades BNCC" aria-label="Buscar atividades"><span class="material-symbols-outlined icon-xs" aria-hidden="true">search</span> Buscar</a>
-        <a href="/login.html" class="btn btn-contorno-escuro btn-sm flex-inline-icon" id="acao-entrar"><span class="material-symbols-outlined icon-xs" aria-hidden="true">account_circle</span> Entrar</a>
-        <a href="/registrar.html" class="btn btn-primario btn-sm flex-inline-icon" id="acao-cadastrar"><span class="material-symbols-outlined icon-xs" aria-hidden="true">person_add</span> Criar conta</a>
+        <a href="/atividades.html" class="btn btn-contorno-escuro btn-sm flex-inline-icon" title="Buscar atividades BNCC" aria-label="Buscar atividades" data-i18n-title="nav.buscarAriaLabel" data-i18n-aria-label="nav.buscarAriaLabel"><span class="material-symbols-outlined icon-xs" aria-hidden="true">search</span> <span data-i18n="nav.buscar">Buscar</span></a>
+        <a href="/login.html" class="btn btn-contorno-escuro btn-sm flex-inline-icon" id="acao-entrar"><span class="material-symbols-outlined icon-xs" aria-hidden="true">account_circle</span> <span data-i18n="nav.entrar">Entrar</span></a>
+        <a href="/registrar.html" class="btn btn-primario btn-sm flex-inline-icon" id="acao-cadastrar"><span class="material-symbols-outlined icon-xs" aria-hidden="true">person_add</span> <span data-i18n="nav.criarConta">Criar conta</span></a>
       </div>
     </div>
   </header>
@@ -121,7 +122,7 @@
           <div class="md-placa-container">
             <div class="md-placa-mae-3d vista-isometrica" id="placa-mae-3d">
               <!-- Componente: CPU Socket -->
-              <button type="button" class="md-slot-componente md-slot-cpu" data-componente="cpu" aria-label="CPU Processador Central">
+              <button type="button" class="md-slot-componente md-slot-cpu" data-componente="cpu" aria-label="CPU Processador Central" data-i18n-aria-label="md.slot.cpuAria">
                 <span class="md-cpu-chip">
                   <span class="md-cooler-anim">
                     <span class="material-symbols-outlined icon-xs" aria-hidden="true">memory</span>
@@ -132,7 +133,7 @@
               </button>
 
               <!-- Componente: Memória RAM -->
-              <button type="button" class="md-slot-componente md-slots-ram" data-componente="ram" aria-label="Memória RAM - Slots de memória">
+              <button type="button" class="md-slot-componente md-slots-ram" data-componente="ram" aria-label="Memória RAM - Slots de memória" data-i18n-aria-label="md.slot.ramAria">
                 <span class="md-slot-ram">
                   <span class="md-ram-pente">
                     <span class="md-ram-chip"></span>
@@ -151,21 +152,21 @@
               </button>
 
               <!-- Componente: SSD NVMe M.2 -->
-              <button type="button" class="md-slot-componente md-slot-ssd" data-componente="ssd" aria-label="NVMe M.2 Armazenamento SSD">
+              <button type="button" class="md-slot-componente md-slot-ssd" data-componente="ssd" aria-label="NVMe M.2 Armazenamento SSD" data-i18n-aria-label="md.slot.ssdAria">
                 <span>NVMe M.2</span>
                 <span class="material-symbols-outlined icon-xs" aria-hidden="true">save</span>
                 <span class="md-etiqueta-componente" data-i18n="md.compSsdRotulo">Armazenamento SSD</span>
               </button>
 
               <!-- Componente: Placa de Vídeo GPU -->
-              <button type="button" class="md-slot-componente md-slot-gpu" data-componente="gpu" aria-label="PCIe 4.0 x16 (Placa de Vídeo) GPU Dedicada">
+              <button type="button" class="md-slot-componente md-slot-gpu" data-componente="gpu" aria-label="PCIe 4.0 x16 (Placa de Vídeo) GPU Dedicada" data-i18n-aria-label="md.slot.gpuAria">
                 <span class="material-symbols-outlined icon-xs" aria-hidden="true">videogame_asset</span>
                 <span>PCIe 4.0 x16</span>
                 <span class="md-etiqueta-componente" data-i18n="md.compGpuRotulo">GPU Dedicada</span>
               </button>
 
               <!-- Componente: Painel Traseiro I/O -->
-              <button type="button" class="md-slot-componente md-slot-io" data-componente="io" aria-label="Portas I/O - Conectores USB, HDMI e Rede">
+              <button type="button" class="md-slot-componente md-slot-io" data-componente="io" aria-label="Portas I/O - Conectores USB, HDMI e Rede" data-i18n-aria-label="md.slot.ioAria">
                 <span class="md-io-porta"></span>
                 <span class="md-io-porta"></span>
                 <span class="md-io-porta"></span>
@@ -227,7 +228,7 @@
               <button type="button" class="btn-acao-montar" id="btn-instalar-etapa">
                 <span class="material-symbols-outlined" aria-hidden="true">add_circle</span> Encaixar Próximo Componente
               </button>
-              <button type="button" class="btn-reset-montar" id="btn-reset-montagem" title="Reiniciar montagem" data-i18n="md.btnReiniciar">
+              <button type="button" class="btn-reset-montar" id="btn-reset-montagem" title="Reiniciar montagem" data-i18n-title="md.btnReiniciarTitle" data-i18n="md.btnReiniciar">
                 Reiniciar
               </button>
             </div>
@@ -410,7 +411,7 @@
   <footer class="md-rodape">
     <div class="md-rodape-grade">
       <div class="md-rodape-info">
-        <img src="/img/logo-branco.svg" alt="LMS COMPASSO — BNCC Computação" width="145" height="34">
+        <img src="/img/logo-branco.svg" alt="LMS COMPASSO — BNCC Computação" data-i18n-attr="alt:nav.logoAlt" width="145" height="34">
         <p data-i18n="rodape.descricao">
           Plataforma aberta para o ensino de Computação no Ensino Fundamental, alinhada à BNCC Computação e desenvolvida com apoio do IFMA Campus Grajaú.
         </p>
@@ -437,8 +438,14 @@
     </div>
   </footer>
 
+  <script src="/js/vendor/gsap.min.js"></script>
+  <script src="/js/vendor/ScrollTrigger.min.js"></script>
   <script type="module" src="/js/mundo-digital.js"></script>
   <script type="module" src="/js/icones-universais.js"></script>
   <script type="module" src="/js/menu-universal.js"></script>
+  <script type="module">
+    import { animarRevelacaoScroll } from '/js/animacoes-gsap.js';
+    animarRevelacaoScroll('.md-secao, .md-card, .md-ciclo-etapa', { grupoPorPai: true, stagger: 0.05, y: 14 });
+  </script>
 </body>
 </html>

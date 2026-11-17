@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Usuários — LMS COMPASSO</title>
+<meta name="i18n-title" content="usrPage.metaTitulo">
 <link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,21 +20,21 @@
       <div class="cartao">
         <div class="flex-entre flex-wrap">
           <div class="flex-linha flex-wrap">
-            <select id="filtro-perfil" title="Filtrar por perfil" aria-label="Filtrar por perfil">
-              <option value="">Todos os perfis</option>
-              <option value="administrador">Administrador</option>
-              <option value="instrutor">Instrutor</option>
-              <option value="aluno">Aluno</option>
+            <select id="filtro-perfil" title="Filtrar por perfil" aria-label="Filtrar por perfil" data-i18n-title="usrPage.filtroPerfilAria" data-i18n-aria-label="usrPage.filtroPerfilAria">
+              <option value="" data-i18n="usrPage.todosPerfis">Todos os perfis</option>
+              <option value="administrador" data-i18n="perfilRole.administrador">Administrador</option>
+              <option value="instrutor" data-i18n="perfilRole.instrutor">Instrutor</option>
+              <option value="aluno" data-i18n="perfilRole.aluno">Aluno</option>
             </select>
-            <input type="text" id="busca" placeholder="Buscar por nome/email" title="Buscar por nome ou email" aria-label="Buscar por nome ou email">
+            <input type="text" id="busca" placeholder="Buscar por nome/email" title="Buscar por nome ou email" aria-label="Buscar por nome ou email" data-i18n-placeholder="usrPage.buscaPlaceholder" data-i18n-title="usrPage.buscaAria" data-i18n-aria-label="usrPage.buscaAria">
           </div>
-          <button type="button" class="btn btn-primario flex-inline-icon" onclick="abrirModalUsuario()"><span class="material-symbols-outlined icon-xs" aria-hidden="true">person_add</span> Novo Usuário</button>
+          <button type="button" class="btn btn-primario flex-inline-icon" onclick="abrirModalUsuario()"><span class="material-symbols-outlined icon-xs" aria-hidden="true">person_add</span> <span data-i18n="usrPage.novoUsuario">Novo Usuário</span></button>
         </div>
       </div>
 
-      <div class="cartao tabela-scroll" role="region" aria-label="Tabela de usuários cadastrados">
-        <table aria-label="Lista de usuários cadastrados">
-          <thead><tr><th scope="col">Nome</th><th scope="col">Email</th><th scope="col">Perfil</th><th scope="col">Status</th><th scope="col">Criado em</th><th scope="col" class="texto-direita">Ações</th></tr></thead>
+      <div class="cartao tabela-scroll" role="region" aria-label="Tabela de usuários cadastrados" data-i18n-aria-label="usrPage.tabelaRegionAria">
+        <table aria-label="Lista de usuários cadastrados" data-i18n-aria-label="usrPage.tabelaAria">
+          <thead><tr><th scope="col" data-i18n="usrPage.colNome">Nome</th><th scope="col" data-i18n="loginPage.emailLabel">Email</th><th scope="col" data-i18n="usrPage.colPerfil">Perfil</th><th scope="col" data-i18n="matPage.colStatus">Status</th><th scope="col" data-i18n="usrPage.colCriadoEm">Criado em</th><th scope="col" class="texto-direita" data-i18n="matPage.colAcoes">Ações</th></tr></thead>
           <tbody id="corpo-tabela"></tbody>
         </table>
       </div>
@@ -42,32 +43,32 @@
 
   <div id="modal-usuario" class="modal-overlay oculto">
     <div class="modal-conteudo max-w-420">
-      <h3 id="titulo-modal">Novo Usuário</h3>
+      <h3 id="titulo-modal" data-i18n="usrPage.novoUsuario">Novo Usuário</h3>
       <form id="form-usuario">
         <input type="hidden" id="usuario-id">
         <div class="form-grupo">
-          <label for="usuario-nome">Nome</label>
-          <input type="text" id="usuario-nome" placeholder="Nome completo" required>
+          <label for="usuario-nome" data-i18n="usrPage.colNome">Nome</label>
+          <input type="text" id="usuario-nome" placeholder="Nome completo" data-i18n-placeholder="usrPage.nomePlaceholder" required>
         </div>
         <div class="form-grupo">
-          <label for="usuario-email">Email</label>
-          <input type="email" id="usuario-email" placeholder="usuario@escola.edu.br" required>
+          <label for="usuario-email" data-i18n="loginPage.emailLabel">Email</label>
+          <input type="email" id="usuario-email" placeholder="usuario@escola.edu.br" data-i18n-placeholder="usrPage.emailPlaceholder" required>
         </div>
         <div class="form-grupo" id="grupo-senha">
-          <label for="usuario-senha">Senha</label>
+          <label for="usuario-senha" data-i18n="loginPage.senhaLabel">Senha</label>
           <input type="password" id="usuario-senha" autocomplete="new-password" placeholder="••••••••" minlength="6">
         </div>
         <div class="form-grupo">
-          <label for="usuario-perfil">Perfil</label>
-          <select id="usuario-perfil" title="Perfil de acesso">
-            <option value="aluno">Aluno</option>
-            <option value="instrutor">Instrutor</option>
-            <option value="administrador">Administrador</option>
+          <label for="usuario-perfil" data-i18n="usrPage.colPerfil">Perfil</label>
+          <select id="usuario-perfil" title="Perfil de acesso" data-i18n-title="usrPage.perfilSelectTitle">
+            <option value="aluno" data-i18n="perfilRole.aluno">Aluno</option>
+            <option value="instrutor" data-i18n="perfilRole.instrutor">Instrutor</option>
+            <option value="administrador" data-i18n="perfilRole.administrador">Administrador</option>
           </select>
         </div>
         <div class="flex-linha mt-16">
-          <button type="submit" class="btn btn-primario">Salvar</button>
-          <button type="button" class="btn btn-neutro" onclick="fecharModalUsuario()">Cancelar</button>
+          <button type="submit" class="btn btn-primario" data-i18n="comp.salvar">Salvar</button>
+          <button type="button" class="btn btn-neutro" onclick="fecharModalUsuario()" data-i18n="comp.cancelar">Cancelar</button>
         </div>
       </form>
     </div>
@@ -77,9 +78,20 @@
   <script src="/js/api.js"></script>
   <script src="/js/layout.js"></script>
   <script type="module">
+    import { t, traduzirDocumento, formatarData } from '/js/i18n.js';
+
     exigirAutenticacao(['administrador']);
     montarLayout('usuarios');
-    document.getElementById('titulo-pagina').textContent = 'Usuários';
+
+    function atualizarTituloTopbar() {
+      const el = document.getElementById('titulo-pagina');
+      if (el) el.textContent = t('usrPage.topbarTitulo');
+    }
+    atualizarTituloTopbar();
+    traduzirDocumento();
+
+    let ultimosUsuarios = [];
+    let modalModo = 'novo';
 
     function montarQuery() {
       const params = new URLSearchParams();
@@ -90,40 +102,50 @@
       return params.toString();
     }
 
-    async function carregar() {
-      try {
-        const usuarios = await api(`/usuarios?${montarQuery()}`);
-        const corpo = document.getElementById('corpo-tabela');
-        if (usuarios.length === 0) {
-          corpo.innerHTML = '<tr><td colspan="6" class="texto-suave">Nenhum usuário encontrado.</td></tr>';
-          return;
-        }
-        window.cacheUsuarios = Object.fromEntries(usuarios.map((u) => [u.id, u]));
-        corpo.innerHTML = usuarios.map((u) => `
+    function renderizarTabela() {
+      const corpo = document.getElementById('corpo-tabela');
+      if (!corpo) return;
+      if (ultimosUsuarios.length === 0) {
+        corpo.innerHTML = `<tr><td colspan="6" class="texto-suave">${escaparHtml(t('usrPage.vazio'))}</td></tr>`;
+        return;
+      }
+      window.cacheUsuarios = Object.fromEntries(ultimosUsuarios.map((u) => [u.id, u]));
+      corpo.innerHTML = ultimosUsuarios.map((u) => {
+        const perfilLabel = t(`perfilRole.${u.perfil}`, {}, u.perfil);
+        const statusLabel = u.ativo ? t('usrPage.ativo') : t('usrPage.inativo');
+        return `
           <tr>
             <td>${escaparHtml(u.nome)}</td>
             <td>${escaparHtml(u.email)}</td>
-            <td><span class="badge badge-${escaparHtml(u.perfil)}">${escaparHtml(u.perfil)}</span></td>
+            <td><span class="badge badge-${escaparHtml(u.perfil)}">${escaparHtml(perfilLabel)}</span></td>
             <td>
               <span class="badge ${u.ativo ? 'badge-ativo' : 'badge-inativo'} flex-inline-icon">
                 <span class="material-symbols-outlined icon-xs" aria-hidden="true">${u.ativo ? 'check_circle' : 'block'}</span>
-                ${u.ativo ? 'Ativo' : 'Inativo'}
+                ${escaparHtml(statusLabel)}
               </span>
             </td>
-            <td>${formatarData(u.criado_em)}</td>
+            <td>${escaparHtml(formatarData(u.criado_em))}</td>
             <td class="texto-direita">
-              <button type="button" class="btn btn-neutro btn-xs" aria-label="Editar usuário ${escaparHtml(u.nome)}" onclick="editarUsuarioPorId(${u.id})">Editar</button>
-              ${u.ativo ? `<button type="button" class="btn btn-perigo btn-xs" aria-label="Desativar usuário ${escaparHtml(u.nome)}" onclick="desativar(${u.id})">Desativar</button>` : ''}
+              <button type="button" class="btn btn-neutro btn-xs" aria-label="${escaparHtml(t('usrPage.editarAria', { nome: u.nome }))}" onclick="editarUsuarioPorId(${u.id})">${escaparHtml(t('usrPage.editar'))}</button>
+              ${u.ativo ? `<button type="button" class="btn btn-perigo btn-xs" aria-label="${escaparHtml(t('usrPage.desativarAria', { nome: u.nome }))}" onclick="desativar(${u.id})">${escaparHtml(t('usrPage.desativar'))}</button>` : ''}
             </td>
           </tr>
-        `).join('');
+        `;
+      }).join('');
+    }
+
+    async function carregar() {
+      try {
+        ultimosUsuarios = await api(`/usuarios?${montarQuery()}`);
+        renderizarTabela();
       } catch (err) {
         mostrarNotificacao(err.message, 'erro');
       }
     }
 
     function abrirModalUsuario() {
-      document.getElementById('titulo-modal').textContent = 'Novo Usuário';
+      modalModo = 'novo';
+      document.getElementById('titulo-modal').textContent = t('usrPage.novoUsuario');
       document.getElementById('form-usuario').reset();
       document.getElementById('usuario-id').value = '';
       document.getElementById('grupo-senha').classList.remove('oculto');
@@ -138,31 +160,38 @@
     }
 
     function editarUsuario(u) {
-      document.getElementById('titulo-modal').textContent = 'Editar Usuário';
-      document.getElementById('usuario-id').value = u.id;
-      document.getElementById('usuario-nome').value = u.nome;
-      document.getElementById('usuario-email').value = u.email;
-      document.getElementById('usuario-perfil').value = u.perfil;
-      document.getElementById('grupo-senha').classList.add('oculto');
-      document.getElementById('usuario-senha').required = false;
-      document.getElementById('modal-usuario').classList.remove('oculto');
+      modalModo = 'editar';
+      const tituloModal = document.getElementById('titulo-modal');
+      if (tituloModal) tituloModal.textContent = t('usrPage.editarUsuario');
+      const campoId = document.getElementById('usuario-id');
+      const campoNome = document.getElementById('usuario-nome');
+      const campoEmail = document.getElementById('usuario-email');
+      const campoPerfil = document.getElementById('usuario-perfil');
+      const campoSenha = document.getElementById('usuario-senha');
+      if (campoId) campoId.value = u.id;
+      if (campoNome) campoNome.value = u.nome;
+      if (campoEmail) campoEmail.value = u.email;
+      if (campoPerfil) campoPerfil.value = u.perfil;
+      document.getElementById('grupo-senha')?.classList.add('oculto');
+      if (campoSenha) campoSenha.required = false;
+      document.getElementById('modal-usuario')?.classList.remove('oculto');
     }
 
-    document.getElementById('form-usuario').addEventListener('submit', async (e) => {
+    document.getElementById('form-usuario')?.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const id = document.getElementById('usuario-id').value;
-      const nome = document.getElementById('usuario-nome').value;
-      const email = document.getElementById('usuario-email').value;
-      const perfil = document.getElementById('usuario-perfil').value;
-      const senha = document.getElementById('usuario-senha').value;
+      const id = document.getElementById('usuario-id')?.value || '';
+      const nome = document.getElementById('usuario-nome')?.value || '';
+      const email = document.getElementById('usuario-email')?.value || '';
+      const perfil = document.getElementById('usuario-perfil')?.value || 'aluno';
+      const senha = document.getElementById('usuario-senha')?.value || '';
 
       try {
         if (id) {
           await api(`/usuarios/${id}`, { method: 'PUT', body: JSON.stringify({ nome, email, perfil }) });
-          mostrarNotificacao('Usuário atualizado com sucesso!', 'sucesso');
+          mostrarNotificacao(t('usrPage.atualizadoSucesso'), 'sucesso');
         } else {
           await api('/usuarios', { method: 'POST', body: JSON.stringify({ nome, email, perfil, senha }) });
-          mostrarNotificacao('Usuário cadastrado com sucesso!', 'sucesso');
+          mostrarNotificacao(t('usrPage.cadastradoSucesso'), 'sucesso');
         }
         fecharModalUsuario();
         carregar();
@@ -170,19 +199,30 @@
     });
 
     async function desativar(id) {
-      if (!confirm('Desativar este usuário?')) return;
+      if (!confirm(t('usrPage.confirmarDesativar'))) return;
       try {
         await api(`/usuarios/${id}`, { method: 'DELETE' });
-        mostrarNotificacao('Usuário desativado com sucesso.', 'info');
+        mostrarNotificacao(t('usrPage.desativadoSucesso'), 'info');
         carregar();
       } catch (err) { mostrarNotificacao(err.message, 'erro'); }
     }
 
-    document.getElementById('filtro-perfil').addEventListener('change', carregar);
-    document.getElementById('busca').addEventListener('input', () => {
+    document.getElementById('filtro-perfil')?.addEventListener('change', carregar);
+    document.getElementById('busca')?.addEventListener('input', () => {
       clearTimeout(window._t);
       window._t = setTimeout(carregar, 350);
     });
+
+    window.addEventListener('lms:idioma-alterado', () => {
+      atualizarTituloTopbar();
+      traduzirDocumento();
+      const tituloModal = document.getElementById('titulo-modal');
+      if (tituloModal) {
+        tituloModal.textContent = t(modalModo === 'editar' ? 'usrPage.editarUsuario' : 'usrPage.novoUsuario');
+      }
+      renderizarTabela();
+    });
+    window.addEventListener('lms:layout-atualizado', atualizarTituloTopbar);
 
     Object.assign(window, {
       abrirModalUsuario,

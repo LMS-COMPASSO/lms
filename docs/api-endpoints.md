@@ -18,6 +18,7 @@ Content-Type: application/json
 | `POST` | `/api/auth/login` | Público | Login com `email` e `senha`, retorna token JWT |
 | `GET` | `/api/auth/me` | Autenticado | Retorna dados do usuário atualmente logado |
 | `POST` | `/api/auth/alterar-senha` | Autenticado | Altera a senha (`senhaAtual`, `novaSenha`) |
+| `GET` | `/api/auth/exportar-dados` | Autenticado | Exporta pacote JSON completo do titular (LGPD Art. 18, V) |
 
 ---
 
@@ -87,3 +88,17 @@ Content-Type: application/json
 | `POST` | `/api/certificados/emitir` | Autenticado | Emite certificado para curso concluído |
 | `GET` | `/api/certificados/validar/:codigo` | Público | Validação pública do certificado |
 | `GET` | `/api/certificados/visualizar/:codigo` | Público | Renderização HTML e impressão A4 do certificado |
+
+---
+
+## 7. Workspace Estilo Notion & Hub de Ideias
+
+| Método | Endpoint | Acesso | Descrição |
+| --- | --- | :---: | --- |
+| `GET` | `/api/workspace?status=&eixo_bncc=&prioridade=&curso_id=&busca=` | Autenticado | Lista os cards/páginas do titular com filtros |
+| `POST` | `/api/workspace` | Autenticado | Cria card/página com metadados, capa/ícone e blocos |
+| `GET` | `/api/workspace/:id` | Autenticado (Titular) | Obtém item completo do Workspace (bloqueio anti-IDOR) |
+| `PUT` | `/api/workspace/:id` | Autenticado (Titular) | Atualiza propriedades, capa/ícone e blocos do item |
+| `PATCH` | `/api/workspace/:id/status` | Autenticado (Titular) | Move status no Kanban (`ideia`, `planejando`, `execucao`, `concluido`) |
+| `DELETE` | `/api/workspace/:id` | Autenticado (Titular) | Exclui permanentemente um item do Workspace |
+| `DELETE` | `/api/workspace` | Autenticado | Apaga todos os itens do titular (LGPD Art. 18, VI) |

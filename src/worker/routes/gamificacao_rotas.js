@@ -105,8 +105,31 @@ export async function garantirTabelasGamificacao(db) {
       }
     }
   } catch (err) {
-    // Silencia erros caso seja ambiente de teste com mocks restritos
+    console.warn('Tabelas de gamificação adiadas neste ambiente:', err?.message || err);
   }
+}
+
+function calcularResumoMedalhasPorEixo(medalhas) {
+  const totalMedalhas = medalhas.length;
+  const totalConquistadas = medalhas.filter((m) => m.conquistada === 1).length;
+  const porEixo = {};
+
+  for (const m of medalhas) {
+    if (!porEixo[m.eixo_bncc]) {
+      porEixo[m.eixo_bncc] = { total: 0, conquistadas: 0 };
+    }
+    porEixo[m.eixo_bncc].total += 1;
+    if (m.conquistada === 1) {
+      porEixo[m.eixo_bncc].conquistadas += 1;
+    }
+  }
+
+  return {
+    total: totalMedalhas,
+    conquistadas: totalConquistadas,
+    percentualConclusao: totalMedalhas > 0 ? Math.round((totalConquistadas / totalMedalhas) * 100) : 0,
+    porEixo,
+  };
 }
 
 /**
@@ -115,7 +138,6 @@ export async function garantirTabelasGamificacao(db) {
  */
 export async function listarMedalhas(request, env, db, url) {
   const { payload } = await authorizeUser(request, env, db);
-  const usuarioId = payload.id;
   const eixoFiltro = url ? url.searchParams.get('eixo_bncc') : null;
 
   let sql = `
@@ -126,7 +148,7 @@ export async function listarMedalhas(request, env, db, url) {
     FROM medalhas m
     LEFT JOIN usuario_medalhas um ON um.medalha_id = m.id AND um.usuario_id = ?
   `;
-  const params = [usuarioId];
+  const params = [payload.id];
 
   if (eixoFiltro) {
     sql += ' WHERE m.eixo_bncc = ?';
@@ -139,42 +161,56 @@ export async function listarMedalhas(request, env, db, url) {
   try {
     medalhas = await queryAll(db, sql, params);
   } catch (err) {
-    if (err && String(err.message || err).includes('no such table')) {
-      await garantirTabelasGamificacao(db);
-      try {
-        medalhas = await queryAll(db, sql, params);
-      } catch {
-        medalhas = [];
-      }
-    } else {
-      throw err;
-    }
-  }
-
-  // Calcula estatísticas gerais de gamificação
-  const totalMedalhas = medalhas.length;
-  const totalConquistadas = medalhas.filter((m) => m.conquistada === 1).length;
-
-  const porEixo = {};
-  for (const m of medalhas) {
-    if (!porEixo[m.eixo_bncc]) {
-      porEixo[m.eixo_bncc] = { total: 0, conquistadas: 0 };
-    }
-    porEixo[m.eixo_bncc].total += 1;
-    if (m.conquistada === 1) {
-      porEixo[m.eixo_bncc].conquistadas += 1;
+    if (!err || !String(err.message || err).includes('no such table')) throw err;
+    await garantirTabelasGamificacao(db);
+    try {
+      medalhas = await queryAll(db, sql, params);
+    } catch (erroRetry) {
+      console.warn('Catálogo de medalhas indisponível após inicialização:', erroRetry?.message || erroRetry);
+      medalhas = [];
     }
   }
 
   return jsonResponse({
-    resumo: {
-      total: totalMedalhas,
-      conquistadas: totalConquistadas,
-      percentualConclusao: totalMedalhas > 0 ? Math.round((totalConquistadas / totalMedalhas) * 100) : 0,
-      porEixo,
-    },
+    resumo: calcularResumoMedalhasPorEixo(medalhas),
     medalhas,
   });
+}
+
+async function inserirMedalhaUsuario(db, usuarioId, medalhaId) {
+  try {
+    const res = await db.prepare('INSERT OR IGNORE INTO usuario_medalhas (usuario_id, medalha_id) VALUES (?, ?)')
+      .bind(usuarioId, medalhaId)
+      .run();
+    return Number(res?.meta?.changes || 0) > 0;
+  } catch (erroInsert) {
+    console.warn('Falha ao gravar conquista de medalha:', erroInsert?.message || erroInsert);
+    return false;
+  }
+}
+
+function coletarCodigosMedalhasElegiveis({ totalAulas, habilidades, totalCertificados, matriculasConcluidas }) {
+  const codigos = new Set();
+  if (Number(totalAulas?.total || 0) >= 1 || habilidades.length >= 1) {
+    codigos.add('primeiro_passo');
+  }
+  if (Number(totalCertificados?.total || 0) >= 1) {
+    codigos.add('trilha_completa');
+  }
+  if (habilidades.some((h) => ['EF01CO02', 'EF01CO03'].includes(h.habilidade_codigo))) {
+    codigos.add('mestre_algoritmos');
+  }
+  if (habilidades.some((h) => ['EF03CO03', 'EF15CO04'].includes(h.habilidade_codigo))) {
+    codigos.add('arquiteto_decomposicao');
+  }
+  if (habilidades.some((h) => ['EF69CO03', 'EF69CO04'].includes(h.habilidade_codigo))) {
+    codigos.add('programador_blocos');
+  }
+  for (const m of matriculasConcluidas) {
+    if (m.eixo_bncc === 'Mundo Digital') codigos.add('detetive_hardware_software');
+    if (m.eixo_bncc === 'Cultura Digital') codigos.add('guardiao_privacidade');
+  }
+  return Array.from(codigos);
 }
 
 /**
@@ -184,7 +220,6 @@ export async function avaliarConquistasAutomaticas(request, env, db) {
   const { payload } = await authorizeUser(request, env, db);
   const usuarioId = payload.id;
 
-  // 1. Matrículas com 100% de progresso ou concluídas
   const matriculasConcluidas = await queryAll(db, `
     SELECT m.*, c.eixo_bncc
     FROM matriculas m
@@ -192,7 +227,6 @@ export async function avaliarConquistasAutomaticas(request, env, db) {
     WHERE m.usuario_id = ? AND (m.status = 'concluida' OR m.progresso_percentual >= 100)
   `, [usuarioId]);
 
-  // 2. Total de aulas concluídas
   const totalAulas = await queryOne(db, `
     SELECT COUNT(*) AS total
     FROM progresso_aulas pa
@@ -200,7 +234,6 @@ export async function avaliarConquistasAutomaticas(request, env, db) {
     WHERE m.usuario_id = ? AND pa.concluida = 1
   `, [usuarioId]);
 
-  // 3. Certificados emitidos
   const totalCertificados = await queryOne(db, `
     SELECT COUNT(*) AS total
     FROM certificados cert
@@ -208,61 +241,24 @@ export async function avaliarConquistasAutomaticas(request, env, db) {
     WHERE m.usuario_id = ?
   `, [usuarioId]);
 
-  // 4. Desempenho de habilidades registradas
   const habilidades = await queryAll(db, `
     SELECT habilidade_codigo, origem_tipo
     FROM desempenho_habilidades
     WHERE usuario_id = ?
   `, [usuarioId]);
 
-  const medalhasConceder = [];
+  const codigosElegiveis = coletarCodigosMedalhasElegiveis({
+    totalAulas,
+    habilidades,
+    totalCertificados,
+    matriculasConcluidas,
+  });
 
-  // Primeiro passo: fez pelo menos uma aula ou atividade
-  if (Number(totalAulas?.total || 0) >= 1 || habilidades.length >= 1) {
-    medalhasConceder.push('primeiro_passo');
-  }
-
-  // Certificado conquistado
-  if (Number(totalCertificados?.total || 0) >= 1) {
-    medalhasConceder.push('trilha_completa');
-  }
-
-  // Habilidades de algoritmos / blocos
-  if (habilidades.some((h) => ['EF01CO02', 'EF01CO03'].includes(h.habilidade_codigo))) {
-    medalhasConceder.push('mestre_algoritmos');
-  }
-  if (habilidades.some((h) => ['EF03CO03', 'EF15CO04'].includes(h.habilidade_codigo))) {
-    medalhasConceder.push('arquiteto_decomposicao');
-  }
-  if (habilidades.some((h) => ['EF69CO03', 'EF69CO04'].includes(h.habilidade_codigo))) {
-    medalhasConceder.push('programador_blocos');
-  }
-
-  // Eixos concluídos
-  for (const m of matriculasConcluidas) {
-    if (m.eixo_bncc === 'Mundo Digital') {
-      medalhasConceder.push('detetive_hardware_software');
-    }
-    if (m.eixo_bncc === 'Cultura Digital') {
-      medalhasConceder.push('guardiao_privacidade');
-    }
-  }
-
-  // Insere as medalhas no banco contabilizando apenas as realmente novas
   let novasConquistadas = 0;
-  for (const cod of medalhasConceder) {
+  for (const cod of codigosElegiveis) {
     const medalha = await queryOne(db, 'SELECT id FROM medalhas WHERE codigo = ?', [cod]);
-    if (medalha) {
-      try {
-        const res = await db.prepare('INSERT OR IGNORE INTO usuario_medalhas (usuario_id, medalha_id) VALUES (?, ?)')
-          .bind(usuarioId, medalha.id)
-          .run();
-        if (Number(res?.meta?.changes || 0) > 0) {
-          novasConquistadas += 1;
-        }
-      } catch {
-        // Ignora duplicidade
-      }
+    if (medalha && await inserirMedalhaUsuario(db, usuarioId, medalha.id)) {
+      novasConquistadas += 1;
     }
   }
 
@@ -272,14 +268,7 @@ export async function avaliarConquistasAutomaticas(request, env, db) {
   });
 }
 
-/**
- * Registra a conclusão de uma atividade dinâmica e computa o desempenho de habilidade BNCC.
- */
-export async function registrarAtividadeConcluida(request, env, db) {
-  const { payload } = await authorizeUser(request, env, db);
-  const usuarioId = payload.id;
-  const body = await readJsonBody(request);
-
+function extrairDadosConclusaoAtividade(body) {
   const atividadeId = String(body.atividadeId || '').trim().slice(0, 120);
   const habilidadesBrutas = Array.isArray(body.habilidades) ? body.habilidades : [];
   const habilidades = habilidadesBrutas
@@ -298,94 +287,118 @@ export async function registrarAtividadeConcluida(request, env, db) {
   const parceiroDupla = body.parceiroDupla ? String(body.parceiroDupla).trim().slice(0, 120) : null;
   const papelDupla = ['individual', 'piloto', 'navegador'].includes(body.papelDupla) ? body.papelDupla : 'individual';
 
-  if (!atividadeId) {
-    return jsonErro('Identificador da atividade é obrigatório.', 400);
-  }
-
   let nivelAtingido = 'em_desenvolvimento';
   if (pontuacao >= 8.5) nivelAtingido = 'avancado';
   else if (pontuacao >= 6.0) nivelAtingido = 'adequado';
 
+  return {
+    atividadeId,
+    habilidades,
+    pontuacao,
+    cursoId,
+    codigoPython,
+    tentativas,
+    estrelas,
+    parceiroDupla,
+    papelDupla,
+    nivelAtingido,
+  };
+}
+
+async function contarSubmissoesPythonDistintas(db, usuarioId) {
+  try {
+    const contagem = await queryOne(
+      db,
+      "SELECT COUNT(DISTINCT atividade_id) AS total FROM submissoes_python WHERE usuario_id = ? AND atividade_id LIKE 'python3d-%' AND sucesso = 1",
+      [usuarioId],
+    );
+    return Number(contagem?.total || 0);
+  } catch (erroContagem) {
+    console.warn('Falha ao contar submissões Python 3D:', erroContagem?.message || erroContagem);
+    return 0;
+  }
+}
+
+async function determinarCodigosMedalhasAtividade(db, usuarioId, atividadeId) {
+  const mapaPrefixos = [
+    ['ordenar-', 'mestre_algoritmos'],
+    ['decompor-', 'arquiteto_decomposicao'],
+    ['blocos-', 'programador_blocos'],
+  ];
+  const codigos = ['primeiro_passo'];
+  const parPrefixo = mapaPrefixos.find(([prefixo]) => atividadeId.startsWith(prefixo));
+  if (parPrefixo) {
+    codigos.push(parPrefixo[1]);
+  }
+  let medalhaExploradorPython3d = false;
+  if (atividadeId.startsWith('python3d-') && await contarSubmissoesPythonDistintas(db, usuarioId) >= 6) {
+    codigos.push('explorador_python_3d');
+    medalhaExploradorPython3d = true;
+  }
+  return { codigos, medalhaExploradorPython3d };
+}
+
+/**
+ * Registra a conclusão de uma atividade dinâmica e computa o desempenho de habilidade BNCC.
+ */
+export async function registrarAtividadeConcluida(request, env, db) {
+  const { payload } = await authorizeUser(request, env, db);
+  const usuarioId = payload.id;
+  const body = await readJsonBody(request);
+  const dados = extrairDadosConclusaoAtividade(body);
+
+  if (!dados.atividadeId) {
+    return jsonErro('Identificador da atividade é obrigatório.', 400);
+  }
+
   const executarComGarantiaTabela = async (operacaoSql) => {
     try {
       await operacaoSql();
-    } catch {
+    } catch (erroSql) {
+      console.warn('Reintentando após garantir tabelas de gamificação:', erroSql?.message || erroSql);
       await garantirTabelasGamificacao(db);
       await operacaoSql();
     }
   };
 
-  // Grava o registro para cada habilidade desenvolvida na atividade
-  for (const cod of habilidades) {
+  for (const cod of dados.habilidades) {
     await executarComGarantiaTabela(() =>
       db.prepare(`
         INSERT INTO desempenho_habilidades (usuario_id, curso_id, habilidade_codigo, origem_tipo, origem_id, pontuacao, nivel_atingido)
         VALUES (?, ?, ?, 'atividade', ?, ?, ?)
-      `).bind(usuarioId, cursoId, cod, atividadeId, pontuacao, nivelAtingido).run(),
+      `).bind(usuarioId, dados.cursoId, cod, dados.atividadeId, dados.pontuacao, dados.nivelAtingido).run(),
     );
   }
 
-  // Se for atividade Python 3D com código enviado, persiste em submissoes_python
-  if (codigoPython) {
+  if (dados.codigoPython) {
     await executarComGarantiaTabela(() =>
       db.prepare(`
         INSERT INTO submissoes_python (usuario_id, atividade_id, codigo_python, sucesso, tentativas, estrelas, parceiro_dupla, papel_dupla)
         VALUES (?, ?, ?, 1, ?, ?, ?, ?)
-      `).bind(usuarioId, atividadeId, codigoPython, tentativas, estrelas, parceiroDupla, papelDupla).run(),
+      `).bind(
+        usuarioId,
+        dados.atividadeId,
+        dados.codigoPython,
+        dados.tentativas,
+        dados.estrelas,
+        dados.parceiroDupla,
+        dados.papelDupla,
+      ).run(),
     );
   }
 
-  // Avalia medalhas exclusivamente a partir do histórico persistido no banco (sem confiar em flags do cliente)
-  const medalhasNovas = [];
-  let medalhaExploradorPython3d = false;
-
-  if (atividadeId.startsWith('ordenar-')) {
-    const m = await queryOne(db, 'SELECT id FROM medalhas WHERE codigo = ?', ['mestre_algoritmos']);
-    if (m) medalhasNovas.push(m.id);
-  } else if (atividadeId.startsWith('decompor-')) {
-    const m = await queryOne(db, 'SELECT id FROM medalhas WHERE codigo = ?', ['arquiteto_decomposicao']);
-    if (m) medalhasNovas.push(m.id);
-  } else if (atividadeId.startsWith('blocos-')) {
-    const m = await queryOne(db, 'SELECT id FROM medalhas WHERE codigo = ?', ['programador_blocos']);
-    if (m) medalhasNovas.push(m.id);
-  } else if (atividadeId.startsWith('python3d-')) {
-    let totalPythonConcluidas = 0;
-    try {
-      const contagem = await queryOne(
-        db,
-        "SELECT COUNT(DISTINCT atividade_id) AS total FROM submissoes_python WHERE usuario_id = ? AND atividade_id LIKE 'python3d-%' AND sucesso = 1",
-        [usuarioId],
-      );
-      totalPythonConcluidas = Number(contagem?.total || 0);
-    } catch {
-      totalPythonConcluidas = 0;
-    }
-    if (totalPythonConcluidas >= 6) {
-      const mPy = await queryOne(db, 'SELECT id FROM medalhas WHERE codigo = ?', ['explorador_python_3d']);
-      if (mPy) {
-        medalhasNovas.push(mPy.id);
-        medalhaExploradorPython3d = true;
-      }
-    }
-  }
-
-  const mPrimeiro = await queryOne(db, 'SELECT id FROM medalhas WHERE codigo = ?', ['primeiro_passo']);
-  if (mPrimeiro) medalhasNovas.push(mPrimeiro.id);
-
-  for (const mid of medalhasNovas) {
-    try {
-      await db.prepare('INSERT OR IGNORE INTO usuario_medalhas (usuario_id, medalha_id) VALUES (?, ?)')
-        .bind(usuarioId, mid)
-        .run();
-    } catch {
-      // Ignora erro
+  const { codigos, medalhaExploradorPython3d } = await determinarCodigosMedalhasAtividade(db, usuarioId, dados.atividadeId);
+  for (const cod of codigos) {
+    const medalha = await queryOne(db, 'SELECT id FROM medalhas WHERE codigo = ?', [cod]);
+    if (medalha) {
+      await inserirMedalhaUsuario(db, usuarioId, medalha.id);
     }
   }
 
   return jsonResponse({
     sucesso: true,
-    habilidadesRegistradas: habilidades.length,
-    nivelAtingido,
+    habilidadesRegistradas: dados.habilidades.length,
+    nivelAtingido: dados.nivelAtingido,
     medalhaExploradorPython3d,
   });
 }

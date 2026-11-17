@@ -5,9 +5,10 @@
  */
 
 import { h, anunciar, criarFeedback, renderizarComFoco } from './dom.js';
-import { avaliarOrdem, embaralharDiferente, plural } from './logica.js';
+import { avaliarOrdem, embaralharDiferente } from './logica.js';
 import { tocarSom, criarBotaoSom } from './som.js';
 import { renderizarIcone } from './icones.js';
+import { t, pluralT, atvConclusao, atvDica, atvPasso } from './traducao.js';
 
 export function jogadorOrdenar(atividade, ctx) {
   const todos = [...atividade.passos, ...(atividade.intrusos || [])];
@@ -17,7 +18,7 @@ export function jogadorOrdenar(atividade, ctx) {
   const area = h('div');
   let estado;
 
-  const texto = (id) => porId.get(id).texto;
+  const texto = (id) => atvPasso(atividade.id, porId.get(id));
 
   function novoEstado() {
     return {
@@ -36,7 +37,7 @@ export function jogadorOrdenar(atividade, ctx) {
     estado.sequencia.push(id);
     estado.resultado = null;
     const vizinho = estado.banco[posicao] ?? estado.banco[posicao - 1];
-    anunciar(`Passo “${texto(id)}” colocado na posição ${estado.sequencia.length}.`);
+    anunciar(t('ordenar.anuncioAdicionado', { texto: texto(id), pos: estado.sequencia.length }));
     renderizar(vizinho ? `banco-${vizinho}` : 'verificar');
 
     if (typeof window !== 'undefined' && window.gsap) {
@@ -52,7 +53,7 @@ export function jogadorOrdenar(atividade, ctx) {
     estado.sequencia.splice(estado.sequencia.indexOf(id), 1);
     estado.banco.push(id);
     estado.resultado = null;
-    anunciar(`Passo “${texto(id)}” devolvido aos passos disponíveis.`);
+    anunciar(t('ordenar.anuncioRemovido', { texto: texto(id) }));
     renderizar(`banco-${id}`);
   }
 
@@ -63,7 +64,7 @@ export function jogadorOrdenar(atividade, ctx) {
     tocarSom('mover');
     [estado.sequencia[de], estado.sequencia[para]] = [estado.sequencia[para], estado.sequencia[de]];
     estado.resultado = null;
-    anunciar(`Passo “${texto(id)}” agora está na posição ${para + 1}.`);
+    anunciar(t('ordenar.anuncioMovido', { texto: texto(id), pos: para + 1 }));
     renderizar([`${deslocamento < 0 ? 'sobe' : 'desce'}-${id}`, `${deslocamento < 0 ? 'desce' : 'sobe'}-${id}`, `remover-${id}`]);
   }
 
@@ -75,7 +76,7 @@ export function jogadorOrdenar(atividade, ctx) {
     if (resposta.ok) {
       estado.concluida = true;
       tocarSom('vitoria');
-      feedback.sucesso('Algoritmo correto! 🎉', atividade.conclusao);
+      feedback.sucesso(t('ordenar.sucessoTitulo'), atvConclusao(atividade));
       renderizar('recomecar');
 
       if (typeof window !== 'undefined' && window.gsap) {
@@ -96,24 +97,23 @@ export function jogadorOrdenar(atividade, ctx) {
 
     const mensagens = [];
     if (resposta.intrusos.length === 1) {
-      mensagens.push(`O passo “${texto(resposta.intrusos[0])}” não faz parte deste algoritmo. Devolva-o aos passos disponíveis.`);
+      mensagens.push(t('ordenar.erroIntrusoSing', { passo: texto(resposta.intrusos[0]) }));
     } else if (resposta.intrusos.length > 1) {
       const nomes = resposta.intrusos.map((id) => `“${texto(id)}”`).join(', ');
-      mensagens.push(`Os passos ${nomes} não fazem parte deste algoritmo. Devolva-os aos passos disponíveis.`);
+      mensagens.push(t('ordenar.erroIntrusoPlur', { passos: nomes }));
     }
     if (resposta.faltando.length) {
-      mensagens.push(`Faltam ${plural(resposta.faltando.length, 'passo', 'passos')} no seu algoritmo.`);
+      mensagens.push(pluralT(resposta.faltando.length, 'ordenar.erroFaltandoSing', 'ordenar.erroFaltandoPlur'));
     }
     if (resposta.foraDoLugar.length) {
-      const marcados = resposta.foraDoLugar.length === 1 ? 'marcado' : 'marcados';
-      mensagens.push(`${plural(resposta.foraDoLugar.length, 'passo está', 'passos estão')} fora do lugar (${marcados} com ⚠). Troque a ordem e verifique de novo.`);
+      mensagens.push(pluralT(resposta.foraDoLugar.length, 'ordenar.erroForaSing', 'ordenar.erroForaPlur'));
     }
 
     const quaseLa = resposta.foraDoLugar.length > 0 && !resposta.intrusos.length && !resposta.faltando.length;
     feedback.erro(
-      quaseLa ? 'Quase lá!' : 'Ainda não é o algoritmo certo',
+      quaseLa ? t('ordenar.quaseLa') : t('ordenar.aindaNao'),
       mensagens.join(' '),
-      estado.tentativas >= 2 ? ` Dica: ${atividade.dica}` : '',
+      estado.tentativas >= 2 ? ` ${t('jog.dicaPrefixo', { dica: atvDica(atividade) })}` : '',
     );
     renderizar('verificar');
   }
@@ -122,7 +122,7 @@ export function jogadorOrdenar(atividade, ctx) {
     tocarSom('click');
     estado = novoEstado();
     feedback.limpar();
-    anunciar('Atividade reiniciada.');
+    anunciar(t('jog.anuncioReiniciada'));
     renderizar(`banco-${estado.banco[0]}`);
   }
 
@@ -132,12 +132,13 @@ export function jogadorOrdenar(atividade, ctx) {
       'button',
       { type: 'button', class: 'atv-passo', 'data-foco': `banco-${id}`, disabled: estado.concluida, onclick: () => adicionar(id) },
       renderizarIcone(passo.id || passo.emoji, { classe: 'atv-passo-icone' }),
-      passo.texto,
+      texto(id),
     );
   }
 
   function itemSequencia(id, indice) {
     const passo = porId.get(id);
+    const passoTexto = texto(id);
     const resultado = estado.resultado;
     let classe = 'atv-item';
     let marca = null;
@@ -145,22 +146,22 @@ export function jogadorOrdenar(atividade, ctx) {
     if (resultado) {
       if (idsIntrusos.has(id)) {
         classe += ' atv-intruso';
-        marca = h('span', { class: 'atv-marca flex-inline-icon' }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'close'), ' Não faz parte');
+        marca = h('span', { class: 'atv-marca flex-inline-icon' }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'close'), ` ${t('ordenar.marcaIntruso')}`);
       } else if (resultado.foraDoLugar.includes(id)) {
         classe += ' atv-fora';
-        marca = h('span', { class: 'atv-marca flex-inline-icon' }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'warning'), ' Fora do lugar');
+        marca = h('span', { class: 'atv-marca flex-inline-icon' }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'warning'), ` ${t('ordenar.marcaFora')}`);
       } else {
         classe += ' atv-certo';
-        marca = h('span', { class: 'atv-marca flex-inline-icon' }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'check_circle'), ' No lugar');
+        marca = h('span', { class: 'atv-marca flex-inline-icon' }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'check_circle'), ` ${t('ordenar.marcaCerto')}`);
       }
     }
 
     const controles = estado.concluida ? null : h(
       'span',
       { class: 'atv-item-controles' },
-      h('button', { type: 'button', class: 'atv-controle', 'data-foco': `sobe-${id}`, 'aria-label': `Mover para cima: ${passo.texto}`, disabled: indice === 0, onclick: () => mover(id, -1) }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'arrow_upward')),
-      h('button', { type: 'button', class: 'atv-controle', 'data-foco': `desce-${id}`, 'aria-label': `Mover para baixo: ${passo.texto}`, disabled: indice === estado.sequencia.length - 1, onclick: () => mover(id, 1) }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'arrow_downward')),
-      h('button', { type: 'button', class: 'atv-controle', 'data-foco': `remover-${id}`, 'aria-label': `Remover: ${passo.texto}`, onclick: () => remover(id) }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'close')),
+      h('button', { type: 'button', class: 'atv-controle', 'data-foco': `sobe-${id}`, 'aria-label': t('ordenar.moverCimaAria', { texto: passoTexto }), disabled: indice === 0, onclick: () => mover(id, -1) }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'arrow_upward')),
+      h('button', { type: 'button', class: 'atv-controle', 'data-foco': `desce-${id}`, 'aria-label': t('ordenar.moverBaixoAria', { texto: passoTexto }), disabled: indice === estado.sequencia.length - 1, onclick: () => mover(id, 1) }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'arrow_downward')),
+      h('button', { type: 'button', class: 'atv-controle', 'data-foco': `remover-${id}`, 'aria-label': t('ordenar.removerAria', { texto: passoTexto }), onclick: () => remover(id) }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'close')),
     );
 
     return h(
@@ -170,8 +171,8 @@ export function jogadorOrdenar(atividade, ctx) {
         'span',
         { class: 'atv-item-texto' },
         renderizarIcone(passo.id || passo.emoji, { classe: 'atv-item-icone' }),
-        h('strong', { class: 'atv-item-pos' }, `${indice + 1}º `),
-        passo.texto,
+        h('strong', { class: 'atv-item-pos' }, `${indice + 1}. `),
+        passoTexto,
         marca,
       ),
       controles,
@@ -187,19 +188,19 @@ export function jogadorOrdenar(atividade, ctx) {
       h(
         'div',
         { class: 'atv-telemetria-col' },
-        h('span', { class: 'atv-telemetria-rotulo' }, 'Construção do Algoritmo'),
+        h('span', { class: 'atv-telemetria-rotulo' }, t('ordenar.telemetriaRotulo')),
         h(
           'div',
           { class: 'atv-telemetria-gauge' },
-          h('progress', { class: 'atv-telemetria-progress', value: String(atual), max: String(totalEsperado), 'aria-label': 'Progresso do algoritmo' }),
-          h('span', { class: 'atv-telemetria-valor' }, `${atual}/${totalEsperado} passos`),
+          h('progress', { class: 'atv-telemetria-progress', value: String(atual), max: String(totalEsperado), 'aria-label': t('ordenar.progressoAria') }),
+          h('span', { class: 'atv-telemetria-valor' }, t('ordenar.telemetriaPassos', { atual, total: totalEsperado })),
         ),
       ),
       h(
         'div',
         { class: 'atv-telemetria-acoes' },
         estado.tentativas > 0
-          ? h('span', { class: 'atv-badge-tentativas' }, plural(estado.tentativas, 'tentativa', 'tentativas'))
+          ? h('span', { class: 'atv-badge-tentativas' }, pluralT(estado.tentativas, 'jog.tentativaSing', 'jog.tentativaPlur'))
           : null,
         criarBotaoSom(() => renderizar()),
       ),
@@ -209,8 +210,8 @@ export function jogadorOrdenar(atividade, ctx) {
   function renderizar(foco = null) {
     const conteudoBanco = estado.banco.length
       ? h('ul', { class: 'atv-banco' }, estado.banco.map((id) => h('li', {}, botaoPasso(id))))
-      : h('p', { class: 'atv-vazio' }, 'Você já usou todos os passos. Confira o seu algoritmo e toque em Verificar.');
-    const tituloPainelBanco = estado.concluida ? 'Ficaram de fora (e estava certo!)' : 'Passos disponíveis';
+      : h('p', { class: 'atv-vazio' }, t('ordenar.todosUsados'));
+    const tituloPainelBanco = estado.concluida ? t('ordenar.ficaramFora') : t('ordenar.passosDisponiveis');
     let painelBanco = null;
     if (!estado.concluida || estado.banco.length) {
       painelBanco = h(
@@ -229,17 +230,17 @@ export function jogadorOrdenar(atividade, ctx) {
         h(
           'div',
           { class: 'atv-painel' },
-          h(ctx.TituloPainel, {}, 'Meu algoritmo'),
+          h(ctx.TituloPainel, {}, t('ordenar.meuAlgoritmo')),
           estado.sequencia.length
             ? h('ol', { class: 'atv-sequencia' }, estado.sequencia.map(itemSequencia))
-            : h('p', { class: 'atv-vazio' }, 'Toque em um passo para começar a montar o algoritmo.'),
+            : h('p', { class: 'atv-vazio' }, t('ordenar.vazioInstrucao')),
         ),
         h(
           'div',
           { class: 'atv-acoes' },
-          h('button', { type: 'button', class: 'btn btn-primario flex-inline-icon', 'data-foco': 'verificar', disabled: estado.concluida || !estado.sequencia.length, onclick: verificar }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'check'), ' Verificar'),
-          h('button', { type: 'button', class: 'btn btn-neutro flex-inline-icon', 'data-foco': 'dica', disabled: estado.concluida, onclick: () => { tocarSom('click'); feedback.info('Dica', atividade.dica); } }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'lightbulb'), ' Quero uma dica'),
-          h('button', { type: 'button', class: 'btn btn-neutro flex-inline-icon', 'data-foco': 'recomecar', onclick: recomecar }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'refresh'), ' Recomeçar'),
+          h('button', { type: 'button', class: 'btn btn-primario flex-inline-icon', 'data-foco': 'verificar', disabled: estado.concluida || !estado.sequencia.length, onclick: verificar }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'check'), ` ${t('jog.verificar')}`),
+          h('button', { type: 'button', class: 'btn btn-neutro flex-inline-icon', 'data-foco': 'dica', disabled: estado.concluida, onclick: () => { tocarSom('click'); feedback.info(t('jog.dicaTitulo'), atvDica(atividade)); } }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'lightbulb'), ` ${t('jog.queroDica')}`),
+          h('button', { type: 'button', class: 'btn btn-neutro flex-inline-icon', 'data-foco': 'recomecar', onclick: recomecar }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'refresh'), ` ${t('jog.recomecar')}`),
         ),
       ],
       foco,

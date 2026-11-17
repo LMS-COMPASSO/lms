@@ -6,31 +6,45 @@
 import { h } from './dom.js';
 import { DIRECOES, embaralharDiferente, lerMapa, menorPrograma } from './logica.js';
 import { renderizarIcone, renderizarIconeCelula } from './icones.js';
+import {
+  t,
+  atvDescarte,
+  atvParte,
+  atvPasso,
+  atvProblema,
+  atvProfessor,
+  atvTarefa,
+  atvTema,
+  atvTitulo,
+  atvBlocoRotulo,
+} from './traducao.js';
 
 function cabecalho(atividade, orientacao) {
+  const anosTexto = t(`faixa.${atividade.faixa}`, {}, atividade.anos);
+  const eixoTexto = t(`eixo.${atividade.eixo || 'pensamento-computacional'}`, {}, 'Pensamento Computacional');
   return [
-    h('h1', { class: 'folha-titulo' }, renderizarIcone(atividade.id, { classe: 'folha-icone' }), ` ${atividade.titulo}`),
-    h('p', {}, `Atividade desplugada · ${atividade.anos} · Pensamento Computacional`),
+    h('h1', { class: 'folha-titulo' }, renderizarIcone(atividade.id, { classe: 'folha-icone' }), ` ${atvTitulo(atividade)}`),
+    h('p', {}, t('imp.subtitulo', { anos: anosTexto, eixo: eixoTexto })),
     h('p', {}, orientacao),
   ];
 }
 
 function rodape(atividade) {
-  return h('p', {}, `LMS COMPASSO · BNCC Computação · Habilidades sugeridas: ${atividade.habilidades.join(', ')}`);
+  return h('p', {}, t('imp.rodape', { habilidades: atividade.habilidades.join(', ') }));
 }
 
 function guiaDoProfessor(atividade, ...extras) {
-  const { professor } = atividade;
+  const prof = atvProfessor(atividade);
   return h(
     'div',
     { class: 'folha-gabarito' },
-    h('h2', {}, 'Para o professor'),
+    h('h2', {}, t('imp.paraProfessor')),
     ...extras,
-    h('p', {}, h('strong', {}, 'Objetivo: '), professor.objetivo),
-    h('p', {}, h('strong', {}, 'Como conduzir: '), professor.desplugada),
-    h('p', {}, h('strong', {}, 'Para conversar em sala:')),
-    h('ul', {}, professor.conversa.map((pergunta) => h('li', {}, pergunta))),
-    professor.observacao ? h('p', {}, professor.observacao) : null,
+    h('p', {}, h('strong', {}, `${t('imp.objetivo')}: `), prof.objetivo),
+    h('p', {}, h('strong', {}, `${t('imp.comoConduzir')}: `), prof.desplugada),
+    h('p', {}, h('strong', {}, `${t('imp.paraConversar')}:`)),
+    h('ul', {}, prof.conversa.map((pergunta) => h('li', {}, pergunta))),
+    prof.observacao ? h('p', {}, prof.observacao) : null,
   );
 }
 
@@ -44,26 +58,30 @@ function folhaOrdenar(atividade) {
     { class: 'folha' },
     ...cabecalho(
       atividade,
-      `Recorte as fichas, embaralhe e monte o algoritmo na ordem certa.${intrusos.length ? ' Atenção: pode haver fichas que não fazem parte do algoritmo.' : ''}`,
+      `${t('imp.ordenar.instrucao')}${intrusos.length ? ` ${t('imp.ordenar.avisoIntrusos')}` : ''}`,
     ),
     h(
       'div',
       { class: 'folha-cartoes' },
-      cartoes.map((passo) => h('div', { class: 'folha-cartao' }, renderizarIcone(passo.id || passo.emoji, { classe: 'folha-icone' }), ` ${passo.texto}`)),
+      cartoes.map((passo) => h('div', { class: 'folha-cartao' }, renderizarIcone(passo.id || passo.emoji, { classe: 'folha-icone' }), ` ${atvPasso(atividade.id, passo)}`)),
     ),
     rodape(atividade),
     guiaDoProfessor(
       atividade,
-      h('p', {}, h('strong', {}, 'Ordem correta:')),
+      h('p', {}, h('strong', {}, `${t('imp.ordenar.ordemCorreta')}:`)),
       h(
         'ol',
         {},
         etapas.map((etapa) => {
           const grupo = atividade.passos.filter((passo) => passo.etapa === etapa);
-          return h('li', {}, grupo.length > 1 ? `Em qualquer ordem: ${grupo.map((passo) => passo.texto).join(' / ')}` : grupo[0].texto);
+          return h('li', {}, grupo.length > 1
+            ? t('imp.ordenar.qualquerOrdem', { lista: grupo.map((passo) => atvPasso(atividade.id, passo)).join(' / ') })
+            : atvPasso(atividade.id, grupo[0]));
         }),
       ),
-      intrusos.length ? h('p', {}, h('strong', {}, 'Não fazem parte: '), intrusos.map((passo) => passo.texto).join('; ')) : null,
+      intrusos.length
+        ? h('p', {}, h('strong', {}, `${t('imp.ordenar.naoFazemParte')}: `), intrusos.map((passo) => atvPasso(atividade.id, passo)).join('; '))
+        : null,
     ),
   );
 }
@@ -71,33 +89,34 @@ function folhaOrdenar(atividade) {
 function folhaDecompor(atividade) {
   const descarte = atividade.tarefas.filter((tarefa) => tarefa.parte === 'fora');
   const cartoes = embaralharDiferente(atividade.tarefas);
+  const rotuloDescarte = atvDescarte(atividade);
 
   return h(
     'div',
     { class: 'folha' },
-    ...cabecalho(atividade, 'Recorte as fichas e cole cada uma na parte do problema a que ela pertence.'),
-    h('h2', {}, `Problema: ${atividade.problema}`),
+    ...cabecalho(atividade, t('imp.decompor.instrucao')),
+    h('h2', {}, `${t('imp.decompor.problema')}: ${atvProblema(atividade)}`),
     h(
       'div',
       { class: 'folha-partes' },
-      atividade.partes.map((parte) => h('div', { class: 'folha-parte' }, renderizarIcone(parte.id || parte.emoji, { classe: 'folha-icone' }), ` ${parte.titulo}`)),
-      descarte.length ? h('div', { class: 'folha-parte' }, renderizarIcone('fora', { classe: 'folha-icone' }), ` ${atividade.descarteTitulo}`) : null,
+      atividade.partes.map((parte) => h('div', { class: 'folha-parte' }, renderizarIcone(parte.id || parte.emoji, { classe: 'folha-icone' }), ` ${atvParte(atividade.id, parte)}`)),
+      descarte.length ? h('div', { class: 'folha-parte' }, renderizarIcone('fora', { classe: 'folha-icone' }), ` ${rotuloDescarte}`) : null,
     ),
-    h('div', { class: 'folha-cartoes' }, cartoes.map((tarefa) => h('div', { class: 'folha-cartao' }, tarefa.texto))),
+    h('div', { class: 'folha-cartoes' }, cartoes.map((tarefa) => h('div', { class: 'folha-cartao' }, atvTarefa(atividade.id, tarefa)))),
     rodape(atividade),
     guiaDoProfessor(
       atividade,
-      h('p', {}, h('strong', {}, 'Respostas:')),
+      h('p', {}, h('strong', {}, `${t('imp.decompor.respostas')}:`)),
       h(
         'ul',
         {},
         atividade.partes.map((parte) => h(
           'li',
           {},
-          h('strong', {}, `${parte.titulo}: `),
-          atividade.tarefas.filter((tarefa) => tarefa.parte === parte.id).map((tarefa) => tarefa.texto).join('; '),
+          h('strong', {}, `${atvParte(atividade.id, parte)}: `),
+          atividade.tarefas.filter((tarefa) => tarefa.parte === parte.id).map((tarefa) => atvTarefa(atividade.id, tarefa)).join('; '),
         )),
-        descarte.length ? h('li', {}, h('strong', {}, `${atividade.descarteTitulo}: `), descarte.map((tarefa) => tarefa.texto).join('; ')) : null,
+        descarte.length ? h('li', {}, h('strong', {}, `${rotuloDescarte}: `), descarte.map((tarefa) => atvTarefa(atividade.id, tarefa)).join('; ')) : null,
       ),
     ),
   );
@@ -105,7 +124,7 @@ function folhaDecompor(atividade) {
 
 function folhaRobo(atividade) {
   const mapa = lerMapa(atividade.grade);
-  const { tema } = atividade;
+  const tema = atvTema(atividade.id, atividade.tema);
   const solucao = menorPrograma(mapa).map((comando) => DIRECOES[comando].simbolo).join(' ');
 
   const celulas = atividade.grade.flatMap((linha) => [...linha].map((simbolo) => {
@@ -119,51 +138,54 @@ function folhaRobo(atividade) {
     { class: 'folha' },
     ...cabecalho(
       atividade,
-      'Use uma ficha pequena como robô. Monte o programa com as fichas de comando, na ordem certa, e confira movendo o robô no mapa, um quadrado por comando.',
+      t('imp.robo.instrucao'),
     ),
     h('div', { class: 'folha-mapa', style: `--colunas:${mapa.largura}` }, celulas),
     h(
       'p',
       { class: 'folha-legenda' },
       renderizarIcone('smart_toy', { classe: 'folha-icone' }),
-      ' robô · ',
+      ` ${t('imp.robo.legendaRobo')} · `,
       renderizarIconeCelula('M', tema),
-      ` ${tema.nomeMeta || 'destino'}`,
-      tema.item ? [' · ', renderizarIconeCelula('I', tema), ` ${tema.nomeItem || 'lugar para passar'}`] : '',
+      ` ${tema.nomeMeta || t('imp.robo.destinoPadrao')}`,
+      tema.item ? [' · ', renderizarIconeCelula('I', tema), ` ${tema.nomeItem || t('imp.robo.itemPadrao')}`] : '',
       ' · ',
       renderizarIconeCelula('#', tema),
-      ` ${tema.nomeObstaculo || 'obstáculo'}`,
+      ` ${tema.nomeObstaculo || t('imp.robo.obstaculoPadrao')}`,
     ),
     h('div', { class: 'folha-cartoes compactos' }, comandos),
     rodape(atividade),
     guiaDoProfessor(
       atividade,
-      h('p', {}, h('strong', {}, `Programa mais curto (${mapa.itens.length ? 'passando por todos os lugares, ' : ''}${solucao.split(' ').length} comandos): `), solucao),
+      h('p', {}, h('strong', {}, `${t(mapa.itens.length ? 'imp.robo.solucaoComItens' : 'imp.robo.solucaoSimples', { comandos: solucao.split(' ').length })}: `), solucao),
     ),
   );
 }
 
 function folhaBlocos(atividade) {
-  const blocosCartoes = (atividade.blocosDisponiveis || []).map((b) =>
-    h('div', { class: 'folha-cartao' },
+  const blocosCartoes = (atividade.blocosDisponiveis || []).map((b) => {
+    const catRotulo = t(`blocos.cat.${b.categoria}`, {}, b.categoria);
+    return h(
+      'div',
+      { class: 'folha-cartao' },
       renderizarIcone('extension', { classe: 'folha-icone' }),
-      ` ${b.rotulo} (${b.categoria})`,
-    ),
-  );
+      ` ${atvBlocoRotulo(atividade.id, b)} (${catRotulo})`,
+    );
+  });
 
   return h(
     'div',
     { class: 'folha' },
     ...cabecalho(
       atividade,
-      'Recorte os blocos de comando abaixo e monte o algoritmo no caderno ou na mesa usando laços de repetição e condições.',
+      t('imp.blocos.instrucao'),
     ),
     h('div', { class: 'folha-cartoes' }, blocosCartoes),
     rodape(atividade),
     guiaDoProfessor(
       atividade,
-      h('p', {}, h('strong', {}, 'Conceito em destaque: '), 'Iteração (loops), controle de fluxo e modularização em blocos.'),
-      h('p', {}, h('strong', {}, 'Desafio desplugado: '), 'Os estudantes organizam os blocos em cartolinas e simulam o papel do robô caminhando na sala de aula.'),
+      h('p', {}, h('strong', {}, `${t('imp.blocos.conceitoTitulo')}: `), t('imp.blocos.conceitoDesc')),
+      h('p', {}, h('strong', {}, `${t('imp.blocos.desafioTitulo')}: `), t('imp.blocos.desafioDesc')),
     ),
   );
 }

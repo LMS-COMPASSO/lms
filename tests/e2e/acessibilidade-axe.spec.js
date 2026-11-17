@@ -5,14 +5,69 @@ const ROTAS_PUBLICAS = [
   { url: '/', nome: 'Página Inicial' },
   { url: '/boas-vindas.html', nome: 'Boas-vindas' },
   { url: '/atividades.html', nome: 'Catálogo de Atividades' },
+  { url: '/workspace.html', nome: 'Workspace e Hub de Ideias' },
   { url: '/mundo-digital.html', nome: 'Eixo 2: Mundo Digital' },
   { url: '/cultura-digital.html', nome: 'Eixo 3: Cultura Digital' },
   { url: '/login.html', nome: 'Login' },
   { url: '/registrar.html', nome: 'Cadastro' },
   { url: '/planos.html', nome: 'Planos e Contratos' },
+  { url: '/privacy.html', nome: 'Política de Privacidade (LGPD)' },
+  { url: '/terms.html', nome: 'Termos de Serviço' },
   { url: '/usabilidade-piloto.html', nome: 'Piloto SUS' },
   { url: '/404.html', nome: 'Página de Erro 404' },
 ];
+
+const ROTAS_TEMA_ESCURO_E_CONTRASTE = [
+  { url: '/workspace.html', nome: 'Workspace e Hub de Ideias' },
+  { url: '/planos.html', nome: 'Planos e Contratos' },
+  { url: '/privacy.html', nome: 'Política de Privacidade (LGPD)' },
+  { url: '/terms.html', nome: 'Termos de Serviço' },
+];
+
+test.describe('Auditoria axe-core WCAG 2.2 AA em Tema Escuro e Alto Contraste', () => {
+  for (const rota of ROTAS_TEMA_ESCURO_E_CONTRASTE) {
+    test(`Auditoria axe-core em ${rota.nome} (${rota.url}) no Tema Escuro sem violações críticas/sérias`, async ({ page }) => {
+      await page.emulateMedia({ colorScheme: 'dark', reducedMotion: 'reduce' });
+      await page.goto(rota.url);
+      await page.waitForLoadState('networkidle');
+      await page.evaluate(() => {
+        document.documentElement.setAttribute('data-tema', 'escuro');
+        document.body.classList.add('suporta-tema-sistema');
+      });
+      await page.waitForTimeout(250);
+
+      const resultados = await new AxeBuilder({ page })
+        .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
+        .analyze();
+
+      const violacoesCriticasOuSerias = resultados.violations.filter(
+        (v) => v.impact === 'critical' || v.impact === 'serious'
+      );
+
+      expect(violacoesCriticasOuSerias).toEqual([]);
+    });
+
+    test(`Auditoria axe-core em ${rota.nome} (${rota.url}) em Alto Contraste sem violações críticas/sérias`, async ({ page }) => {
+      await page.emulateMedia({ reducedMotion: 'reduce' });
+      await page.goto(rota.url);
+      await page.waitForLoadState('networkidle');
+      await page.evaluate(() => {
+        document.documentElement.classList.add('a11y-alto-contraste');
+      });
+      await page.waitForTimeout(250);
+
+      const resultados = await new AxeBuilder({ page })
+        .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
+        .analyze();
+
+      const violacoesCriticasOuSerias = resultados.violations.filter(
+        (v) => v.impact === 'critical' || v.impact === 'serious'
+      );
+
+      expect(violacoesCriticasOuSerias).toEqual([]);
+    });
+  }
+});
 
 test.describe('Acessibilidade Automatizada (axe-core WCAG 2.2 AA)', () => {
   for (const rota of ROTAS_PUBLICAS) {

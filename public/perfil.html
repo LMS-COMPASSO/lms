@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Meu Perfil — LMS COMPASSO</title>
+<meta name="i18n-title" content="perfPage.metaTitulo">
 <link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,43 +19,43 @@
 
       <div class="grid-2col">
         <div class="cartao">
-          <h2>Meus Dados</h2>
+          <h2 data-i18n="perfPage.meusDados">Meus Dados</h2>
           <div id="dados-usuario"></div>
         </div>
 
         <div class="cartao">
-          <h2>Alterar Senha</h2>
+          <h2 data-i18n="perfPage.alterarSenha">Alterar Senha</h2>
           <div id="alerta" class="alerta oculto"></div>
           <form id="form-senha">
             <div class="form-grupo">
-              <label for="senha-atual">Senha atual</label>
+              <label for="senha-atual" data-i18n="perfPage.senhaAtual">Senha atual</label>
               <input type="password" id="senha-atual" autocomplete="current-password" placeholder="••••••••" required>
             </div>
             <div class="form-grupo">
-              <label for="nova-senha">Nova senha</label>
+              <label for="nova-senha" data-i18n="perfPage.novaSenha">Nova senha</label>
               <input type="password" id="nova-senha" autocomplete="new-password" placeholder="••••••••" required minlength="6">
             </div>
-            <button type="submit" class="btn btn-primario flex-inline-icon"><span class="material-symbols-outlined icon-xs" aria-hidden="true">lock_reset</span> Salvar nova senha</button>
+            <button type="submit" class="btn btn-primario flex-inline-icon"><span class="material-symbols-outlined icon-xs" aria-hidden="true">lock_reset</span> <span data-i18n="perfPage.salvarSenha">Salvar nova senha</span></button>
           </form>
         </div>
       </div>
 
       <!-- Preferências de Acessibilidade salvas no D1 -->
       <div class="cartao mt-16" id="secao-preferencias-a11y">
-        <h2 class="flex-inline-icon"><span class="material-symbols-outlined icon-sm" aria-hidden="true">settings_accessibility</span> Preferências de Acessibilidade (Sincronizadas na Nuvem D1)</h2>
-        <p class="texto-suave">Suas preferências de acessibilidade são salvas no banco de dados e restauradas automaticamente em qualquer aparelho ou computador da escola.</p>
+        <h2 class="flex-inline-icon"><span class="material-symbols-outlined icon-sm" aria-hidden="true">settings_accessibility</span> <span data-i18n="perfPage.a11yTitulo">Preferências de Acessibilidade (Sincronizadas na Nuvem D1)</span></h2>
+        <p class="texto-suave" data-i18n="perfPage.a11yDesc">Suas preferências de acessibilidade são salvas no banco de dados e restauradas automaticamente em qualquer aparelho ou computador da escola.</p>
         <div class="wf-opcoes-a11y mt-12">
           <label class="wf-check-label">
             <input type="checkbox" id="pref-alto-contraste" onchange="aplicarPreferenciaAcessibilidade('alto-contraste', this.checked)">
-            <span>Alto Contraste &amp; Daltonismo Seguro (WCAG 2.2 AA)</span>
+            <span data-i18n="perfPage.a11yContraste">Alto Contraste &amp; Daltonismo Seguro (WCAG 2.2 AA)</span>
           </label>
           <label class="wf-check-label">
             <input type="checkbox" id="pref-fonte-ampliada" onchange="aplicarPreferenciaAcessibilidade('fonte-ampliada', this.checked)">
-            <span>Texto Ampliado (+15% de escala tipográfica)</span>
+            <span data-i18n="perfPage.a11yFonte">Texto Ampliado (+15% de escala tipográfica)</span>
           </label>
           <label class="wf-check-label">
             <input type="checkbox" id="pref-reduzir-movimento" onchange="aplicarPreferenciaAcessibilidade('reduzir-movimento', this.checked)">
-            <span>Reduzir Animações (prefers-reduced-motion)</span>
+            <span data-i18n="perfPage.a11yMovimento">Reduzir Animações (prefers-reduced-motion)</span>
           </label>
         </div>
       </div>
@@ -62,16 +63,20 @@
       <div class="cartao mt-16" id="secao-lgpd-privacidade">
         <div class="flex-entre flex-wrap gap-10">
           <div>
-            <h2 class="flex-inline-icon"><span class="material-symbols-outlined icon-sm" aria-hidden="true">shield</span> Privacidade e Portabilidade de Dados (LGPD Art. 18)</h2>
-            <p class="texto-suave">Consulte nossos documentos legais ou baixe uma cópia completa dos seus dados pessoais, matrículas, medalhas, habilidades e submissões Python em JSON.</p>
+            <h2 class="flex-inline-icon"><span class="material-symbols-outlined icon-sm" aria-hidden="true">shield</span> <span data-i18n="perfPage.lgpdTitulo">Privacidade e Portabilidade de Dados (LGPD Art. 18)</span></h2>
+            <p class="texto-suave" data-i18n="perfPage.lgpdDesc">Consulte nossos documentos legais ou baixe uma cópia completa dos seus dados pessoais, matrículas, medalhas, habilidades e submissões Python em JSON.</p>
           </div>
           <div class="flex-linha flex-wrap gap-8">
             <button type="button" class="btn btn-sm btn-primario flex-inline-icon" id="btn-exportar-dados-lgpd" onclick="exportarMeusDadosLgpd()">
               <span class="material-symbols-outlined icon-xs" aria-hidden="true">download</span>
-              <span>Exportar meus dados (JSON)</span>
+              <span data-i18n="perfPage.exportarDados">Exportar meus dados (JSON)</span>
             </button>
-            <a href="/privacy.html" class="btn btn-sm btn-neutro">Política de Privacidade</a>
-            <a href="/terms.html" class="btn btn-sm btn-neutro">Termos de Serviço</a>
+            <button type="button" class="btn btn-sm btn-perigo flex-inline-icon" id="btn-apagar-workspace-lgpd" onclick="apagarTodosItensWorkspaceLgpd()">
+              <span class="material-symbols-outlined icon-xs" aria-hidden="true">delete</span>
+              <span data-i18n="perfPage.apagarWorkspace">Apagar todos os meus itens (Workspace)</span>
+            </button>
+            <a href="/privacy.html" class="btn btn-sm btn-neutro" data-i18n="perfPage.politicaPrivacidade">Política de Privacidade</a>
+            <a href="/terms.html" class="btn btn-sm btn-neutro" data-i18n="loginPage.termos">Termos de Serviço</a>
           </div>
         </div>
         <p id="status-exportacao-lgpd" class="texto-suave mt-8 oculto" role="status" aria-live="polite"></p>
@@ -80,14 +85,14 @@
       <div class="cartao mt-16" id="secao-medalhas">
         <div class="flex-entre flex-wrap gap-10">
           <div>
-            <h2 class="flex-inline-icon"><span class="material-symbols-outlined icon-sm" aria-hidden="true">military_tech</span> Minhas Medalhas e Selos da BNCC Computação</h2>
-            <p class="texto-suave" id="progresso-medalhas-texto">Carregando conquistas...</p>
+            <h2 class="flex-inline-icon"><span class="material-symbols-outlined icon-sm" aria-hidden="true">military_tech</span> <span data-i18n="perfPage.medalhasTitulo">Minhas Medalhas e Selos da BNCC Computação</span></h2>
+            <p class="texto-suave" id="progresso-medalhas-texto" data-i18n="perfPage.carregandoConquistas">Carregando conquistas...</p>
           </div>
           <div class="filtro-eixos flex flex-wrap gap-6" id="botoes-filtro-medalhas">
-            <button type="button" class="btn btn-sm btn-primario" onclick="filtrarMedalhas(null, this)">Todas</button>
-            <button type="button" class="btn btn-sm btn-neutro" onclick="filtrarMedalhas('Pensamento Computacional', this)">Pensamento Computacional</button>
-            <button type="button" class="btn btn-sm btn-neutro" onclick="filtrarMedalhas('Mundo Digital', this)">Mundo Digital</button>
-            <button type="button" class="btn btn-sm btn-neutro" onclick="filtrarMedalhas('Cultura Digital', this)">Cultura Digital</button>
+            <button type="button" class="btn btn-sm btn-primario" onclick="filtrarMedalhas(null, this)" data-i18n="toolbar.todas">Todas</button>
+            <button type="button" class="btn btn-sm btn-neutro" onclick="filtrarMedalhas('Pensamento Computacional', this)" data-i18n="eixo.pensamento-computacional">Pensamento Computacional</button>
+            <button type="button" class="btn btn-sm btn-neutro" onclick="filtrarMedalhas('Mundo Digital', this)" data-i18n="eixo.mundo-digital">Mundo Digital</button>
+            <button type="button" class="btn btn-sm btn-neutro" onclick="filtrarMedalhas('Cultura Digital', this)" data-i18n="eixo.cultura-digital">Cultura Digital</button>
           </div>
         </div>
 
@@ -103,10 +108,20 @@
   <script src="/js/config.js"></script>
   <script src="/js/api.js"></script>
   <script src="/js/layout.js"></script>
-  <script>
+  <script src="/js/vendor/gsap.min.js"></script>
+  <script type="module" src="/js/animacoes-gsap.js"></script>
+  <script type="module">
+    import { t, traduzirDocumento, formatarData, formatarNumero } from '/js/i18n.js';
+
     const usuario = exigirAutenticacao();
     montarLayout('perfil');
-    document.getElementById('titulo-pagina').textContent = 'Meu Perfil';
+
+    function atualizarTituloTopbar() {
+      const el = document.getElementById('titulo-pagina');
+      if (el) el.textContent = t('perfPage.topbarTitulo');
+    }
+    atualizarTituloTopbar();
+    traduzirDocumento();
 
     const ehGoogle = Boolean(
       usuario.metodo_auth === 'google_academico' ||
@@ -117,17 +132,22 @@
       (usuario.email && (usuario.email.endsWith('.edu.br') || usuario.email.endsWith('.gov.br') || usuario.email.includes('escola') || usuario.email.includes('educacao')))
     );
     const dominioExibicao = usuario.dominio_institucional || (usuario.email && usuario.email.includes('@') ? usuario.email.split('@')[1] : 'Google Workspace');
-    document.getElementById('dados-usuario').innerHTML = `
-      <p><strong>Nome:</strong> ${escaparHtml(usuario.nome)}</p>
-      <p><strong>Email:</strong> ${escaparHtml(usuario.email)}</p>
-      <p><strong>Perfil:</strong> <span class="badge badge-${usuario.perfil}">${usuario.perfil}</span></p>
-      <p><strong>Autenticação:</strong> ${ehGoogle ? `
-        <span class="badge badge-google-topbar badge-google-perfil">
-          <svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
-          Google Acadêmico (${escaparHtml(dominioExibicao)})
-        </span>
-      ` : '<span class="texto-suave">Email e Senha Convencionais</span>'}</p>
-    `;
+
+    function renderizarDadosUsuario() {
+      const perfilLabel = t(`perfilRole.${usuario.perfil}`, {}, usuario.perfil);
+      document.getElementById('dados-usuario').innerHTML = `
+        <p><strong>${escaparHtml(t('perfPage.campoNome'))}:</strong> ${escaparHtml(usuario.nome)}</p>
+        <p><strong>${escaparHtml(t('perfPage.campoEmail'))}:</strong> ${escaparHtml(usuario.email)}</p>
+        <p><strong>${escaparHtml(t('perfPage.campoPerfil'))}:</strong> <span class="badge badge-${escaparHtml(usuario.perfil)}">${escaparHtml(perfilLabel)}</span></p>
+        <p><strong>${escaparHtml(t('perfPage.campoAuth'))}:</strong> ${ehGoogle ? `
+          <span class="badge badge-google-topbar badge-google-perfil">
+            <svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
+            ${escaparHtml(t('perfPage.googleAcad', { dominio: dominioExibicao }))}
+          </span>
+        ` : `<span class="texto-suave">${escaparHtml(t('perfPage.emailSenhaConv'))}</span>`}</p>
+      `;
+    }
+    renderizarDadosUsuario();
 
     // Atualiza checkboxes de preferências e sincroniza quando D1 terminar de carregar
     function sincronizarCheckboxesAcessibilidade() {
@@ -141,10 +161,12 @@
     sincronizarCheckboxesAcessibilidade();
     window.addEventListener('preferenciasA11yAtualizadas', sincronizarCheckboxesAcessibilidade);
 
+    let alertaSenhaEstado = null;
     document.getElementById('form-senha').addEventListener('submit', async (e) => {
       e.preventDefault();
       const alertaEl = document.getElementById('alerta');
       alertaEl.classList.add('oculto');
+      alertaSenhaEstado = null;
       try {
         await api('/auth/alterar-senha', {
           method: 'POST',
@@ -153,49 +175,93 @@
             novaSenha: document.getElementById('nova-senha').value,
           }),
         });
-        alertaEl.textContent = 'Senha alterada com sucesso!';
+        alertaSenhaEstado = { ok: true };
+        alertaEl.textContent = t('perfPage.senhaAlteradaSucesso');
         alertaEl.className = 'alerta alerta-sucesso';
         document.getElementById('form-senha').reset();
       } catch (err) {
+        alertaSenhaEstado = { ok: false, msg: err.message };
         alertaEl.textContent = err.message;
         alertaEl.className = 'alerta alerta-erro';
       }
     });
 
     let dadosGamificacao = null;
+    let erroMedalhas = false;
+    let eixoFiltroAtivo = null;
+    let lgpdEstado = null;
 
-    async function carregarMedalhas() {
+    function traduzirEixoDb(eixo) {
+      if (eixo === 'Pensamento Computacional') return t('eixo.pensamento-computacional');
+      if (eixo === 'Mundo Digital') return t('eixo.mundo-digital');
+      if (eixo === 'Cultura Digital') return t('eixo.cultura-digital');
+      if (eixo === 'Geral') return t('eixo.geral');
+      return eixo || '';
+    }
+
+    function renderizarFallbackErroMedalhas() {
       const grade = document.getElementById('grade-medalhas');
       const textoProgresso = document.getElementById('progresso-medalhas-texto');
       const barra = document.getElementById('barra-progresso-medalhas');
+      if (!grade || !textoProgresso || !barra) return;
+      grade.innerHTML = `
+        <div class="medalhas-vazio-box">
+          <span class="material-symbols-outlined medalhas-vazio-icone" aria-hidden="true">military_tech</span>
+          <p class="medalhas-vazio-titulo">${escaparHtml(t('perfPage.medalhasErroTitulo'))}</p>
+          <p class="texto-suave medalhas-vazio-desc">${escaparHtml(t('perfPage.medalhasErroDesc'))}</p>
+          <button type="button" class="btn btn-sm btn-primario" onclick="carregarMedalhas()">
+            <span class="material-symbols-outlined icon-xs" aria-hidden="true">refresh</span> ${escaparHtml(t('perfPage.sincronizarAgora'))}
+          </button>
+        </div>
+      `;
+      textoProgresso.textContent = t('perfPage.carregamentoPendente');
+      barra.style.width = '0%';
+    }
+
+    function atualizarResumoMedalhas() {
+      if (!dadosGamificacao) return;
+      const textoProgresso = document.getElementById('progresso-medalhas-texto');
+      const { total = 0, conquistadas = 0, percentualConclusao = 0 } = dadosGamificacao.resumo || {};
+      if (textoProgresso) {
+        textoProgresso.textContent = t('perfPage.medalhasResumo', {
+          conquistadas: formatarNumero(conquistadas),
+          total: formatarNumero(total),
+          percentual: formatarNumero(percentualConclusao),
+        });
+      }
+    }
+
+    async function carregarMedalhas() {
+      const grade = document.getElementById('grade-medalhas');
+      const barra = document.getElementById('barra-progresso-medalhas');
+      erroMedalhas = false;
 
       try {
-        grade.innerHTML = '<p class="texto-suave flex-inline-icon"><span class="material-symbols-outlined icon-spin icon-xs">sync</span> Carregando conquistas...</p>';
+        grade.innerHTML = `<p class="texto-suave flex-inline-icon"><span class="material-symbols-outlined icon-spin icon-xs">sync</span> ${escaparHtml(t('perfPage.carregandoConquistas'))}</p>`;
 
         // Tenta avaliar conquistas automáticas antes de listar
         try { await api('/gamificacao/avaliar', { method: 'POST' }); } catch {}
 
         dadosGamificacao = await api('/gamificacao/medalhas');
-        renderizarMedalhas(dadosGamificacao.medalhas || []);
+        const lista = eixoFiltroAtivo
+          ? (dadosGamificacao.medalhas || []).filter((m) => m.eixo_bncc === eixoFiltroAtivo)
+          : (dadosGamificacao.medalhas || []);
+        renderizarMedalhas(lista);
+        atualizarResumoMedalhas();
 
-        const { total = 0, conquistadas = 0, percentualConclusao = 0 } = dadosGamificacao.resumo || {};
-        textoProgresso.textContent =
-          `${conquistadas} de ${total} medalhas conquistadas (${percentualConclusao}% de domínio dos eixos da BNCC)`;
-        barra.style.width = `${percentualConclusao}%`;
+        const { percentualConclusao = 0 } = dadosGamificacao.resumo || {};
+        if (window.LmsAnimacoes) {
+          window.LmsAnimacoes.animarFeedbackGamificacao(barra, 'progresso', { largura: `${percentualConclusao}%` });
+          document.querySelectorAll('#grade-medalhas .card-medalha:not(.bloqueada)').forEach((el) => {
+            window.LmsAnimacoes.animarFeedbackGamificacao(el, 'medalha');
+          });
+        } else {
+          barra.style.width = `${percentualConclusao}%`;
+        }
       } catch (err) {
         console.warn('Erro ao carregar medalhas:', err);
-        grade.innerHTML = `
-          <div class="medalhas-vazio-box">
-            <span class="material-symbols-outlined medalhas-vazio-icone" aria-hidden="true">military_tech</span>
-            <p class="medalhas-vazio-titulo">Conquistas e Selos da BNCC</p>
-            <p class="texto-suave medalhas-vazio-desc">As medalhas ainda estão sendo sincronizadas com o banco de dados.</p>
-            <button type="button" class="btn btn-sm btn-primario" onclick="carregarMedalhas()">
-              <span class="material-symbols-outlined icon-xs" aria-hidden="true">refresh</span> Sincronizar Agora
-            </button>
-          </div>
-        `;
-        textoProgresso.textContent = 'Carregamento pendente';
-        barra.style.width = '0%';
+        erroMedalhas = true;
+        renderizarFallbackErroMedalhas();
       }
     }
 
@@ -208,12 +274,14 @@
       guardiao_privacidade: 'verified_user',
       primeiro_passo: 'rocket_launch',
       pioneiro_bncc: 'workspace_premium',
+      trilha_completa: 'workspace_premium',
     };
 
     function renderizarMedalhas(lista) {
       const container = document.getElementById('grade-medalhas');
+      if (!container) return;
       if (lista.length === 0) {
-        container.innerHTML = '<p class="texto-suave">Nenhuma medalha encontrada para este eixo.</p>';
+        container.innerHTML = `<p class="texto-suave">${escaparHtml(t('perfPage.medalhaNenhuma'))}</p>`;
         return;
       }
 
@@ -222,6 +290,12 @@
         const dataStr = m.conquistada_em ? formatarData(m.conquistada_em) : null;
         const iconeMedalha = iconesMedalhasPadrao[m.codigo] || m.icone || 'workspace_premium';
         const metaEtapas = Number(m.criterio_meta) || 1;
+        const tituloMed = t(`medalha.${m.codigo}.titulo`, {}, m.titulo);
+        const descMed = t(`medalha.${m.codigo}.desc`, {}, m.descricao);
+        const eixoMed = traduzirEixoDb(m.eixo_bncc);
+        const metaTexto = dataStr
+          ? t('perfPage.medalhaConquistadaEm', { data: dataStr })
+          : t(metaEtapas === 1 ? 'perfPage.medalhaMetaSing' : 'perfPage.medalhaMetaPlur', { n: formatarNumero(metaEtapas) });
 
         return `
           <div class="card-medalha ${bloqueada ? 'bloqueada' : ''}">
@@ -230,18 +304,18 @@
                 <span class="material-symbols-outlined" aria-hidden="true">${iconeMedalha}</span>
               </div>
               <div>
-                <h3 class="card-medalha-titulo">${escaparHtml(m.titulo)}</h3>
-                <span class="card-medalha-eixo">${escaparHtml(m.eixo_bncc)}</span>
+                <h3 class="card-medalha-titulo">${escaparHtml(tituloMed)}</h3>
+                <span class="card-medalha-eixo">${escaparHtml(eixoMed)}</span>
               </div>
             </div>
-            <p class="card-medalha-desc">${escaparHtml(m.descricao)}</p>
+            <p class="card-medalha-desc">${escaparHtml(descMed)}</p>
             <div class="card-medalha-status">
               ${bloqueada
-                ? '<span class="flex-inline-icon"><span class="material-symbols-outlined icon-xs" aria-hidden="true">lock</span> Bloqueado</span>'
-                : '<span class="badge badge-conquistada flex-inline-icon"><span class="material-symbols-outlined icon-xs" aria-hidden="true">check_circle</span> Concluído</span>'}
+                ? `<span class="flex-inline-icon"><span class="material-symbols-outlined icon-xs" aria-hidden="true">lock</span> ${escaparHtml(t('perfPage.bloqueado'))}</span>`
+                : `<span class="badge badge-conquistada flex-inline-icon"><span class="material-symbols-outlined icon-xs" aria-hidden="true">check_circle</span> ${escaparHtml(t('card.concluido'))}</span>`}
               <span class="flex-inline-icon">
                 <span class="material-symbols-outlined icon-xs" aria-hidden="true">${bloqueada ? 'schedule' : 'workspace_premium'}</span>
-                ${dataStr ? `Em ${dataStr}` : `Meta: ${metaEtapas} etapa(s)`}
+                ${escaparHtml(metaTexto)}
               </span>
             </div>
           </div>
@@ -249,7 +323,20 @@
       }).join('');
     }
 
+    function aplicarTextoStatusLgpd() {
+      const statusEl = document.getElementById('status-exportacao-lgpd');
+      if (!statusEl || !lgpdEstado) return;
+      if (lgpdEstado.chave) {
+        statusEl.textContent = t(lgpdEstado.chave, lgpdEstado.params || {});
+        statusEl.classList.remove('oculto');
+      } else if (lgpdEstado.texto) {
+        statusEl.textContent = lgpdEstado.texto;
+        statusEl.classList.remove('oculto');
+      }
+    }
+
     window.filtrarMedalhas = function(eixo, btn) {
+      eixoFiltroAtivo = eixo;
       document.querySelectorAll('#botoes-filtro-medalhas button').forEach((b) => {
         b.className = 'btn btn-sm btn-neutro';
       });
@@ -263,14 +350,11 @@
     };
 
     window.exportarMeusDadosLgpd = async function() {
-      const statusEl = document.getElementById('status-exportacao-lgpd');
       const btn = document.getElementById('btn-exportar-dados-lgpd');
       try {
         if (btn) btn.disabled = true;
-        if (statusEl) {
-          statusEl.textContent = 'Gerando pacote JSON de portabilidade LGPD…';
-          statusEl.classList.remove('oculto');
-        }
+        lgpdEstado = { chave: 'perfPage.lgpdGerando' };
+        aplicarTextoStatusLgpd();
         const pacote = await api('/auth/exportar-dados');
         const blob = new Blob([JSON.stringify(pacote, null, 2)], { type: 'application/json;charset=utf-8' });
         const urlBlob = URL.createObjectURL(blob);
@@ -281,18 +365,63 @@
         link.click();
         link.remove();
         URL.revokeObjectURL(urlBlob);
-        if (statusEl) {
-          statusEl.textContent = 'Pacote de dados LGPD baixado com sucesso.';
-        }
+        lgpdEstado = { chave: 'perfPage.lgpdExportado' };
+        aplicarTextoStatusLgpd();
       } catch (err) {
-        if (statusEl) {
-          statusEl.textContent = `Não foi possível exportar os dados: ${err.message}`;
-          statusEl.classList.remove('oculto');
-        }
+        lgpdEstado = { chave: 'perfPage.lgpdErroExportar', params: { msg: err.message } };
+        aplicarTextoStatusLgpd();
       } finally {
         if (btn) btn.disabled = false;
       }
     };
+
+    window.apagarTodosItensWorkspaceLgpd = async function() {
+      const btn = document.getElementById('btn-apagar-workspace-lgpd');
+      if (!confirm(t('perfPage.lgpdConfirmApagar'))) {
+        return;
+      }
+      try {
+        if (btn) btn.disabled = true;
+        const resp = await api('/workspace', { method: 'DELETE' });
+        try {
+          localStorage.removeItem('lms_workspace_itens_v1');
+          localStorage.removeItem('lms_workspace_fila_v1');
+        } catch (erroStorage) {
+          console.warn('Falha ao limpar cache local do Workspace:', erroStorage?.message || erroStorage);
+        }
+        lgpdEstado = { chave: 'perfPage.lgpdApagadoPadrao' };
+        aplicarTextoStatusLgpd();
+        mostrarNotificacao(t('perfPage.lgpdApagadoToast'), 'sucesso');
+      } catch (err) {
+        lgpdEstado = { chave: 'perfPage.lgpdErroApagar', params: { msg: err.message } };
+        aplicarTextoStatusLgpd();
+      } finally {
+        if (btn) btn.disabled = false;
+      }
+    };
+
+    window.carregarMedalhas = carregarMedalhas;
+
+    window.addEventListener('lms:idioma-alterado', () => {
+      atualizarTituloTopbar();
+      traduzirDocumento();
+      renderizarDadosUsuario();
+      aplicarTextoStatusLgpd();
+      if (alertaSenhaEstado?.ok) {
+        const alertaEl = document.getElementById('alerta');
+        if (alertaEl) alertaEl.textContent = t('perfPage.senhaAlteradaSucesso');
+      }
+      if (erroMedalhas) {
+        renderizarFallbackErroMedalhas();
+      } else if (dadosGamificacao) {
+        atualizarResumoMedalhas();
+        const filtradas = eixoFiltroAtivo
+          ? dadosGamificacao.medalhas.filter((m) => m.eixo_bncc === eixoFiltroAtivo)
+          : dadosGamificacao.medalhas;
+        renderizarMedalhas(filtradas);
+      }
+    });
+    window.addEventListener('lms:layout-atualizado', atualizarTituloTopbar);
 
     carregarMedalhas();
   </script>

@@ -4,13 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dashboard — LMS COMPASSO</title>
+<meta name="i18n-title" content="dashPage.metaTitulo">
 <link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
 <link rel="stylesheet" href="/css/style.css">
-<!-- GreenSock Animation Platform (GSAP) com fallback integrado -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<!-- GreenSock Animation Platform (GSAP) local com guardrail de acessibilidade -->
+<script src="/js/vendor/gsap.min.js"></script>
+<script src="/js/vendor/ScrollTrigger.min.js"></script>
+<script type="module" src="/js/animacoes-gsap.js"></script>
 </head>
 <body>
   <div class="app-shell">
@@ -23,67 +26,67 @@
         <div class="dashboard-hero-content">
           <span class="dashboard-hero-tag">
             <span class="material-symbols-outlined icon-xs">verified</span>
-            <span>Alinhado à BNCC Computação</span>
+            <span data-i18n="dashPage.heroTag">Alinhado à BNCC Computação</span>
           </span>
-          <h2 class="dashboard-hero-titulo" id="titulo-hero-dashboard">Painel de Gestão e Monitoramento Pedagógico</h2>
-          <p class="dashboard-hero-subtitulo">
+          <h2 class="dashboard-hero-titulo" id="titulo-hero-dashboard" data-i18n="dashPage.heroTitulo">Painel de Gestão e Monitoramento Pedagógico</h2>
+          <p class="dashboard-hero-subtitulo" data-i18n="dashPage.heroDesc">
             Acompanhamento em tempo real de turmas, consolidação das habilidades dos 3 eixos e conformidade com limites saudáveis de tela.
           </p>
         </div>
         <div class="dashboard-hero-actions">
           <button type="button" class="btn btn-sm btn-branco flex-inline-icon" id="btn-atualizar-dashboard" onclick="recarregarDashboard()">
-            <span class="material-symbols-outlined icon-xs" id="icone-atualizar">sync</span> Atualizar Indicadores
+            <span class="material-symbols-outlined icon-xs" id="icone-atualizar">sync</span> <span data-i18n="dashPage.btnAtualizar">Atualizar Indicadores</span>
           </button>
           <button type="button" class="btn btn-sm btn-branco flex-inline-icon" onclick="exportarCsvDiario()">
-            <span class="material-symbols-outlined icon-xs">download</span> Exportar Diário (CSV)
+            <span class="material-symbols-outlined icon-xs">download</span> <span data-i18n="dashPage.btnExportarCsv">Exportar Diário (CSV)</span>
           </button>
         </div>
       </section>
 
       <!-- Atalhos Rápidos da Plataforma -->
-      <section class="dashboard-atalhos" aria-label="Atalhos Rápidos de Ação">
-        <a href="/atividades.html" class="atalho-card" title="Acessar catálogo de algoritmos, simulador de blocos e folhas desplugadas">
+      <section class="dashboard-atalhos" aria-label="Atalhos Rápidos de Ação" data-i18n-aria-label="dashPage.atalhosAria">
+        <a href="/atividades.html" class="atalho-card" title="Acessar catálogo de algoritmos, simulador de blocos e folhas desplugadas" data-i18n-title="dashPage.atalho1Title">
           <span class="atalho-icone">
             <span class="material-symbols-outlined">format_list_numbered</span>
           </span>
           <span class="atalho-info">
-            <span class="atalho-titulo">Simulador &amp; Desplugadas</span>
-            <span class="atalho-desc">Algoritmos, blocos e fichas em PDF</span>
+            <span class="atalho-titulo" data-i18n="dashPage.atalho1Titulo">Simulador &amp; Desplugadas</span>
+            <span class="atalho-desc" data-i18n="dashPage.atalho1Desc">Algoritmos, blocos e fichas em PDF</span>
           </span>
         </a>
 
 
-        <button type="button" class="atalho-card" onclick="exportarCsvDiario()" title="Exportar dados consolidados em planilha CSV para diários escolares">
+        <button type="button" class="atalho-card" onclick="exportarCsvDiario()" title="Exportar dados consolidados em planilha CSV para diários escolares" data-i18n-title="dashPage.atalho2Title">
           <span class="atalho-icone">
             <span class="material-symbols-outlined">table_view</span>
           </span>
           <span class="atalho-info">
-            <span class="atalho-titulo">Diário Escolar (CSV)</span>
-            <span class="atalho-desc">Exportação com notas e habilidades</span>
+            <span class="atalho-titulo" data-i18n="dashPage.atalho2Titulo">Diário Escolar (CSV)</span>
+            <span class="atalho-desc" data-i18n="dashPage.atalho2Desc">Exportação com notas e habilidades</span>
           </span>
         </button>
 
-        <button type="button" class="atalho-card" onclick="window.print()" title="Imprimir relatório pedagógico formatado em A4">
+        <button type="button" class="atalho-card" onclick="window.print()" title="Imprimir relatório pedagógico formatado em A4" data-i18n-title="dashPage.atalho3Title">
           <span class="atalho-icone">
             <span class="material-symbols-outlined">print</span>
           </span>
           <span class="atalho-info">
-            <span class="atalho-titulo">Imprimir Relatório</span>
-            <span class="atalho-desc">Layout otimizado para papel A4</span>
+            <span class="atalho-titulo" data-i18n="dashPage.atalho3Titulo">Imprimir Relatório</span>
+            <span class="atalho-desc" data-i18n="dashPage.atalho3Desc">Layout otimizado para papel A4</span>
           </span>
         </button>
       </section>
 
       <!-- Navegação por Abas Rápidas do Dashboard -->
-      <nav class="dashboard-nav-tabs" role="tablist" aria-label="Seções do Dashboard">
+      <nav class="dashboard-nav-tabs" role="tablist" aria-label="Seções do Dashboard" data-i18n-aria-label="dashPage.tabsAria">
         <button type="button" class="dashboard-tab-btn" role="tab" id="tab-visao-geral" aria-selected="true" aria-controls="painel-visao-geral" tabindex="0" onclick="alternarAba('tab-visao-geral')">
-          <span class="material-symbols-outlined icon-xs">dashboard</span> Visão Geral
+          <span class="material-symbols-outlined icon-xs">dashboard</span> <span data-i18n="dashPage.tabVisaoGeral">Visão Geral</span>
         </button>
         <button type="button" class="dashboard-tab-btn" role="tab" id="tab-pedagogico" aria-selected="false" aria-controls="painel-pedagogico" tabindex="-1" onclick="alternarAba('tab-pedagogico')">
-          <span class="material-symbols-outlined icon-xs">psychology</span> Pedagógico &amp; Habilidades
+          <span class="material-symbols-outlined icon-xs">psychology</span> <span data-i18n="dashPage.tabPedagogico">Pedagógico &amp; Habilidades</span>
         </button>
         <button type="button" class="dashboard-tab-btn" role="tab" id="tab-gestao" aria-selected="false" aria-controls="painel-gestao" tabindex="-1" onclick="alternarAba('tab-gestao')">
-          <span class="material-symbols-outlined icon-xs">analytics</span> Gestão &amp; Métricas
+          <span class="material-symbols-outlined icon-xs">analytics</span> <span data-i18n="dashPage.tabGestao">Gestão &amp; Métricas</span>
         </button>
       </nav>
 
@@ -92,7 +95,7 @@
       <!-- ============================================================== -->
       <div id="painel-visao-geral" role="tabpanel" aria-labelledby="tab-visao-geral">
         <!-- Grade Resumida de Indicadores Principais -->
-        <section aria-label="Indicadores Principais">
+        <section aria-label="Indicadores Principais" data-i18n-aria-label="dashPage.indPrincipaisAria">
           <div class="grid-indicadores" id="grid-indicadores-resumo"></div>
         </section>
 
@@ -100,8 +103,8 @@
         <div class="grid-2col mt-16">
           <div class="cartao cartao-dashboard cartao-coluna">
             <div class="flex-entre mb-12">
-              <h3 class="flex-inline-icon m-0"><span class="material-symbols-outlined icon-sm">hub</span> Cursos por Eixo BNCC</h3>
-              <button type="button" class="btn btn-xs btn-neutro" onclick="alternarAba('tab-pedagogico')">Ver Detalhes</button>
+              <h3 class="flex-inline-icon m-0"><span class="material-symbols-outlined icon-sm">hub</span> <span data-i18n="dashPage.cursosPorEixo">Cursos por Eixo BNCC</span></h3>
+              <button type="button" class="btn btn-xs btn-neutro" onclick="alternarAba('tab-pedagogico')" data-i18n="dashPage.verDetalhes">Ver Detalhes</button>
             </div>
             <div id="lista-eixos-resumo"></div>
           </div>
@@ -113,25 +116,25 @@
                 <div>
                   <h3 class="tempo-tela-titulo">
                     <span class="material-symbols-outlined icon-sm">devices</span>
-                    Equilíbrio de Tempo de Tela
+                    <span data-i18n="dashPage.telaTitulo1">Equilíbrio de Tempo de Tela</span>
                   </h3>
-                  <span class="texto-suave">Diretrizes de uso saudável de telas</span>
+                  <span class="texto-suave" data-i18n="dashPage.telaSub1">Diretrizes de uso saudável de telas</span>
                 </div>
                 <span class="badge-cne">
                   <span class="material-symbols-outlined icon-xs">verified</span>
-                  Conforme
+                  <span data-i18n="dashPage.conforme">Conforme</span>
                 </span>
               </div>
 
               <div class="tempo-tela-proporcao">
                 <div class="proporcao-rotulos">
-                  <span>Atividades Desplugadas (Físicas)</span>
-                  <span>Atividades em Tela (Digitais)</span>
+                  <span data-i18n="dashPage.desplugadasFisicas">Atividades Desplugadas (Físicas)</span>
+                  <span data-i18n="dashPage.telaDigitais">Atividades em Tela (Digitais)</span>
                 </div>
-                <progress class="proporcao-barra" value="42" max="100" aria-label="Proporção entre atividades desplugadas (42%) e digitais (58%)">42%</progress>
+                <progress class="proporcao-barra" value="42" max="100" aria-label="Proporção entre atividades desplugadas (42%) e digitais (58%)" data-i18n-aria-label="dashPage.barraTelaAriaPadrao">42%</progress>
                 <div class="proporcao-legenda">
-                  <span class="legenda-item"><span class="ponto-cor ponto-desplugada"></span> <strong>42%</strong> Desplugadas (Sem tela / Fichas PDF)</span>
-                  <span class="legenda-item"><span class="ponto-cor ponto-plugada"></span> <strong>58%</strong> Digitais (Simulador / Telas)</span>
+                  <span class="legenda-item"><span class="ponto-cor ponto-desplugada"></span> <strong>42%</strong> <span data-i18n="dashPage.legDesplugadas1">Desplugadas (Sem tela / Fichas PDF)</span></span>
+                  <span class="legenda-item"><span class="ponto-cor ponto-plugada"></span> <strong>58%</strong> <span data-i18n="dashPage.legPlugadas1">Digitais (Simulador / Telas)</span></span>
                 </div>
               </div>
             </div>
@@ -139,24 +142,24 @@
             <div class="tempo-tela-recomendacao">
               <span class="material-symbols-outlined icon-sm">tips_and_updates</span>
               <div>
-                <strong>Recomendação Pedagógica:</strong>
-                <p class="m-0">Alternância recomendada para Educação Básica: no máximo 30 min contínuos de tela seguidos de atividades desplugadas ou dinâmicas coletivas.</p>
+                <strong data-i18n="dashPage.recPedTitulo">Recomendação Pedagógica:</strong>
+                <p class="m-0" data-i18n="dashPage.recPedDesc">Alternância recomendada para Educação Básica: no máximo 30 min contínuos de tela seguidos de atividades desplugadas ou dinâmicas coletivas.</p>
               </div>
             </div>
           </div>
         </div>
 
         <!-- Banner com chamada para o Relatório Pedagógico -->
-        <section class="cartao cartao-dashboard mt-16 p-20 flex-entre flex-wrap gap-12 card-banner-chamada" aria-label="Acesso ao Relatório Pedagógico">
+        <section class="cartao cartao-dashboard mt-16 p-20 flex-entre flex-wrap gap-12 card-banner-chamada" aria-label="Acesso ao Relatório Pedagógico" data-i18n-aria-label="dashPage.bannerRelAria">
           <div class="flex-inline-icon gap-12">
             <span class="material-symbols-outlined icon-lg icone-destaque-primario">assessment</span>
             <div>
-              <h4 class="m-0 titulo-banner">Relatório de Consolidação das Habilidades BNCC</h4>
-              <p class="m-0 texto-suave subtitulo-banner">Consulte o desempenho detalhado por turma e exporte o diário oficial de classe.</p>
+              <h4 class="m-0 titulo-banner" data-i18n="dashPage.bannerRelTitulo">Relatório de Consolidação das Habilidades BNCC</h4>
+              <p class="m-0 texto-suave subtitulo-banner" data-i18n="dashPage.bannerRelDesc">Consulte o desempenho detalhado por turma e exporte o diário oficial de classe.</p>
             </div>
           </div>
           <button type="button" class="btn btn-sm btn-primario flex-inline-icon" onclick="alternarAba('tab-pedagogico')">
-            <span class="material-symbols-outlined icon-xs">arrow_forward</span> Acessar Painel Pedagógico
+            <span class="material-symbols-outlined icon-xs">arrow_forward</span> <span data-i18n="dashPage.bannerRelBtn">Acessar Painel Pedagógico</span>
           </button>
         </section>
       </div>
@@ -168,8 +171,8 @@
         <!-- Grade de 2 Colunas: Eixos da BNCC e Balanço Pedagógico -->
         <div class="grid-2col">
           <div class="cartao cartao-dashboard cartao-coluna">
-            <h3 class="flex-inline-icon"><span class="material-symbols-outlined icon-sm">hub</span> Cursos por Eixo Estruturante BNCC</h3>
-            <p class="texto-suave mb-12 texto-pequeno">Distribuição das trilhas curriculares pelos eixos da BNCC Computação.</p>
+            <h3 class="flex-inline-icon"><span class="material-symbols-outlined icon-sm">hub</span> <span data-i18n="dashPage.eixosEstruturantesTitulo">Cursos por Eixo Estruturante BNCC</span></h3>
+            <p class="texto-suave mb-12 texto-pequeno" data-i18n="dashPage.eixosEstruturantesDesc">Distribuição das trilhas curriculares pelos eixos da BNCC Computação.</p>
             <div id="lista-eixos"></div>
           </div>
 
@@ -180,25 +183,25 @@
                 <div>
                   <h3 class="tempo-tela-titulo">
                     <span class="material-symbols-outlined icon-sm">health_and_safety</span>
-                    Balanço de Tempo de Tela
+                    <span data-i18n="dashPage.telaTitulo2">Balanço de Tempo de Tela</span>
                   </h3>
-                  <span class="texto-suave">Proteção e saúde digital na Educação Básica</span>
+                  <span class="texto-suave" data-i18n="dashPage.telaSub2">Proteção e saúde digital na Educação Básica</span>
                 </div>
                 <span class="badge-cne">
                   <span class="material-symbols-outlined icon-xs">check_circle</span>
-                  85% de Equilíbrio
+                  <span data-i18n="dashPage.telaBadgeEq">85% de Equilíbrio</span>
                 </span>
               </div>
 
               <div class="tempo-tela-proporcao">
                 <div class="proporcao-rotulos">
-                  <span>Atividades Desplugadas (Sem tela)</span>
-                  <span>Atividades Plugadas (Em tela)</span>
+                  <span data-i18n="dashPage.desplugadasSemTela">Atividades Desplugadas (Sem tela)</span>
+                  <span data-i18n="dashPage.plugadasEmTela">Atividades Plugadas (Em tela)</span>
                 </div>
-                <progress class="proporcao-barra" value="42" max="100" aria-label="Proporção entre atividades desplugadas (42%) e digitais (58%)">42%</progress>
+                <progress class="proporcao-barra" value="42" max="100" aria-label="Proporção entre atividades desplugadas (42%) e digitais (58%)" data-i18n-aria-label="dashPage.barraTelaAriaPadrao">42%</progress>
                 <div class="proporcao-legenda">
-                  <span class="legenda-item"><span class="ponto-cor ponto-desplugada"></span> <strong>42%</strong> Desplugadas (Cadernos, jogos físicos, fichas)</span>
-                  <span class="legenda-item"><span class="ponto-cor ponto-plugada"></span> <strong>58%</strong> Plugadas (Simulador de blocos, laboratório)</span>
+                  <span class="legenda-item"><span class="ponto-cor ponto-desplugada"></span> <strong>42%</strong> <span data-i18n="dashPage.legDesplugadas2">Desplugadas (Cadernos, jogos físicos, fichas)</span></span>
+                  <span class="legenda-item"><span class="ponto-cor ponto-plugada"></span> <strong>58%</strong> <span data-i18n="dashPage.legPlugadas2">Plugadas (Simulador de blocos, laboratório)</span></span>
                 </div>
               </div>
             </div>
@@ -206,8 +209,8 @@
             <div class="tempo-tela-recomendacao">
               <span class="material-symbols-outlined icon-sm">fact_check</span>
               <div>
-                <strong>Diretriz Pedagógica:</strong>
-                <p class="m-0">No Ensino Fundamental I (1º ao 5º ano), privilegie o modelo híbrido com atividades desplugadas para fixação de algoritmos sem fadiga visual.</p>
+                <strong data-i18n="dashPage.dirPedTitulo">Diretriz Pedagógica:</strong>
+                <p class="m-0" data-i18n="dashPage.dirPedDesc">No Ensino Fundamental I (1º ao 5º ano), privilegie o modelo híbrido com atividades desplugadas para fixação de algoritmos sem fadiga visual.</p>
               </div>
             </div>
           </div>
@@ -218,34 +221,34 @@
           <div class="relatorio-pedagogico-topo">
             <div>
               <h3 id="titulo-relatorio-pedagogico" class="flex-inline-icon">
-                <span class="material-symbols-outlined icon-sm">assessment</span> Relatório Pedagógico por Turma — BNCC Computação
+                <span class="material-symbols-outlined icon-sm">assessment</span> <span data-i18n="dashPage.relPedTitulo">Relatório Pedagógico por Turma — BNCC Computação</span>
               </h3>
-              <p class="texto-suave">Acompanhamento da consolidação de habilidades para lançamento em diários de classe escolares.</p>
+              <p class="texto-suave" data-i18n="dashPage.relPedDesc">Acompanhamento da consolidação de habilidades para lançamento em diários de classe escolares.</p>
             </div>
             <div class="relatorio-acoes">
               <button type="button" class="btn btn-sm btn-neutro flex-inline-icon" id="btn-exportar-csv" onclick="exportarCsvDiario()">
-                <span class="material-symbols-outlined icon-xs">download</span> Exportar Diário Escolar (CSV)
+                <span class="material-symbols-outlined icon-xs">download</span> <span data-i18n="dashPage.btnExportarCsv2">Exportar Diário Escolar (CSV)</span>
               </button>
               <button type="button" class="btn btn-sm btn-neutro flex-inline-icon" onclick="window.print()">
-                <span class="material-symbols-outlined icon-xs">print</span> Imprimir Relatório
+                <span class="material-symbols-outlined icon-xs">print</span> <span data-i18n="dashPage.atalho3Titulo">Imprimir Relatório</span>
               </button>
             </div>
           </div>
 
-          <div class="tabela-scroll" role="region" aria-label="Tabela do relatório pedagógico por habilidades BNCC">
+          <div class="tabela-scroll" role="region" aria-label="Tabela do relatório pedagógico por habilidades BNCC" data-i18n-aria-label="dashPage.relPedTabelaAria">
             <table id="tabela-habilidades-pedagogico" class="tabela-relatorio">
               <thead>
                 <tr>
-                  <th scope="col">Código BNCC</th>
-                  <th scope="col">Estudantes Avaliados</th>
-                  <th scope="col">Média da Turma</th>
-                  <th scope="col">Taxa de Consolidação</th>
-                  <th scope="col">Status da Turma</th>
-                  <th scope="col">Amostra de Alunos</th>
+                  <th scope="col" data-i18n="dashPage.colCodigoBncc">Código BNCC</th>
+                  <th scope="col" data-i18n="dashPage.colEstudantesAvaliados">Estudantes Avaliados</th>
+                  <th scope="col" data-i18n="dashPage.colMediaTurma">Média da Turma</th>
+                  <th scope="col" data-i18n="dashPage.colTaxaConsolidacao">Taxa de Consolidação</th>
+                  <th scope="col" data-i18n="dashPage.colStatusTurma">Status da Turma</th>
+                  <th scope="col" data-i18n="dashPage.colAmostraAlunos">Amostra de Alunos</th>
                 </tr>
               </thead>
               <tbody id="corpo-tabela-pedagogico">
-                <tr><td colspan="6" class="texto-centro texto-suave">Carregando relatório pedagógico...</td></tr>
+                <tr><td colspan="6" class="texto-centro texto-suave" data-i18n="dashPage.carregandoRelatorio">Carregando relatório pedagógico...</td></tr>
               </tbody>
             </table>
           </div>
@@ -256,39 +259,39 @@
           <div class="relatorio-pedagogico-topo">
             <div>
               <h3 id="titulo-submissoes-python" class="flex-inline-icon">
-                <span class="material-symbols-outlined icon-sm">deployed_code</span> Submissões de Código Python 3D da Turma (Cloudflare D1)
+                <span class="material-symbols-outlined icon-sm">deployed_code</span> <span data-i18n="dashPage.subPyTitulo">Submissões de Código Python 3D da Turma (Cloudflare D1)</span>
               </h3>
-              <p class="texto-suave">Visualize o código Python exato submetido por cada estudante ou dupla (Pair Programming) nas 6 atividades tridimensionais.</p>
+              <p class="texto-suave" data-i18n="dashPage.subPyDesc">Visualize o código Python exato submetido por cada estudante ou dupla (Pair Programming) nas 6 atividades tridimensionais.</p>
             </div>
             <div class="relatorio-acoes">
-              <select id="filtro-atividade-python" class="select-filtro-compacto" aria-label="Filtrar submissões por atividade Python 3D" onchange="carregarSubmissoesPython(this.value)">
-                <option value="">Todas as 6 missões Python 3D</option>
-                <option value="python3d-sequencia-labirinto">1. Sequências: Robô Coletor 3D</option>
-                <option value="python3d-condicionais-portas">2. Condicionais: Sensores e Portas 3D</option>
-                <option value="python3d-lacos-repeticao">3. Laços (for): Ponte de Energia 3D</option>
-                <option value="python3d-funcoes-decomposicao">4. Funções (def): Sub-rotinas 3D</option>
-                <option value="python3d-listas-ordenacao">5. Listas: Ordenação de Torres 3D</option>
-                <option value="python3d-recursao-hanoi">6. Recursão: Torre de Hanói 3D</option>
+              <select id="filtro-atividade-python" class="select-filtro-compacto" aria-label="Filtrar submissões por atividade Python 3D" data-i18n-aria-label="dashPage.subPyFiltroAria" onchange="carregarSubmissoesPython(this.value)">
+                <option value="" data-i18n="dashPage.py3dOptTodas">Todas as 6 missões Python 3D</option>
+                <option value="python3d-sequencia-labirinto" data-i18n="dashPage.py3dOpt1">1. Sequências: Robô Coletor 3D</option>
+                <option value="python3d-condicionais-portas" data-i18n="dashPage.py3dOpt2">2. Condicionais: Sensores e Portas 3D</option>
+                <option value="python3d-lacos-repeticao" data-i18n="dashPage.py3dOpt3">3. Laços (for): Ponte de Energia 3D</option>
+                <option value="python3d-funcoes-decomposicao" data-i18n="dashPage.py3dOpt4">4. Funções (def): Sub-rotinas 3D</option>
+                <option value="python3d-listas-ordenacao" data-i18n="dashPage.py3dOpt5">5. Listas: Ordenação de Torres 3D</option>
+                <option value="python3d-recursao-hanoi" data-i18n="dashPage.py3dOpt6">6. Recursão: Torre de Hanói 3D</option>
               </select>
               <a href="/api/certificados/python3d" target="_blank" rel="noopener" class="btn btn-sm btn-primario flex-inline-icon">
-                <span class="material-symbols-outlined icon-xs">workspace_premium</span> Modelo Certificado Python 3D
+                <span class="material-symbols-outlined icon-xs">workspace_premium</span> <span data-i18n="dashPage.modeloCertPy3d">Modelo Certificado Python 3D</span>
               </a>
             </div>
           </div>
 
-          <div class="tabela-scroll" role="region" aria-label="Tabela de submissões de código Python 3D">
+          <div class="tabela-scroll" role="region" aria-label="Tabela de submissões de código Python 3D" data-i18n-aria-label="dashPage.subPyTabelaAria">
             <table id="tabela-submissoes-python" class="tabela-relatorio">
               <thead>
                 <tr>
-                  <th scope="col">Estudante &amp; Modo</th>
-                  <th scope="col">Atividade Python 3D</th>
-                  <th scope="col">Desempenho</th>
-                  <th scope="col">Data / Hora</th>
-                  <th scope="col">Código Submetido</th>
+                  <th scope="col" data-i18n="dashPage.colEstudanteModo">Estudante &amp; Modo</th>
+                  <th scope="col" data-i18n="dashPage.colAtividadePy3d">Atividade Python 3D</th>
+                  <th scope="col" data-i18n="dashPage.colDesempenho">Desempenho</th>
+                  <th scope="col" data-i18n="dashPage.colDataHora">Data / Hora</th>
+                  <th scope="col" data-i18n="dashPage.colCodigoSubmetido">Código Submetido</th>
                 </tr>
               </thead>
               <tbody id="corpo-submissoes-python">
-                <tr><td colspan="5" class="texto-centro texto-suave">Carregando submissões de código Python da turma...</td></tr>
+                <tr><td colspan="5" class="texto-centro texto-suave" data-i18n="dashPage.carregandoSubmissoes">Carregando submissões de código Python da turma...</td></tr>
               </tbody>
             </table>
           </div>
@@ -297,14 +300,14 @@
           <div id="inspetor-codigo-python" class="inspetor-codigo-python" hidden>
             <div class="flex-entre flex-wrap gap-8 mb-8">
               <div>
-                <strong id="inspetor-python-titulo" class="inspetor-python-titulo">Código Python do Estudante</strong>
+                <strong id="inspetor-python-titulo" class="inspetor-python-titulo" data-i18n="dashPage.inspetorTituloPadrao">Código Python do Estudante</strong>
                 <div id="inspetor-python-meta" class="inspetor-python-meta"></div>
               </div>
               <div class="flex-inline-icon gap-8">
                 <a id="inspetor-python-certificado" href="/api/certificados/python3d" target="_blank" rel="noopener" class="btn btn-xs btn-primario flex-inline-icon">
-                  <span class="material-symbols-outlined icon-xs">workspace_premium</span> Emitir Certificado do Aluno
+                  <span class="material-symbols-outlined icon-xs">workspace_premium</span> <span data-i18n="dashPage.emitirCertAluno">Emitir Certificado do Aluno</span>
                 </a>
-                <button type="button" class="btn btn-xs btn-neutro" onclick="document.getElementById('inspetor-codigo-python').hidden = true">Fechar</button>
+                <button type="button" class="btn btn-xs btn-neutro" onclick="document.getElementById('inspetor-codigo-python').hidden = true" data-i18n="loginPage.fechar">Fechar</button>
               </div>
             </div>
             <pre id="inspetor-python-pre" class="inspetor-python-pre"></pre>
@@ -317,54 +320,54 @@
       <!-- ============================================================== -->
       <div id="painel-gestao" role="tabpanel" aria-labelledby="tab-gestao" hidden>
         <!-- Grade Completa de Indicadores Executivos -->
-        <section aria-label="Indicadores Administrativos">
+        <section aria-label="Indicadores Administrativos" data-i18n-aria-label="dashPage.indAdminAria">
           <div class="grid-indicadores" id="grid-indicadores-gestao"></div>
         </section>
 
         <!-- Linha do Tempo Recente de Atividades e Auditoria -->
         <div class="grid-2col mt-16">
           <div class="cartao cartao-dashboard cartao-coluna">
-            <h3 class="flex-inline-icon"><span class="material-symbols-outlined icon-sm">history</span> Linha do Tempo Recente</h3>
-            <p class="texto-suave mb-12 texto-pequeno">Registro cronológico de matrículas, conclusões e certificações.</p>
+            <h3 class="flex-inline-icon"><span class="material-symbols-outlined icon-sm">history</span> <span data-i18n="dashPage.timelineTitulo">Linha do Tempo Recente</span></h3>
+            <p class="texto-suave mb-12 texto-pequeno" data-i18n="dashPage.timelineDesc">Registro cronológico de matrículas, conclusões e certificações.</p>
             <ul class="timeline" id="timeline"></ul>
           </div>
 
           <div class="cartao cartao-dashboard cartao-coluna">
-            <h3 class="flex-inline-icon"><span class="material-symbols-outlined icon-sm">verified_user</span> Documentação &amp; Auditoria</h3>
-            <p class="texto-suave mb-16 texto-pequeno">Recursos de prestação de contas institucional e governança.</p>
+            <h3 class="flex-inline-icon"><span class="material-symbols-outlined icon-sm">verified_user</span> <span data-i18n="dashPage.auditoriaTitulo">Documentação &amp; Auditoria</span></h3>
+            <p class="texto-suave mb-16 texto-pequeno" data-i18n="dashPage.auditoriaDesc">Recursos de prestação de contas institucional e governança.</p>
 
 
             <div class="item-eixo mb-12">
               <div class="item-eixo-cabecalho">
                 <div class="item-eixo-titulo">
                   <span class="material-symbols-outlined icon-sm icone-destaque-secundario">gavel</span>
-                  <span>Resolução CNE/CP nº 1/2022</span>
+                  <span data-i18n="dashPage.cne2022Titulo">Resolução CNE/CP nº 1/2022</span>
                 </div>
-                <span class="item-eixo-contagem">100% Cobertura</span>
+                <span class="item-eixo-contagem" data-i18n="dashPage.cne2022Badge">100% Cobertura</span>
               </div>
-              <p class="m-0 texto-suave texto-micro">Normas da BNCC Computação para a Educação Básica integralmente atendidas.</p>
+              <p class="m-0 texto-suave texto-micro" data-i18n="dashPage.cne2022Desc">Normas da BNCC Computação para a Educação Básica integralmente atendidas.</p>
             </div>
 
             <div class="item-eixo mb-12">
               <div class="item-eixo-cabecalho">
                 <div class="item-eixo-titulo">
                   <span class="material-symbols-outlined icon-sm icone-destaque-primario">health_and_safety</span>
-                  <span>Resolução CNE nº 2/2025</span>
+                  <span data-i18n="dashPage.cne2025Titulo">Resolução CNE nº 2/2025</span>
                 </div>
-                <span class="item-eixo-contagem">Conforme</span>
+                <span class="item-eixo-contagem" data-i18n="dashPage.conforme">Conforme</span>
               </div>
-              <p class="m-0 texto-suave texto-micro">Diretrizes de tempo de tela saudável e proteção ao desenvolvimento infantil atendidas.</p>
+              <p class="m-0 texto-suave texto-micro" data-i18n="dashPage.cne2025Desc">Diretrizes de tempo de tela saudável e proteção ao desenvolvimento infantil atendidas.</p>
             </div>
 
             <div class="item-eixo">
               <div class="item-eixo-cabecalho">
                 <div class="item-eixo-titulo">
                   <span class="material-symbols-outlined icon-sm icone-destaque-alerta">qr_code_2</span>
-                  <span>Acesso Rápido via QR Code</span>
+                  <span data-i18n="dashPage.qrTitulo">Acesso Rápido via QR Code</span>
                 </div>
-                <a href="/compartilhar.html" class="btn btn-xs btn-neutro">Compartilhar</a>
+                <a href="/compartilhar.html" class="btn btn-xs btn-neutro" data-i18n="dashPage.qrBtn">Compartilhar</a>
               </div>
-              <p class="m-0 texto-suave texto-micro">Folha com QR Code oficial para divulgação em murais escolares.</p>
+              <p class="m-0 texto-suave texto-micro" data-i18n="dashPage.qrDesc">Folha com QR Code oficial para divulgação em murais escolares.</p>
             </div>
           </div>
         </div>
@@ -376,74 +379,106 @@
   <script src="/js/api.js"></script>
   <script src="/js/layout.js"></script>
   <script type="module">
+    import { t, traduzirDocumento, formatarData, formatarNumero } from '/js/i18n.js';
+
     exigirAutenticacao(['administrador', 'instrutor']);
     montarLayout('dashboard');
-    document.getElementById('titulo-pagina').textContent = 'Dashboard';
+
+    function atualizarTituloTopbar() {
+      const el = document.getElementById('titulo-pagina');
+      if (el) el.textContent = t('dashPage.topbarTitulo');
+    }
+    atualizarTituloTopbar();
+    traduzirDocumento();
+
+    let cacheIndicadores = null;
+    let cacheTimeline = null;
+    let cacheRelatorio = null;
+    let erroRelatorio = null;
+    let cacheSubmissoesPython = [];
+    let erroSubmissoes = null;
+    let indiceInspecionado = null;
 
     const rotulosEventos = {
       matricula: (e) => ({
-        texto: `<strong>${escaparHtml(e.usuario_nome)}</strong> se matriculou em <strong>${escaparHtml(e.curso_titulo)}</strong>`,
+        texto: t('dashPage.evMatricula', { usuario: escaparHtml(e.usuario_nome), curso: escaparHtml(e.curso_titulo) }),
         icone: 'person_add'
       }),
       conclusao: (e) => ({
-        texto: `<strong>${escaparHtml(e.usuario_nome)}</strong> concluiu o curso <strong>${escaparHtml(e.curso_titulo)}</strong>`,
+        texto: t('dashPage.evConclusao', { usuario: escaparHtml(e.usuario_nome), curso: escaparHtml(e.curso_titulo) }),
         icone: 'military_tech'
       }),
       curso_publicado: (e) => ({
-        texto: `Curso <strong>${escaparHtml(e.curso_titulo)}</strong> foi publicado por ${escaparHtml(e.usuario_nome)}`,
+        texto: t('dashPage.evCursoPublicado', { usuario: escaparHtml(e.usuario_nome), curso: escaparHtml(e.curso_titulo) }),
         icone: 'rocket_launch'
       }),
       certificado: (e) => ({
-        texto: `Certificado emitido para <strong>${escaparHtml(e.usuario_nome)}</strong> (${escaparHtml(e.curso_titulo)})`,
+        texto: t('dashPage.evCertificado', { usuario: escaparHtml(e.usuario_nome), curso: escaparHtml(e.curso_titulo) }),
         icone: 'workspace_premium'
       }),
     };
 
-    const metadadosEixos = {
-      'Pensamento Computacional': {
-        classe: 'eixo-pensamento',
-        icone: 'format_list_numbered',
-        descricao: 'Algoritmos, decomposição, reconhecimento de padrões e abstração lógica.',
-        anos: '1º ao 9º Ano'
-      },
-      'Mundo Digital': {
-        classe: 'eixo-mundo',
-        icone: 'memory',
-        descricao: 'Hardware, software, codificação da informação e redes de comunicação.',
-        anos: '4º ao 9º Ano'
-      },
-      'Cultura Digital': {
-        classe: 'eixo-cultura',
-        icone: 'verified_user',
-        descricao: 'Cidadania na rede, ética, segurança, privacidade e pensamento crítico.',
-        anos: 'Fundamental Geral'
+    function obterMetadadosEixo(eixoNome) {
+      if (eixoNome === 'Pensamento Computacional') {
+        return {
+          classe: 'eixo-pensamento',
+          icone: 'format_list_numbered',
+          nome: t('eixo.pensamento-computacional'),
+          descricao: t('dashPage.eixoPcDesc'),
+          anos: t('dashPage.eixoPcAnos'),
+        };
       }
-    };
+      if (eixoNome === 'Mundo Digital') {
+        return {
+          classe: 'eixo-mundo',
+          icone: 'memory',
+          nome: t('eixo.mundo-digital'),
+          descricao: t('dashPage.eixoMdDesc'),
+          anos: t('dashPage.eixoMdAnos'),
+        };
+      }
+      if (eixoNome === 'Cultura Digital') {
+        return {
+          classe: 'eixo-cultura',
+          icone: 'verified_user',
+          nome: t('eixo.cultura-digital'),
+          descricao: t('dashPage.eixoCdDesc'),
+          anos: t('dashPage.eixoCdAnos'),
+        };
+      }
+      return {
+        classe: 'eixo-padrao',
+        icone: 'hub',
+        nome: eixoNome,
+        descricao: t('dashPage.eixoPadraoDesc'),
+        anos: t('dashPage.eixoPadraoAnos'),
+      };
+    }
 
     function renderizarHtmlEixos(cursosPorEixoBNCC) {
       if (!cursosPorEixoBNCC || cursosPorEixoBNCC.length === 0) {
-        return '<p class="texto-suave">Nenhum curso cadastrado ainda.</p>';
+        return `<p class="texto-suave">${escaparHtml(t('dashPage.nenhumCurso'))}</p>`;
       }
       const totalCursosEixos = cursosPorEixoBNCC.reduce((acc, curr) => acc + Number(curr.total || 0), 0) || 1;
-      return cursosPorEixoBNCC.map(e => {
-        const meta = metadadosEixos[e.eixo_bncc] || {
-          classe: 'eixo-padrao',
-          icone: 'hub',
-          descricao: 'Eixo estruturante alinhado às competências da computação.',
-          anos: 'Ensino Fundamental'
-        };
-        const porcentagem = Math.round((Number(e.total || 0) / totalCursosEixos) * 100);
+      return cursosPorEixoBNCC.map((e) => {
+        const meta = obterMetadadosEixo(e.eixo_bncc);
+        const qtd = Number(e.total || 0);
+        const porcentagem = Math.round((qtd / totalCursosEixos) * 100);
+        const contagemTxt = t(qtd === 1 ? 'dashPage.eixoContagemSing' : 'dashPage.eixoContagemPlur', {
+          n: formatarNumero(qtd),
+          pct: formatarNumero(porcentagem),
+        });
 
         return `
           <div class="item-eixo ${meta.classe}">
             <div class="item-eixo-cabecalho">
               <div class="item-eixo-titulo">
                 <span class="material-symbols-outlined icon-sm">${meta.icone}</span>
-                <span>${escaparHtml(e.eixo_bncc)}</span>
+                <span>${escaparHtml(meta.nome)}</span>
               </div>
-              <span class="item-eixo-contagem">${e.total} curso(s) • ${porcentagem}%</span>
+              <span class="item-eixo-contagem">${escaparHtml(contagemTxt)}</span>
             </div>
-            <div class="item-eixo-descricao">${meta.descricao} <strong class="texto-suave">(${meta.anos})</strong></div>
+            <div class="item-eixo-descricao">${escaparHtml(meta.descricao)} <strong class="texto-suave">(${escaparHtml(meta.anos)})</strong></div>
             <div class="item-eixo-barra-fundo">
               <div class="item-eixo-barra-preenchimento" style="width: 0%;" data-largura="${porcentagem}%"></div>
             </div>
@@ -452,243 +487,277 @@
       }).join('');
     }
 
+    function renderizarIndicadores(dados) {
+      if (!dados) return;
+      const definicoesKpi = [
+        ...(dados.usuarios ? [
+          { rotulo: t('dashPage.kpiTotalUsuarios'), valor: dados.usuarios.total, icone: 'groups', tema: 'indicador-azul', badge: t('dashPage.badgeGeral'), sufixo: '', prioridade: false },
+          { rotulo: t('dashPage.kpiEstudantes'), valor: dados.usuarios.alunos, icone: 'school', tema: 'indicador-indigo', badge: t('dashPage.badgeTurmas'), sufixo: '', prioridade: true },
+          { rotulo: t('dashPage.kpiDocentes'), valor: dados.usuarios.instrutores, icone: 'badge', tema: 'indicador-teal', badge: t('dashPage.kpiDocentes'), sufixo: '', prioridade: true },
+        ] : []),
+        { rotulo: t('dashPage.kpiCursosPub'), valor: dados.cursos.publicados || 0, icone: 'auto_stories', tema: 'indicador-verde', badge: t('dashPage.badgeNoAr'), sufixo: '', prioridade: true },
+        { rotulo: t('dashPage.kpiCursosRasc'), valor: dados.cursos.rascunhos || 0, icone: 'edit_note', tema: 'indicador-ambar', badge: t('dashPage.badgeEdicao'), sufixo: '', prioridade: false },
+        { rotulo: t('dashPage.kpiMatAtivas'), valor: dados.matriculas.ativas || 0, icone: 'how_to_reg', tema: 'indicador-indigo', badge: t('dashPage.badgeAndamento'), sufixo: '', prioridade: true },
+        { rotulo: t('dashPage.kpiMatConcluidas'), valor: dados.matriculas.concluidas || 0, icone: 'task_alt', tema: 'indicador-teal', badge: t('dashPage.badgeFinalizadas'), sufixo: '', prioridade: false },
+        { rotulo: t('dashPage.kpiTaxaConclusao'), valor: dados.taxaConclusao || 0, icone: 'trending_up', tema: 'indicador-rosa', badge: t('dashPage.badgePctTurmas'), sufixo: '%', prioridade: true },
+        { rotulo: t('dashPage.kpiCertEmitidos'), valor: dados.certificadosEmitidos || 0, icone: 'military_tech', tema: 'indicador-dourado', badge: t('dashPage.badgeEmitidos'), sufixo: '', prioridade: true },
+      ];
+
+      const htmlCardKpi = (kpi) => `
+        <div class="indicador ${kpi.tema}">
+          <div class="indicador-topo">
+            <div class="indicador-icone">
+              <span class="material-symbols-outlined icon-md">${kpi.icone}</span>
+            </div>
+            <span class="indicador-badge">${escaparHtml(kpi.badge)}</span>
+          </div>
+          <div>
+            <div class="valor kpi-contador" data-alvo="${kpi.valor}" data-sufixo="${kpi.sufixo}">${escaparHtml(formatarNumero(kpi.valor))}${kpi.sufixo}</div>
+            <div class="rotulo">${escaparHtml(kpi.rotulo)}</div>
+          </div>
+        </div>
+      `;
+
+      const gridResumo = document.getElementById('grid-indicadores-resumo');
+      if (gridResumo) {
+        const kpisResumo = definicoesKpi.filter((k) => k.prioridade);
+        gridResumo.innerHTML = kpisResumo.map(htmlCardKpi).join('');
+      }
+
+      const gridGestao = document.getElementById('grid-indicadores-gestao');
+      if (gridGestao) {
+        gridGestao.innerHTML = definicoesKpi.map(htmlCardKpi).join('');
+      }
+
+      const htmlEixos = renderizarHtmlEixos(dados.cursosPorEixoBNCC);
+      const listaResumo = document.getElementById('lista-eixos-resumo');
+      if (listaResumo) listaResumo.innerHTML = htmlEixos;
+      const listaEixos = document.getElementById('lista-eixos');
+      if (listaEixos) listaEixos.innerHTML = htmlEixos;
+
+      const conf = dados.conformidadeTempoTela || { atividadesDesplugadasPercent: 42, atividadesPlugadasPercent: 58 };
+      document.querySelectorAll('.tempo-tela-proporcao').forEach((bloco) => {
+        const barra = bloco.querySelector('progress.proporcao-barra');
+        if (barra) {
+          barra.value = conf.atividadesDesplugadasPercent;
+          barra.textContent = `${conf.atividadesDesplugadasPercent}%`;
+          barra.setAttribute('aria-label', t('dashPage.barraTelaAria', {
+            desp: conf.atividadesDesplugadasPercent,
+            plug: conf.atividadesPlugadasPercent,
+          }));
+        }
+        const legendas = bloco.querySelectorAll('.proporcao-legenda .legenda-item > strong');
+        if (legendas[0]) legendas[0].textContent = `${conf.atividadesDesplugadasPercent}%`;
+        if (legendas[1]) legendas[1].textContent = `${conf.atividadesPlugadasPercent}%`;
+      });
+    }
+
     async function carregarIndicadores() {
       try {
-        const dados = await api('/dashboard/indicadores');
-
-        const definicoesKpi = [
-          ...(dados.usuarios ? [
-            { rotulo: 'Total de Usuários', valor: dados.usuarios.total, icone: 'groups', tema: 'indicador-azul', badge: 'Geral', sufixo: '', prioridade: false },
-            { rotulo: 'Estudantes', valor: dados.usuarios.alunos, icone: 'school', tema: 'indicador-indigo', badge: 'Turmas', sufixo: '', prioridade: true },
-            { rotulo: 'Docentes', valor: dados.usuarios.instrutores, icone: 'badge', tema: 'indicador-teal', badge: 'Docentes', sufixo: '', prioridade: true },
-          ] : []),
-          { rotulo: 'Cursos Publicados', valor: dados.cursos.publicados || 0, icone: 'auto_stories', tema: 'indicador-verde', badge: 'No ar', sufixo: '', prioridade: true },
-          { rotulo: 'Cursos em Rascunho', valor: dados.cursos.rascunhos || 0, icone: 'edit_note', tema: 'indicador-ambar', badge: 'Edição', sufixo: '', prioridade: false },
-          { rotulo: 'Matrículas Ativas', valor: dados.matriculas.ativas || 0, icone: 'how_to_reg', tema: 'indicador-indigo', badge: 'Andamento', sufixo: '', prioridade: true },
-          { rotulo: 'Matrículas Concluídas', valor: dados.matriculas.concluidas || 0, icone: 'task_alt', tema: 'indicador-teal', badge: 'Finalizadas', sufixo: '', prioridade: false },
-          { rotulo: 'Taxa de Conclusão', valor: dados.taxaConclusao || 0, icone: 'trending_up', tema: 'indicador-rosa', badge: '% Turmas', sufixo: '%', prioridade: true },
-          { rotulo: 'Certificados Emitidos', valor: dados.certificadosEmitidos || 0, icone: 'military_tech', tema: 'indicador-dourado', badge: 'Emitidos', sufixo: '', prioridade: true },
-        ];
-
-        const htmlCardKpi = (kpi) => `
-          <div class="indicador ${kpi.tema}">
-            <div class="indicador-topo">
-              <div class="indicador-icone">
-                <span class="material-symbols-outlined icon-md">${kpi.icone}</span>
-              </div>
-              <span class="indicador-badge">${kpi.badge}</span>
-            </div>
-            <div>
-              <div class="valor kpi-contador" data-alvo="${kpi.valor}" data-sufixo="${kpi.sufixo}">${kpi.valor}${kpi.sufixo}</div>
-              <div class="rotulo">${kpi.rotulo}</div>
-            </div>
-          </div>
-        `;
-
-        // Renderiza KPIs resumidos (Visão Geral)
-        const gridResumo = document.getElementById('grid-indicadores-resumo');
-        if (gridResumo) {
-          const kpisResumo = definicoesKpi.filter(k => k.prioridade);
-          gridResumo.innerHTML = kpisResumo.map(htmlCardKpi).join('');
-        }
-
-        // Renderiza todos os KPIs (Gestão & Métricas)
-        const gridGestao = document.getElementById('grid-indicadores-gestao');
-        if (gridGestao) {
-          gridGestao.innerHTML = definicoesKpi.map(htmlCardKpi).join('');
-        }
-
-        // Renderiza cursos por eixo nas duas abas
-        const htmlEixos = renderizarHtmlEixos(dados.cursosPorEixoBNCC);
-        const listaResumo = document.getElementById('lista-eixos-resumo');
-        if (listaResumo) listaResumo.innerHTML = htmlEixos;
-        const listaEixos = document.getElementById('lista-eixos');
-        if (listaEixos) listaEixos.innerHTML = htmlEixos;
-
-        // Atualiza dados de tempo de tela se fornecidos pela API (barra + legenda visível em sincronia)
-        if (dados.conformidadeTempoTela) {
-          const conf = dados.conformidadeTempoTela;
-          document.querySelectorAll('.tempo-tela-proporcao').forEach((bloco) => {
-            const barra = bloco.querySelector('progress.proporcao-barra');
-            if (barra) {
-              barra.value = conf.atividadesDesplugadasPercent;
-              barra.textContent = `${conf.atividadesDesplugadasPercent}%`;
-              barra.setAttribute('aria-label', `Proporção entre atividades desplugadas (${conf.atividadesDesplugadasPercent}%) e digitais (${conf.atividadesPlugadasPercent}%)`);
-            }
-            const legendas = bloco.querySelectorAll('.proporcao-legenda .legenda-item strong');
-            if (legendas[0]) legendas[0].textContent = `${conf.atividadesDesplugadasPercent}%`;
-            if (legendas[1]) legendas[1].textContent = `${conf.atividadesPlugadasPercent}%`;
-          });
-        }
+        cacheIndicadores = await api('/dashboard/indicadores');
+        renderizarIndicadores(cacheIndicadores);
       } catch (err) {
         mostrarNotificacao(err.message, 'erro');
       }
+    }
+
+    function renderizarTimeline(eventos) {
+      const ul = document.getElementById('timeline');
+      if (!ul || !eventos) return;
+      if (eventos.length === 0) {
+        ul.innerHTML = `<li>${escaparHtml(t('dashPage.timelineVazia'))}</li>`;
+        return;
+      }
+      ul.innerHTML = eventos.map((e) => {
+        const configEvento = (rotulosEventos[e.tipo] || (() => ({ texto: escaparHtml(t('dashPage.evGenerico')), icone: 'notifications' })))(e);
+        return `
+          <li class="linha-tempo-item">
+            <span class="timeline-icone-no material-symbols-outlined">${configEvento.icone}</span>
+            <div class="timeline-texto">${configEvento.texto}</div>
+            <div class="data">
+              <span class="material-symbols-outlined icon-xs">schedule</span>
+              ${escaparHtml(formatarData(e.data))}
+            </div>
+          </li>
+        `;
+      }).join('');
     }
 
     async function carregarTimeline() {
       try {
-        const eventos = await api('/dashboard/linha-do-tempo?limite=15');
-        const ul = document.getElementById('timeline');
-        if (!ul) return;
-        if (eventos.length === 0) {
-          ul.innerHTML = '<li>Nenhuma atividade registrada ainda.</li>';
-          return;
-        }
-        ul.innerHTML = eventos.map((e) => {
-          const configEvento = (rotulosEventos[e.tipo] || (() => ({ texto: 'Evento registrado', icone: 'notifications' })))(e);
-          return `
-            <li class="linha-tempo-item">
-              <span class="timeline-icone-no material-symbols-outlined">${configEvento.icone}</span>
-              <div class="timeline-texto">${configEvento.texto}</div>
-              <div class="data">
-                <span class="material-symbols-outlined icon-xs">schedule</span>
-                ${formatarData(e.data)}
-              </div>
-            </li>
-          `;
-        }).join('');
+        cacheTimeline = await api('/dashboard/linha-do-tempo?limite=15');
+        renderizarTimeline(cacheTimeline);
       } catch (err) {
         mostrarNotificacao(err.message, 'erro');
       }
     }
 
-    async function carregarRelatorioPedagogico() {
+    function renderizarRelatorioPedagogico() {
       const tbody = document.getElementById('corpo-tabela-pedagogico');
       if (!tbody) return;
-      try {
-        const dados = await api('/dashboard/relatorio-pedagogico');
-        if (!dados.habilidades || dados.habilidades.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="6" class="texto-centro texto-suave">Nenhum registro de habilidade encontrado ainda.</td></tr>';
-          return;
+      if (erroRelatorio) {
+        tbody.innerHTML = `<tr><td colspan="6" class="texto-centro texto-suave">${escaparHtml(t('dashPage.erroRelatorio', { msg: erroRelatorio }))}</td></tr>`;
+        return;
+      }
+      if (!cacheRelatorio) return;
+      if (!cacheRelatorio.habilidades || cacheRelatorio.habilidades.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="texto-centro texto-suave">${escaparHtml(t('dashPage.semRegistrosHab'))}</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = cacheRelatorio.habilidades.map((h) => {
+        let badgeStatus = `<span class="status-em-desenvolvimento flex-inline-icon"><span class="material-symbols-outlined icon-xs">timelapse</span> ${escaparHtml(t('dashPage.statusEmDesenv'))}</span>`;
+        if (h.statusTurma === 'Consolidada') {
+          badgeStatus = `<span class="status-consolidada flex-inline-icon"><span class="material-symbols-outlined icon-xs">check_circle</span> ${escaparHtml(t('hab.dominio.consolidada'))}</span>`;
+        } else if (h.statusTurma === 'Adequada') {
+          badgeStatus = `<span class="status-adequada flex-inline-icon"><span class="material-symbols-outlined icon-xs">thumb_up</span> ${escaparHtml(t('dashPage.statusAdequada'))}</span>`;
         }
 
-        tbody.innerHTML = dados.habilidades.map((h) => {
-          let badgeStatus = '<span class="status-em-desenvolvimento flex-inline-icon"><span class="material-symbols-outlined icon-xs">timelapse</span> Em Desenvolvimento</span>';
-          if (h.statusTurma === 'Consolidada') {
-            badgeStatus = '<span class="status-consolidada flex-inline-icon"><span class="material-symbols-outlined icon-xs">check_circle</span> Consolidada</span>';
-          } else if (h.statusTurma === 'Adequada') {
-            badgeStatus = '<span class="status-adequada flex-inline-icon"><span class="material-symbols-outlined icon-xs">thumb_up</span> Adequada</span>';
-          }
+        const amostraChips = h.registros.slice(0, 3).map((r) => `
+          <span class="chip-aluno" title="${escaparHtml(t('dashPage.notaTooltip', { nota: formatarNumero(Number(r.pontuacao), { minimumFractionDigits: 1, maximumFractionDigits: 1 }) }))}">
+            ${escaparHtml(String(r.aluno_nome || '').split(' ')[0])} <strong>(${escaparHtml(formatarNumero(Number(r.pontuacao), { minimumFractionDigits: 1, maximumFractionDigits: 1 }))})</strong>
+          </span>
+        `).join('');
 
-          const amostraChips = h.registros.slice(0, 3).map((r) => `
-            <span class="chip-aluno" title="Nota: ${Number(r.pontuacao).toFixed(1)}">
-              ${escaparHtml(String(r.aluno_nome || '').split(' ')[0])} <strong>(${Number(r.pontuacao).toFixed(1)})</strong>
-            </span>
-          `).join('');
+        const totalAlunosNum = Number(h.totalAlunos) || 0;
+        const alunosSufixo = t(totalAlunosNum === 1 ? 'dashPage.alunoSing' : 'dashPage.alunoPlur');
 
-          return `
-            <tr class="linha-pedagogica">
-              <td><span class="badge-bncc-codigo">${escaparHtml(h.codigo)}</span></td>
-              <td><strong>${Number(h.totalAlunos) || 0}</strong> aluno(s)</td>
-              <td><strong>${Number(h.mediaPontuacao || 0).toFixed(1)}</strong> <span class="texto-suave">/ 10.0</span></td>
-              <td>
-                <div class="flex-entre mb-4"><span>${Number(h.taxaConsolidacao) || 0}%</span></div>
-                <div class="barra-progresso-wrap">
-                  <div class="barra-progresso-preenchimento barra-pedagogica" style="width: 0%;" data-largura="${Number(h.taxaConsolidacao) || 0}%"></div>
-                </div>
-              </td>
-              <td>${badgeStatus}</td>
-              <td>${amostraChips}${h.registros.length > 3 ? `<span class="chip-aluno">+${h.registros.length - 3}</span>` : ''}</td>
-            </tr>
-          `;
-        }).join('');
-      } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="6" class="texto-centro texto-suave">Erro ao carregar relatório: ${escaparHtml(err.message)}</td></tr>`;
-      }
+        return `
+          <tr class="linha-pedagogica">
+            <td><span class="badge-bncc-codigo">${escaparHtml(h.codigo)}</span></td>
+            <td><strong>${escaparHtml(formatarNumero(totalAlunosNum))}</strong> ${escaparHtml(alunosSufixo)}</td>
+            <td><strong>${escaparHtml(formatarNumero(Number(h.mediaPontuacao || 0), { minimumFractionDigits: 1, maximumFractionDigits: 1 }))}</strong> <span class="texto-suave">/ 10.0</span></td>
+            <td>
+              <div class="flex-entre mb-4"><span>${escaparHtml(formatarNumero(Number(h.taxaConsolidacao) || 0))}%</span></div>
+              <div class="barra-progresso-wrap">
+                <div class="barra-progresso-preenchimento barra-pedagogica" style="width: 0%;" data-largura="${Number(h.taxaConsolidacao) || 0}%"></div>
+              </div>
+            </td>
+            <td>${badgeStatus}</td>
+            <td>${amostraChips}${h.registros.length > 3 ? `<span class="chip-aluno">+${h.registros.length - 3}</span>` : ''}</td>
+          </tr>
+        `;
+      }).join('');
     }
 
-    const titulosPython3d = {
-      'python3d-sequencia': '1. Sequências: Robô Coletor 3D',
-      'python3d-sequencia-labirinto': '1. Sequências: Robô Coletor 3D',
-      'python3d-condicional': '2. Condicionais: Sensores e Portas 3D',
-      'python3d-condicionais-portas': '2. Condicionais: Sensores e Portas 3D',
-      'python3d-lacos': '3. Laços (for): Ponte de Energia 3D',
-      'python3d-lacos-repeticao': '3. Laços (for): Ponte de Energia 3D',
-      'python3d-funcoes': '4. Funções (def): Sub-rotinas 3D',
-      'python3d-funcoes-decomposicao': '4. Funções (def): Sub-rotinas 3D',
-      'python3d-listas': '5. Listas: Ordenação de Torres 3D',
-      'python3d-listas-ordenacao': '5. Listas: Ordenação de Torres 3D',
-      'python3d-hanoi': '6. Recursão: Torre de Hanói 3D',
-      'python3d-recursao-hanoi': '6. Recursão: Torre de Hanói 3D',
+    async function carregarRelatorioPedagogico() {
+      try {
+        erroRelatorio = null;
+        cacheRelatorio = await api('/dashboard/relatorio-pedagogico');
+      } catch (err) {
+        erroRelatorio = err.message;
+      }
+      renderizarRelatorioPedagogico();
+    }
+
+    const chavesTitulosPy3d = {
+      'python3d-sequencia': 'dashPage.py3dOpt1',
+      'python3d-sequencia-labirinto': 'dashPage.py3dOpt1',
+      'python3d-condicional': 'dashPage.py3dOpt2',
+      'python3d-condicionais-portas': 'dashPage.py3dOpt2',
+      'python3d-lacos': 'dashPage.py3dOpt3',
+      'python3d-lacos-repeticao': 'dashPage.py3dOpt3',
+      'python3d-funcoes': 'dashPage.py3dOpt4',
+      'python3d-funcoes-decomposicao': 'dashPage.py3dOpt4',
+      'python3d-listas': 'dashPage.py3dOpt5',
+      'python3d-listas-ordenacao': 'dashPage.py3dOpt5',
+      'python3d-hanoi': 'dashPage.py3dOpt6',
+      'python3d-recursao-hanoi': 'dashPage.py3dOpt6',
     };
 
-    let cacheSubmissoesPython = [];
+    function obterTituloPy3d(atividadeId) {
+      const chave = chavesTitulosPy3d[atividadeId];
+      return chave ? t(chave) : atividadeId;
+    }
 
-    window.carregarSubmissoesPython = async function(filtroAtividade = '') {
+    function renderizarSubmissoesPython() {
       const tbody = document.getElementById('corpo-submissoes-python');
       if (!tbody) return;
+      if (erroSubmissoes) {
+        tbody.innerHTML = `<tr><td colspan="5" class="texto-centro texto-suave">${escaparHtml(t('dashPage.erroSubmissoes', { msg: erroSubmissoes }))}</td></tr>`;
+        return;
+      }
+
+      if (cacheSubmissoesPython.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="texto-centro texto-suave">${escaparHtml(t('dashPage.semSubmissoes'))}</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = cacheSubmissoesPython.map((s, idx) => {
+        const tituloAtv = obterTituloPy3d(s.atividade_id);
+        const estrelas = '★'.repeat(Math.max(1, Math.min(3, Number(s.estrelas) || 3)));
+        const parceiroEsc = s.parceiro_dupla || '';
+        const papelEsc = s.papel_dupla || 'piloto';
+        const badgeDupla = s.parceiro_dupla
+          ? `<span class="chip-aluno" title="Pair Programming (${escaparHtml(papelEsc)})">${escaparHtml(t('dashPage.duplaCom', { parceiro: parceiroEsc, papel: papelEsc }))}</span>`
+          : `<span class="texto-suave texto-pequeno">${escaparHtml(t('dashPage.individual'))}</span>`;
+
+        return `
+          <tr class="linha-pedagogica">
+            <td>
+              <strong>${escaparHtml(s.aluno_nome || t('dashPage.estudante'))}</strong>
+              <div>${badgeDupla}</div>
+            </td>
+            <td><span class="badge-bncc-codigo">${escaparHtml(tituloAtv)}</span></td>
+            <td>
+              <strong class="estrelas-desempenho">${estrelas}</strong>
+              <span class="texto-suave texto-pequeno">${escaparHtml(t('dashPage.tentativasAbrev', { n: Number(s.tentativas) || 1 }))}</span>
+            </td>
+            <td class="texto-suave texto-pequeno">${escaparHtml(formatarData(s.criado_em))}</td>
+            <td>
+              <button type="button" class="btn btn-xs btn-primario flex-inline-icon" onclick="inspecionarCodigoPython(${idx})">
+                <span class="material-symbols-outlined icon-xs">code</span> ${escaparHtml(t('dashPage.verCodigoPython'))}
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    window.carregarSubmissoesPython = async function(filtroAtividade = '') {
       try {
+        erroSubmissoes = null;
         const sufixo = filtroAtividade ? `?atividade_id=${encodeURIComponent(filtroAtividade)}` : '';
         const dados = await api(`/dashboard/submissoes-python${sufixo}`);
         let submissoes = Array.isArray(dados?.submissoes) ? dados.submissoes : [];
 
-        // Combina com submissões locais recentes (caso aluno tenha testado no mesmo navegador)
         try {
           const locais = JSON.parse(localStorage.getItem('lms_submissoes_python_local') || '[]');
           const locaisFiltradas = filtroAtividade
             ? locais.filter((item) => item.atividade_id === filtroAtividade)
             : locais;
           submissoes = [...locaisFiltradas, ...submissoes];
-        } catch {
-          // Ignora erro local
+        } catch (erroLocal) {
+          console.warn('Submissões Python locais indisponíveis:', erroLocal?.message || erroLocal);
         }
 
         cacheSubmissoesPython = submissoes;
-
-        if (submissoes.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="5" class="texto-centro texto-suave">Nenhuma submissão de código Python encontrada para este filtro.</td></tr>';
-          return;
-        }
-
-        tbody.innerHTML = submissoes.map((s, idx) => {
-          const tituloAtv = titulosPython3d[s.atividade_id] || s.atividade_id;
-          const estrelas = '★'.repeat(Math.max(1, Math.min(3, Number(s.estrelas) || 3)));
-          const parceiroEsc = escaparHtml(s.parceiro_dupla);
-          const papelEsc = escaparHtml(s.papel_dupla || 'piloto');
-          const badgeDupla = s.parceiro_dupla
-            ? `<span class="chip-aluno" title="Pair Programming (${papelEsc})">👥 Dupla com ${parceiroEsc} (${papelEsc})</span>`
-            : '<span class="texto-suave texto-pequeno">Individual</span>';
-
-          return `
-            <tr class="linha-pedagogica">
-              <td>
-                <strong>${escaparHtml(s.aluno_nome || 'Estudante')}</strong>
-                <div>${badgeDupla}</div>
-              </td>
-              <td><span class="badge-bncc-codigo">${escaparHtml(tituloAtv)}</span></td>
-              <td>
-                <strong class="estrelas-desempenho">${estrelas}</strong>
-                <span class="texto-suave texto-pequeno">(${Number(s.tentativas) || 1} tent.)</span>
-              </td>
-              <td class="texto-suave texto-pequeno">${formatarData(s.criado_em)}</td>
-              <td>
-                <button type="button" class="btn btn-xs btn-primario flex-inline-icon" onclick="inspecionarCodigoPython(${idx})">
-                  <span class="material-symbols-outlined icon-xs">code</span> Ver Código Python
-                </button>
-              </td>
-            </tr>
-          `;
-        }).join('');
       } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="5" class="texto-centro texto-suave">Erro ao carregar submissões Python: ${escaparHtml(err.message)}</td></tr>`;
+        erroSubmissoes = err.message;
       }
+      renderizarSubmissoesPython();
     };
 
-    window.inspecionarCodigoPython = function(indice) {
+    window.inspecionarCodigoPython = function(indice, rolar = true) {
       const item = cacheSubmissoesPython[indice];
       if (!item) return;
+      indiceInspecionado = indice;
       const painel = document.getElementById('inspetor-codigo-python');
       const titulo = document.getElementById('inspetor-python-titulo');
       const meta = document.getElementById('inspetor-python-meta');
       const pre = document.getElementById('inspetor-python-pre');
       const linkCert = document.getElementById('inspetor-python-certificado');
 
-      const tituloAtv = titulosPython3d[item.atividade_id] || item.atividade_id;
-      titulo.textContent = `${item.aluno_nome || 'Estudante'} — ${tituloAtv}`;
+      const tituloAtv = obterTituloPy3d(item.atividade_id);
+      const nomeEstudante = item.aluno_nome || t('dashPage.estudante');
+      const nTent = Number(item.tentativas) || 1;
+      const tentChave = nTent === 1 ? 'jog.tentativaSing' : 'jog.tentativaPlur';
+      const tentLabel = t(tentChave, { n: nTent });
+      titulo.textContent = `${nomeEstudante} — ${tituloAtv}`;
       meta.textContent = item.parceiro_dupla
-        ? `Modo Desafio Colaborativo (Dupla com ${item.parceiro_dupla} • Papel: ${item.papel_dupla || 'piloto'}) • ${item.tentativas || 1} tentativa(s)`
-        : `Modo Individual • ${item.tentativas || 1} tentativa(s) • Submetido em ${formatarData(item.criado_em)}`;
-      pre.textContent = item.codigo_python || '# Sem código registrado';
+        ? t('dashPage.inspetorMetaDupla', { parceiro: item.parceiro_dupla, papel: item.papel_dupla || 'piloto', tentativas: tentLabel })
+        : t('dashPage.inspetorMetaIndiv', { tentativas: tentLabel, data: formatarData(item.criado_em) });
+      pre.textContent = item.codigo_python || t('dashPage.semCodigo');
 
       if (linkCert) {
         const params = new URLSearchParams();
@@ -698,82 +767,99 @@
       }
 
       painel.hidden = false;
-      painel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      if (rolar) painel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     };
 
-    function executarAnimacoesGSAP() {
-      const prefereReduzido = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-      if (typeof gsap === 'undefined' || prefereReduzido) {
-        document.querySelectorAll('[data-largura]').forEach((el) => {
-          el.style.width = el.getAttribute('data-largura');
-        });
-        return;
-      }
-
-      // 1. Linha do Tempo de Entrada rápida (conclui em < 240ms sem deixar blocos invisíveis)
-      const tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
-
-      tl.from('#dashboard-hero', {
-        opacity: 0,
-        y: -12,
-        duration: 0.2,
-        clearProps: 'transform,opacity',
-      }, 0)
-      .from('.atalho-card', {
-        opacity: 0,
-        y: 8,
-        stagger: 0.015,
-        duration: 0.18,
-        clearProps: 'transform,opacity',
-      }, 0)
-      .from('.indicador', {
-        opacity: 0,
-        y: 10,
-        stagger: 0.015,
-        duration: 0.18,
-        clearProps: 'transform,opacity',
-      }, 0)
-      .from('.cartao-coluna', {
-        opacity: 0,
-        y: 10,
-        stagger: 0.02,
-        duration: 0.18,
-        clearProps: 'transform,opacity',
-      }, 0)
-      .from('.linha-pedagogica', {
-        opacity: 0,
-        y: 6,
-        stagger: 0.01,
-        duration: 0.16,
-        clearProps: 'transform,opacity',
-      }, 0);
-
-      // 2. Animação de contadores numéricos
+    function aplicarFinalDashboard() {
+      document.querySelectorAll('[data-largura]').forEach((el) => {
+        el.style.width = el.getAttribute('data-largura');
+      });
       document.querySelectorAll('.kpi-contador').forEach((el) => {
         const alvo = Number.parseFloat(el.getAttribute('data-alvo')) || 0;
         const sufixo = el.getAttribute('data-sufixo') || '';
         const ehDecimal = String(el.getAttribute('data-alvo')).includes('.');
-        const contadorObj = { val: 0 };
-
-        gsap.to(contadorObj, {
-          val: alvo,
-          duration: 1.1,
-          ease: 'power2.out',
-          onUpdate: () => {
-            el.textContent = (ehDecimal ? contadorObj.val.toFixed(1) : Math.round(contadorObj.val)) + sufixo;
-          }
-        });
+        const valNum = ehDecimal ? Number(alvo.toFixed(1)) : Math.round(alvo);
+        el.textContent = formatarNumero(valNum, ehDecimal ? { minimumFractionDigits: 1, maximumFractionDigits: 1 } : {}) + sufixo;
       });
+    }
 
-      // 3. Animação fluida das barras de progresso
-      document.querySelectorAll('.item-eixo-barra-preenchimento, .barra-pedagogica').forEach((barra) => {
-        const larguraAlvo = barra.getAttribute('data-largura') || '0%';
-        gsap.fromTo(barra,
-          { width: '0%' },
-          { width: larguraAlvo, duration: 1.0, ease: 'power2.out', delay: 0.1 }
+    function executarAnimacoesGSAP() {
+      if (window.LmsAnimacoes) {
+        window.LmsAnimacoes.executarComMatchMedia(
+          ({ gsap }) => {
+            const tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
+            const animarSeExistir = (seletor, vars) => {
+              if (document.querySelectorAll(seletor).length > 0) {
+                tl.from(seletor, vars, 0);
+              }
+            };
+
+            animarSeExistir('#dashboard-hero', {
+              opacity: 0,
+              y: -12,
+              duration: 0.2,
+              clearProps: 'transform,opacity',
+            });
+            animarSeExistir('.atalho-card', {
+              opacity: 0,
+              y: 8,
+              stagger: 0.015,
+              duration: 0.18,
+              clearProps: 'transform,opacity',
+            });
+            animarSeExistir('.indicador', {
+              opacity: 0,
+              y: 10,
+              stagger: 0.015,
+              duration: 0.18,
+              clearProps: 'transform,opacity',
+            });
+            animarSeExistir('.cartao-coluna', {
+              opacity: 0,
+              y: 10,
+              stagger: 0.02,
+              duration: 0.18,
+              clearProps: 'transform,opacity',
+            });
+            animarSeExistir('.linha-pedagogica', {
+              opacity: 0,
+              y: 6,
+              stagger: 0.01,
+              duration: 0.16,
+              clearProps: 'transform,opacity',
+            });
+
+            document.querySelectorAll('.kpi-contador').forEach((el) => {
+              const alvo = Number.parseFloat(el.getAttribute('data-alvo')) || 0;
+              const sufixo = el.getAttribute('data-sufixo') || '';
+              const ehDecimal = String(el.getAttribute('data-alvo')).includes('.');
+              const contadorObj = { val: 0 };
+
+              gsap.to(contadorObj, {
+                val: alvo,
+                duration: 1.1,
+                ease: 'power2.out',
+                onUpdate: () => {
+                  el.textContent = (ehDecimal ? contadorObj.val.toFixed(1) : Math.round(contadorObj.val)) + sufixo;
+                },
+              });
+            });
+
+            document.querySelectorAll('.item-eixo-barra-preenchimento, .barra-pedagogica').forEach((barra) => {
+              const larguraAlvo = barra.getAttribute('data-largura') || '0%';
+              gsap.fromTo(
+                barra,
+                { width: '0%' },
+                { width: larguraAlvo, duration: 1.0, ease: 'power2.out', delay: 0.1 },
+              );
+            });
+          },
+          aplicarFinalDashboard,
         );
-      });
+        return;
+      }
+
+      aplicarFinalDashboard();
     }
 
     // Gerenciador de alternância de abas com suporte a teclado
@@ -795,11 +881,9 @@
 
           if (ativa) {
             painel.removeAttribute('hidden');
-            // Animação de revelação suave da aba selecionada
             if (typeof gsap !== 'undefined' && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
               gsap.fromTo(painel, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out' });
             }
-            // Dispara preenchimento de barras visíveis no painel ativo
             painel.querySelectorAll('[data-largura]').forEach((el) => {
               el.style.width = el.getAttribute('data-largura');
             });
@@ -853,7 +937,7 @@
         const resp = await fetch('/api/dashboard/relatorio-pedagogico?formato=csv', {
           headers: { Authorization: `Bearer ${token}` },
         });
-        if (!resp.ok) throw new Error('Falha ao baixar CSV do diário escolar.');
+        if (!resp.ok) throw new Error(t('dashPage.erroExportarCsv'));
         const blob = await resp.blob();
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -863,11 +947,26 @@
         a.click();
         document.body.removeChild(a);
         window.URL.revokeObjectURL(url);
-        mostrarNotificacao('Diário escolar (CSV) exportado com sucesso!', 'sucesso');
+        mostrarNotificacao(t('dashPage.sucessoExportarCsv'), 'sucesso');
       } catch (err) {
         mostrarNotificacao(err.message, 'erro');
       }
     };
+
+    window.addEventListener('lms:idioma-alterado', () => {
+      atualizarTituloTopbar();
+      traduzirDocumento();
+      if (cacheIndicadores) renderizarIndicadores(cacheIndicadores);
+      if (cacheTimeline) renderizarTimeline(cacheTimeline);
+      renderizarRelatorioPedagogico();
+      renderizarSubmissoesPython();
+      const inspetorEl = document.getElementById('inspetor-codigo-python');
+      if (inspetorEl && !inspetorEl.hidden && indiceInspecionado !== null) {
+        inspecionarCodigoPython(indiceInspecionado, false);
+      }
+      aplicarFinalDashboard();
+    });
+    window.addEventListener('lms:layout-atualizado', atualizarTituloTopbar);
 
     // Inicialização assíncrona
     await Promise.all([carregarIndicadores(), carregarTimeline(), carregarRelatorioPedagogico(), carregarSubmissoesPython()]);

@@ -92,6 +92,22 @@ export const SVG_ICON_PATHS = {
   star: '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
   sound: '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>',
   mute: '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="22" y1="9" x2="16" y2="15"/><line x1="16" y1="9" x2="22" y2="15"/>',
+
+  // Workspace estilo Notion, Blocos & Laboratório
+  kanban: '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 7v10"/><path d="M12 7v5"/><path d="M16 7v8"/>',
+  gallery: '<rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/>',
+  checklist: '<rect x="3" y="5" width="6" height="6" rx="1"/><path d="m4.5 8 1 1 2-2"/><line x1="13" y1="8" x2="21" y2="8"/><rect x="3" y="14" width="6" height="6" rx="1"/><line x1="13" y1="17" x2="21" y2="17"/>',
+  'toggle-accordion': '<polyline points="6 7 10 11 6 15"/><line x1="13" y1="11" x2="21" y2="11"/><line x1="8" y1="18" x2="21" y2="18"/>',
+  callout: '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8" cy="12" r="1"/><line x1="12" y1="10" x2="18" y2="10"/><line x1="12" y1="14" x2="17" y2="14"/>',
+  'slash-command': '<rect x="3" y="3" width="18" height="18" rx="3"/><line x1="15" y1="7" x2="9" y2="17"/>',
+  'bncc-tag': '<path d="M12 2H4a2 2 0 0 0-2 2v8a2 2 0 0 0 .59 1.41l8.59 8.59a2 2 0 0 0 2.82 0l7.18-7.18a2 2 0 0 0 0-2.82L12.59 2.59A2 2 0 0 0 12 2Z"/><circle cx="7.5" cy="7.5" r="1.5"/>',
+  'flask-lab': '<path d="M9 3h6"/><path d="M10 3v6l-5 9a2 2 0 0 0 1.7 3h10.6a2 2 0 0 0 1.7-3l-5-9V3"/><line x1="7" y1="15" x2="17" y2="15"/>',
+  notebook: '<path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/><line x1="9" y1="7" x2="16" y2="7"/><line x1="9" y1="11" x2="14" y2="11"/>',
+  template: '<rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/>',
+  'cover-image': '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="m21 16-5-5-11 9"/>',
+  'text-heading': '<path d="M5 6v12"/><path d="M13 6v12"/><path d="M5 12h8"/><path d="M17 10v8"/><path d="M17 14c1.5-1.5 3.5-1 3.5 1v3"/>',
+  'text-paragraph': '<line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="11" x2="20" y2="11"/><line x1="4" y1="16" x2="14" y2="16"/>',
+  'code-snippet': '<polyline points="8 7 3 12 8 17"/><polyline points="16 7 21 12 16 17"/><line x1="14" y1="5" x2="10" y2="19"/>',
 };
 
 /**
@@ -208,6 +224,22 @@ export const MAPA_ALIASES_ICONES = {
   view_in_ar: 'cube-3d',
   smart_toy: 'robot',
   chat: 'chat',
+  view_kanban: 'kanban',
+  grid_view: 'gallery',
+  checklist: 'checklist',
+  check_box: 'checklist',
+  campaign: 'callout',
+  label: 'bncc-tag',
+  sell: 'bncc-tag',
+  science: 'flask-lab',
+  biotech: 'flask-lab',
+  note_alt: 'notebook',
+  auto_awesome_mosaic: 'template',
+  wallpaper: 'cover-image',
+  image: 'cover-image',
+  title: 'text-heading',
+  subject: 'text-paragraph',
+  notes: 'text-paragraph',
 };
 
 /**
@@ -300,7 +332,10 @@ export function hidratarIconesUniversaisNoDom(raiz = document) {
     iconeSpan.innerHTML = gerarSvgIconeHtml('external-link', { tamanho: 16 });
     const srOnly = document.createElement('span');
     srOnly.className = 'somente-leitor';
-    srOnly.textContent = ' (abre em nova janela)';
+    srOnly.setAttribute('data-i18n', 'comp.abreNovaJanela');
+    srOnly.textContent = typeof window.t === 'function'
+      ? ` ${window.t('comp.abreNovaJanela')}`
+      : ' (abre em nova janela)';
     link.appendChild(iconeSpan);
     link.appendChild(srOnly);
   });

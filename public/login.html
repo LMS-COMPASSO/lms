@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Entrar — LMS COMPASSO</title>
+<meta name="i18n-title" content="loginPage.metaTitulo">
 <link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,12 +16,13 @@
 <body>
   <main class="pagina-login">
     <div class="caixa-login caixa-login-ampla">
-      <a href="/" class="login-logo" aria-label="LMS COMPASSO — página inicial">
-        <img src="/img/logo.svg" alt="LMS COMPASSO — BNCC Computação" width="272" height="64" class="logo-tema-claro">
-        <img src="/img/logo-branco.svg" alt="LMS COMPASSO — BNCC Computação" width="272" height="64" class="logo-tema-escuro">
+      <div class="auth-idioma-topo" id="auth-seletor-idioma"></div>
+      <a href="/" class="login-logo" aria-label="LMS COMPASSO — página inicial" data-i18n-aria-label="nav.logoAria">
+        <img src="/img/logo.svg" alt="LMS COMPASSO — BNCC Computação" width="272" height="64" class="logo-tema-claro" data-i18n-attr="alt:nav.logoAlt">
+        <img src="/img/logo-branco.svg" alt="LMS COMPASSO — BNCC Computação" width="272" height="64" class="logo-tema-escuro" data-i18n-attr="alt:nav.logoAlt">
       </a>
-      <h1>Entrar na plataforma</h1>
-      <p class="subtitulo">Plataforma de ensino alinhada à BNCC Computação</p>
+      <h1 data-i18n="loginPage.titulo">Entrar na plataforma</h1>
+      <p class="subtitulo" data-i18n="loginPage.subtitulo">Plataforma de ensino alinhada à BNCC Computação</p>
 
       <div id="alerta" class="alerta alerta-erro oculto" role="alert" aria-live="polite"></div>
 
@@ -40,27 +42,27 @@
               </div>
               <span class="badge-academico-recomendado">
                 <span class="material-symbols-outlined icon-xs" aria-hidden="true">verified</span>
-                Recomendado para Escolas
+                <span data-i18n="loginPage.recomendadoEscolas">Recomendado para Escolas</span>
               </span>
             </div>
 
-            <h2 class="login-card-titulo">Acesso com Conta Acadêmica</h2>
-            <p class="texto-suave login-card-desc">
+            <h2 class="login-card-titulo" data-i18n="loginPage.acadTitulo">Acesso com Conta Acadêmica</h2>
+            <p class="texto-suave login-card-desc" data-i18n="loginPage.acadDesc">
               Acesso direto para redes públicas e privadas parceiras sem necessidade de senha manual.
             </p>
 
             <ul class="lista-vantagens-academico">
               <li>
                 <span class="material-symbols-outlined icon-xs icon-check" aria-hidden="true">check_circle</span>
-                <span>Sem necessidade de cadastrar ou decorar senhas</span>
+                <span data-i18n="loginPage.vantagem1">Sem necessidade de cadastrar ou decorar senhas</span>
               </li>
               <li>
                 <span class="material-symbols-outlined icon-xs icon-check" aria-hidden="true">check_circle</span>
-                <span>Vínculo com domínios escolares (@*.edu.br, @*.gov.br)</span>
+                <span data-i18n="loginPage.vantagem2">Vínculo com domínios escolares (@*.edu.br, @*.gov.br)</span>
               </li>
               <li>
                 <span class="material-symbols-outlined icon-xs icon-check" aria-hidden="true">check_circle</span>
-                <span>Login rápido em 1 clique integrado ao Google Classroom</span>
+                <span data-i18n="loginPage.vantagem3">Login rápido em 1 clique integrado ao Google Classroom</span>
               </li>
             </ul>
           </div>
@@ -68,54 +70,54 @@
           <div class="mt-14">
             <div id="google-gis-btn-wrap" class="google-gis-btn-wrap mb-8">
               <div id="google-gis-container" class="google-gis-container mb-8"></div>
-              <button type="button" id="btn-login-google-academic" class="btn-google-academic btn-bloco" aria-label="Entrar com Google Acadêmico" onclick="acionarLoginGoogle()">
+              <button type="button" id="btn-login-google-academic" class="btn-google-academic btn-bloco" aria-label="Entrar com Google Acadêmico" data-i18n-aria-label="loginPage.entrarGoogleAria" onclick="acionarLoginGoogle()">
                 <svg class="google-g-icon" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                   <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                   <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
                   <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
                   <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
                 </svg>
-                <span>Entrar com Google Acadêmico</span>
+                <span data-i18n="loginPage.entrarGoogleBtn">Entrar com Google Acadêmico</span>
               </button>
             </div>
-            <p id="google-status-subtexto" class="texto-centro texto-suave google-status-subtexto">
+            <p id="google-status-subtexto" class="texto-centro texto-suave google-status-subtexto" data-i18n="loginPage.redesParceiras">
               Redes municipais, estaduais, federais e colégios parceiros
             </p>
           </div>
         </div>
 
         <div class="divisor-mobile-login" aria-hidden="true">
-          <span>ou com email e senha</span>
+          <span data-i18n="loginPage.divisor">ou com email e senha</span>
         </div>
 
         <!-- Card 2: Acesso Convencional -->
         <div class="card-login-convencional">
           <div>
-            <h2 class="login-card-titulo">Email e Senha</h2>
-            <p class="texto-suave login-card-desc-ampla">Para usuários com cadastro individual no LMS</p>
+            <h2 class="login-card-titulo" data-i18n="loginPage.convTitulo">Email e Senha</h2>
+            <p class="texto-suave login-card-desc-ampla" data-i18n="loginPage.convDesc">Para usuários com cadastro individual no LMS</p>
 
             <form id="form-login">
               <div class="form-grupo">
-                <label for="email">Email</label>
-                <input type="email" id="email" autocomplete="email" spellcheck="false" required placeholder="seuemail@escola.edu.br">
+                <label for="email" data-i18n="loginPage.emailLabel">Email</label>
+                <input type="email" id="email" autocomplete="email" spellcheck="false" required placeholder="seuemail@escola.edu.br" data-i18n-placeholder="loginPage.emailPlaceholder">
               </div>
               <div class="form-grupo">
-                <label for="senha">Senha</label>
+                <label for="senha" data-i18n="loginPage.senhaLabel">Senha</label>
                 <input type="password" id="senha" autocomplete="current-password" required placeholder="••••••••">
               </div>
-              <button type="submit" id="btn-submit" class="btn btn-primario btn-bloco">Entrar</button>
+              <button type="submit" id="btn-submit" class="btn btn-primario btn-bloco" data-i18n="nav.entrar">Entrar</button>
             </form>
           </div>
 
           <div class="mt-18">
             <p class="texto-centro mt-10 texto-suave">
-              Não tem conta? <a href="/registrar.html" class="link-destaque">Criar conta</a>
+              <span data-i18n="loginPage.semConta">Não tem conta?</span> <a href="/registrar.html" class="link-destaque" data-i18n="nav.criarConta">Criar conta</a>
             </p>
             <p class="texto-centro mt-8 texto-suave">
-              <a href="/" class="link-destaque flex-inline-icon flex-centro"><span class="material-symbols-outlined icon-xs" aria-hidden="true">arrow_back</span> Voltar à página inicial</a>
+              <a href="/" class="link-destaque flex-inline-icon flex-centro"><span class="material-symbols-outlined icon-xs" aria-hidden="true">arrow_back</span> <span data-i18n="loginPage.voltarInicio">Voltar à página inicial</span></a>
             </p>
             <p class="texto-centro mt-8 texto-suave texto-nota-auth">
-              <a href="/terms.html" class="link-destaque">Termos de Serviço</a> · <a href="/privacy.html" class="link-destaque">Privacidade (LGPD)</a>
+              <a href="/terms.html" class="link-destaque" data-i18n="loginPage.termos">Termos de Serviço</a> · <a href="/privacy.html" class="link-destaque" data-i18n="loginPage.privacidade">Privacidade (LGPD)</a>
             </p>
           </div>
         </div>
@@ -134,9 +136,9 @@
             <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
             <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
           </svg>
-          <strong id="titulo-modal-google" class="modal-google-titulo">Acesso Institucional Google</strong>
+          <strong id="titulo-modal-google" class="modal-google-titulo" data-i18n="loginPage.modalTitulo">Acesso Institucional Google</strong>
         </div>
-        <button type="button" class="btn btn-xs btn-neutro" onclick="fecharModalGoogle()" aria-label="Fechar janela">Fechar</button>
+        <button type="button" class="btn btn-xs btn-neutro" onclick="fecharModalGoogle()" aria-label="Fechar janela" data-i18n="loginPage.fechar" data-i18n-aria-label="loginPage.fecharJanelaAria">Fechar</button>
       </div>
 
       <!-- Container do botão nativo do Google GIS no modal quando configurado -->
@@ -146,30 +148,30 @@
       <div id="banner-config-cloudflare" class="google-config-banner">
         <div class="flex-linha gap-8 mb-6">
           <span class="material-symbols-outlined icon-xs text-primaria" aria-hidden="true">tune</span>
-          <strong class="google-config-titulo">Integração Google Console Pendente</strong>
+          <strong class="google-config-titulo" data-i18n="loginPage.configTitulo">Integração Google Console Pendente</strong>
         </div>
-        <p class="texto-suave mb-6 google-config-desc">
+        <p class="texto-suave mb-6 google-config-desc" data-i18n="loginPage.configDesc">
           Para ativar o login do Google em 1 clique na Cloudflare com verificação criptográfica, configure o secret e utilize Email e Senha enquanto isso:
         </p>
         <code class="codigo-secret-cmd">npx wrangler secret put GOOGLE_CLIENT_ID</code>
       </div>
 
       <div id="bloco-google-simulado" hidden>
-        <p class="texto-suave mb-14 texto-nota-auth">
+        <p class="texto-suave mb-14 texto-nota-auth" data-i18n="loginPage.simuladoDesc">
           Informe seu e-mail escolar institucional para validar acesso em modo de desenvolvimento local:
         </p>
 
         <form id="form-google-custom" onsubmit="event.preventDefault(); submeterEmailCustomGoogle();">
           <div class="form-grupo mb-12">
-            <label for="input-email-google-custom" class="label-email-google">E-mail Institucional</label>
-            <input type="email" id="input-email-google-custom" placeholder="seu.nome@escola.edu.br" required spellcheck="false" autocomplete="email">
-            <small class="texto-suave hint-email-google">
+            <label for="input-email-google-custom" class="label-email-google" data-i18n="loginPage.simuladoLabel">E-mail Institucional</label>
+            <input type="email" id="input-email-google-custom" placeholder="seu.nome@escola.edu.br" data-i18n-placeholder="loginPage.simuladoPlaceholder" required spellcheck="false" autocomplete="email">
+            <small class="texto-suave hint-email-google" data-i18n="loginPage.simuladoHint">
               Aceita domínios @*.edu.br, @*.gov.br, @*.sp.gov.br e redes conveniadas.
             </small>
           </div>
           <button type="submit" id="btn-submit-google-custom" class="btn btn-primario btn-bloco flex-inline-icon flex-centro">
             <span class="material-symbols-outlined icon-xs" aria-hidden="true">login</span>
-            <span>Acessar com Email Acadêmico</span>
+            <span id="btn-submit-google-custom-label" data-i18n="loginPage.acessarModalBtn">Acessar com Email Acadêmico</span>
           </button>
         </form>
       </div>
@@ -179,7 +181,12 @@
   <script src="/js/config.js"></script>
   <script src="/js/api.js"></script>
   <script type="module" src="/js/icones-universais.js"></script>
-  <script>
+  <script type="module">
+    import { t, traduzirDocumento, montarSeletorIdioma } from '/js/i18n.js';
+
+    traduzirDocumento();
+    montarSeletorIdioma(document.getElementById('auth-seletor-idioma'));
+
     const usuarioLogado = obterToken() ? obterUsuario() : null;
     if (usuarioLogado) {
       window.location.href = usuarioLogado.perfil === 'aluno' ? '/cursos.html' : '/dashboard.html';
@@ -207,7 +214,7 @@
         if (banner) banner.style.display = 'block';
         if (blocoSimulado) blocoSimulado.hidden = !authConfig.googleSimuladoAtivo;
         if (!authConfig.googleSimuladoAtivo && subtexto) {
-          subtexto.textContent = 'Login Google requer GOOGLE_CLIENT_ID configurado; utilize Email e Senha ao lado.';
+          subtexto.textContent = t('loginPage.semClientIdSubtexto');
         }
         return;
       }
@@ -363,12 +370,13 @@
       const input = document.getElementById('input-email-google-custom');
       const email = input.value.trim();
       const btn = document.getElementById('btn-submit-google-custom');
+      const btnRotulo = document.getElementById('btn-submit-google-custom-label');
       const alertaEl = document.getElementById('alerta');
       alertaEl.classList.add('oculto');
 
       try {
         btn.disabled = true;
-        btn.textContent = 'Autenticando…';
+        if (btnRotulo) btnRotulo.textContent = t('loginPage.autenticando');
         const resposta = await api('/auth/google', {
           method: 'POST',
           body: JSON.stringify({ email, academico: true }),
@@ -377,13 +385,20 @@
         window.location.href = resposta.usuario.perfil === 'aluno' ? '/cursos.html' : '/dashboard.html';
       } catch (err) {
         btn.disabled = false;
-        btn.textContent = 'Acessar com esta conta';
+        if (btnRotulo) btnRotulo.textContent = t('loginPage.acessarModalBtn');
         fecharModalGoogle();
         alertaEl.textContent = err.message;
         alertaEl.classList.remove('oculto');
       }
     }
     window.submeterEmailCustomGoogle = submeterEmailCustomGoogle;
+
+    window.addEventListener('lms:idioma-alterado', () => {
+      const subtexto = document.getElementById('google-status-subtexto');
+      if (subtexto && !authConfig.googleConfigurado && !authConfig.googleSimuladoAtivo) {
+        subtexto.textContent = t('loginPage.semClientIdSubtexto');
+      }
+    });
 
     // Formulário tradicional (Email e Senha)
     document.getElementById('form-login').addEventListener('submit', async (e) => {
@@ -397,7 +412,7 @@
 
       try {
         btnSubmit.disabled = true;
-        btnSubmit.textContent = 'Entrando…';
+        btnSubmit.textContent = t('loginPage.entrando');
         const resposta = await api('/auth/login', {
           method: 'POST',
           body: JSON.stringify({ email, senha }),
@@ -406,7 +421,7 @@
         window.location.href = resposta.usuario.perfil === 'aluno' ? '/cursos.html' : '/dashboard.html';
       } catch (err) {
         btnSubmit.disabled = false;
-        btnSubmit.textContent = 'Entrar';
+        btnSubmit.textContent = t('nav.entrar');
         alertaEl.textContent = err.message;
         alertaEl.classList.remove('oculto');
       }

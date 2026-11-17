@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Termos de Serviço — LMS COMPASSO</title>
-<meta name="description" content="Termos de Serviço e Condições de Uso do LMS COMPASSO: funcionalidades reais da BNCC Computação, perfis RBAC, licença MIT, planos institucionais e foro.">
+<meta name="i18n-title" content="terms.metaTitulo">
+<meta name="description" data-i18n-attr="content:terms.metaDesc" content="Termos de Serviço e Condições de Uso do LMS COMPASSO: funcionalidades reais da BNCC Computação, perfis RBAC, licença MIT, planos institucionais e foro.">
 <link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,129 +14,129 @@
 <link rel="stylesheet" href="/css/publico.css">
 </head>
 <body class="pagina-legal">
-  <a class="pular-conteudo" href="#conteudo">Pular para o conteúdo principal</a>
+  <a class="pular-conteudo" href="#conteudo" data-i18n="a11y.pularConteudo">Pular para o conteúdo principal</a>
 
   <header class="pub-topo">
     <div class="pub-container pub-topo-conteudo">
-      <a href="/" class="pub-logo" aria-label="LMS COMPASSO — página inicial">
-        <img src="/img/logo.svg" alt="LMS COMPASSO — BNCC Computação" width="272" height="64" class="logo-tema-claro">
-        <img src="/img/logo-branco.svg" alt="LMS COMPASSO — BNCC Computação" width="272" height="64" class="logo-tema-escuro">
+      <a href="/" class="pub-logo" aria-label="LMS COMPASSO — página inicial" data-i18n-aria-label="nav.logoAriaLabel">
+        <img src="/img/logo.svg" alt="LMS COMPASSO — BNCC Computação" data-i18n-attr="alt:nav.logoAlt" width="272" height="64" class="logo-tema-claro">
+        <img src="/img/logo-branco.svg" alt="LMS COMPASSO — BNCC Computação" data-i18n-attr="alt:nav.logoAlt" width="272" height="64" class="logo-tema-escuro">
       </a>
-      <nav class="pub-nav" aria-label="Navegação principal">
-        <a href="/"><span class="material-symbols-outlined icon-xs" aria-hidden="true">home</span> Início</a>
-        <a href="/atividades.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">format_list_numbered</span> Atividades</a>
-        <a href="/planos.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">credit_card</span> Planos</a>
-        <a href="/terms.html" aria-current="page"><span class="material-symbols-outlined icon-xs" aria-hidden="true">gavel</span> Termos de Serviço</a>
-        <a href="/privacy.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">shield</span> Privacidade (LGPD)</a>
+      <nav class="pub-nav" aria-label="Navegação principal" data-i18n-aria-label="nav.principalAriaLabel">
+        <a href="/"><span class="material-symbols-outlined icon-xs" aria-hidden="true">home</span> <span data-i18n="nav.inicio">Início</span></a>
+        <a href="/atividades.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">format_list_numbered</span> <span data-i18n="nav.atividades">Atividades</span></a>
+        <a href="/planos.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">credit_card</span> <span data-i18n="nav.planos">Planos</span></a>
+        <a href="/terms.html" aria-current="page"><span class="material-symbols-outlined icon-xs" aria-hidden="true">gavel</span> <span data-i18n="nav.termos">Termos de Serviço</span></a>
+        <a href="/privacy.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">shield</span> <span data-i18n="nav.privacidadeLgpd">Privacidade (LGPD)</span></a>
       </nav>
       <div class="pub-acoes">
-        <a href="/login.html" class="btn btn-contorno-escuro btn-sm flex-inline-icon"><span class="material-symbols-outlined icon-xs" aria-hidden="true">account_circle</span> Entrar</a>
-        <a href="/registrar.html" class="btn btn-primario btn-sm flex-inline-icon"><span class="material-symbols-outlined icon-xs" aria-hidden="true">person_add</span> Criar conta</a>
+        <a href="/login.html" class="btn btn-contorno-escuro btn-sm flex-inline-icon" id="acao-entrar"><span class="material-symbols-outlined icon-xs" aria-hidden="true">account_circle</span> <span data-i18n="nav.entrar">Entrar</span></a>
+        <a href="/registrar.html" class="btn btn-primario btn-sm flex-inline-icon" id="acao-cadastrar"><span class="material-symbols-outlined icon-xs" aria-hidden="true">person_add</span> <span data-i18n="nav.criarConta">Criar conta</span></a>
       </div>
     </div>
   </header>
 
   <section class="legal-hero" aria-labelledby="titulo-termos">
     <div class="pub-container">
-      <nav class="legal-breadcrumb" aria-label="Você está aqui">
+      <nav class="legal-breadcrumb" aria-label="Você está aqui" data-i18n-aria-label="wf.voceEstaAqui">
         <ol>
-          <li><a href="/">Início</a></li>
+          <li><a href="/" data-i18n="wf.inicio">Início</a></li>
           <li aria-hidden="true">/</li>
-          <li aria-current="page"><strong>Termos de Serviço</strong></li>
+          <li aria-current="page"><strong data-i18n="terms.breadcrumbAtual">Termos de Serviço</strong></li>
         </ol>
       </nav>
-      <h1 id="titulo-termos">Termos de Serviço e Condições de Uso — LMS COMPASSO</h1>
-      <p class="texto-suave">
+      <h1 id="titulo-termos" data-i18n="terms.heroTitulo">Termos de Serviço e Condições de Uso — LMS COMPASSO</h1>
+      <p class="texto-suave" data-i18n="terms.heroDesc">
         Condições transparentes sobre o funcionamento da plataforma educacional, responsabilidades de conta, Licença MIT, planos gratuitos e contratação pública.
       </p>
       <div class="legal-meta">
-        <span class="legal-badge"><span class="material-symbols-outlined icon-xs" aria-hidden="true">event</span> Atualizado em 16/11/2026</span>
-        <span class="legal-badge"><span class="material-symbols-outlined icon-xs" aria-hidden="true">code</span> Software Aberto · Licença MIT</span>
-        <span class="legal-badge"><span class="material-symbols-outlined icon-xs" aria-hidden="true">school</span> BNCC · Res. CNE 1/2022 e 2/2025</span>
+        <span class="legal-badge"><span class="material-symbols-outlined icon-xs" aria-hidden="true">event</span> <span data-i18n="terms.badgeAtualizado">Atualizado em 16/11/2026</span></span>
+        <span class="legal-badge"><span class="material-symbols-outlined icon-xs" aria-hidden="true">code</span> <span data-i18n="terms.badgeMit">Software Aberto · Licença MIT</span></span>
+        <span class="legal-badge"><span class="material-symbols-outlined icon-xs" aria-hidden="true">school</span> <span data-i18n="terms.badgeBncc">BNCC · Res. CNE 1/2022 e 2/2025</span></span>
       </div>
     </div>
   </section>
 
   <main id="conteudo" class="legal-main" tabindex="-1">
     <div class="pub-container legal-layout">
-      <aside class="legal-toc" aria-label="Sumário dos Termos de Serviço">
-        <h2>Índice Rápido</h2>
+      <aside class="legal-toc" aria-label="Sumário dos Termos de Serviço" data-i18n-aria-label="terms.tocAria">
+        <h2 data-i18n="legal.indiceRapido">Índice Rápido</h2>
         <ul>
-          <li><a href="#sec-objeto">1. Aceitação e Serviço Real</a></li>
-          <li><a href="#sec-perfis">2. Contas e Responsabilidades (RBAC)</a></li>
-          <li><a href="#sec-uso-aceitavel">3. Regras de Uso Aceitável</a></li>
-          <li><a href="#sec-pi">4. Propriedade Intelectual e MIT</a></li>
-          <li><a href="#sec-planos">5. Planos e Contratação Pública</a></li>
-          <li><a href="#sec-responsabilidade">6. Disponibilidade e Garantias</a></li>
-          <li><a href="#sec-foro">7. Alterações e Foro Aplicável</a></li>
+          <li><a href="#sec-objeto" data-i18n="terms.toc1">1. Aceitação e Serviço Real</a></li>
+          <li><a href="#sec-perfis" data-i18n="terms.toc2">2. Contas e Responsabilidades (RBAC)</a></li>
+          <li><a href="#sec-uso-aceitavel" data-i18n="terms.toc3">3. Regras de Uso Aceitável</a></li>
+          <li><a href="#sec-pi" data-i18n="terms.toc4">4. Propriedade Intelectual e MIT</a></li>
+          <li><a href="#sec-planos" data-i18n="terms.toc5">5. Planos e Contratação Pública</a></li>
+          <li><a href="#sec-responsabilidade" data-i18n="terms.toc6">6. Disponibilidade e Garantias</a></li>
+          <li><a href="#sec-foro" data-i18n="terms.toc7">7. Alterações e Foro Aplicável</a></li>
         </ul>
       </aside>
 
       <article class="legal-artigo">
         <section id="sec-objeto" aria-labelledby="h-objeto">
-          <h2 id="h-objeto">1. Aceitação e Descrição Exata do Serviço</h2>
+          <h2 id="h-objeto" data-i18n="terms.s1Titulo">1. Aceitação e Descrição Exata do Serviço</h2>
           <p>
-            Ao criar uma conta ou acessar os laboratórios públicos do <strong>LMS COMPASSO</strong>, você concorda com estes Termos de Serviço e com a <a href="/privacy.html">Política de Privacidade (LGPD)</a>. O sistema é composto pelos seguintes módulos reais em produção:
+            <span data-i18n-html="terms.s1Intro1">Ao criar uma conta ou acessar os laboratórios públicos do <strong>LMS COMPASSO</strong>, você concorda com estes Termos de Serviço e com a</span> <a href="/privacy.html" data-i18n="rodape.politicaPrivacidade">Política de Privacidade (LGPD)</a>. <span data-i18n="terms.s1Intro2">O sistema é composto pelos seguintes módulos reais em produção:</span>
           </p>
           <ul>
-            <li><strong>Trilhas e Cursos BNCC:</strong> Gestão de cursos, módulos e aulas (texto, vídeo, PDF e links) estruturados pelos 3 eixos da BNCC Computação (<em>Pensamento Computacional</em>, <em>Mundo Digital</em> e <em>Cultura Digital</em>).</li>
-            <li><strong>Atividades Interativas e Laboratório Python 3D:</strong> Sequenciamento de algoritmos, decomposição, programação em blocos e desafios 3D com Three.js e Pyodide WebAssembly, incluindo trabalho em dupla colaborativa (<em>piloto</em> e <em>navegador</em>).</li>
-            <li><strong>Simuladores Temáticos:</strong> Laboratório 3D de hardware, CPU e pacotes de rede (<code>/mundo-digital.html</code>) e simulador de cidadania digital, phishing e senhas (<code>/cultura-digital.html</code>).</li>
-            <li><strong>Avaliações, Gamificação e Certificados:</strong> Questionários avaliativos, medalhas BNCC, métricas por habilidade e certificados A4 com código público verificável.</li>
-            <li><strong>Gestão Pedagógica e Pesquisa SUS:</strong> Painel de indicadores, equilíbrio entre atividades desplugadas e plugadas (Resolução CNE nº 2/2025), exportação CSV e pesquisa de usabilidade SUS.</li>
+            <li data-i18n-html="terms.s1Li1"><strong>Trilhas e Cursos BNCC:</strong> Gestão de cursos, módulos e aulas (texto, vídeo, PDF e links) estruturados pelos 3 eixos da BNCC Computação (<em>Pensamento Computacional</em>, <em>Mundo Digital</em> e <em>Cultura Digital</em>).</li>
+            <li data-i18n-html="terms.s1Li2"><strong>Atividades Interativas e Laboratório Python 3D:</strong> Sequenciamento de algoritmos, decomposição, programação em blocos e desafios 3D com Three.js e Pyodide WebAssembly, incluindo trabalho em dupla colaborativa (<em>piloto</em> e <em>navegador</em>).</li>
+            <li data-i18n-html="terms.s1Li3"><strong>Simuladores Temáticos:</strong> Laboratório 3D de hardware, CPU e pacotes de rede (<code>/mundo-digital.html</code>) e simulador de cidadania digital, phishing e senhas (<code>/cultura-digital.html</code>).</li>
+            <li data-i18n-html="terms.s1Li4"><strong>Avaliações, Gamificação e Certificados:</strong> Questionários avaliativos, medalhas BNCC, métricas por habilidade e certificados A4 com código público verificável.</li>
+            <li data-i18n-html="terms.s1Li5"><strong>Gestão Pedagógica e Pesquisa SUS:</strong> Painel de indicadores, equilíbrio entre atividades desplugadas e plugadas (Resolução CNE nº 2/2025), exportação CSV e pesquisa de usabilidade SUS.</li>
           </ul>
         </section>
 
         <section id="sec-perfis" aria-labelledby="h-perfis">
-          <h2 id="h-perfis">2. Perfis de Acesso (RBAC) e Responsabilidades da Conta</h2>
-          <p>O acesso às rotas da plataforma é segregado por perfis cadastrados no banco D1:</p>
+          <h2 id="h-perfis" data-i18n="terms.s2Titulo">2. Perfis de Acesso (RBAC) e Responsabilidades da Conta</h2>
+          <p data-i18n="terms.s2Intro">O acesso às rotas da plataforma é segregado por perfis cadastrados no banco D1:</p>
           <ul>
-            <li><strong>Aluno (<code>aluno</code>):</strong> Perfil padrão de novos cadastros. Permite matrícula em cursos publicados, progresso em aulas, resposta a avaliações dentro do limite de tentativas e emissão de certificados após cumprir 100% das aulas e aprovação nas avaliações vinculadas.</li>
-            <li><strong>Instrutor (<code>instrutor</code>):</strong> Pode criar e editar exclusivamente seus próprios cursos, módulos, aulas, avaliações e acompanhar os estudantes matriculados nas suas turmas.</li>
-            <li><strong>Administrador (<code>administrador</code>):</strong> Gerencia usuários, perfis, redefinições de senha e supervisão global da instância escolar.</li>
+            <li data-i18n-html="terms.s2Li1"><strong>Aluno (<code>aluno</code>):</strong> Perfil padrão de novos cadastros. Permite matrícula em cursos publicados, progresso em aulas, resposta a avaliações dentro do limite de tentativas e emissão de certificados após cumprir 100% das aulas e aprovação nas avaliações vinculadas.</li>
+            <li data-i18n-html="terms.s2Li2"><strong>Instrutor (<code>instrutor</code>):</strong> Pode criar e editar exclusivamente seus próprios cursos, módulos, aulas, avaliações e acompanhar os estudantes matriculados nas suas turmas.</li>
+            <li data-i18n-html="terms.s2Li3"><strong>Administrador (<code>administrador</code>):</strong> Gerencia usuários, perfis, redefinições de senha e supervisão global da instância escolar.</li>
           </ul>
-          <p>
+          <p data-i18n="terms.s2Fim">
             O usuário compromete-se a manter suas credenciais em sigilo e notificar a administração escolar em caso de acesso não autorizado.
           </p>
         </section>
 
         <section id="sec-uso-aceitavel" aria-labelledby="h-uso-aceitavel">
-          <h2 id="h-uso-aceitavel">3. Regras de Uso Aceitável</h2>
-          <p>É proibido:</p>
+          <h2 id="h-uso-aceitavel" data-i18n="terms.s3Titulo">3. Regras de Uso Aceitável</h2>
+          <p data-i18n="terms.s3Intro">É proibido:</p>
           <ol>
-            <li>Explorar vulnerabilidades, automatizar ataques de força bruta, tentar adulterar notas ou enviar payloads de injeção (XSS, SQLi ou fórmulas CSV maliciosas);</li>
-            <li>Publicar conteúdos ilícitos, ofensivos ou que violem direitos autorais de terceiros;</li>
-            <li>Utilizar ferramentas automatizadas de raspagem ou sobrecarregar intencionalmente os endpoints do Cloudflare Worker;</li>
-            <li>Personificar docentes, coordenadores ou administradores escolares.</li>
+            <li data-i18n="terms.s3Li1">Explorar vulnerabilidades, automatizar ataques de força bruta, tentar adulterar notas ou enviar payloads de injeção (XSS, SQLi ou fórmulas CSV maliciosas);</li>
+            <li data-i18n="terms.s3Li2">Publicar conteúdos ilícitos, ofensivos ou que violem direitos autorais de terceiros;</li>
+            <li data-i18n="terms.s3Li3">Utilizar ferramentas automatizadas de raspagem ou sobrecarregar intencionalmente os endpoints do Cloudflare Worker;</li>
+            <li data-i18n="terms.s3Li4">Personificar docentes, coordenadores ou administradores escolares.</li>
           </ol>
         </section>
 
         <section id="sec-pi" aria-labelledby="h-pi">
-          <h2 id="h-pi">4. Propriedade Intelectual e Licença MIT</h2>
-          <p>
+          <h2 id="h-pi" data-i18n="terms.s4Titulo">4. Propriedade Intelectual e Licença MIT</h2>
+          <p data-i18n-html="terms.s4Texto">
             O código-fonte do <strong>LMS COMPASSO</strong> é licenciado sob a <strong>Licença MIT</strong>. Os códigos Python, respostas e produções pedagógicas inseridos na plataforma pertencem aos respectivos estudantes, professores e instituições de ensino usuárias.
           </p>
         </section>
 
         <section id="sec-planos" aria-labelledby="h-planos">
-          <h2 id="h-planos">5. Planos Gratuitos, Assinaturas e Contratação Pública</h2>
+          <h2 id="h-planos" data-i18n="terms.s5Titulo">5. Planos Gratuitos, Assinaturas e Contratação Pública</h2>
           <ul>
-            <li><strong>Assinatura Gratuita:</strong> Acesso aberto às atividades públicas e uso institucional gratuito para até <strong>200 alunos</strong> conforme descrito em <a href="/planos.html">Planos &amp; Assinaturas</a>.</li>
-            <li><strong>Planos Escaláveis &amp; Contratação Pública:</strong> Redes de ensino e órgãos públicos podem contratar maior capacidade de alunos, armazenamento D1 e suporte via <strong>Dispensa de Licitação</strong> (Art. 75, II da Lei nº 14.133/2021) ou <strong>Marco Legal das Startups</strong> (LC nº 182/2021).</li>
-            <li><strong>Cancelamento e Portabilidade:</strong> O encerramento de vínculo ou cancelamento de matrícula pode ser feito a qualquer momento, com garantia de exportação dos registros acadêmicos em JSON ou CSV.</li>
+            <li><span data-i18n-html="terms.s5Li1Prefixo"><strong>Assinatura Gratuita:</strong> Acesso aberto às atividades públicas e uso institucional gratuito para até <strong>200 alunos</strong> conforme descrito em</span> <a href="/planos.html" data-i18n="rodape.planosAssinaturas">Planos &amp; Assinaturas</a>.</li>
+            <li data-i18n-html="terms.s5Li2"><strong>Planos Escaláveis &amp; Contratação Pública:</strong> Redes de ensino e órgãos públicos podem contratar maior capacidade de alunos, armazenamento D1 e suporte via <strong>Dispensa de Licitação</strong> (Art. 75, II da Lei nº 14.133/2021) ou <strong>Marco Legal das Startups</strong> (LC nº 182/2021).</li>
+            <li data-i18n-html="terms.s5Li3"><strong>Cancelamento e Portabilidade:</strong> O encerramento de vínculo ou cancelamento de matrícula pode ser feito a qualquer momento, com garantia de exportação dos registros acadêmicos em JSON ou CSV.</li>
           </ul>
         </section>
 
         <section id="sec-responsabilidade" aria-labelledby="h-responsabilidade">
-          <h2 id="h-responsabilidade">6. Disponibilidade e Limitação de Responsabilidade</h2>
-          <p>
+          <h2 id="h-responsabilidade" data-i18n="terms.s6Titulo">6. Disponibilidade e Limitação de Responsabilidade</h2>
+          <p data-i18n-html="terms.s6Texto">
             Para contratos institucionais gerenciados, a infraestrutura em Cloudflare Workers e D1 adota meta operacional de <strong>99,9% de disponibilidade</strong>. No uso gratuito e comunitário sob Licença MIT, o software é fornecido no estado em que se encontra (<em>as is</em>), cabendo à instituição escolar a validação pedagógica oficial de diários e históricos.
           </p>
         </section>
 
         <section id="sec-foro" aria-labelledby="h-foro">
-          <h2 id="h-foro">7. Alterações e Foro Aplicável</h2>
-          <p>
+          <h2 id="h-foro" data-i18n="terms.s7Titulo">7. Alterações e Foro Aplicável</h2>
+          <p data-i18n-html="terms.s7Texto">
             Estes Termos podem ser atualizados para acompanhar evoluções do projeto e normas da BNCC/CNE. Aplica-se a legislação brasileira, com eleição do foro da <strong>Comarca de Grajaú, Estado do Maranhão</strong> (sede do IFMA Campus Grajaú), ressalvadas as prerrogativas legais de domicílio do usuário quando cabíveis.
           </p>
         </section>
@@ -147,28 +148,28 @@
     <div class="pub-container">
       <div class="pub-rodape-grade">
         <div>
-          <img src="/img/logo-branco.svg" alt="LMS COMPASSO — BNCC Computação" width="272" height="64">
-          <p>Plataforma aberta para o ensino de Computação no Ensino Fundamental, alinhada à BNCC Computação.</p>
+          <img src="/img/logo-branco.svg" alt="LMS COMPASSO — BNCC Computação" data-i18n-attr="alt:nav.logoAlt" width="272" height="64">
+          <p data-i18n="rodape.descricao">Plataforma aberta para o ensino de Computação no Ensino Fundamental, alinhada à BNCC Computação.</p>
         </div>
         <nav aria-labelledby="rodape-plataforma">
-          <h3 id="rodape-plataforma">Plataforma</h3>
+          <h3 id="rodape-plataforma" data-i18n="rodape.plataforma">Plataforma</h3>
           <ul>
-            <li><a href="/">Início</a></li>
-            <li><a href="/atividades.html">Atividades dinâmicas</a></li>
-            <li><a href="/planos.html">Planos &amp; Assinaturas</a></li>
-            <li><a href="/login.html">Entrar</a></li>
+            <li><a href="/" data-i18n="wf.inicio">Início</a></li>
+            <li><a href="/atividades.html" data-i18n="rodape.atividadesDinamicas">Atividades dinâmicas</a></li>
+            <li><a href="/planos.html" data-i18n="rodape.planosAssinaturas">Planos &amp; Assinaturas</a></li>
+            <li><a href="/login.html" data-i18n="nav.entrar">Entrar</a></li>
           </ul>
         </nav>
         <nav aria-labelledby="rodape-legal">
-          <h3 id="rodape-legal">Governança &amp; Legal</h3>
+          <h3 id="rodape-legal" data-i18n="rodape.governancaLegal">Governança &amp; Legal</h3>
           <ul>
-            <li><a href="/terms.html">Termos de Serviço</a></li>
-            <li><a href="/privacy.html">Política de Privacidade (LGPD)</a></li>
-            <li><a href="https://github.com/LMS-COMPASSO/lms/blob/main/LICENSE" rel="noopener">Licença MIT</a></li>
+            <li><a href="/terms.html" data-i18n="nav.termos">Termos de Serviço</a></li>
+            <li><a href="/privacy.html" data-i18n="rodape.politicaPrivacidade">Política de Privacidade (LGPD)</a></li>
+            <li><a href="https://github.com/LMS-COMPASSO/lms/blob/main/LICENSE" rel="noopener" data-i18n="rodape.licenca">Licença MIT</a></li>
           </ul>
         </nav>
       </div>
-      <p class="pub-rodape-fim">
+      <p class="pub-rodape-fim" data-i18n="rodape.fim">
         Projeto de Inovação SUAP/IFMA nº 14246/2025 · Startup LMS COMPASSO · IFMA Campus Grajaú.
       </p>
     </div>

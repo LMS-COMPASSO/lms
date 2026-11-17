@@ -225,28 +225,42 @@ export function renderizarIcone(idOuEmoji, opcoes = {}) {
   return h('span', { class: classes, 'aria-hidden': 'true' }, info.icone);
 }
 
+const CHAVES_TEXTO_POR_SIMBOLO = {
+  '#': [
+    [['poça'], 'obstaculo-poca'],
+    [['obra'], 'obstaculo-obra'],
+    [['pedra'], 'obstaculo-pedra'],
+  ],
+  M: [
+    [['portão'], 'meta-portao'],
+  ],
+  I: [
+    [['mochila'], 'item-mochila'],
+    [['merenda'], 'item-merenda'],
+    [['padaria', 'pão'], 'item-padaria'],
+    [['planta', 'alface'], 'item-planta'],
+    [['guarda-chuva'], 'item-guarda-chuva'],
+    [['galochas'], 'item-galochas'],
+  ],
+};
+
+function textoContemAlgum(texto, palavras) {
+  return Boolean(texto && palavras.some((palavra) => texto.includes(palavra)));
+}
+
 /**
  * Renderiza o ícone temático de uma célula da grade do robô
  */
 export function renderizarIconeCelula(simbolo, tema = {}) {
-  let chave = simbolo;
-  if (simbolo === '#') {
-    if (tema.nomeObstaculo?.includes('poça')) chave = 'obstaculo-poca';
-    else if (tema.nomeObstaculo?.includes('obra')) chave = 'obstaculo-obra';
-    else if (tema.nomeObstaculo?.includes('pedra')) chave = 'obstaculo-pedra';
-    else chave = '#';
-  } else if (simbolo === 'M') {
-    if (tema.nomeMeta?.includes('portão')) chave = 'meta-portao';
-    else chave = 'M';
-  } else if (simbolo === 'I') {
-    if (tema.nomeItem?.includes('mochila')) chave = 'item-mochila';
-    else if (tema.nomeItem?.includes('merenda')) chave = 'item-merenda';
-    else if (tema.nomeItem?.includes('padaria') || tema.nomeItem?.includes('pão')) chave = 'item-padaria';
-    else if (tema.nomeItem?.includes('planta') || tema.nomeItem?.includes('alface')) chave = 'item-planta';
-    else if (tema.nomeItem?.includes('guarda-chuva')) chave = 'item-guarda-chuva';
-    else if (tema.nomeItem?.includes('galochas')) chave = 'item-galochas';
-    else chave = 'I';
-  }
+  const textosPorSimbolo = {
+    '#': tema._rawObstaculo || tema.nomeObstaculo,
+    M: tema._rawMeta || tema.nomeMeta,
+    I: tema._rawItem || tema.nomeItem,
+  };
+  const regras = CHAVES_TEXTO_POR_SIMBOLO[simbolo] || [];
+  const textoAlvo = textosPorSimbolo[simbolo];
+  const encontrada = regras.find(([palavras]) => textoContemAlgum(textoAlvo, palavras));
+  const chave = encontrada ? encontrada[1] : simbolo;
 
   return renderizarIcone(chave, { classe: 'atv-celula-glyph' });
 }

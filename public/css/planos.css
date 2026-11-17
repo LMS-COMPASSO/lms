@@ -1063,17 +1063,20 @@ body[data-tema="escuro"] .cartao.planos-resumo-box {
   .planos-topo-conteudo {
     padding: 10px 12px;
     gap: 8px;
+    flex-wrap: wrap;
   }
 
   .planos-topo .pub-logo img {
-    height: 32px;
+    height: 30px;
     width: auto;
-    max-width: 136px;
+    max-width: 112px;
   }
 
   .planos-topo-acoes {
     gap: 6px;
     min-width: 0;
+    flex-wrap: wrap;
+    max-width: 100%;
   }
 
   .planos-topo-acoes .btn {

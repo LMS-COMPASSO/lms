@@ -158,9 +158,9 @@ test.describe('Piloto de Alunos — Simulação de Campo em Android de Entrada (
       await radio.check({ force: true });
     }
 
-    // Verifica cálculo psicométrico em tempo real (100.0 pontos para respostas perfeitas)
+    // Verifica cálculo psicométrico em tempo real (100,0 em pt-BR via Intl.NumberFormat)
     const scoreCalculado = page.locator('#previa-sus-score');
-    await expect(scoreCalculado).toHaveText('100.0');
+    await expect(scoreCalculado).toHaveText('100,0');
 
     // Preenchimento de dados de identificação do participante
     await page.fill('#nome-participante', 'Estudante Piloto Android');

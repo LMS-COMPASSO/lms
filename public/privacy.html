@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Política de Privacidade e LGPD — LMS COMPASSO</title>
-<meta name="description" content="Política de Privacidade do LMS COMPASSO em conformidade com a LGPD (Lei nº 13.709/2018) e GDPR: dados mapeados, subprocessadores, armazenamento local e direitos do titular.">
+<meta name="i18n-title" content="priv.metaTitulo">
+<meta name="description" data-i18n-attr="content:priv.metaDesc" content="Política de Privacidade do LMS COMPASSO em conformidade com a LGPD (Lei nº 13.709/2018) e GDPR: dados mapeados, subprocessadores, armazenamento local e direitos do titular.">
 <link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,139 +14,146 @@
 <link rel="stylesheet" href="/css/publico.css">
 </head>
 <body class="pagina-legal">
-  <a class="pular-conteudo" href="#conteudo">Pular para o conteúdo principal</a>
+  <a class="pular-conteudo" href="#conteudo" data-i18n="a11y.pularConteudo">Pular para o conteúdo principal</a>
 
   <header class="pub-topo">
     <div class="pub-container pub-topo-conteudo">
-      <a href="/" class="pub-logo" aria-label="LMS COMPASSO — página inicial">
-        <img src="/img/logo.svg" alt="LMS COMPASSO — BNCC Computação" width="272" height="64" class="logo-tema-claro">
-        <img src="/img/logo-branco.svg" alt="LMS COMPASSO — BNCC Computação" width="272" height="64" class="logo-tema-escuro">
+      <a href="/" class="pub-logo" aria-label="LMS COMPASSO — página inicial" data-i18n-aria-label="nav.logoAriaLabel">
+        <img src="/img/logo.svg" alt="LMS COMPASSO — BNCC Computação" data-i18n-attr="alt:nav.logoAlt" width="272" height="64" class="logo-tema-claro">
+        <img src="/img/logo-branco.svg" alt="LMS COMPASSO — BNCC Computação" data-i18n-attr="alt:nav.logoAlt" width="272" height="64" class="logo-tema-escuro">
       </a>
-      <nav class="pub-nav" aria-label="Navegação principal">
-        <a href="/"><span class="material-symbols-outlined icon-xs" aria-hidden="true">home</span> Início</a>
-        <a href="/atividades.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">format_list_numbered</span> Atividades</a>
-        <a href="/planos.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">credit_card</span> Planos</a>
-        <a href="/terms.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">gavel</span> Termos de Serviço</a>
-        <a href="/privacy.html" aria-current="page"><span class="material-symbols-outlined icon-xs" aria-hidden="true">shield</span> Privacidade (LGPD)</a>
+      <nav class="pub-nav" aria-label="Navegação principal" data-i18n-aria-label="nav.principalAriaLabel">
+        <a href="/"><span class="material-symbols-outlined icon-xs" aria-hidden="true">home</span> <span data-i18n="nav.inicio">Início</span></a>
+        <a href="/atividades.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">format_list_numbered</span> <span data-i18n="nav.atividades">Atividades</span></a>
+        <a href="/planos.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">credit_card</span> <span data-i18n="nav.planos">Planos</span></a>
+        <a href="/terms.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">gavel</span> <span data-i18n="nav.termos">Termos de Serviço</span></a>
+        <a href="/privacy.html" aria-current="page"><span class="material-symbols-outlined icon-xs" aria-hidden="true">shield</span> <span data-i18n="nav.privacidadeLgpd">Privacidade (LGPD)</span></a>
       </nav>
       <div class="pub-acoes">
-        <a href="/login.html" class="btn btn-contorno-escuro btn-sm flex-inline-icon"><span class="material-symbols-outlined icon-xs" aria-hidden="true">account_circle</span> Entrar</a>
-        <a href="/registrar.html" class="btn btn-primario btn-sm flex-inline-icon"><span class="material-symbols-outlined icon-xs" aria-hidden="true">person_add</span> Criar conta</a>
+        <a href="/login.html" class="btn btn-contorno-escuro btn-sm flex-inline-icon" id="acao-entrar"><span class="material-symbols-outlined icon-xs" aria-hidden="true">account_circle</span> <span data-i18n="nav.entrar">Entrar</span></a>
+        <a href="/registrar.html" class="btn btn-primario btn-sm flex-inline-icon" id="acao-cadastrar"><span class="material-symbols-outlined icon-xs" aria-hidden="true">person_add</span> <span data-i18n="nav.criarConta">Criar conta</span></a>
       </div>
     </div>
   </header>
 
   <section class="legal-hero" aria-labelledby="titulo-privacidade">
     <div class="pub-container">
-      <nav class="legal-breadcrumb" aria-label="Você está aqui">
+      <nav class="legal-breadcrumb" aria-label="Você está aqui" data-i18n-aria-label="wf.voceEstaAqui">
         <ol>
-          <li><a href="/">Início</a></li>
+          <li><a href="/" data-i18n="wf.inicio">Início</a></li>
           <li aria-hidden="true">/</li>
-          <li aria-current="page"><strong>Política de Privacidade</strong></li>
+          <li aria-current="page"><strong data-i18n="priv.breadcrumbAtual">Política de Privacidade</strong></li>
         </ol>
       </nav>
-      <h1 id="titulo-privacidade">Política de Privacidade — LMS COMPASSO</h1>
-      <p class="texto-suave">
+      <h1 id="titulo-privacidade" data-i18n="priv.heroTitulo">Política de Privacidade — LMS COMPASSO</h1>
+      <p class="texto-suave" data-i18n-html="priv.heroDesc">
         Documento elaborado a partir do mapeamento técnico real do banco de dados Cloudflare D1, rotas Serverless e armazenamento local, em conformidade com a <strong>LGPD (Lei nº 13.709/2018)</strong> e o <strong>GDPR</strong>.
       </p>
       <div class="legal-meta">
-        <span class="legal-badge"><span class="material-symbols-outlined icon-xs" aria-hidden="true">event</span> Atualizada em 16/11/2026</span>
-        <span class="legal-badge"><span class="material-symbols-outlined icon-xs" aria-hidden="true">child_care</span> Proteção Escolar (Art. 14 LGPD)</span>
-        <span class="legal-badge"><span class="material-symbols-outlined icon-xs" aria-hidden="true">cookie_off</span> Zero Cookies de Rastreamento</span>
+        <span class="legal-badge"><span class="material-symbols-outlined icon-xs" aria-hidden="true">event</span> <span data-i18n="priv.badgeAtualizada">Atualizada em 16/11/2026</span></span>
+        <span class="legal-badge"><span class="material-symbols-outlined icon-xs" aria-hidden="true">child_care</span> <span data-i18n="priv.badgeEscolar">Proteção Escolar (Art. 14 LGPD)</span></span>
+        <span class="legal-badge"><span class="material-symbols-outlined icon-xs" aria-hidden="true">cookie_off</span> <span data-i18n="priv.badgeCookies">Zero Cookies de Rastreamento</span></span>
       </div>
     </div>
   </section>
 
   <main id="conteudo" class="legal-main" tabindex="-1">
     <div class="pub-container legal-layout">
-      <aside class="legal-toc" aria-label="Sumário da Política de Privacidade">
-        <h2>Índice Rápido</h2>
+      <aside class="legal-toc" aria-label="Sumário da Política de Privacidade" data-i18n-aria-label="priv.tocAria">
+        <h2 data-i18n="legal.indiceRapido">Índice Rápido</h2>
         <ul>
-          <li><a href="#sec-compromisso">1. Compromisso e Minimização</a></li>
-          <li><a href="#sec-quadro-dados">2. Quadro de Dados x Finalidade x Base Legal</a></li>
-          <li><a href="#sec-subprocessadores">3. Subprocessadores e Terceiros</a></li>
-          <li><a href="#sec-armazenamento">4. Armazenamento Local e Cookies</a></li>
-          <li><a href="#sec-seguranca">5. Segurança e Criptografia</a></li>
-          <li><a href="#sec-direitos">6. Direitos do Titular (Art. 18 LGPD)</a></li>
-          <li><a href="#sec-internacional">7. Transferência Internacional</a></li>
-          <li><a href="#sec-dpo">8. Encarregado (DPO) e Contato</a></li>
+          <li><a href="#sec-compromisso" data-i18n="priv.toc1">1. Compromisso e Minimização</a></li>
+          <li><a href="#sec-quadro-dados" data-i18n="priv.toc2">2. Quadro de Dados x Finalidade x Base Legal</a></li>
+          <li><a href="#sec-subprocessadores" data-i18n="priv.toc3">3. Subprocessadores e Terceiros</a></li>
+          <li><a href="#sec-armazenamento" data-i18n="priv.toc4">4. Armazenamento Local e Cookies</a></li>
+          <li><a href="#sec-seguranca" data-i18n="priv.toc5">5. Segurança e Criptografia</a></li>
+          <li><a href="#sec-direitos" data-i18n="priv.toc6">6. Direitos do Titular (Art. 18 LGPD)</a></li>
+          <li><a href="#sec-internacional" data-i18n="priv.toc7">7. Transferência Internacional</a></li>
+          <li><a href="#sec-dpo" data-i18n="priv.toc8">8. Encarregado (DPO) e Contato</a></li>
         </ul>
       </aside>
 
       <article class="legal-artigo">
         <section id="sec-compromisso" aria-labelledby="h-compromisso">
-          <h2 id="h-compromisso">1. Compromisso e Princípio da Minimização</h2>
-          <p>
+          <h2 id="h-compromisso" data-i18n="priv.s1Titulo">1. Compromisso e Princípio da Minimização</h2>
+          <p data-i18n-html="priv.s1Texto">
             O <strong>LMS COMPASSO</strong> (Projeto de Inovação SUAP/IFMA nº 14246/2025 — Startup LMS COMPASSO / IFMA Campus Grajaú) coleta estritamente os dados necessários para operacionalizar o ensino de Computação na Educação Básica alinhado à BNCC (Resolução CNE/CEB nº 1/2022 e Resolução CNE nº 2/2025).
           </p>
-          <div class="legal-destaque-box">
+          <div class="legal-destaque-box" data-i18n-html="priv.s1Destaque">
             <strong>Transparência Técnica:</strong> A plataforma bloqueia por cabeçalho HTTP (<code>Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()</code>) o acesso a câmera, microfone, GPS e pagamentos, não exibe publicidade e não vende nem compartilha dados de estudantes com corretores de dados.
           </div>
         </section>
 
         <section id="sec-quadro-dados" aria-labelledby="h-quadro-dados">
-          <h2 id="h-quadro-dados">2. Quadro Resumo: Dados Coletados × Finalidade × Base Legal (LGPD Art. 7º e 14)</h2>
-          <div class="legal-tabela-wrap">
+          <h2 id="h-quadro-dados" data-i18n="priv.s2Titulo">2. Quadro Resumo: Dados Coletados × Finalidade × Base Legal (LGPD Art. 7º e 14)</h2>
+          <div class="legal-tabela-wrap" role="region" aria-label="Quadro resumo de dados pessoais, finalidades e bases legais LGPD" data-i18n-aria-label="priv.tabelaAria">
             <table class="legal-tabela">
-              <caption>Mapeamento real das tabelas do banco Cloudflare D1 e memória volátil</caption>
+              <caption data-i18n="priv.tabelaCaption">Mapeamento real das tabelas do banco Cloudflare D1 e memória volátil</caption>
               <thead>
                 <tr>
-                  <th scope="col">Categoria / Tabela</th>
-                  <th scope="col">Dados Coletados</th>
-                  <th scope="col">Finalidade</th>
-                  <th scope="col">Base Legal (LGPD)</th>
-                  <th scope="col">Retenção</th>
+                  <th scope="col" data-i18n="priv.colCategoria">Categoria / Tabela</th>
+                  <th scope="col" data-i18n="priv.colDados">Dados Coletados</th>
+                  <th scope="col" data-i18n="priv.colFinalidade">Finalidade</th>
+                  <th scope="col" data-i18n="priv.colBaseLegal">Base Legal (LGPD)</th>
+                  <th scope="col" data-i18n="priv.colRetencao">Retenção</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td><strong>Conta e Acesso</strong><br><code>usuarios</code></td>
-                  <td>Nome, e-mail, hash PBKDF2-SHA256 da senha, perfil (<code>administrador</code>, <code>instrutor</code>, <code>aluno</code>), avatar opcional Google, status <code>ativo</code></td>
-                  <td>Autenticação, controle de acesso RBAC e emissão de histórico escolar</td>
-                  <td>Execução de contrato / Políticas públicas educacionais (Art. 7º, III e V; Art. 14)</td>
-                  <td>Enquanto a conta estiver ativa; desativação lógica ou exclusão sob pedido</td>
+                  <td data-i18n-html="priv.r1c1"><strong>Conta e Acesso</strong><br><code>usuarios</code></td>
+                  <td data-i18n-html="priv.r1c2">Nome, e-mail, hash PBKDF2-SHA256 da senha, perfil (<code>administrador</code>, <code>instrutor</code>, <code>aluno</code>), avatar opcional Google, status <code>ativo</code></td>
+                  <td data-i18n="priv.r1c3">Autenticação, controle de acesso RBAC e emissão de histórico escolar</td>
+                  <td data-i18n="priv.r1c4">Execução de contrato / Políticas públicas educacionais (Art. 7º, III e V; Art. 14)</td>
+                  <td data-i18n="priv.r1c5">Enquanto a conta estiver ativa; desativação lógica ou exclusão sob pedido</td>
                 </tr>
                 <tr>
-                  <td><strong>Acessibilidade</strong><br><code>preferencias_usuario</code></td>
-                  <td><code>alto_contraste</code>, <code>fonte_ampliada</code>, <code>reduzir_movimento</code>, <code>tema</code></td>
-                  <td>Sincronizar preferências WCAG 2.2 AA entre dispositivos da escola</td>
-                  <td>Execução de contrato / Inclusão digital (Art. 7º, V)</td>
-                  <td>Excluída em cascata (<code>ON DELETE CASCADE</code>) com a conta</td>
+                  <td data-i18n-html="priv.r2c1"><strong>Acessibilidade</strong><br><code>preferencias_usuario</code></td>
+                  <td data-i18n-html="priv.r2c2"><code>alto_contraste</code>, <code>fonte_ampliada</code>, <code>reduzir_movimento</code>, <code>tema</code></td>
+                  <td data-i18n="priv.r2c3">Sincronizar preferências WCAG 2.2 AA entre dispositivos da escola</td>
+                  <td data-i18n="priv.r2c4">Execução de contrato / Inclusão digital (Art. 7º, V)</td>
+                  <td data-i18n-html="priv.r2c5">Excluída em cascata (<code>ON DELETE CASCADE</code>) com a conta</td>
                 </tr>
                 <tr>
-                  <td><strong>Progresso e Notas</strong><br><code>matriculas</code>, <code>progresso_aulas</code>, <code>tentativas_avaliacao</code></td>
-                  <td>Vínculo curso/aluno, percentual concluído, notas, respostas, status</td>
-                  <td>Acompanhamento pedagógico, cálculo de tempo de tela e avaliações</td>
-                  <td>Execução de contrato e obrigação pedagógica (Art. 7º, II e V)</td>
-                  <td>Durante o ciclo escolar; <code>ON DELETE CASCADE</code> na exclusão</td>
+                  <td data-i18n-html="priv.r3c1"><strong>Progresso e Notas</strong><br><code>matriculas</code>, <code>progresso_aulas</code>, <code>tentativas_avaliacao</code></td>
+                  <td data-i18n="priv.r3c2">Vínculo curso/aluno, percentual concluído, notas, respostas, status</td>
+                  <td data-i18n="priv.r3c3">Acompanhamento pedagógico, cálculo de tempo de tela e avaliações</td>
+                  <td data-i18n="priv.r3c4">Execução de contrato e obrigação pedagógica (Art. 7º, II e V)</td>
+                  <td data-i18n-html="priv.r3c5">Durante o ciclo escolar; <code>ON DELETE CASCADE</code> na exclusão</td>
                 </tr>
                 <tr>
-                  <td><strong>Certificados e BNCC</strong><br><code>certificados</code>, <code>usuario_medalhas</code>, <code>desempenho_habilidades</code></td>
-                  <td>Código de validação, data de emissão, código BNCC (ex.: <code>EF05CO01</code>), pontuação</td>
-                  <td>Validação pública de certificados A4 e Diário Escolar CSV</td>
-                  <td>Cumprimento de obrigação e execução educacional (Art. 7º, II e V)</td>
-                  <td>Durante vínculo institucional; removida em exclusão definitiva</td>
+                  <td data-i18n-html="priv.r4c1"><strong>Certificados e BNCC</strong><br><code>certificados</code>, <code>usuario_medalhas</code>, <code>desempenho_habilidades</code></td>
+                  <td data-i18n-html="priv.r4c2">Código de validação, data de emissão, código BNCC (ex.: <code>EF05CO01</code>), pontuação</td>
+                  <td data-i18n="priv.r4c3">Validação pública de certificados A4 e Diário Escolar CSV</td>
+                  <td data-i18n="priv.r4c4">Cumprimento de obrigação e execução educacional (Art. 7º, II e V)</td>
+                  <td data-i18n="priv.r4c5">Durante vínculo institucional; removida em exclusão definitiva</td>
                 </tr>
                 <tr>
-                  <td><strong>Laboratório Python 3D</strong><br><code>submissoes_python</code></td>
-                  <td>ID da atividade, código Python (até 20.000 chars), tentativas, estrelas, parceiro e papel de dupla</td>
-                  <td>Correção docente, trabalho colaborativo e medalha Explorador Python 3D</td>
-                  <td>Execução de contrato educacional (Art. 7º, V)</td>
-                  <td>Vinculada à conta; <code>ON DELETE CASCADE</code> na exclusão</td>
+                  <td data-i18n-html="priv.r5c1"><strong>Laboratório Python 3D</strong><br><code>submissoes_python</code></td>
+                  <td data-i18n="priv.r5c2">ID da atividade, código Python (até 20.000 chars), tentativas, estrelas, parceiro e papel de dupla</td>
+                  <td data-i18n="priv.r5c3">Correção docente, trabalho colaborativo e medalha Explorador Python 3D</td>
+                  <td data-i18n="priv.r5c4">Execução de contrato educacional (Art. 7º, V)</td>
+                  <td data-i18n-html="priv.r5c5">Vinculada à conta; <code>ON DELETE CASCADE</code> na exclusão</td>
                 </tr>
                 <tr>
-                  <td><strong>Usabilidade Piloto</strong><br><code>avaliacoes_usabilidade_sus</code></td>
-                  <td>Nome (opcional), tipo, turma, respostas Likert Q1–Q10, escore SUS, tempo e comentários</td>
-                  <td>Estudo psicométrico SUS (Brooke, 1996) para melhoria da plataforma</td>
-                  <td>Consentimento e pesquisa aplicada pelo IFMA (Art. 7º, I e IV; Art. 16, II)</td>
-                  <td>Consultas públicas anonimizadas; na desativação/exclusão, <code>usuario_id</code> torna-se <code>NULL</code> e o nome é anonimizado (LGPD Art. 16, II)</td>
+                  <td data-i18n-html="priv.r6c1"><strong>Workspace &amp; Hub de Ideias</strong><br><code>estudante_workspace_itens</code></td>
+                  <td data-i18n-html="priv.r6c2">Título, status Kanban, eixo BNCC, habilidade, curso vinculado, prioridade, prazo, capa/ícone e blocos (<code>blocos_json</code>)</td>
+                  <td data-i18n="priv.r6c3">Organização pessoal de estudos, checklists e incubação de ideias de projetos BNCC</td>
+                  <td data-i18n="priv.r6c4">Execução de contrato educacional e melhor interesse do estudante (Art. 7º, V e Art. 14)</td>
+                  <td data-i18n-html="priv.r6c5">Exclusão imediata pelo titular (<code>DELETE /api/workspace</code>), na desativação da conta ou em cascata (<code>ON DELETE CASCADE</code>)</td>
                 </tr>
                 <tr>
-                  <td><strong>Segurança Anti-Brute Force</strong><br>(Memória RAM)</td>
-                  <td>IP (<code>cf-connecting-ip</code>) e e-mail em tentativas falhas de login</td>
-                  <td>Bloqueio temporário após 5 erros consecutivos (janela de 15 min)</td>
-                  <td>Legítimo interesse em segurança (Art. 7º, IX e Art. 46)</td>
-                  <td>Estritamente volátil em RAM (máx. 5.000 entradas, nunca gravado no D1)</td>
+                  <td data-i18n-html="priv.r7c1"><strong>Usabilidade Piloto</strong><br><code>avaliacoes_usabilidade_sus</code></td>
+                  <td data-i18n="priv.r7c2">Nome (opcional), tipo, turma, respostas Likert Q1–Q10, escore SUS, tempo e comentários</td>
+                  <td data-i18n="priv.r7c3">Estudo psicométrico SUS (Brooke, 1996) para melhoria da plataforma</td>
+                  <td data-i18n="priv.r7c4">Consentimento e pesquisa aplicada pelo IFMA (Art. 7º, I e IV; Art. 16, II)</td>
+                  <td data-i18n-html="priv.r7c5">Consultas públicas anonimizadas; na desativação/exclusão, <code>usuario_id</code> torna-se <code>NULL</code> e o nome é anonimizado (LGPD Art. 16, II)</td>
+                </tr>
+                <tr>
+                  <td data-i18n-html="priv.r8c1"><strong>Segurança Anti-Brute Force</strong><br>(Memória RAM)</td>
+                  <td data-i18n-html="priv.r8c2">IP (<code>cf-connecting-ip</code>) e e-mail em tentativas falhas de login</td>
+                  <td data-i18n="priv.r8c3">Bloqueio temporário após 5 erros consecutivos (janela de 15 min)</td>
+                  <td data-i18n="priv.r8c4">Legítimo interesse em segurança (Art. 7º, IX e Art. 46)</td>
+                  <td data-i18n="priv.r8c5">Estritamente volátil em RAM (máx. 5.000 entradas, nunca gravado no D1)</td>
                 </tr>
               </tbody>
             </table>
@@ -153,60 +161,61 @@
         </section>
 
         <section id="sec-subprocessadores" aria-labelledby="h-subprocessadores">
-          <h2 id="h-subprocessadores">3. Subprocessadores e Serviços Terceiros Identificados no Código</h2>
+          <h2 id="h-subprocessadores" data-i18n="priv.s3Titulo">3. Subprocessadores e Serviços Terceiros Identificados no Código</h2>
           <ul>
-            <li><strong>Cloudflare, Inc.:</strong> Execução Serverless (Cloudflare Workers), armazenamento relacional (Cloudflare D1 <code>lms_prod</code>), entrega de arquivos estáticos, proteção DDoS/WAF e CDN <code>cdnjs.cloudflare.com</code> (bibliotecas <code>Three.js r128</code> e <code>GSAP 3.12.5</code>).</li>
-            <li><strong>Google LLC:</strong> Autenticação institucional opcional via Google Identity Services (<code>accounts.google.com</code>, <code>oauth2.googleapis.com</code>, <code>www.googleapis.com/oauth2/v3/certs</code>) e entrega de ícones/fontes (<code>fonts.googleapis.com</code>, <code>fonts.gstatic.com</code>).</li>
-            <li><strong>jsDelivr CDN:</strong> Fornecimento dos arquivos WebAssembly do <strong>Pyodide v0.26.2</strong> (<code>cdn.jsdelivr.net</code>) para execução local de Python 100% dentro do navegador do usuário, sem envio de código a executores externos.</li>
+            <li data-i18n-html="priv.s3Li1"><strong>Cloudflare, Inc.:</strong> Execução Serverless (Cloudflare Workers), armazenamento relacional (Cloudflare D1 <code>lms_prod</code>), entrega de arquivos estáticos, proteção DDoS/WAF e CDN <code>cdnjs.cloudflare.com</code> (<code>Three.js r128</code>). A biblioteca <code>GSAP 3.15.1</code> (Core, <code>ScrollTrigger</code> e <code>Flip</code>) e as ilustrações SVG são servidas localmente pelo próprio domínio (<code>/js/vendor/</code> e <code>/img/</code>), sem expor dados a CDNs externos.</li>
+            <li data-i18n-html="priv.s3Li2"><strong>Google LLC:</strong> Autenticação institucional opcional via Google Identity Services (<code>accounts.google.com</code>, <code>oauth2.googleapis.com</code>, <code>www.googleapis.com/oauth2/v3/certs</code>) e entrega de ícones/fontes (<code>fonts.googleapis.com</code>, <code>fonts.gstatic.com</code>).</li>
+            <li data-i18n-html="priv.s3Li3"><strong>jsDelivr CDN:</strong> Fornecimento dos arquivos WebAssembly do <strong>Pyodide v0.26.2</strong> (<code>cdn.jsdelivr.net</code>) para execução local de Python 100% dentro do navegador do usuário, sem envio de código a executores externos.</li>
           </ul>
         </section>
 
         <section id="sec-armazenamento" aria-labelledby="h-armazenamento">
-          <h2 id="h-armazenamento">4. Armazenamento Local (<code>localStorage</code> / <code>sessionStorage</code>) e Cookies</h2>
-          <p>
+          <h2 id="h-armazenamento" data-i18n-html="priv.s4Titulo">4. Armazenamento Local (<code>localStorage</code> / <code>sessionStorage</code>) e Cookies</h2>
+          <p data-i18n="priv.s4Desc">
             Não utilizamos cookies de rastreamento, marketing ou analytics comportamental. Apenas as chaves técnicas abaixo são armazenadas localmente no navegador para manter sessão, acessibilidade e progresso offline:
           </p>
           <ul>
-            <li><strong>Sessão essencial:</strong> <code>lms_token</code> (JWT HS256 com expiração de 8 horas) e <code>lms_usuario</code> (dados resumidos do usuário logado).</li>
-            <li><strong>Acessibilidade e preferências:</strong> <code>lms_tema</code>, <code>lms_a11y_alto-contraste</code>, <code>lms_a11y_fonte-ampliada</code>, <code>lms_a11y_reduzir-movimento</code>, <code>lms_idioma</code>, <code>lms_sidebar_recolhida</code>, <code>lms_som_ativo</code>.</li>
-            <li><strong>Progresso pedagógico offline:</strong> <code>lms_progresso_atividades_v1</code>, <code>lms_ultima_atividade_v1</code>, <code>lms_submissoes_python_local</code>.</li>
-            <li><strong>Diagnóstico técnico:</strong> <code>debug_api</code> (apenas quando configurada manualmente em testes locais).</li>
+            <li data-i18n-html="priv.s4Li1"><strong>Sessão essencial:</strong> <code>lms_token</code> (JWT HS256 com expiração de 8 horas) e <code>lms_usuario</code> (dados resumidos do usuário logado).</li>
+            <li data-i18n-html="priv.s4Li2"><strong>Acessibilidade e preferências:</strong> <code>lms_tema</code>, <code>lms_a11y_alto-contraste</code>, <code>lms_a11y_fonte-ampliada</code>, <code>lms_a11y_reduzir-movimento</code>, <code>lms_idioma</code>, <code>lms_sidebar_recolhida</code>, <code>lms_som_ativo</code>.</li>
+            <li data-i18n-html="priv.s4Li3"><strong>Progresso pedagógico e Workspace offline:</strong> <code>lms_progresso_atividades_v1</code>, <code>lms_ultima_atividade_v1</code>, <code>lms_submissoes_python_local</code>, <code>lms_workspace_itens_v1</code>, <code>lms_workspace_fila_v1</code>.</li>
+            <li data-i18n-html="priv.s4Li4"><strong>Diagnóstico técnico:</strong> <code>debug_api</code> (apenas quando configurada manualmente em testes locais).</li>
           </ul>
         </section>
 
         <section id="sec-seguranca" aria-labelledby="h-seguranca">
-          <h2 id="h-seguranca">5. Segurança, Criptografia e Proteção em Profundidade</h2>
+          <h2 id="h-seguranca" data-i18n="priv.s5Titulo">5. Segurança, Criptografia e Proteção em Profundidade</h2>
           <ul>
-            <li>Senhas protegidas com <strong>PBKDF2-SHA256</strong> (100.000 iterações e <em>salt</em> exclusivo de 16 bytes) com comparação em tempo constante e proteção contra enumeração de contas no login.</li>
-            <li>Tokens JWT assinados com HMAC-SHA256 e segredo obrigatório mínimo de 32 caracteres (<code>JWT_SECRET</code>).</li>
-            <li>Cabeçalhos HTTP de proteção (<code>Content-Security-Policy</code> sem <code>unsafe-eval</code> de JS, <code>Strict-Transport-Security</code>, <code>X-Content-Type-Options: nosniff</code>, <code>X-Frame-Options: SAMEORIGIN</code>) aplicados tanto na API quanto nos assets estáticos.</li>
+            <li data-i18n-html="priv.s5Li1">Senhas protegidas com <strong>PBKDF2-SHA256</strong> (100.000 iterações e <em>salt</em> exclusivo de 16 bytes) com comparação em tempo constante e proteção contra enumeração de contas no login.</li>
+            <li data-i18n-html="priv.s5Li2">Tokens JWT assinados com HMAC-SHA256 e segredo obrigatório mínimo de 32 caracteres (<code>JWT_SECRET</code>).</li>
+            <li data-i18n-html="priv.s5Li3">Cabeçalhos HTTP de proteção (<code>Content-Security-Policy</code> sem <code>unsafe-eval</code> de JS, <code>Strict-Transport-Security</code>, <code>X-Content-Type-Options: nosniff</code>, <code>X-Frame-Options: SAMEORIGIN</code>) aplicados tanto na API quanto nos assets estáticos.</li>
           </ul>
         </section>
 
         <section id="sec-direitos" aria-labelledby="h-direitos">
-          <h2 id="h-direitos">6. Direitos do Titular (Art. 18 da LGPD e GDPR)</h2>
-          <p>
+          <h2 id="h-direitos" data-i18n="priv.s6Titulo">6. Direitos do Titular (Art. 18 da LGPD e GDPR)</h2>
+          <p data-i18n="priv.s6Desc">
             Você — ou seu responsável legal e escola, no caso de estudantes menores de 18 anos — tem direito a confirmar a existência de tratamento, acessar, corrigir, exportar e solicitar a eliminação dos seus dados:
           </p>
           <ul>
-            <li><strong>Portabilidade imediata (Art. 18, V):</strong> Usuários autenticados podem baixar todos os seus dados pessoais e acadêmicos em formato JSON estruturado acessando <strong>Meu Perfil</strong> ou o endpoint <code>GET /api/auth/exportar-dados</code>.</li>
-            <li><strong>Desativação vs. Exclusão Definitiva:</strong> A desativação administrativa (<code>DELETE /api/usuarios/:id</code>) realiza <em>soft delete</em> (<code>ativo = 0</code>) preservando registros escolares de certificação. A exclusão definitiva (<em>hard delete</em>) pode ser solicitada ao Encarregado (DPO) e aciona exclusão em cascata no banco D1.</li>
+            <li data-i18n-html="priv.s6Li1"><strong>Portabilidade imediata (Art. 18, V):</strong> Usuários autenticados podem baixar todos os seus dados pessoais e acadêmicos (incluindo <code>workspaceItens</code>) em formato JSON estruturado acessando <strong>Meu Perfil</strong> ou o endpoint <code>GET /api/auth/exportar-dados</code>.</li>
+            <li data-i18n-html="priv.s6Li2"><strong>Eliminação por autoatendimento (Art. 18, VI):</strong> O titular pode apagar permanentemente todos os seus itens do Workspace via botão <strong>Apagar todos os meus itens</strong> (<code>DELETE /api/workspace</code>) ou diretamente pelo perfil.</li>
+            <li data-i18n-html="priv.s6Li3"><strong>Desativação vs. Exclusão Definitiva:</strong> A desativação administrativa (<code>DELETE /api/usuarios/:id</code>) realiza <em>soft delete</em> (<code>ativo = 0</code>) preservando registros escolares de certificação e exclui definitivamente os itens do Workspace (<code>estudante_workspace_itens</code>). A exclusão definitiva (<em>hard delete</em>) pode ser solicitada ao Encarregado (DPO) e aciona exclusão em cascata no banco D1.</li>
           </ul>
         </section>
 
         <section id="sec-internacional" aria-labelledby="h-internacional">
-          <h2 id="h-internacional">7. Transferência Internacional de Dados</h2>
-          <p>
+          <h2 id="h-internacional" data-i18n="priv.s7Titulo">7. Transferência Internacional de Dados</h2>
+          <p data-i18n-html="priv.s7Texto">
             Em razão da infraestrutura distribuída em borda da <strong>Cloudflare, Inc.</strong> e dos serviços de autenticação/fontes da <strong>Google LLC</strong>, os dados podem ser processados em servidores fora do Brasil. Essa transferência cumpre o <strong>Art. 33 da LGPD</strong> e o <strong>Capítulo V do GDPR</strong>, mediante criptografia TLS/HSTS em trânsito e garantias contratuais dos provedores globais.
           </p>
         </section>
 
         <section id="sec-dpo" aria-labelledby="h-dpo">
-          <h2 id="h-dpo">8. Encarregado pelo Tratamento de Dados (DPO)</h2>
+          <h2 id="h-dpo" data-i18n="priv.s8Titulo">8. Encarregado pelo Tratamento de Dados (DPO)</h2>
           <p>
-            <strong>Controlador:</strong> Startup LMS COMPASSO · Projeto de Inovação SUAP/IFMA nº 14246/2025 (IFMA Campus Grajaú)<br>
-            <strong>E-mail do Encarregado (DPO):</strong> <a href="mailto:dpo@lms-compasso.edu.br">dpo@lms-compasso.edu.br</a><br>
-            <strong>Termos relacionados:</strong> <a href="/terms.html">Termos de Serviço e Condições de Uso</a>
+            <span data-i18n-html="priv.s8Controlador"><strong>Controlador:</strong> Startup LMS COMPASSO · Projeto de Inovação SUAP/IFMA nº 14246/2025 (IFMA Campus Grajaú)</span><br>
+            <span data-i18n-html="priv.s8EmailLabel"><strong>E-mail do Encarregado (DPO):</strong></span> <a href="mailto:dpo@lms-compasso.edu.br">dpo@lms-compasso.edu.br</a><br>
+            <span data-i18n-html="priv.s8TermosLabel"><strong>Termos relacionados:</strong></span> <a href="/terms.html" data-i18n="priv.s8TermosLink">Termos de Serviço e Condições de Uso</a>
           </p>
         </section>
       </article>
@@ -217,28 +226,28 @@
     <div class="pub-container">
       <div class="pub-rodape-grade">
         <div>
-          <img src="/img/logo-branco.svg" alt="LMS COMPASSO — BNCC Computação" width="272" height="64">
-          <p>Plataforma aberta para o ensino de Computação no Ensino Fundamental, alinhada à BNCC Computação.</p>
+          <img src="/img/logo-branco.svg" alt="LMS COMPASSO — BNCC Computação" data-i18n-attr="alt:nav.logoAlt" width="272" height="64">
+          <p data-i18n="rodape.descricao">Plataforma aberta para o ensino de Computação no Ensino Fundamental, alinhada à BNCC Computação.</p>
         </div>
         <nav aria-labelledby="rodape-plataforma">
-          <h3 id="rodape-plataforma">Plataforma</h3>
+          <h3 id="rodape-plataforma" data-i18n="rodape.plataforma">Plataforma</h3>
           <ul>
-            <li><a href="/">Início</a></li>
-            <li><a href="/atividades.html">Atividades dinâmicas</a></li>
-            <li><a href="/planos.html">Planos &amp; Assinaturas</a></li>
-            <li><a href="/login.html">Entrar</a></li>
+            <li><a href="/" data-i18n="wf.inicio">Início</a></li>
+            <li><a href="/atividades.html" data-i18n="rodape.atividadesDinamicas">Atividades dinâmicas</a></li>
+            <li><a href="/planos.html" data-i18n="rodape.planosAssinaturas">Planos &amp; Assinaturas</a></li>
+            <li><a href="/login.html" data-i18n="nav.entrar">Entrar</a></li>
           </ul>
         </nav>
         <nav aria-labelledby="rodape-legal">
-          <h3 id="rodape-legal">Governança &amp; Legal</h3>
+          <h3 id="rodape-legal" data-i18n="rodape.governancaLegal">Governança &amp; Legal</h3>
           <ul>
-            <li><a href="/terms.html">Termos de Serviço</a></li>
-            <li><a href="/privacy.html">Política de Privacidade (LGPD)</a></li>
-            <li><a href="https://github.com/LMS-COMPASSO/lms/blob/main/LICENSE" rel="noopener">Licença MIT</a></li>
+            <li><a href="/terms.html" data-i18n="nav.termos">Termos de Serviço</a></li>
+            <li><a href="/privacy.html" data-i18n="rodape.politicaPrivacidade">Política de Privacidade (LGPD)</a></li>
+            <li><a href="https://github.com/LMS-COMPASSO/lms/blob/main/LICENSE" rel="noopener" data-i18n="rodape.licenca">Licença MIT</a></li>
           </ul>
         </nav>
       </div>
-      <p class="pub-rodape-fim">
+      <p class="pub-rodape-fim" data-i18n="rodape.fim">
         Projeto de Inovação SUAP/IFMA nº 14246/2025 · Startup LMS COMPASSO · IFMA Campus Grajaú.
       </p>
     </div>

@@ -20,128 +20,31 @@ import {
 } from '../helpers_utilitarios.js';
 import { garantirTabelasGamificacao } from './gamificacao_rotas.js';
 
-/**
- * Retorna estatísticas gerais e indicadores para o dashboard.
- */
-export async function obterIndicadores(request, env, db) {
-  const { payload } = await authorizeUser(request, env, db);
-  exigirPerfil(payload, ['administrador', 'instrutor']);
-
-  // Contagem geral de usuários (apenas administrador visualiza)
-  const usuarios = await queryOne(db, `
-    SELECT COUNT(*) AS total,
-      SUM(CASE WHEN perfil = 'administrador' THEN 1 ELSE 0 END) AS administradores,
-      SUM(CASE WHEN perfil = 'instrutor' THEN 1 ELSE 0 END) AS instrutores,
-      SUM(CASE WHEN perfil = 'aluno' THEN 1 ELSE 0 END) AS alunos,
-      SUM(CASE WHEN ativo = 1 THEN 1 ELSE 0 END) AS ativos
-    FROM usuarios
-  `);
-
-  // Estatísticas de cursos
-  let cursosSql = `
-    SELECT SUM(CASE WHEN c.status = 'publicado' THEN 1 ELSE 0 END) AS publicados,
-      SUM(CASE WHEN c.status = 'rascunho' THEN 1 ELSE 0 END) AS rascunhos,
-      COUNT(*) AS total
-    FROM cursos c
-  `;
-  const cursoParams = [];
+function montarFiltroInstrutor(sqlBase, payload, clausulaInstrutor) {
   if (payload.perfil === 'instrutor') {
-    cursosSql += ' WHERE instrutor_id = ?';
-    cursoParams.push(payload.id);
+    return { sql: `${sqlBase} ${clausulaInstrutor}`, params: [payload.id] };
   }
-  const cursos = await queryOne(db, cursosSql, cursoParams);
+  return { sql: sqlBase, params: [] };
+}
 
-  // Estatísticas de matrículas
-  let matriculasSql = `
-    SELECT SUM(CASE WHEN mt.status = 'ativa' THEN 1 ELSE 0 END) AS ativas,
-      SUM(CASE WHEN mt.status = 'concluida' THEN 1 ELSE 0 END) AS concluidas,
-      SUM(CASE WHEN mt.status = 'cancelada' THEN 1 ELSE 0 END) AS canceladas,
-      COUNT(*) AS total,
-      ROUND(AVG(mt.progresso_percentual), 2) AS progresso_medio
-    FROM matriculas mt
-    JOIN cursos c ON c.id = mt.curso_id
-  `;
-  const matriculasParams = [];
-  if (payload.perfil === 'instrutor') {
-    matriculasSql += ' WHERE c.instrutor_id = ?';
-    matriculasParams.push(payload.id);
-  }
-  const matriculas = await queryOne(db, matriculasSql, matriculasParams);
-
-  // Total de certificados emitidos
-  let certificadosSql = `
-    SELECT COUNT(*) AS total
-    FROM certificados cert
-    JOIN matriculas mt ON mt.id = cert.matricula_id
-    JOIN cursos c ON c.id = mt.curso_id
-  `;
-  const certificadosParams = [];
-  if (payload.perfil === 'instrutor') {
-    certificadosSql += ' WHERE c.instrutor_id = ?';
-    certificadosParams.push(payload.id);
-  }
-  const certificados = await queryOne(db, certificadosSql, certificadosParams);
-
-  // Distribuição de cursos por eixo estruturante da BNCC Computação
-  let eixosSql = 'SELECT eixo_bncc, COUNT(*) AS total FROM cursos';
-  const eixosParams = [];
-  if (payload.perfil === 'instrutor') {
-    eixosSql += ' WHERE instrutor_id = ?';
-    eixosParams.push(payload.id);
-  }
-  eixosSql += ' GROUP BY eixo_bncc';
-  const cursosPorEixo = await queryAll(db, eixosSql, eixosParams);
-
-  // Cálculo da taxa de conclusão
-  const totalMatriculas = Number(matriculas.total || 0);
-  const concluidasMatriculas = Number(matriculas.concluidas || 0);
-  const taxaConclusao = totalMatriculas > 0
-    ? Number(((concluidasMatriculas / totalMatriculas) * 100).toFixed(2))
-    : 0;
-
-  // Cálculo real do equilíbrio entre atividades desplugadas/leitura (texto/pdf) e digitais/plugadas (vídeo/link/Python 3D)
-  let aulasSql = `
-    SELECT
-      SUM(CASE WHEN a.tipo IN ('texto', 'pdf') THEN 1 ELSE 0 END) AS desplugadas,
-      SUM(CASE WHEN a.tipo IN ('video', 'link') THEN 1 ELSE 0 END) AS plugadas,
-      SUM(COALESCE(a.duracao_min, 0)) AS minutos_aulas
-    FROM aulas a
-    JOIN modulos m ON m.id = a.modulo_id
-    JOIN cursos c ON c.id = m.curso_id
-  `;
-  const aulasParams = [];
-  if (payload.perfil === 'instrutor') {
-    aulasSql += ' WHERE c.instrutor_id = ?';
-    aulasParams.push(payload.id);
-  }
-  const resumoAulas = await queryOne(db, aulasSql, aulasParams);
-
-  let cursosHorasSql = 'SELECT SUM(COALESCE(carga_horaria, 0)) AS total_horas FROM cursos';
-  const cursosHorasParams = [];
-  if (payload.perfil === 'instrutor') {
-    cursosHorasSql += ' WHERE instrutor_id = ?';
-    cursosHorasParams.push(payload.id);
-  }
-  const resumoHoras = await queryOne(db, cursosHorasSql, cursosHorasParams);
-
-  let totalSubmissoesPlugadas = 0;
+async function contarSubmissoesPlugadas(db, payload) {
   try {
-    let subSql = 'SELECT COUNT(*) AS total FROM submissoes_python sp';
-    const subParams = [];
-    if (payload.perfil === 'instrutor') {
-      subSql += ` WHERE EXISTS (
-        SELECT 1 FROM matriculas mt
-        JOIN cursos c ON c.id = mt.curso_id
-        WHERE mt.usuario_id = sp.usuario_id AND c.instrutor_id = ?
-      )`;
-      subParams.push(payload.id);
-    }
-    const subRes = await queryOne(db, subSql, subParams);
-    totalSubmissoesPlugadas = Number(subRes?.total || 0);
-  } catch {
-    totalSubmissoesPlugadas = 0;
+    const baseSql = 'SELECT COUNT(*) AS total FROM submissoes_python sp';
+    const clausula = `WHERE EXISTS (
+      SELECT 1 FROM matriculas mt
+      JOIN cursos c ON c.id = mt.curso_id
+      WHERE mt.usuario_id = sp.usuario_id AND c.instrutor_id = ?
+    )`;
+    const { sql, params } = montarFiltroInstrutor(baseSql, payload, clausula);
+    const subRes = await queryOne(db, sql, params);
+    return Number(subRes?.total || 0);
+  } catch (erroSub) {
+    console.warn('Tabela submissoes_python indisponível ao calcular indicadores:', erroSub?.message || erroSub);
+    return 0;
   }
+}
 
+function montarConformidadeTempoTela(resumoAulas, totalSubmissoesPlugadas, resumoHoras) {
   const qtdDesplugadas = Number(resumoAulas?.desplugadas || 0);
   const qtdPlugadas = Number(resumoAulas?.plugadas || 0) + totalSubmissoesPlugadas;
   const totalAtividades = qtdDesplugadas + qtdPlugadas;
@@ -153,10 +56,96 @@ export async function obterIndicadores(request, env, db) {
   const totalHorasEstimadas = Number(resumoHoras?.total_horas || 0)
     || Math.round(Number(resumoAulas?.minutos_aulas || 0) / 60);
 
-  let statusEquilibrio = 'Sem registros';
+  let status = 'Sem registros';
   if (totalAtividades > 0) {
-    statusEquilibrio = taxaEquilibrio >= 60 ? 'Conforme' : 'Atenção ao equilíbrio';
+    status = taxaEquilibrio >= 60 ? 'Conforme' : 'Atenção ao equilíbrio';
   }
+
+  return {
+    status,
+    resolucao: 'Resolução CNE nº 2/2025',
+    taxaEquilibrio,
+    atividadesDesplugadasPercent: desplugadasPct,
+    atividadesPlugadasPercent: plugadasPct,
+    totalHorasEstimadas,
+    recomendacao: 'Equilíbrio recomendado para a Educação Básica: alternância pedagógica com dinâmicas físicas e fichas desplugadas a cada 30 minutos de tela.',
+  };
+}
+
+/**
+ * Retorna estatísticas gerais e indicadores para o dashboard.
+ */
+export async function obterIndicadores(request, env, db) {
+  const { payload } = await authorizeUser(request, env, db);
+  exigirPerfil(payload, ['administrador', 'instrutor']);
+
+  const usuarios = await queryOne(db, `
+    SELECT COUNT(*) AS total,
+      SUM(CASE WHEN perfil = 'administrador' THEN 1 ELSE 0 END) AS administradores,
+      SUM(CASE WHEN perfil = 'instrutor' THEN 1 ELSE 0 END) AS instrutores,
+      SUM(CASE WHEN perfil = 'aluno' THEN 1 ELSE 0 END) AS alunos,
+      SUM(CASE WHEN ativo = 1 THEN 1 ELSE 0 END) AS ativos
+    FROM usuarios
+  `);
+
+  const qCursos = montarFiltroInstrutor(`
+    SELECT SUM(CASE WHEN c.status = 'publicado' THEN 1 ELSE 0 END) AS publicados,
+      SUM(CASE WHEN c.status = 'rascunho' THEN 1 ELSE 0 END) AS rascunhos,
+      COUNT(*) AS total
+    FROM cursos c
+  `, payload, 'WHERE instrutor_id = ?');
+  const cursos = await queryOne(db, qCursos.sql, qCursos.params);
+
+  const qMatriculas = montarFiltroInstrutor(`
+    SELECT SUM(CASE WHEN mt.status = 'ativa' THEN 1 ELSE 0 END) AS ativas,
+      SUM(CASE WHEN mt.status = 'concluida' THEN 1 ELSE 0 END) AS concluidas,
+      SUM(CASE WHEN mt.status = 'cancelada' THEN 1 ELSE 0 END) AS canceladas,
+      COUNT(*) AS total,
+      ROUND(AVG(mt.progresso_percentual), 2) AS progresso_medio
+    FROM matriculas mt
+    JOIN cursos c ON c.id = mt.curso_id
+  `, payload, 'WHERE c.instrutor_id = ?');
+  const matriculas = await queryOne(db, qMatriculas.sql, qMatriculas.params);
+
+  const qCertificados = montarFiltroInstrutor(`
+    SELECT COUNT(*) AS total
+    FROM certificados cert
+    JOIN matriculas mt ON mt.id = cert.matricula_id
+    JOIN cursos c ON c.id = mt.curso_id
+  `, payload, 'WHERE c.instrutor_id = ?');
+  const certificados = await queryOne(db, qCertificados.sql, qCertificados.params);
+
+  const qEixos = montarFiltroInstrutor(
+    'SELECT eixo_bncc, COUNT(*) AS total FROM cursos',
+    payload,
+    'WHERE instrutor_id = ?',
+  );
+  const cursosPorEixo = await queryAll(db, `${qEixos.sql} GROUP BY eixo_bncc`, qEixos.params);
+
+  const totalMatriculas = Number(matriculas.total || 0);
+  const concluidasMatriculas = Number(matriculas.concluidas || 0);
+  const taxaConclusao = totalMatriculas > 0
+    ? Number(((concluidasMatriculas / totalMatriculas) * 100).toFixed(2))
+    : 0;
+
+  const qAulas = montarFiltroInstrutor(`
+    SELECT
+      SUM(CASE WHEN a.tipo IN ('texto', 'pdf') THEN 1 ELSE 0 END) AS desplugadas,
+      SUM(CASE WHEN a.tipo IN ('video', 'link') THEN 1 ELSE 0 END) AS plugadas,
+      SUM(COALESCE(a.duracao_min, 0)) AS minutos_aulas
+    FROM aulas a
+    JOIN modulos m ON m.id = a.modulo_id
+    JOIN cursos c ON c.id = m.curso_id
+  `, payload, 'WHERE c.instrutor_id = ?');
+  const resumoAulas = await queryOne(db, qAulas.sql, qAulas.params);
+
+  const qHoras = montarFiltroInstrutor(
+    'SELECT SUM(COALESCE(carga_horaria, 0)) AS total_horas FROM cursos',
+    payload,
+    'WHERE instrutor_id = ?',
+  );
+  const resumoHoras = await queryOne(db, qHoras.sql, qHoras.params);
+  const totalSubmissoesPlugadas = await contarSubmissoesPlugadas(db, payload);
 
   return jsonResponse({
     usuarios: payload.perfil === 'administrador' ? usuarios : undefined,
@@ -165,15 +154,7 @@ export async function obterIndicadores(request, env, db) {
     certificadosEmitidos: Number(certificados.total || 0),
     taxaConclusao,
     cursosPorEixoBNCC: cursosPorEixo,
-    conformidadeTempoTela: {
-      status: statusEquilibrio,
-      resolucao: 'Resolução CNE nº 2/2025',
-      taxaEquilibrio,
-      atividadesDesplugadasPercent: desplugadasPct,
-      atividadesPlugadasPercent: plugadasPct,
-      totalHorasEstimadas,
-      recomendacao: 'Equilíbrio recomendado para a Educação Básica: alternância pedagógica com dinâmicas físicas e fichas desplugadas a cada 30 minutos de tela.',
-    },
+    conformidadeTempoTela: montarConformidadeTempoTela(resumoAulas, totalSubmissoesPlugadas, resumoHoras),
   });
 }
 

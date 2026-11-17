@@ -130,6 +130,35 @@ export async function criarAula(request, env, db, moduloId) {
   }, 201);
 }
 
+function extrairCamposAtualizacaoAula(body) {
+  const camposPermitidos = ['titulo', 'tipo', 'conteudo', 'url_recurso', 'duracao_min', 'ordem'];
+  const campos = [];
+  const params = [];
+
+  for (const campo of camposPermitidos) {
+    if (body[campo] === undefined) continue;
+    if (campo === 'titulo') {
+      const tituloLimpo = String(body.titulo).trim();
+      if (!tituloLimpo) return { erro: 'Título da aula não pode ser vazio.' };
+      campos.push('titulo = ?');
+      params.push(tituloLimpo);
+      continue;
+    }
+    if (campo === 'tipo') {
+      const tipoLimpo = String(body.tipo);
+      if (!TIPOS_AULA_VALIDOS.includes(tipoLimpo)) {
+        return { erro: 'Tipo de aula inválido. Use "video", "texto", "pdf" ou "link".' };
+      }
+      campos.push('tipo = ?');
+      params.push(tipoLimpo);
+      continue;
+    }
+    campos.push(`${campo} = ?`);
+    params.push(campo === 'duracao_min' || campo === 'ordem' ? Number(body[campo] || 0) : body[campo]);
+  }
+  return { campos, params };
+}
+
 /**
  * Atualiza os dados de uma aula, validando propriedade do curso (IDOR).
  */
@@ -151,33 +180,10 @@ export async function atualizarAula(request, env, db, aulaId) {
   }
 
   const body = await readJsonBody(request);
-  const camposPermitidos = ['titulo', 'tipo', 'conteudo', 'url_recurso', 'duracao_min', 'ordem'];
-  const campos = [];
-  const params = [];
-
-  for (const campo of camposPermitidos) {
-    if (body[campo] !== undefined) {
-      if (campo === 'titulo') {
-        const tituloLimpo = String(body.titulo).trim();
-        if (!tituloLimpo) return jsonErro('Título da aula não pode ser vazio.', 400);
-        campos.push('titulo = ?');
-        params.push(tituloLimpo);
-        continue;
-      }
-      if (campo === 'tipo') {
-        const tipoLimpo = String(body.tipo);
-        if (!TIPOS_AULA_VALIDOS.includes(tipoLimpo)) {
-          return jsonErro('Tipo de aula inválido. Use "video", "texto", "pdf" ou "link".', 400);
-        }
-        campos.push('tipo = ?');
-        params.push(tipoLimpo);
-        continue;
-      }
-      campos.push(`${campo} = ?`);
-      params.push(campo === 'duracao_min' || campo === 'ordem' ? Number(body[campo] || 0) : body[campo]);
-    }
+  const { erro, campos, params } = extrairCamposAtualizacaoAula(body);
+  if (erro) {
+    return jsonErro(erro, 400);
   }
-
   if (campos.length === 0) {
     return jsonErro('Nenhum campo para atualizar.', 400);
   }

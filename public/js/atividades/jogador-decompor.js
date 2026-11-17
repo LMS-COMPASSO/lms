@@ -5,9 +5,19 @@
  */
 
 import { h, anunciar, criarFeedback, renderizarComFoco } from './dom.js';
-import { avaliarClassificacao, embaralharDiferente, plural } from './logica.js';
+import { avaliarClassificacao, embaralharDiferente } from './logica.js';
 import { tocarSom, criarBotaoSom } from './som.js';
 import { renderizarIcone } from './icones.js';
+import {
+  t,
+  pluralT,
+  atvConclusao,
+  atvDescarte,
+  atvDica,
+  atvParte,
+  atvProblema,
+  atvTarefa,
+} from './traducao.js';
 
 export function jogadorDecompor(atividade, ctx) {
   const tarefas = new Map(atividade.tarefas.map((tarefa) => [tarefa.id, tarefa]));
@@ -20,8 +30,11 @@ export function jogadorDecompor(atividade, ctx) {
   const area = h('div');
   let estado;
 
-  const texto = (id) => tarefas.get(id).texto;
-  const nomeColuna = (id) => colunas.find((coluna) => coluna.id === id).titulo;
+  const texto = (id) => atvTarefa(atividade.id, tarefas.get(id));
+  const nomeColuna = (id) => {
+    const col = colunas.find((coluna) => coluna.id === id);
+    return col?.descarte ? atvDescarte(atividade) : atvParte(atividade.id, col);
+  };
   const naLista = () => estado.ordem.filter((id) => !estado.alocacao[id]);
 
   function novoEstado() {
@@ -39,8 +52,8 @@ export function jogadorDecompor(atividade, ctx) {
     tocarSom('click');
     estado.selecionada = estado.selecionada === id ? null : id;
     anunciar(estado.selecionada
-      ? `Tarefa “${texto(id)}” selecionada. Escolha a parte do problema.`
-      : 'Seleção removida.');
+      ? t('decompor.anuncioSelecionada', { texto: texto(id) })
+      : t('decompor.anuncioDeselecionada'));
     renderizar(`lista-${id}`);
   }
 
@@ -55,11 +68,11 @@ export function jogadorDecompor(atividade, ctx) {
     estado.alocacao[id] = idColuna;
     estado.selecionada = null;
     estado.resultado = null;
-    anunciar(`Tarefa “${texto(id)}” colocada em ${nomeColuna(idColuna)}.`);
+    anunciar(t('decompor.anuncioColocada', { texto: texto(id), parte: nomeColuna(idColuna) }));
     renderizar(vizinho ? `lista-${vizinho}` : 'verificar');
 
     if (typeof window !== 'undefined' && window.gsap) {
-      const parteEl = area.querySelector(`.atv-parte[aria-label*="${nomeColuna(idColuna)}"]`);
+      const parteEl = area.querySelector(`.atv-parte[data-parte-id="${idColuna}"]`);
       if (parteEl) {
         window.gsap.fromTo(parteEl, { scale: 0.98 }, { scale: 1, duration: 0.25 });
       }
@@ -70,7 +83,7 @@ export function jogadorDecompor(atividade, ctx) {
     tocarSom('mover');
     delete estado.alocacao[id];
     estado.resultado = null;
-    anunciar(`Tarefa “${texto(id)}” devolvida à lista.`);
+    anunciar(t('decompor.anuncioDevolvida', { texto: texto(id) }));
     renderizar(`lista-${id}`);
   }
 
@@ -79,7 +92,10 @@ export function jogadorDecompor(atividade, ctx) {
 
     if (resposta.naoClassificadas.length) {
       tocarSom('click');
-      feedback.info('Ainda faltam tarefas', `Organize mais ${plural(resposta.naoClassificadas.length, 'tarefa', 'tarefas')} antes de verificar.`);
+      feedback.info(
+        t('decompor.faltamTitulo'),
+        pluralT(resposta.naoClassificadas.length, 'decompor.faltamDescSing', 'decompor.faltamDescPlur'),
+      );
       renderizar('verificar');
       return;
     }
@@ -90,7 +106,7 @@ export function jogadorDecompor(atividade, ctx) {
     if (resposta.ok) {
       estado.concluida = true;
       tocarSom('vitoria');
-      feedback.sucesso('Problema dividido com sucesso! 🎉', atividade.conclusao);
+      feedback.sucesso(t('decompor.sucessoTitulo'), atvConclusao(atividade));
       renderizar('recomecar');
 
       if (typeof window !== 'undefined' && window.gsap) {
@@ -110,9 +126,9 @@ export function jogadorDecompor(atividade, ctx) {
     }
 
     feedback.erro(
-      'Quase lá!',
-      `${resposta.corretas.length} de ${resposta.total} tarefas estão no lugar certo. Revise as marcadas com ⚠: toque nelas para devolvê-las à lista e tente de novo.`,
-      estado.tentativas >= 2 ? ` Dica: ${atividade.dica}` : '',
+      t('ordenar.quaseLa'),
+      t('decompor.erroResumo', { corretas: resposta.corretas.length, total: resposta.total }),
+      estado.tentativas >= 2 ? ` ${t('jog.dicaPrefixo', { dica: atvDica(atividade) })}` : '',
     );
     renderizar('verificar');
   }
@@ -121,7 +137,7 @@ export function jogadorDecompor(atividade, ctx) {
     tocarSom('click');
     estado = novoEstado();
     feedback.limpar();
-    anunciar('Atividade reiniciada.');
+    anunciar(t('jog.anuncioReiniciada'));
     renderizar(`lista-${naLista()[0]}`);
   }
 
@@ -147,10 +163,10 @@ export function jogadorDecompor(atividade, ctx) {
     if (resultado) {
       if (resultado.erradas.includes(id)) {
         classe += ' atv-fora';
-        marca = '⚠ Revise';
+        marca = t('decompor.marcaRevise');
       } else {
         classe += ' atv-certo';
-        marca = '✔ Certo';
+        marca = t('decompor.marcaCerto');
       }
     }
     return h(
@@ -159,8 +175,8 @@ export function jogadorDecompor(atividade, ctx) {
         type: 'button',
         class: classe,
         'data-foco': `lista-${id}`,
-        title: 'Toque para devolver à lista',
-        'aria-label': `${texto(id)}${marca ? `. ${marca}` : ''}. Toque para devolver à lista.`,
+        title: t('decompor.devolverTitle'),
+        'aria-label': t('decompor.devolverAria', { texto: texto(id), marca: marca ? `. ${marca}` : '' }),
         disabled: estado.concluida,
         onclick: () => devolver(id),
       },
@@ -171,14 +187,15 @@ export function jogadorDecompor(atividade, ctx) {
 
   function coluna(parte) {
     const ids = estado.ordem.filter((id) => estado.alocacao[id] === parte.id);
+    const tituloParte = nomeColuna(parte.id);
     return h(
       'section',
-      { class: `atv-parte${parte.descarte ? ' descarte' : ''}`, 'aria-label': parte.titulo },
+      { class: `atv-parte${parte.descarte ? ' descarte' : ''}`, 'data-parte-id': parte.id, 'aria-label': tituloParte },
       h(
         'div',
         { class: 'atv-parte-cabecalho' },
-        h('h4', { class: 'atv-parte-titulo-flex' }, renderizarIcone(parte.id || parte.emoji, { classe: 'atv-parte-icone' }), h('span', {}, parte.titulo)),
-        h('span', { class: 'atv-parte-count' }, plural(ids.length, 'item', 'itens')),
+        h('h4', { class: 'atv-parte-titulo-flex' }, renderizarIcone(parte.id || parte.emoji, { classe: 'atv-parte-icone' }), h('span', {}, tituloParte)),
+        h('span', { class: 'atv-parte-count' }, pluralT(ids.length, 'decompor.itemSing', 'decompor.itemPlur')),
       ),
       h(
         'button',
@@ -186,15 +203,15 @@ export function jogadorDecompor(atividade, ctx) {
           type: 'button',
           class: `btn btn-sm ${estado.selecionada ? 'btn-primario' : 'btn-neutro'}`,
           'data-foco': `parte-${parte.id}`,
-          'aria-label': `Colocar aqui em ${parte.titulo}`,
+          'aria-label': t('decompor.colocarAria', { parte: tituloParte }),
           disabled: !estado.selecionada || estado.concluida,
           onclick: () => colocar(parte.id),
         },
-        'Colocar aqui',
+        t('decompor.colocarAqui'),
       ),
       ids.length
         ? h('ul', {}, ids.map((id) => h('li', {}, cartaoNaColuna(id))))
-        : h('p', { class: 'atv-parte-vazia' }, 'Nenhuma tarefa ainda.'),
+        : h('p', { class: 'atv-parte-vazia' }, t('decompor.nenhumaTarefa')),
     );
   }
 
@@ -202,14 +219,14 @@ export function jogadorDecompor(atividade, ctx) {
     return h(
       'div',
       { class: 'atv-painel' },
-      h(ctx.TituloPainel, {}, 'Mapa da decomposição'),
+      h(ctx.TituloPainel, {}, t('decompor.mapaTitulo')),
       h(
         'ul',
         { class: 'atv-arvore' },
         h(
           'li',
           {},
-          h('strong', {}, atividade.problema),
+          h('strong', {}, atvProblema(atividade)),
           h(
             'ul',
             {},
@@ -217,13 +234,13 @@ export function jogadorDecompor(atividade, ctx) {
               'li',
               {},
               renderizarIcone(parte.id || parte.emoji, { classe: 'icon-xs', fallback: 'folder' }),
-              ` ${parte.titulo}`,
-              h('ul', {}, atividade.tarefas.filter((tarefa) => tarefa.parte === parte.id).map((tarefa) => h('li', {}, tarefa.texto))),
+              ` ${atvParte(atividade.id, parte)}`,
+              h('ul', {}, atividade.tarefas.filter((tarefa) => tarefa.parte === parte.id).map((tarefa) => h('li', {}, atvTarefa(atividade.id, tarefa)))),
             )),
           ),
         ),
         temDescarte
-          ? h('li', {}, renderizarIcone('fora', { classe: 'icon-xs' }), ` ${atividade.descarteTitulo}: ${atividade.tarefas.filter((tarefa) => tarefa.parte === 'fora').map((tarefa) => tarefa.texto).join('; ')}`)
+          ? h('li', {}, renderizarIcone('fora', { classe: 'icon-xs' }), ` ${atvDescarte(atividade)}: ${atividade.tarefas.filter((tarefa) => tarefa.parte === 'fora').map((tarefa) => atvTarefa(atividade.id, tarefa)).join('; ')}`)
           : null,
       ),
     );
@@ -238,19 +255,19 @@ export function jogadorDecompor(atividade, ctx) {
       h(
         'div',
         { class: 'atv-telemetria-col' },
-        h('span', { class: 'atv-telemetria-rotulo' }, 'Divisão do Problema'),
+        h('span', { class: 'atv-telemetria-rotulo' }, t('decompor.telemetriaRotulo')),
         h(
           'div',
           { class: 'atv-telemetria-gauge' },
-          h('progress', { class: 'atv-telemetria-progress', value: String(alocadas), max: String(totalTarefas), 'aria-label': 'Tarefas alocadas' }),
-          h('span', { class: 'atv-telemetria-valor' }, `${alocadas}/${totalTarefas} organizadas`),
+          h('progress', { class: 'atv-telemetria-progress', value: String(alocadas), max: String(totalTarefas), 'aria-label': t('decompor.progressoAria') }),
+          h('span', { class: 'atv-telemetria-valor' }, t('decompor.telemetriaOrganizadas', { atual: alocadas, total: totalTarefas })),
         ),
       ),
       h(
         'div',
         { class: 'atv-telemetria-acoes' },
         estado.tentativas > 0
-          ? h('span', { class: 'atv-badge-tentativas' }, plural(estado.tentativas, 'tentativa', 'tentativas'))
+          ? h('span', { class: 'atv-badge-tentativas' }, pluralT(estado.tentativas, 'jog.tentativaSing', 'jog.tentativaPlur'))
           : null,
         criarBotaoSom(() => renderizar()),
       ),
@@ -267,27 +284,27 @@ export function jogadorDecompor(atividade, ctx) {
           'div',
           { class: 'atv-problema' },
           renderizarIcone('problema', { classe: 'atv-problema-icone' }),
-          h('span', {}, 'Problema: ', h('strong', {}, atividade.problema)),
+          h('span', {}, `${t('decompor.problemaPrefixo')} `, h('strong', {}, atvProblema(atividade))),
         ),
         h(
           'div',
           { class: 'atv-painel' },
-          h(ctx.TituloPainel, {}, 'Tarefas para organizar'),
+          h(ctx.TituloPainel, {}, t('decompor.tarefasTitulo')),
           h('p', { class: 'atv-contagem' }, estado.selecionada
-            ? `Selecionada: “${texto(estado.selecionada)}”. Agora escolha a parte do problema abaixo.`
-            : 'Toque em uma tarefa para selecioná-la e depois toque em "Colocar aqui" na parte correspondente.'),
+            ? t('decompor.selecionadaInstrucao', { texto: texto(estado.selecionada) })
+            : t('decompor.instrucaoPadrao')),
           lista.length
             ? h('ul', { class: 'atv-banco' }, lista.map((id) => h('li', {}, cartaoDaLista(id))))
-            : h('p', { class: 'atv-vazio' }, 'Todas as tarefas foram colocadas. Confira e toque em Verificar.'),
+            : h('p', { class: 'atv-vazio' }, t('decompor.todasColocadas')),
         ),
-        h('div', { class: 'atv-painel' }, h(ctx.TituloPainel, {}, 'Partes do problema'), h('div', { class: 'atv-partes' }, colunas.map(coluna))),
+        h('div', { class: 'atv-painel' }, h(ctx.TituloPainel, {}, t('decompor.partesTitulo')), h('div', { class: 'atv-partes' }, colunas.map(coluna))),
         estado.concluida ? arvoreDaDecomposicao() : null,
         h(
           'div',
           { class: 'atv-acoes' },
-          h('button', { type: 'button', class: 'btn btn-primario flex-inline-icon', 'data-foco': 'verificar', disabled: estado.concluida, onclick: verificar }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'check'), ' Verificar'),
-          h('button', { type: 'button', class: 'btn btn-neutro flex-inline-icon', 'data-foco': 'dica', disabled: estado.concluida, onclick: () => { tocarSom('click'); feedback.info('Dica', atividade.dica); } }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'lightbulb'), ' Quero uma dica'),
-          h('button', { type: 'button', class: 'btn btn-neutro flex-inline-icon', 'data-foco': 'recomecar', onclick: recomecar }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'refresh'), ' Recomeçar'),
+          h('button', { type: 'button', class: 'btn btn-primario flex-inline-icon', 'data-foco': 'verificar', disabled: estado.concluida, onclick: verificar }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'check'), ` ${t('jog.verificar')}`),
+          h('button', { type: 'button', class: 'btn btn-neutro flex-inline-icon', 'data-foco': 'dica', disabled: estado.concluida, onclick: () => { tocarSom('click'); feedback.info(t('jog.dicaTitulo'), atvDica(atividade)); } }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'lightbulb'), ` ${t('jog.queroDica')}`),
+          h('button', { type: 'button', class: 'btn btn-neutro flex-inline-icon', 'data-foco': 'recomecar', onclick: recomecar }, h('span', { class: 'material-symbols-outlined icon-xs' }, 'refresh'), ` ${t('jog.recomecar')}`),
         ),
       ],
       foco,

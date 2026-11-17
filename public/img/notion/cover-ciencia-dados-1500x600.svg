@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 600" width="1500" height="600" role="img" aria-labelledby="dad-title dad-desc">
+  <title id="dad-title">Ciência de Dados e Padrões — Capa Notion</title>
+  <desc id="dad-desc">Capa temática 1500x600 com matriz de dados e visualização analítica na zona segura central 900x350.</desc>
+  <defs>
+    <linearGradient id="bg-dad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0b1120"/>
+      <stop offset="50%" stop-color="#131d36"/>
+      <stop offset="100%" stop-color="#1e3a8a"/>
+    </linearGradient>
+    <pattern id="lines-dad" width="36" height="36" patternUnits="userSpaceOnUse">
+      <path d="M 0 36 L 36 0" stroke="#38bdf8" stroke-opacity="0.1" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1500" height="600" fill="url(#bg-dad)"/>
+  <rect width="1500" height="600" fill="url(#lines-dad)"/>
+
+  <g id="safe-zone" data-safe-area="300 125 900 350">
+    <rect x="328" y="168" width="210" height="32" rx="16" fill="#0369a1" fill-opacity="0.35" stroke="#7dd3fc" stroke-width="1.5"/>
+    <text x="433" y="189" text-anchor="middle" font-family="Segoe UI, Roboto, system-ui, sans-serif" font-size="13" font-weight="700" fill="#7dd3fc">DADOS &amp; PADRÕES · BNCC</text>
+    <text x="328" y="254" font-family="Segoe UI, Roboto, system-ui, sans-serif" font-size="40" font-weight="800" fill="#f8fafc">Ciência de Dados</text>
+    <text x="328" y="294" font-family="Segoe UI, Roboto, system-ui, sans-serif" font-size="18" fill="#cbd5e1">Listas, tabelas estruturadas, análise de padrões</text>
+    <text x="328" y="320" font-family="Segoe UI, Roboto, system-ui, sans-serif" font-size="18" fill="#cbd5e1">e gráficos para projetos escolares investigativos.</text>
+
+    <!-- Painel Analítico -->
+    <g transform="translate(834, 158)">
+      <rect x="0" y="0" width="324" height="280" rx="20" fill="#0f172a" fill-opacity="0.84" stroke="#38bdf8" stroke-width="2"/>
+      <!-- Barras e linha de tendência -->
+      <rect x="36" y="156" width="38" height="72" rx="6" fill="#1d4ed8"/>
+      <rect x="90" y="122" width="38" height="106" rx="6" fill="#0284c7"/>
+      <rect x="144" y="88" width="38" height="140" rx="6" fill="#38bdf8"/>
+      <rect x="198" y="106" width="38" height="122" rx="6" fill="#059669"/>
+      <rect x="252" y="64" width="38" height="164" rx="6" fill="#10b981"/>
+      <path d="M 55 138 L 109 102 L 163 68 L 217 86 L 271 44" fill="none" stroke="#fbbf24" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="55" cy="138" r="5" fill="#fbbf24"/>
+      <circle cx="163" cy="68" r="5" fill="#fbbf24"/>
+      <circle cx="271" cy="44" r="5" fill="#fbbf24"/>
+      <text x="162" y="254" text-anchor="middle" font-family="ui-monospace, Consolas, monospace" font-size="12" font-weight="700" fill="#bae6fd">EF69CO02 · RECONHECIMENTO DE PADRÕES</text>
+    </g>
+  </g>
+</svg>

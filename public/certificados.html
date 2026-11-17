@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Certificados — LMS COMPASSO</title>
+<meta name="i18n-title" content="certPage.metaTitulo">
 <link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,18 +16,18 @@
     <div id="sidebar-container"></div>
     <main class="conteudo">
       <div id="topbar-container"></div>
-      <div class="cartao tabela-scroll" role="region" aria-label="Tabela de certificados emitidos">
-        <table aria-label="Lista de certificados emitidos">
-          <thead><tr><th scope="col">Aluno</th><th scope="col">Curso</th><th scope="col">Código</th><th scope="col">Emitido em</th><th scope="col" class="texto-direita">Arquivo</th></tr></thead>
+      <div class="cartao tabela-scroll" role="region" aria-label="Tabela de certificados emitidos" data-i18n-aria-label="certPage.tabelaRegionAria">
+        <table aria-label="Lista de certificados emitidos" data-i18n-aria-label="certPage.tabelaAria">
+          <thead><tr><th scope="col" data-i18n="matPage.colAluno">Aluno</th><th scope="col" data-i18n="matPage.colCurso">Curso</th><th scope="col" data-i18n="certPage.colCodigo">Código</th><th scope="col" data-i18n="certPage.colEmitidoEm">Emitido em</th><th scope="col" class="texto-direita" data-i18n="certPage.colArquivo">Arquivo</th></tr></thead>
           <tbody id="corpo-tabela"></tbody>
         </table>
       </div>
 
       <div class="cartao">
-        <h2>Validar Certificado</h2>
+        <h2 data-i18n="certPage.validarTitulo">Validar Certificado</h2>
         <div class="flex-linha flex-wrap">
-          <input type="text" id="codigo-validar" placeholder="Código de validação" title="Código de validação do certificado" aria-label="Código de validação do certificado" class="flex-1 min-w-200">
-          <button type="button" class="btn btn-primario flex-inline-icon" onclick="validar()"><span class="material-symbols-outlined icon-xs" aria-hidden="true">verified</span> Validar</button>
+          <input type="text" id="codigo-validar" placeholder="Código de validação" title="Código de validação do certificado" aria-label="Código de validação do certificado" data-i18n-placeholder="certPage.validarPlaceholder" data-i18n-title="certPage.validarAria" data-i18n-aria-label="certPage.validarAria" class="flex-1 min-w-200">
+          <button type="button" class="btn btn-primario flex-inline-icon" onclick="validar()"><span class="material-symbols-outlined icon-xs" aria-hidden="true">verified</span> <span data-i18n="certPage.btnValidar">Validar</span></button>
         </div>
         <div id="resultado-validacao" class="mt-12"></div>
       </div>
@@ -37,56 +38,97 @@
   <script src="/js/api.js"></script>
   <script src="/js/layout.js"></script>
   <script type="module">
+    import { t, traduzirDocumento, formatarData, formatarNumero } from '/js/i18n.js';
+
     const usuario = exigirAutenticacao();
     montarLayout('certificados');
-    document.getElementById('titulo-pagina').textContent = 'Certificados';
+
+    function atualizarTituloTopbar() {
+      const el = document.getElementById('titulo-pagina');
+      if (el) el.textContent = t('certPage.topbarTitulo');
+    }
+    atualizarTituloTopbar();
+    traduzirDocumento();
+
+    let ultimosCertificados = [];
+    let ultimaValidacao = null;
+
+    function renderizarCertificados() {
+      const corpo = document.getElementById('corpo-tabela');
+      if (!corpo) return;
+      if (ultimosCertificados.length === 0) {
+        corpo.innerHTML = `<tr><td colspan="5" class="texto-suave">${escaparHtml(t('certPage.vazio'))}</td></tr>`;
+        return;
+      }
+      corpo.innerHTML = ultimosCertificados.map((c) => {
+        const urlSegura = /^(https?:\/\/|\/)/i.test(String(c.url_arquivo || '')) ? String(c.url_arquivo) : '#';
+        return `
+          <tr>
+            <td>${escaparHtml(c.aluno_nome)}</td>
+            <td>${escaparHtml(c.curso_titulo)}</td>
+            <td><code>${escaparHtml(c.codigo_validacao)}</code></td>
+            <td>${escaparHtml(formatarData(c.data_emissao))}</td>
+            <td class="texto-direita"><a href="${escaparHtml(urlSegura)}" target="_blank" rel="noopener" class="btn btn-neutro btn-xs flex-inline-icon" aria-label="${escaparHtml(t('certPage.baixarPdfAria', { nome: c.aluno_nome }))}"><span class="material-symbols-outlined icon-xs" aria-hidden="true">download</span> ${escaparHtml(t('certPage.baixarPdf'))}</a></td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderizarResultadoValidacao() {
+      const resultado = document.getElementById('resultado-validacao');
+      if (!resultado || !ultimaValidacao) return;
+      if (ultimaValidacao.ok) {
+        const cert = ultimaValidacao.dados.certificado;
+        const msg = t('certPage.validoMsg', {
+          aluno: cert.aluno_nome,
+          curso: cert.curso_titulo,
+          horas: formatarNumero(Number(cert.carga_horaria) || 0),
+          data: formatarData(cert.data_emissao),
+        });
+        resultado.innerHTML = `
+          <div class="alerta alerta-sucesso flex-inline-icon">
+            <span class="material-symbols-outlined icon-sm">verified</span>
+            <span>${escaparHtml(msg)}</span>
+          </div>`;
+      } else {
+        resultado.innerHTML = `
+          <div class="alerta alerta-erro flex-inline-icon">
+            <span class="material-symbols-outlined icon-sm">error</span>
+            <span>${escaparHtml(ultimaValidacao.erro)}</span>
+          </div>`;
+      }
+    }
 
     async function carregar() {
       try {
-        const certificados = await api('/certificados');
-        const corpo = document.getElementById('corpo-tabela');
-        if (certificados.length === 0) {
-          corpo.innerHTML = '<tr><td colspan="5" class="texto-suave">Nenhum certificado emitido ainda.</td></tr>';
-          return;
-        }
-        corpo.innerHTML = certificados.map((c) => {
-          const urlSegura = /^(https?:\/\/|\/)/i.test(String(c.url_arquivo || '')) ? String(c.url_arquivo) : '#';
-          return `
-            <tr>
-              <td>${escaparHtml(c.aluno_nome)}</td>
-              <td>${escaparHtml(c.curso_titulo)}</td>
-              <td><code>${escaparHtml(c.codigo_validacao)}</code></td>
-              <td>${escaparHtml(formatarData(c.data_emissao))}</td>
-              <td class="texto-direita"><a href="${escaparHtml(urlSegura)}" target="_blank" rel="noopener" class="btn btn-neutro btn-xs flex-inline-icon" aria-label="Baixar PDF do certificado de ${escaparHtml(c.aluno_nome)}"><span class="material-symbols-outlined icon-xs" aria-hidden="true">download</span> Baixar PDF</a></td>
-            </tr>
-          `;
-        }).join('');
+        ultimosCertificados = await api('/certificados');
+        renderizarCertificados();
       } catch (err) {
         mostrarNotificacao(err.message, 'erro');
       }
     }
 
     async function validar() {
-      const codigo = document.getElementById('codigo-validar').value.trim();
-      const resultado = document.getElementById('resultado-validacao');
+      const inputCodigo = document.getElementById('codigo-validar');
+      const codigo = inputCodigo?.value.trim() || '';
       if (!codigo) return;
       try {
         const dados = await api(`/certificados/validar/${encodeURIComponent(codigo)}`);
-        resultado.innerHTML = `
-          <div class="alerta alerta-sucesso flex-inline-icon">
-            <span class="material-symbols-outlined icon-sm">verified</span>
-            <span>Certificado válido — ${escaparHtml(dados.certificado.aluno_nome)} concluiu "${escaparHtml(dados.certificado.curso_titulo)}"
-            (${Number(dados.certificado.carga_horaria) || 0}h) em ${escaparHtml(formatarData(dados.certificado.data_emissao))}.</span>
-          </div>`;
+        ultimaValidacao = { ok: true, dados };
       } catch (err) {
-        resultado.innerHTML = `
-          <div class="alerta alerta-erro flex-inline-icon">
-            <span class="material-symbols-outlined icon-sm">error</span>
-            <span>${escaparHtml(err.message)}</span>
-          </div>`;
+        ultimaValidacao = { ok: false, erro: err.message };
       }
+      renderizarResultadoValidacao();
     }
     window.validar = validar;
+
+    window.addEventListener('lms:idioma-alterado', () => {
+      atualizarTituloTopbar();
+      traduzirDocumento();
+      renderizarCertificados();
+      renderizarResultadoValidacao();
+    });
+    window.addEventListener('lms:layout-atualizado', atualizarTituloTopbar);
 
     await carregar();
   </script>

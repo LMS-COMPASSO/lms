@@ -52,6 +52,38 @@ function encerrarSessao() {
 }
 
 /**
+ * Auxiliar interno para traduzir mensagens antes ou depois do carregamento do módulo i18n.js
+ */
+function traduzirApi(chave, padrao) {
+  if (typeof window !== 'undefined' && typeof window.t === 'function') {
+    return window.t(chave, {}, padrao);
+  }
+  return padrao;
+}
+
+const MAPA_ERROS_API_SERVIDOR = {
+  'Email ou senha inválidos.': 'api.erroCredenciais',
+  'Muitas tentativas de login. Aguarde antes de tentar novamente.': 'api.erroMuitasTentativas',
+  'Este email já está cadastrado.': 'api.erroEmailCadastrado',
+  'Este e-mail já está em uso.': 'api.erroEmailEmUso',
+  'Todos os campos obrigatórios devem ser preenchidos.': 'api.erroCamposObrigatorios',
+  'A senha deve ter pelo menos 6 caracteres.': 'api.erroSenhaCurta',
+  'Senha atual incorreta.': 'api.erroSenhaAtual',
+  'Acesso negado.': 'api.erroAcessoNegado',
+  'Usuário não encontrado.': 'api.erroUsuarioNaoEncontrado',
+  'Curso não encontrado.': 'api.erroCursoNaoEncontrado',
+  'Token inválido ou expirado.': 'api.erroTokenInvalido',
+  'Não autorizado.': 'api.erroNaoAutorizado',
+};
+
+function traduzirMensagemServidor(msg) {
+  if (!msg || typeof msg !== 'string') return traduzirApi('api.erroServidor', 'Erro ao processar a solicitação no servidor.');
+  const chave = MAPA_ERROS_API_SERVIDOR[msg.trim()];
+  if (chave) return traduzirApi(chave, msg);
+  return msg;
+}
+
+/**
  * Realiza uma chamada HTTP à API REST com envio automático do token JWT.
  *
  * @param {string} caminho - Rota da API (ex: '/cursos' ou '/auth/me').
@@ -76,7 +108,7 @@ async function api(caminho, opcoes = {}) {
   try {
     resposta = await fetch(`${API_BASE}${caminho}`, { ...opcoes, headers });
   } catch {
-    throw new Error('Não foi possível conectar ao servidor. Verifique sua conexão à internet.');
+    throw new Error(traduzirApi('api.erroConexao', 'Não foi possível conectar ao servidor. Verifique sua conexão à internet.'));
   }
 
   // Se a sessão autenticada expirou ou o token atual foi rejeitado, encerra a sessão
@@ -85,7 +117,7 @@ async function api(caminho, opcoes = {}) {
     || caminho.startsWith('/auth/google');
   if (resposta.status === 401 && token && !rotaPublicaAuth) {
     encerrarSessao();
-    throw new Error('Sessão expirada. Faça login novamente.');
+    throw new Error(traduzirApi('api.sessaoExpirada', 'Sessão expirada. Faça login novamente.'));
   }
 
   // Lê a resposta do backend
@@ -101,7 +133,7 @@ async function api(caminho, opcoes = {}) {
 
   // Se o status HTTP indicar erro (4xx ou 5xx), lança uma exceção com a mensagem
   if (!resposta.ok) {
-    throw new Error(dados.erro || 'Erro ao processar a solicitação no servidor.');
+    throw new Error(dados.erro ? traduzirMensagemServidor(dados.erro) : traduzirApi('api.erroServidor', 'Erro ao processar a solicitação no servidor.'));
   }
 
   return dados;
@@ -122,7 +154,10 @@ function exigirAutenticacao(perfisPermitidos = null) {
   }
 
   if (perfisPermitidos && !perfisPermitidos.includes(usuario.perfil)) {
-    window.location.href = '/dashboard.html';
+    const destinoFallback = usuario.perfil === 'aluno' ? '/cursos.html' : '/dashboard.html';
+    if (window.location.pathname !== destinoFallback) {
+      window.location.href = destinoFallback;
+    }
     return null;
   }
 
@@ -130,16 +165,21 @@ function exigirAutenticacao(perfisPermitidos = null) {
 }
 
 /**
- * Formata uma data no padrão brasileiro (DD/MM/AAAA HH:mm).
+ * Formata uma data respeitando o idioma ativo (Intl.DateTimeFormat).
  *
- * @param {string} dataStr - String de data em formato ISO.
+ * @param {string|Date} dataStr - Data em formato ISO ou objeto Date.
  * @returns {string} Data formatada ou "-" se vazia.
  */
 function formatarData(dataStr) {
   if (!dataStr) return '-';
+  if (typeof window !== 'undefined' && window.LMS_I18N?.formatarData) {
+    return window.LMS_I18N.formatarData(dataStr);
+  }
   const data = new Date(dataStr);
-  const dataFormatada = data.toLocaleDateString('pt-BR');
-  const horaFormatada = data.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+  if (Number.isNaN(data.getTime())) return String(dataStr);
+  const langDoc = typeof document !== 'undefined' ? (document.documentElement?.lang || 'pt-BR') : 'pt-BR';
+  const dataFormatada = data.toLocaleDateString(langDoc);
+  const horaFormatada = data.toLocaleTimeString(langDoc, { hour: '2-digit', minute: '2-digit' });
   return `${dataFormatada} ${horaFormatada}`;
 }
 

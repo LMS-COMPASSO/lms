@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320" width="480" height="320" fill="none" role="img" aria-labelledby="cc-title cc-desc">
+  <title id="cc-title">Conquista de Certificação</title>
+  <desc id="cc-desc">Ilustração editorial modular com certificado A4, medalha BNCC e selo de validação.</desc>
+
+  <!-- Folha de Certificado -->
+  <rect x="92" y="48" width="296" height="212" rx="16" fill="var(--cor-cartao, #ffffff)" stroke="var(--cor-primaria, #2c5282)" stroke-width="2.5"/>
+  <rect x="112" y="68" width="256" height="172" rx="10" stroke="var(--cor-borda, #cbd5e1)" stroke-width="1.5" stroke-dasharray="6 4"/>
+
+  <!-- Linhas do Certificado -->
+  <path d="M 136 102 H 264" stroke="var(--cor-primaria, #2c5282)" stroke-width="5" stroke-linecap="round"/>
+  <path d="M 136 132 H 248" stroke="currentColor" stroke-opacity="0.65" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M 136 156 H 224" stroke="currentColor" stroke-opacity="0.5" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M 136 196 H 212" stroke="var(--cor-secundaria-suave, #38a169)" stroke-width="3.5" stroke-linecap="round"/>
+
+  <!-- Medalha / Selo -->
+  <g transform="translate(274, 128)">
+    <path d="M 32 54 L 22 104 L 44 92 L 66 104 L 56 54" fill="var(--cor-secao-cultura-fundo, #fffbeb)" stroke="var(--cor-secao-cultura, #b45309)" stroke-width="2.5" stroke-linejoin="round"/>
+    <circle cx="44" cy="40" r="32" fill="var(--cor-cartao, #ffffff)" stroke="var(--cor-alerta, #b7791f)" stroke-width="3"/>
+    <path d="M 33 40 L 41 48 L 57 32" stroke="var(--cor-secundaria-suave, #38a169)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

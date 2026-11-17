@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320" width="480" height="320" fill="none" role="img" aria-labelledby="sd-title sd-desc">
+  <title id="sd-title">Segurança Digital e Cidadania</title>
+  <desc id="sd-desc">Ilustração modular com escudo protetor, cadeado verificado e nós de privacidade escolar.</desc>
+
+  <!-- Malha de Conexões -->
+  <path d="M 104 160 H 168 M 312 160 H 376 M 240 44 V 74 M 240 246 V 276" stroke="var(--cor-borda, #cbd5e1)" stroke-width="3" stroke-dasharray="5 5" stroke-linecap="round"/>
+  <circle cx="96" cy="160" r="16" fill="var(--cor-cartao, #ffffff)" stroke="var(--cor-secao-mundo, #047857)" stroke-width="2.5"/>
+  <circle cx="384" cy="160" r="16" fill="var(--cor-cartao, #ffffff)" stroke="var(--cor-primaria, #2c5282)" stroke-width="2.5"/>
+
+  <!-- Escudo Central -->
+  <path d="M 240 62 L 322 94 V 158 C 322 208 286 244 240 262 C 194 244 158 208 158 158 V 94 Z" fill="var(--cor-cartao, #ffffff)" stroke="var(--cor-secao-cultura, #b45309)" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M 240 82 L 304 108 V 158 C 304 198 274 226 240 242 C 206 226 176 198 176 158 V 108 Z" fill="var(--cor-secao-cultura-fundo, #fffbeb)" stroke="var(--cor-secao-cultura-borda, #fcd34d)" stroke-width="1.5"/>
+
+  <!-- Cadeado Interno -->
+  <rect x="214" y="148" width="52" height="42" rx="8" fill="var(--cor-cartao, #ffffff)" stroke="currentColor" stroke-width="2.5"/>
+  <path d="M 224 148 V 134 A 16 16 0 0 1 256 134 V 148" stroke="var(--cor-primaria, #2c5282)" stroke-width="3" stroke-linecap="round"/>
+  <path d="M 230 169 L 238 177 L 252 162" stroke="var(--cor-secundaria-suave, #38a169)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

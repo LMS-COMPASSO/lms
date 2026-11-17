@@ -101,7 +101,7 @@ try {
   }
 
   const idsVistos = new Map();
-  const secoes = ['navegacaoEWayfinding', 'estadosEFluxo', 'conceitosComputacaoBNCC'];
+  const secoes = ['navegacaoEWayfinding', 'estadosEFluxo', 'conceitosComputacaoBNCC', 'workspaceEBloqueio'];
   for (const secao of secoes) {
     const bloco = registro[secao];
     if (!bloco || typeof bloco !== 'object') {

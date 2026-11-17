@@ -8,6 +8,7 @@
  */
 
 import { h } from './dom.js';
+import { t } from './traducao.js';
 
 let audioCtx = null;
 let somHabilitado = localStorage.getItem('lms_som_ativo') !== 'false';
@@ -164,25 +165,42 @@ export function tocarSom(tipo) {
  * @param {Function} aoAlternar Callback chamado ao alternar o estado do áudio
  */
 export function criarBotaoSom(aoAlternar) {
+  const iconeEl = h('span', { class: 'material-symbols-outlined' }, somHabilitado ? 'volume_up' : 'volume_off');
+  const rotuloEl = h('span', { class: 'atv-som-rotulo' }, somHabilitado ? t('som.on', {}, 'Som: ON') : t('som.off', {}, 'Som: OFF'));
   const btn = h(
     'button',
     {
       type: 'button',
       class: `atv-btn-som ${somHabilitado ? 'ativo' : ''}`,
-      'aria-label': somHabilitado ? 'Desativar efeitos sonoros' : 'Ativar efeitos sonoros',
-      title: somHabilitado ? 'Sons ativados' : 'Sons mudos',
+      'aria-label': somHabilitado
+        ? t('som.desativarAria', {}, 'Desativar efeitos sonoros')
+        : t('som.ativarAria', {}, 'Ativar efeitos sonoros'),
+      title: somHabilitado
+        ? t('som.ativadosTitle', {}, 'Sons ativados')
+        : t('som.mudosTitle', {}, 'Sons mudos'),
       onclick: () => {
         const novo = alternarSom();
         btn.classList.toggle('ativo', novo);
-        btn.setAttribute('aria-label', novo ? 'Desativar efeitos sonoros' : 'Ativar efeitos sonoros');
-        btn.setAttribute('title', novo ? 'Sons ativados' : 'Sons mudos');
-        btn.innerHTML = `<span class="material-symbols-outlined">${novo ? 'volume_up' : 'volume_off'}</span><span class="atv-som-rotulo">${novo ? 'Som: ON' : 'Som: OFF'}</span>`;
+        btn.setAttribute(
+          'aria-label',
+          novo
+            ? t('som.desativarAria', {}, 'Desativar efeitos sonoros')
+            : t('som.ativarAria', {}, 'Ativar efeitos sonoros'),
+        );
+        btn.setAttribute(
+          'title',
+          novo
+            ? t('som.ativadosTitle', {}, 'Sons ativados')
+            : t('som.mudosTitle', {}, 'Sons mudos'),
+        );
+        iconeEl.textContent = novo ? 'volume_up' : 'volume_off';
+        rotuloEl.textContent = novo ? t('som.on', {}, 'Som: ON') : t('som.off', {}, 'Som: OFF');
         if (novo) tocarSom('click');
         if (aoAlternar) aoAlternar(novo);
       },
     },
-    h('span', { class: 'material-symbols-outlined' }, somHabilitado ? 'volume_up' : 'volume_off'),
-    h('span', { class: 'atv-som-rotulo' }, somHabilitado ? 'Som: ON' : 'Som: OFF'),
+    iconeEl,
+    rotuloEl,
   );
   return btn;
 }

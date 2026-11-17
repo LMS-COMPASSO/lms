@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Detalhe do Curso — LMS COMPASSO</title>
+<meta name="i18n-title" content="cdetPage.metaTitulo">
 <link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,13 +20,13 @@
       <div class="cartao" id="cabecalho-curso"></div>
 
       <!-- Mapa de Orientação do Curso (Pilar 2: Mostra a trilha completa, onde o aluno está e o que vem a seguir) -->
-      <section class="cartao" id="mapa-orientacao-curso" aria-label="Mapa do curso: progresso por etapa"></section>
+      <section class="cartao" id="mapa-orientacao-curso" aria-label="Mapa do curso: progresso por etapa" data-i18n-aria-label="cdetPage.mapaSecaoAria"></section>
 
       <div class="cartao oculto-aluno" id="area-novo-modulo">
-        <h3>Adicionar Módulo</h3>
+        <h3 data-i18n="cdetPage.addModuloTitulo">Adicionar Módulo</h3>
         <div class="flex-linha flex-wrap">
-          <input type="text" id="novo-modulo-titulo" placeholder="Título do módulo" title="Título do novo módulo" aria-label="Título do novo módulo" class="flex-1 min-w-200">
-          <button type="button" class="btn btn-primario flex-inline-icon" onclick="criarModulo()"><span class="material-symbols-outlined icon-xs">add</span> Adicionar</button>
+          <input type="text" id="novo-modulo-titulo" placeholder="Título do módulo" title="Título do novo módulo" aria-label="Título do novo módulo" data-i18n-placeholder="cdetPage.novoModuloPlaceholder" data-i18n-title="cdetPage.novoModuloAria" data-i18n-aria-label="cdetPage.novoModuloAria" class="flex-1 min-w-200">
+          <button type="button" class="btn btn-primario flex-inline-icon" onclick="criarModulo()"><span class="material-symbols-outlined icon-xs">add</span> <span data-i18n="cdetPage.btnAdicionar">Adicionar</span></button>
         </div>
       </div>
 
@@ -37,8 +38,8 @@
   <div id="modal-avaliacao" class="modal-backdrop oculto" role="dialog" aria-modal="true" aria-labelledby="titulo-modal-avaliacao">
     <div class="modal-conteudo modal-conteudo-largo">
       <div class="flex-entre mb-12">
-        <h3 id="titulo-modal-avaliacao" class="modal-titulo-compacto">Avaliação do Módulo</h3>
-        <button type="button" class="btn btn-xs btn-neutro" onclick="fecharModalAvaliacao()" aria-label="Fechar avaliação">Fechar</button>
+        <h3 id="titulo-modal-avaliacao" class="modal-titulo-compacto" data-i18n="cdetPage.modalAvTituloPadrao">Avaliação do Módulo</h3>
+        <button type="button" class="btn btn-xs btn-neutro" onclick="fecharModalAvaliacao()" aria-label="Fechar avaliação" data-i18n="loginPage.fechar" data-i18n-aria-label="cdetPage.fecharAvAria">Fechar</button>
       </div>
       <div id="conteudo-modal-avaliacao"></div>
     </div>
@@ -48,9 +49,19 @@
   <script src="/js/api.js"></script>
   <script src="/js/layout.js"></script>
   <script type="module">
+    import { t, traduzirDocumento, formatarNumero } from '/js/i18n.js';
+
     const usuario = exigirAutenticacao();
     montarLayout('cursos');
-    document.getElementById('titulo-pagina').textContent = 'Detalhe do Curso';
+
+    let cursoAtual = null;
+
+    function atualizarTituloTopbar() {
+      const el = document.getElementById('titulo-pagina');
+      if (el) el.textContent = cursoAtual?.titulo || t('cdetPage.topbarTitulo');
+    }
+    atualizarTituloTopbar();
+    traduzirDocumento();
 
     function aplicarVisibilidadePerfil() {
       const ehAluno = usuario?.perfil === 'aluno';
@@ -67,43 +78,41 @@
       if (perfil === 'aluno') {
         const marcado = aula.concluida ? 'checked' : '';
         return `<label class="flex-linha">
-          <input type="checkbox" ${marcado} onchange="marcarProgresso(${aula.id}, this.checked)"> Concluída
+          <input type="checkbox" ${marcado} onchange="marcarProgresso(${aula.id}, this.checked)"> ${escaparHtml(t('cdetPage.concluidaLabel'))}
         </label>`;
       }
-      return `<button type="button" class="btn btn-perigo btn-xs" onclick="excluirAula(${aula.id})">Excluir</button>`;
+      return `<button type="button" class="btn btn-perigo btn-xs" onclick="excluirAula(${aula.id})">${escaparHtml(t('comp.excluir'))}</button>`;
     }
 
-    // Atividades dinâmicas do próprio LMS recebem a aula e o curso para marcar o progresso ao concluir.
-    // Links externos só são aceitos com http(s), o que impede endereços como "javascript:".
     function montarLinkAula(aula, idDoCurso) {
       const url = (aula.url_recurso || '').trim();
       if (url.startsWith('/atividades.html')) {
         const separador = url.includes('?') ? '&' : '?';
-        return { href: `${url}${separador}aula=${aula.id}&curso=${idDoCurso}`, rotulo: 'Abrir atividade', externo: false };
+        return { href: `${url}${separador}aula=${aula.id}&curso=${idDoCurso}`, rotulo: t('cdetPage.abrirAtividade'), externo: false };
       }
-      if (/^https?:\/\//i.test(url)) return { href: url, rotulo: 'Abrir recurso', externo: true };
+      if (/^https?:\/\//i.test(url)) return { href: url, rotulo: t('cdetPage.abrirRecurso'), externo: true };
       return null;
     }
 
     function renderizarConteudoAula(aula, idDoCurso) {
       const link = montarLinkAula(aula, idDoCurso);
       const botao = link
-        ? `<div class="mt-8"><a class="btn btn-primario btn-xs" href="${escaparHtml(link.href)}"${link.externo ? ' target="_blank" rel="noopener"' : ''}>${link.rotulo}</a></div>`
+        ? `<div class="mt-8"><a class="btn btn-primario btn-xs" href="${escaparHtml(link.href)}"${link.externo ? ' target="_blank" rel="noopener"' : ''}>${escaparHtml(link.rotulo)}</a></div>`
         : '';
       const descricao = aula.conteudo
-        ? `<details class="mt-8"><summary class="texto-suave cursor-pointer">Ver descrição</summary><p class="texto-suave">${escaparHtml(aula.conteudo)}</p></details>`
+        ? `<details class="mt-8"><summary class="texto-suave cursor-pointer">${escaparHtml(t('cdetPage.verDescricao'))}</summary><p class="texto-suave">${escaparHtml(aula.conteudo)}</p></details>`
         : '';
       return botao + descricao;
     }
 
     function mapearEixoParaSecao(eixoBncc) {
       const val = String(eixoBncc || '').toLowerCase();
-      if (val.includes('mundo')) return { secao: 'mundo', rotulo: 'Eixo 2: Mundo Digital', icone: 'memory' };
-      if (val.includes('cultura')) return { secao: 'cultura', rotulo: 'Eixo 3: Cultura Digital', icone: 'verified_user' };
-      return { secao: 'pensamento', rotulo: 'Eixo 1: Pensamento Computacional', icone: 'format_list_numbered' };
+      if (val.includes('mundo')) return { secao: 'mundo', nomeEixo: t('eixo.mundo-digital'), rotulo: t('cdetPage.eixo2Badge'), icone: 'memory' };
+      if (val.includes('cultura')) return { secao: 'cultura', nomeEixo: t('eixo.cultura-digital'), rotulo: t('cdetPage.eixo3Badge'), icone: 'verified_user' };
+      return { secao: 'pensamento', nomeEixo: t('eixo.pensamento-computacional'), rotulo: t('cdetPage.eixo1Badge'), icone: 'format_list_numbered' };
     }
 
-    function renderizarMapaOrientacaoCurso(curso, infoSecao) {
+    function renderizarMapaOrientacaoCurso(curso) {
       const mapaEl = document.getElementById('mapa-orientacao-curso');
       if (!mapaEl) return;
 
@@ -112,9 +121,9 @@
       if (totalEtapas === 0) {
         mapaEl.innerHTML = `
           <div class="progresso-etapas-topo">
-            <span class="progresso-etapas-contador"><span class="material-symbols-outlined icon-xs" aria-hidden="true">map</span> Mapa do Curso: 0 etapas cadastradas</span>
+            <span class="progresso-etapas-contador"><span class="material-symbols-outlined icon-xs" aria-hidden="true">map</span> ${escaparHtml(t('cdetPage.mapaZeroEtapas'))}</span>
           </div>
-          <p class="texto-suave m-0">Adicione módulos e aulas para visualizar a trilha de marcos do curso.</p>
+          <p class="texto-suave m-0">${escaparHtml(t('cdetPage.mapaZeroDesc'))}</p>
         `;
         return;
       }
@@ -133,26 +142,28 @@
 
         let classeEstado = 'estado-nao-iniciado';
         let iconeEstado = 'circle-dashed';
-        let rotuloEstado = 'Não iniciado';
+        let rotuloEstado = t('card.naoIniciado');
 
         if (ehConcluida) {
           classeEstado = 'estado-concluido';
           iconeEstado = 'check_circle';
-          rotuloEstado = 'Concluído';
+          rotuloEstado = t('card.concluido');
         } else if (ehAqui) {
           classeEstado = 'estado-em-andamento';
           iconeEstado = 'schedule';
-          rotuloEstado = 'Em andamento (Você está aqui)';
+          rotuloEstado = t('trilha.estadoAqui');
         } else if (ehBloqueada) {
           classeEstado = 'estado-bloqueado';
           iconeEstado = 'lock';
-          rotuloEstado = 'Bloqueado (Conclua a etapa anterior)';
+          rotuloEstado = t('cdetPage.estadoBloqueado');
         }
 
+        const titleTxt = t('cdetPage.marcoTitle', { etapa: idx + 1, total: totalEtapas, titulo: aula.titulo, estado: rotuloEstado });
+        const stepTxt = t('cdetPage.etapaItem', { etapa: idx + 1, titulo: aula.titulo });
         return `
-          <li class="trilha-marco-item ${classeEstado}" ${ehAqui ? 'aria-current="step"' : ''} title="Etapa ${idx + 1} de ${totalEtapas}: ${escaparHtml(aula.titulo)} — ${rotuloEstado}">
+          <li class="trilha-marco-item ${classeEstado}" ${ehAqui ? 'aria-current="step"' : ''} title="${escaparHtml(titleTxt)}">
             <span class="material-symbols-outlined icon-xs" aria-hidden="true">${iconeEstado}</span>
-            <span>Etapa ${idx + 1}: ${escaparHtml(aula.titulo)}</span>
+            <span>${escaparHtml(stepTxt)}</span>
           </li>
         `;
       }).join('');
@@ -161,116 +172,131 @@
         <div class="progresso-etapas-topo">
           <span class="progresso-etapas-contador">
             <span class="material-symbols-outlined icon-xs" aria-hidden="true">map</span>
-            <span>Mapa do Curso — Etapa ${etapaExibida} de ${totalEtapas} (${concluidas}/${totalEtapas} concluídas · ${percentual}%)</span>
+            <span>${escaparHtml(t('cdetPage.mapaContador', {
+              etapa: etapaExibida,
+              total: totalEtapas,
+              concluidas,
+              percentual: formatarNumero(percentual),
+            }))}</span>
           </span>
           <div class="flex-linha flex-wrap gap-8">
-            <span class="mapa-tag-aqui"><span class="material-symbols-outlined icon-xs" aria-hidden="true">explore</span> Você está aqui: ${escaparHtml(aulaAtual.titulo)}</span>
-            ${proximaAula ? `<span class="mapa-tag-proximo">O que vem a seguir: ${escaparHtml(proximaAula.titulo)} →</span>` : '<span class="estado-progresso-pill estado-concluido"><span class="material-symbols-outlined icon-xs" aria-hidden="true">check_circle</span> Curso Concluído!</span>'}
+            <span class="mapa-tag-aqui"><span class="material-symbols-outlined icon-xs" aria-hidden="true">explore</span> ${escaparHtml(t('cdetPage.voceEstaAquiAula', { titulo: aulaAtual.titulo }))}</span>
+            ${proximaAula ? `<span class="mapa-tag-proximo">${escaparHtml(t('cdetPage.proximoPasso', { titulo: proximaAula.titulo }))}</span>` : `<span class="estado-progresso-pill estado-concluido"><span class="material-symbols-outlined icon-xs" aria-hidden="true">check_circle</span> ${escaparHtml(t('cdetPage.cursoConcluido'))}</span>`}
           </div>
         </div>
-        <div class="progresso-etapas-barra" role="progressbar" aria-label="Progresso nas etapas do curso" aria-valuenow="${concluidas}" aria-valuemin="0" aria-valuemax="${totalEtapas}">
+        <div class="progresso-etapas-barra" role="progressbar" aria-label="${escaparHtml(t('cdetPage.barraProgressoAria'))}" aria-valuenow="${concluidas}" aria-valuemin="0" aria-valuemax="${totalEtapas}">
           <div class="progresso-etapas-preenchimento" style="width: ${percentual}%"></div>
         </div>
-        <ol class="trilha-marcos" aria-label="Etapas e estados das aulas do curso">
+        <ol class="trilha-marcos" aria-label="${escaparHtml(t('cdetPage.marcosAria'))}">
           ${marcosHtml}
         </ol>
       `;
     }
 
-    async function carregarCurso() {
-      try {
-        const curso = await api(`/cursos/${cursoId}`);
-        const infoSecao = mapearEixoParaSecao(curso.eixo_bncc);
-        document.body.setAttribute('data-secao', infoSecao.secao);
-        document.getElementById('titulo-pagina').textContent = curso.titulo;
+    function renderizarCurso(curso) {
+      if (!curso) return;
+      const infoSecao = mapearEixoParaSecao(curso.eixo_bncc);
+      document.body.setAttribute('data-secao', infoSecao.secao);
+      atualizarTituloTopbar();
 
-        document.getElementById('cabecalho-curso').innerHTML = `
-          <div class="flex-linha flex-wrap gap-8">
-            <span class="secao-pista-badge" data-secao="${infoSecao.secao}">
-              <span class="material-symbols-outlined icon-xs" aria-hidden="true">${infoSecao.icone}</span>
-              <span>${infoSecao.rotulo}</span>
-            </span>
-            <span class="badge badge-${curso.status}">${curso.status}</span>
-          </div>
-          <h2 class="mt-8 mb-10">${escaparHtml(curso.titulo)}</h2>
-          <p class="texto-suave">${escaparHtml(curso.descricao || '')}</p>
-          <div class="curso-meta-info texto-suave">
-            <div><span class="material-symbols-outlined icon-xs">category</span> <span>${escaparHtml(curso.eixo_bncc)}</span> · <span class="material-symbols-outlined icon-xs">school</span> <span>${escaparHtml(curso.ano_escolar)}</span></div>
-            <div><span class="material-symbols-outlined icon-xs">schedule</span> <span>${curso.carga_horaria}h</span> · <span class="material-symbols-outlined icon-xs">person</span> <span>${escaparHtml(curso.instrutor_nome)}</span></div>
+      const statusLabel = t(`status.${curso.status}`, {}, curso.status);
+      const cabecalhoCursoEl = document.getElementById('cabecalho-curso');
+      if (cabecalhoCursoEl) {
+        cabecalhoCursoEl.innerHTML = `
+        <div class="flex-linha flex-wrap gap-8">
+          <span class="secao-pista-badge" data-secao="${infoSecao.secao}">
+            <span class="material-symbols-outlined icon-xs" aria-hidden="true">${infoSecao.icone}</span>
+            <span>${escaparHtml(infoSecao.rotulo)}</span>
+          </span>
+          <span class="badge badge-${escaparHtml(curso.status)}">${escaparHtml(statusLabel)}</span>
+        </div>
+        <h2 class="mt-8 mb-10">${escaparHtml(curso.titulo)}</h2>
+        <p class="texto-suave">${escaparHtml(curso.descricao || '')}</p>
+        <div class="curso-meta-info texto-suave">
+          <div><span class="material-symbols-outlined icon-xs">category</span> <span>${escaparHtml(infoSecao.nomeEixo)}</span> · <span class="material-symbols-outlined icon-xs">school</span> <span>${escaparHtml(curso.ano_escolar)}</span></div>
+          <div><span class="material-symbols-outlined icon-xs">schedule</span> <span>${escaparHtml(formatarNumero(curso.carga_horaria))}h</span> · <span class="material-symbols-outlined icon-xs">person</span> <span>${escaparHtml(curso.instrutor_nome)}</span></div>
+        </div>
+      `;
+      }
+
+      renderizarMapaOrientacaoCurso(curso);
+
+      const container = document.getElementById('lista-modulos');
+      if (!container) return;
+      if (curso.modulos.length === 0) {
+        container.innerHTML = `
+          <div class="estado-saida-404">
+            <div class="estado-saida-icone" aria-hidden="true"><span class="material-symbols-outlined icon-lg">menu_book</span></div>
+            <h3>${escaparHtml(t('cdetPage.semModulosTitulo'))}</h3>
+            <p>${escaparHtml(t('cdetPage.semModulosDesc'))}</p>
+            <div class="estado-saida-acoes">
+              <a href="/cursos.html" class="btn btn-neutro seta-voltar"><span class="material-symbols-outlined icon-xs" aria-hidden="true">arrow_back</span> ${escaparHtml(t('wf.voltarTrilhas'))}</a>
+              <a href="/atividades.html" class="btn btn-primario seta-proximo">${escaparHtml(t('cdetPage.irAtividades'))} <span class="material-symbols-outlined icon-xs" aria-hidden="true">arrow_forward</span></a>
+            </div>
           </div>
         `;
+        return;
+      }
 
-        renderizarMapaOrientacaoCurso(curso, infoSecao);
-
-        const container = document.getElementById('lista-modulos');
-        if (curso.modulos.length === 0) {
-          container.innerHTML = `
-            <div class="estado-saida-404">
-              <div class="estado-saida-icone" aria-hidden="true"><span class="material-symbols-outlined icon-lg">menu_book</span></div>
-              <h3>Nenhum módulo cadastrado neste curso ainda</h3>
-              <p>Explore as atividades práticas da BNCC Computação ou retorne ao catálogo de cursos.</p>
-              <div class="estado-saida-acoes">
-                <a href="/cursos.html" class="btn btn-neutro seta-voltar"><span class="material-symbols-outlined icon-xs" aria-hidden="true">arrow_back</span> Voltar para Trilhas</a>
-                <a href="/atividades.html" class="btn btn-primario seta-proximo">Ir para Atividades <span class="material-symbols-outlined icon-xs" aria-hidden="true">arrow_forward</span></a>
-              </div>
-            </div>
-          `;
-          return;
-        }
-
-        container.innerHTML = curso.modulos.map((m) => `
-          <div class="cartao">
-            <div class="flex-entre">
-              <h3>${escaparHtml(m.titulo)}</h3>
-              <button type="button" class="btn btn-perigo btn-xs oculto-aluno${usuario.perfil === 'aluno' ? ' oculto' : ''}" onclick="excluirModulo(${m.id})">Excluir módulo</button>
-            </div>
-            <p class="texto-suave">${escaparHtml(m.descricao || '')}</p>
-
-            <div class="tabela-scroll" tabindex="0" role="region" aria-label="Lista de aulas do módulo">
-              <table>
-                <thead><tr><th scope="col">Aula</th><th scope="col">Tipo</th><th scope="col">Duração</th><th scope="col">Ações</th></tr></thead>
-                <tbody>
-                  ${m.aulas.map((a) => `
-                    <tr>
-                      <td>${escaparHtml(a.titulo)}${renderizarConteudoAula(a, curso.id)}</td>
-                      <td>${escaparHtml(a.tipo)}</td>
-                      <td>${Number(a.duracao_min) || 0} min</td>
-                      <td>
-                        ${renderizarAcaoAula(a, usuario.perfil)}
-                      </td>
-                    </tr>
-                  `).join('') || '<tr><td colspan="4" class="texto-suave">Nenhuma aula cadastrada.</td></tr>'}
-                </tbody>
-              </table>
-            </div>
-
-            <div class="oculto-aluno${usuario.perfil === 'aluno' ? ' oculto' : ''} flex-linha flex-wrap mt-12">
-              <input type="text" id="nova-aula-${m.id}" placeholder="Título da nova aula" title="Título da nova aula" aria-label="Título da nova aula" class="flex-1 min-w-160">
-              <select id="tipo-aula-${m.id}" title="Tipo de aula" aria-label="Tipo de aula">
-                <option value="texto">Texto</option>
-                <option value="video">Vídeo</option>
-                <option value="pdf">PDF</option>
-                <option value="link">Link</option>
-              </select>
-              <button type="button" class="btn btn-neutro btn-sm flex-inline-icon" onclick="criarAula(${m.id})"><span class="material-symbols-outlined icon-xs">add</span> Aula</button>
-            </div>
-
-            ${m.avaliacoes.length > 0 ? `
-              <div class="mt-12 pt-10 modulo-avaliacoes-bloco">
-                <p class="texto-suave mb-6"><strong>Avaliações do módulo:</strong></p>
-                <div class="flex-linha flex-wrap gap-8">
-                  ${m.avaliacoes.map((av) => `
-                    <button type="button" class="btn btn-neutro btn-sm flex-inline-icon" onclick="abrirAvaliacao(${av.id})">
-                      <span class="material-symbols-outlined icon-xs" aria-hidden="true">quiz</span>
-                      <span>${escaparHtml(av.titulo)} (mín. ${Number(av.nota_minima) || 6})</span>
-                    </button>
-                  `).join('')}
-                </div>
-              </div>
-            ` : ''}
+      container.innerHTML = curso.modulos.map((m) => `
+        <div class="cartao">
+          <div class="flex-entre">
+            <h3>${escaparHtml(m.titulo)}</h3>
+            <button type="button" class="btn btn-perigo btn-xs oculto-aluno${usuario.perfil === 'aluno' ? ' oculto' : ''}" onclick="excluirModulo(${m.id})">${escaparHtml(t('cdetPage.excluirModulo'))}</button>
           </div>
-        `).join('');
-        aplicarVisibilidadePerfil();
+          <p class="texto-suave">${escaparHtml(m.descricao || '')}</p>
+
+          <div class="tabela-scroll" tabindex="0" role="region" aria-label="${escaparHtml(t('cdetPage.aulasTabelaAria'))}">
+            <table>
+              <thead><tr><th scope="col">${escaparHtml(t('cdetPage.colAula'))}</th><th scope="col">${escaparHtml(t('cdetPage.colTipo'))}</th><th scope="col">${escaparHtml(t('cdetPage.colDuracao'))}</th><th scope="col">${escaparHtml(t('matPage.colAcoes'))}</th></tr></thead>
+              <tbody>
+                ${m.aulas.map((a) => `
+                  <tr>
+                    <td>${escaparHtml(a.titulo)}${renderizarConteudoAula(a, curso.id)}</td>
+                    <td>${escaparHtml(t(`cdetPage.tipo.${a.tipo}`, {}, a.tipo))}</td>
+                    <td>${escaparHtml(formatarNumero(Number(a.duracao_min) || 0))} ${escaparHtml(t('card.min'))}</td>
+                    <td>
+                      ${renderizarAcaoAula(a, usuario.perfil)}
+                    </td>
+                  </tr>
+                `).join('') || `<tr><td colspan="4" class="texto-suave">${escaparHtml(t('cdetPage.nenhumaAula'))}</td></tr>`}
+              </tbody>
+            </table>
+          </div>
+
+          <div class="oculto-aluno${usuario.perfil === 'aluno' ? ' oculto' : ''} flex-linha flex-wrap mt-12">
+            <input type="text" id="nova-aula-${m.id}" placeholder="${escaparHtml(t('cdetPage.novaAulaPlaceholder'))}" title="${escaparHtml(t('cdetPage.novaAulaPlaceholder'))}" aria-label="${escaparHtml(t('cdetPage.novaAulaPlaceholder'))}" class="flex-1 min-w-160">
+            <select id="tipo-aula-${m.id}" title="${escaparHtml(t('cdetPage.tipoAulaAria'))}" aria-label="${escaparHtml(t('cdetPage.tipoAulaAria'))}">
+              <option value="texto">${escaparHtml(t('cdetPage.tipo.texto'))}</option>
+              <option value="video">${escaparHtml(t('cdetPage.tipo.video'))}</option>
+              <option value="pdf">${escaparHtml(t('cdetPage.tipo.pdf'))}</option>
+              <option value="link">${escaparHtml(t('cdetPage.tipo.link'))}</option>
+            </select>
+            <button type="button" class="btn btn-neutro btn-sm flex-inline-icon" onclick="criarAula(${m.id})"><span class="material-symbols-outlined icon-xs">add</span> ${escaparHtml(t('cdetPage.colAula'))}</button>
+          </div>
+
+          ${m.avaliacoes.length > 0 ? `
+            <div class="mt-12 pt-10 modulo-avaliacoes-bloco">
+              <p class="texto-suave mb-6"><strong>${escaparHtml(t('cdetPage.avaliacoesModulo'))}</strong></p>
+              <div class="flex-linha flex-wrap gap-8">
+                ${m.avaliacoes.map((av) => `
+                  <button type="button" class="btn btn-neutro btn-sm flex-inline-icon" onclick="abrirAvaliacao(${av.id})">
+                    <span class="material-symbols-outlined icon-xs" aria-hidden="true">quiz</span>
+                    <span>${escaparHtml(av.titulo)} (${escaparHtml(t('cdetPage.notaMinima', { min: Number(av.nota_minima) || 6 }))})</span>
+                  </button>
+                `).join('')}
+              </div>
+            </div>
+          ` : ''}
+        </div>
+      `).join('');
+      aplicarVisibilidadePerfil();
+    }
+
+    async function carregarCurso() {
+      try {
+        cursoAtual = await api(`/cursos/${cursoId}`);
+        renderizarCurso(cursoAtual);
       } catch (err) {
         mostrarNotificacao(err.message, 'erro');
       }
@@ -281,14 +307,14 @@
       const tituloEl = document.getElementById('titulo-modal-avaliacao');
       const corpoEl = document.getElementById('conteudo-modal-avaliacao');
       if (!modal || !corpoEl) return;
-      corpoEl.innerHTML = '<p class="texto-suave">Carregando questões da avaliação...</p>';
+      corpoEl.innerHTML = `<p class="texto-suave">${escaparHtml(t('cdetPage.carregandoAv'))}</p>`;
       modal.classList.remove('oculto');
       try {
         const av = await api(`/avaliacoes/${avaliacaoId}`);
-        tituloEl.textContent = av.titulo || 'Avaliação';
+        tituloEl.textContent = av.titulo || t('cdetPage.modalAvTituloCurto');
         const questoes = Array.isArray(av.questoes) ? av.questoes : [];
         if (questoes.length === 0) {
-          corpoEl.innerHTML = '<p class="texto-suave">Esta avaliação ainda não possui questões cadastradas.</p>';
+          corpoEl.innerHTML = `<p class="texto-suave">${escaparHtml(t('cdetPage.avSemQuestoes'))}</p>`;
           return;
         }
         const ehAluno = usuario.perfil === 'aluno';
@@ -297,7 +323,7 @@
           <form id="form-responder-avaliacao">
             ${questoes.map((q, idx) => `
               <fieldset class="mb-14 avaliacao-questao-fieldset">
-                <legend class="avaliacao-questao-legenda">${idx + 1}. ${escaparHtml(q.enunciado)} (${Number(q.pontos) || 1} pt)</legend>
+                <legend class="avaliacao-questao-legenda">${idx + 1}. ${escaparHtml(q.enunciado)} (${escaparHtml(t('cdetPage.pontos', { pts: Number(q.pontos) || 1 }))})</legend>
                 ${(q.alternativas || []).map((alt) => `
                   <label class="flex-linha gap-8 mt-6 avaliacao-alternativa-label">
                     ${ehAluno
@@ -309,7 +335,7 @@
               </fieldset>
             `).join('')}
             <div id="resultado-avaliacao-modal" class="mb-10"></div>
-            ${ehAluno ? '<button type="submit" class="btn btn-primario flex-inline-icon"><span class="material-symbols-outlined icon-xs" aria-hidden="true">task_alt</span> Enviar Respostas</button>' : ''}
+            ${ehAluno ? `<button type="submit" class="btn btn-primario flex-inline-icon"><span class="material-symbols-outlined icon-xs" aria-hidden="true">task_alt</span> ${escaparHtml(t('cdetPage.enviarRespostas'))}</button>` : ''}
           </form>
         `;
         const formAv = document.getElementById('form-responder-avaliacao');
@@ -325,7 +351,7 @@
               method: 'POST',
               body: JSON.stringify({ respostas }),
             });
-            resBox.innerHTML = `<div class="alerta ${resp.aprovado ? 'alerta-sucesso' : 'alerta-erro'}">${escaparHtml(resp.mensagem)} Nota obtida: <strong>${Number(resp.nota).toFixed(1)}</strong>.</div>`;
+            resBox.innerHTML = `<div class="alerta ${resp.aprovado ? 'alerta-sucesso' : 'alerta-erro'}">${escaparHtml(resp.mensagem)} ${escaparHtml(t('cdetPage.notaObtida'))} <strong>${escaparHtml(formatarNumero(Number(resp.nota), { minimumFractionDigits: 1, maximumFractionDigits: 1 }))}</strong>.</div>`;
             await carregarCurso();
           } catch (errResp) {
             resBox.innerHTML = `<div class="alerta alerta-erro">${escaparHtml(errResp.message)}</div>`;
@@ -341,41 +367,42 @@
     }
 
     async function criarModulo() {
-      const titulo = document.getElementById('novo-modulo-titulo').value.trim();
+      const inputModulo = document.getElementById('novo-modulo-titulo');
+      const titulo = inputModulo?.value.trim() || '';
       if (!titulo) return;
       try {
         await api(`/modulos/curso/${cursoId}`, { method: 'POST', body: JSON.stringify({ titulo }) });
-        document.getElementById('novo-modulo-titulo').value = '';
-        mostrarNotificacao('Módulo criado com sucesso!', 'sucesso');
+        if (inputModulo) inputModulo.value = '';
+        mostrarNotificacao(t('cdetPage.moduloCriado'), 'sucesso');
         carregarCurso();
       } catch (err) { mostrarNotificacao(err.message, 'erro'); }
     }
 
     async function excluirModulo(id) {
-      if (!confirm('Excluir este módulo e todo seu conteúdo?')) return;
+      if (!confirm(t('cdetPage.confirmExcluirModulo'))) return;
       try {
         await api(`/modulos/${id}`, { method: 'DELETE' });
-        mostrarNotificacao('Módulo excluído.', 'info');
+        mostrarNotificacao(t('cdetPage.moduloExcluido'), 'info');
         carregarCurso();
       } catch (err) { mostrarNotificacao(err.message, 'erro'); }
     }
 
     async function criarAula(moduloId) {
-      const titulo = document.getElementById(`nova-aula-${moduloId}`).value.trim();
-      const tipo = document.getElementById(`tipo-aula-${moduloId}`).value;
+      const titulo = document.getElementById(`nova-aula-${moduloId}`)?.value.trim() || '';
+      const tipo = document.getElementById(`tipo-aula-${moduloId}`)?.value || 'texto';
       if (!titulo) return;
       try {
         await api(`/aulas/modulo/${moduloId}`, { method: 'POST', body: JSON.stringify({ titulo, tipo }) });
-        mostrarNotificacao('Aula adicionada com sucesso!', 'sucesso');
+        mostrarNotificacao(t('cdetPage.aulaCriada'), 'sucesso');
         carregarCurso();
       } catch (err) { mostrarNotificacao(err.message, 'erro'); }
     }
 
     async function excluirAula(id) {
-      if (!confirm('Excluir esta aula?')) return;
+      if (!confirm(t('cdetPage.confirmExcluirAula'))) return;
       try {
         await api(`/aulas/${id}`, { method: 'DELETE' });
-        mostrarNotificacao('Aula excluída.', 'info');
+        mostrarNotificacao(t('cdetPage.aulaExcluida'), 'info');
         carregarCurso();
       } catch (err) { mostrarNotificacao(err.message, 'erro'); }
     }
@@ -386,6 +413,13 @@
         await carregarCurso();
       } catch (err) { mostrarNotificacao(err.message, 'erro'); }
     }
+
+    window.addEventListener('lms:idioma-alterado', () => {
+      atualizarTituloTopbar();
+      traduzirDocumento();
+      if (cursoAtual) renderizarCurso(cursoAtual);
+    });
+    window.addEventListener('lms:layout-atualizado', atualizarTituloTopbar);
 
     Object.assign(window, {
       criarModulo,

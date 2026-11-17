@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cultura Digital — Cidadania e Diálogo — LMS COMPASSO</title>
-<meta name="description" content="Laboratório interativo do Eixo Cultura Digital alinhado à BNCC Computação: tome decisões éticas em chats interativos, identifique phishing e fake news, proteja sua pegada digital e teste a segurança de senhas.">
+<meta name="i18n-title" content="cd.metaTitulo">
+<meta name="description" data-i18n-attr="content:cd.metaDesc" content="Laboratório interativo do Eixo Cultura Digital alinhado à BNCC Computação: tome decisões éticas em chats interativos, identifique phishing e fake news, proteja sua pegada digital e teste a segurança de senhas.">
 <link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,21 +20,21 @@
   <!-- Topo de Navegação Universal -->
   <header class="pub-topo">
     <div class="pub-container pub-topo-conteudo">
-      <a href="/" class="pub-logo" aria-label="LMS COMPASSO — página inicial">
-        <img src="/img/logo.svg" alt="LMS COMPASSO — BNCC Computação" width="272" height="64" class="logo-tema-claro">
-        <img src="/img/logo-branco.svg" alt="LMS COMPASSO — BNCC Computação" width="272" height="64" class="logo-tema-escuro">
+      <a href="/" class="pub-logo" aria-label="LMS COMPASSO — página inicial" data-i18n-aria-label="nav.logoAriaLabel">
+        <img src="/img/logo.svg" alt="LMS COMPASSO — BNCC Computação" data-i18n-attr="alt:nav.logoAlt" width="272" height="64" class="logo-tema-claro">
+        <img src="/img/logo-branco.svg" alt="LMS COMPASSO — BNCC Computação" data-i18n-attr="alt:nav.logoAlt" width="272" height="64" class="logo-tema-escuro">
       </a>
-      <nav class="pub-nav" aria-label="Navegação principal">
-        <a href="/"><span class="material-symbols-outlined icon-xs" aria-hidden="true">home</span> Início</a>
-        <a href="/boas-vindas.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">rocket_launch</span> Boas-vindas</a>
-        <a href="/atividades.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">format_list_numbered</span> Atividades</a>
-        <a href="/mundo-digital.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">memory</span> Mundo Digital</a>
-        <a href="/cultura-digital.html" aria-current="page"><span class="material-symbols-outlined icon-xs" aria-hidden="true">verified_user</span> Cultura Digital</a>
+      <nav class="pub-nav" aria-label="Navegação principal" data-i18n-aria-label="nav.principalAriaLabel">
+        <a href="/"><span class="material-symbols-outlined icon-xs" aria-hidden="true">home</span> <span data-i18n="nav.inicio">Início</span></a>
+        <a href="/boas-vindas.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">rocket_launch</span> <span data-i18n="nav.boasVindas">Boas-vindas</span></a>
+        <a href="/atividades.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">format_list_numbered</span> <span data-i18n="nav.atividades">Atividades</span></a>
+        <a href="/mundo-digital.html"><span class="material-symbols-outlined icon-xs" aria-hidden="true">memory</span> <span data-i18n="nav.mundoDigital">Mundo Digital</span></a>
+        <a href="/cultura-digital.html" aria-current="page"><span class="material-symbols-outlined icon-xs" aria-hidden="true">verified_user</span> <span data-i18n="nav.culturaDigital">Cultura Digital</span></a>
       </nav>
       <div class="pub-acoes">
-        <a href="/atividades.html" class="btn btn-contorno-escuro btn-sm flex-inline-icon" title="Buscar atividades BNCC" aria-label="Buscar atividades"><span class="material-symbols-outlined icon-xs" aria-hidden="true">search</span> Buscar</a>
-        <a href="/login.html" class="btn btn-contorno-escuro btn-sm flex-inline-icon" id="acao-entrar"><span class="material-symbols-outlined icon-xs" aria-hidden="true">account_circle</span> Entrar</a>
-        <a href="/registrar.html" class="btn btn-primario btn-sm flex-inline-icon" id="acao-cadastrar"><span class="material-symbols-outlined icon-xs" aria-hidden="true">person_add</span> Criar conta</a>
+        <a href="/atividades.html" class="btn btn-contorno-escuro btn-sm flex-inline-icon" title="Buscar atividades BNCC" aria-label="Buscar atividades" data-i18n-title="nav.buscarAriaLabel" data-i18n-aria-label="nav.buscarAriaLabel"><span class="material-symbols-outlined icon-xs" aria-hidden="true">search</span> <span data-i18n="nav.buscar">Buscar</span></a>
+        <a href="/login.html" class="btn btn-contorno-escuro btn-sm flex-inline-icon" id="acao-entrar"><span class="material-symbols-outlined icon-xs" aria-hidden="true">account_circle</span> <span data-i18n="nav.entrar">Entrar</span></a>
+        <a href="/registrar.html" class="btn btn-primario btn-sm flex-inline-icon" id="acao-cadastrar"><span class="material-symbols-outlined icon-xs" aria-hidden="true">person_add</span> <span data-i18n="nav.criarConta">Criar conta</span></a>
       </div>
     </div>
   </header>
@@ -297,7 +298,7 @@
   <footer class="cd-rodape">
     <div class="cd-rodape-grade">
       <div class="cd-rodape-info">
-        <img src="/img/logo-branco.svg" alt="LMS COMPASSO — BNCC Computação" width="145" height="34">
+        <img src="/img/logo-branco.svg" alt="LMS COMPASSO — BNCC Computação" data-i18n-attr="alt:nav.logoAlt" width="145" height="34">
         <p data-i18n="rodape.descricao">
           Plataforma aberta para o ensino de Computação no Ensino Fundamental, alinhada à BNCC Computação e desenvolvida com apoio do IFMA Campus Grajaú.
         </p>
@@ -305,7 +306,7 @@
       <div class="cd-rodape-col">
         <h3 data-i18n="rodape.eixos">Eixos Curriculares</h3>
         <ul>
-          <li><a href="/atividades.html" data-i18n="nav.atividades">Pensamento Computacional</a></li>
+          <li><a href="/atividades.html" data-i18n="eixo.pensamento-computacional">Pensamento Computacional</a></li>
           <li><a href="/mundo-digital.html" data-i18n="rodape.mundoDigital">Mundo Digital (Hardware/Redes)</a></li>
           <li><a href="/cultura-digital.html" data-i18n="rodape.culturaDigital">Cultura Digital (Cidadania)</a></li>
         </ul>
@@ -324,8 +325,14 @@
     </div>
   </footer>
 
+  <script src="/js/vendor/gsap.min.js"></script>
+  <script src="/js/vendor/ScrollTrigger.min.js"></script>
   <script type="module" src="/js/cultura-digital.js"></script>
   <script type="module" src="/js/icones-universais.js"></script>
   <script type="module" src="/js/menu-universal.js"></script>
+  <script type="module">
+    import { animarRevelacaoScroll } from '/js/animacoes-gsap.js';
+    animarRevelacaoScroll('.cd-secao, .cd-card, .cd-opcao-pegada', { grupoPorPai: true, stagger: 0.05, y: 14 });
+  </script>
 </body>
 </html>

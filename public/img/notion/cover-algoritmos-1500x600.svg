@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 600" width="1500" height="600" role="img" aria-labelledby="alg-title alg-desc">
+  <title id="alg-title">Algoritmos e Pensamento Computacional — Capa Notion</title>
+  <desc id="alg-desc">Capa temática 1500x600 com fluxograma isométrico e blocos de sequência na zona segura central 900x350.</desc>
+  <defs>
+    <linearGradient id="bg-alg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b1120"/>
+      <stop offset="55%" stop-color="#172554"/>
+      <stop offset="100%" stop-color="#1a365d"/>
+    </linearGradient>
+    <pattern id="grid-alg" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#93c5fd" stroke-opacity="0.12" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1500" height="600" fill="url(#bg-alg)"/>
+  <rect width="1500" height="600" fill="url(#grid-alg)"/>
+
+  <g id="safe-zone" data-safe-area="300 125 900 350">
+    <!-- Bloco de texto editorial -->
+    <rect x="328" y="168" width="168" height="32" rx="16" fill="#1d4ed8" fill-opacity="0.3" stroke="#93c5fd" stroke-width="1.5"/>
+    <text x="412" y="189" text-anchor="middle" font-family="Segoe UI, Roboto, system-ui, sans-serif" font-size="13" font-weight="700" fill="#93c5fd">EIXO 1 · BNCC</text>
+    <text x="328" y="254" font-family="Segoe UI, Roboto, system-ui, sans-serif" font-size="40" font-weight="800" fill="#f8fafc">Algoritmos &amp; Lógica</text>
+    <text x="328" y="294" font-family="Segoe UI, Roboto, system-ui, sans-serif" font-size="18" fill="#cbd5e1">Sequências, laços de repetição, condicionais e</text>
+    <text x="328" y="320" font-family="Segoe UI, Roboto, system-ui, sans-serif" font-size="18" fill="#cbd5e1">decomposição para Laboratório 3D Python.</text>
+
+    <!-- Fluxograma Modular de Blocos -->
+    <g transform="translate(830, 156)">
+      <rect x="0" y="0" width="330" height="284" rx="20" fill="#111827" fill-opacity="0.72" stroke="#3b82f6" stroke-width="2"/>
+      <!-- Passo 1 -->
+      <rect x="28" y="28" width="274" height="52" rx="10" fill="#1e3a8a" fill-opacity="0.5" stroke="#93c5fd" stroke-width="1.5"/>
+      <circle cx="54" cy="54" r="12" fill="#2563eb"/>
+      <text x="54" y="59" text-anchor="middle" font-family="ui-monospace, Consolas, monospace" font-size="13" font-weight="700" fill="#ffffff">1</text>
+      <text x="80" y="59" font-family="ui-monospace, Consolas, monospace" font-size="15" font-weight="600" fill="#f8fafc">decompor(problema)</text>
+      <!-- Conector -->
+      <path d="M 165 80 V 104" stroke="#60a5fa" stroke-width="2.5" stroke-linecap="round"/>
+      <!-- Passo 2 -->
+      <rect x="28" y="104" width="274" height="52" rx="10" fill="#1e293b" stroke="#6ee7b7" stroke-width="1.5"/>
+      <circle cx="54" cy="130" r="12" fill="#047857"/>
+      <text x="54" y="135" text-anchor="middle" font-family="ui-monospace, Consolas, monospace" font-size="13" font-weight="700" fill="#ffffff">2</text>
+      <text x="80" y="135" font-family="ui-monospace, Consolas, monospace" font-size="15" font-weight="600" fill="#6ee7b7">para cada passo in rota:</text>
+      <!-- Conector -->
+      <path d="M 165 156 V 180" stroke="#6ee7b7" stroke-width="2.5" stroke-linecap="round"/>
+      <!-- Passo 3 -->
+      <rect x="28" y="180" width="274" height="52" rx="10" fill="#1e293b" stroke="#fcd34d" stroke-width="1.5"/>
+      <circle cx="54" cy="206" r="12" fill="#b45309"/>
+      <text x="54" y="211" text-anchor="middle" font-family="ui-monospace, Consolas, monospace" font-size="13" font-weight="700" fill="#ffffff">3</text>
+      <text x="80" y="211" font-family="ui-monospace, Consolas, monospace" font-size="15" font-weight="600" fill="#fcd34d">validar_solucao()</text>
+    </g>
+  </g>
+</svg>

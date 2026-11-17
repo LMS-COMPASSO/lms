@@ -16,9 +16,19 @@
 import { anunciar, h } from './dom.js';
 import { criarControladorCena3D } from './cena3d.js';
 import { executarPythonPedagogicoFallback } from './pyodide-worker.js';
+import {
+  t,
+  atvConclusao,
+  atvDica,
+  atvTitulo,
+  traduzirErroWorkerPython,
+  traduzirEventoPython,
+  traduzirResumoPython,
+} from './traducao.js';
 
 let workerGlobal = null;
 let contadorRequisicao = 0;
+const rascunhosCodigo = new Map();
 
 function executarNoWorkerOuFallback(codigoPython, cena3d) {
   return new Promise((resolve) => {
@@ -73,21 +83,24 @@ export function jogadorPython3d(atividade, { aoConcluir, reduzirMovimento = fals
   const containerPalco = h('div', {
     class: 'py3d-palco-container',
     role: 'region',
-    'aria-label': `Cena 3D da atividade: ${atividade.titulo}`,
+    'aria-label': t('py3d.cenaAria', { titulo: atvTitulo(atividade) }),
   });
 
   const controladorCena = criarControladorCena3D(containerPalco, atividade.cena3d, { reduzirMovimento });
 
   // 2. Editor de código com números de linha e destaque sincronizado
   const colunaLinhas = h('ol', { class: 'py3d-editor-linhas', 'aria-hidden': 'true' });
+  const codigoBase = rascunhosCodigo.has(atividade.id)
+    ? rascunhosCodigo.get(atividade.id)
+    : (atividade.codigoInicial || '');
   const textareaCodigo = h('textarea', {
     class: 'py3d-editor-textarea',
     spellcheck: 'false',
     autocapitalize: 'off',
     autocomplete: 'off',
-    'aria-label': 'Editor de código Python',
+    'aria-label': t('py3d.editorAria'),
     rows: 12,
-  }, atividade.codigoInicial || '');
+  }, codigoBase);
 
   const caixaFeedback = h('div', { class: 'atv-feedback', role: 'status', 'aria-live': 'polite' });
 
@@ -117,14 +130,16 @@ export function jogadorPython3d(atividade, { aoConcluir, reduzirMovimento = fals
           'li',
           {
             class: classes.join(' '),
-            title: modoDuplaAtivo ? `Clique para marcar a linha ${i} para revisão da dupla` : `Linha ${i}`,
+            title: modoDuplaAtivo
+              ? t('py3d.linhaDuplaTitle', { linha: i })
+              : t('py3d.linhaTitle', { linha: i }),
             onclick: () => {
               if (!modoDuplaAtivo) return;
               linhaMarcadaNavegador = linhaMarcadaNavegador === i ? null : i;
               atualizarNumeracaoLinhas(linhaDestacada);
               emitirSincronizacaoDupla('marcar-linha', { linha: linhaMarcadaNavegador });
               if (linhaMarcadaNavegador) {
-                const msg = `Navegador destacou a linha ${i} para revisão conjunta com o Piloto.`;
+                const msg = t('py3d.navMarcouLinha', { linha: i });
                 caixaFeedback.className = 'atv-feedback info';
                 caixaFeedback.textContent = msg;
                 anunciar(msg);
@@ -139,6 +154,7 @@ export function jogadorPython3d(atividade, { aoConcluir, reduzirMovimento = fals
   }
 
   textareaCodigo.addEventListener('input', () => {
+    rascunhosCodigo.set(atividade.id, textareaCodigo.value);
     cacheUltimaExecucao = null;
     indicePassoManual = -1;
     atualizarNumeracaoLinhas();
@@ -147,12 +163,12 @@ export function jogadorPython3d(atividade, { aoConcluir, reduzirMovimento = fals
   atualizarNumeracaoLinhas();
 
   // 3. Barra do Modo Desafio Colaborativo (Pair Programming Escolar: Piloto + Navegador)
-  const badgePapelDupla = h('span', { class: 'py3d-dupla-badge' }, 'Modo Individual');
+  const badgePapelDupla = h('span', { class: 'py3d-dupla-badge' }, t('py3d.duplaIndividual'));
   const inputParceiro = h('input', {
     type: 'text',
     class: 'py3d-dupla-input',
-    placeholder: 'Nome do colega da dupla (ex.: Sofia Oliveira)',
-    'aria-label': 'Nome do colega da dupla de Pair Programming',
+    placeholder: t('py3d.duplaColegaPlaceholder'),
+    'aria-label': t('py3d.duplaColegaAria'),
     oninput: (e) => {
       parceiroDupla = e.target.value.trim();
       emitirSincronizacaoDupla('parceiro-atualizado', { parceiro: parceiroDupla });
@@ -162,7 +178,7 @@ export function jogadorPython3d(atividade, { aoConcluir, reduzirMovimento = fals
     type: 'text',
     class: 'py3d-dupla-input py3d-dupla-sala',
     value: codigoSalaDupla,
-    'aria-label': 'Código da sala colaborativa',
+    'aria-label': t('py3d.duplaSalaAria'),
     onchange: (e) => {
       codigoSalaDupla = e.target.value.trim().toUpperCase() || codigoSalaDupla;
     },
@@ -171,26 +187,26 @@ export function jogadorPython3d(atividade, { aoConcluir, reduzirMovimento = fals
   const dicaPapelDupla = h(
     'p',
     { class: 'py3d-dupla-orientacao' },
-    'No Pair Programming escolar, o Piloto digita o código Python enquanto o Navegador inspeciona a cena 3D, clica nos números de linha para apontar ajustes e sugere a estratégia.',
+    t('py3d.duplaOrientacaoPadrao'),
   );
 
   function aplicarEstadoPapelDupla() {
     if (!modoDuplaAtivo) {
       papelDupla = 'individual';
-      badgePapelDupla.textContent = 'Modo Individual';
+      badgePapelDupla.textContent = t('py3d.duplaIndividual');
       badgePapelDupla.className = 'py3d-dupla-badge';
       textareaCodigo.removeAttribute('readonly');
       return;
     }
     if (papelDupla === 'piloto') {
-      badgePapelDupla.textContent = 'Papel: PILOTO (Codificação Python)';
+      badgePapelDupla.textContent = t('py3d.duplaBadgePiloto');
       badgePapelDupla.className = 'py3d-dupla-badge piloto';
       textareaCodigo.removeAttribute('readonly');
-      dicaPapelDupla.textContent = 'Você está como PILOTO: escreva o código Python no editor em diálogo com o Navegador da sua dupla.';
+      dicaPapelDupla.textContent = t('py3d.duplaOrientacaoPiloto');
     } else {
-      badgePapelDupla.textContent = 'Papel: NAVEGADOR (Inspeção 3D & Revisão)';
+      badgePapelDupla.textContent = t('py3d.duplaBadgeNavegador');
       badgePapelDupla.className = 'py3d-dupla-badge navegador';
-      dicaPapelDupla.textContent = 'Você está como NAVEGADOR: gire a cena 3D, clique no número de uma linha do código para destacá-la ao Piloto e valide a lógica antes de executar!';
+      dicaPapelDupla.textContent = t('py3d.duplaOrientacaoNavegador');
     }
   }
 
@@ -203,6 +219,7 @@ export function jogadorPython3d(atividade, { aoConcluir, reduzirMovimento = fals
         if (!modoDuplaAtivo || msg.sala !== codigoSalaDupla || msg.atividadeId !== atividade.id) return;
         if (msg.tipoEvento === 'codigo-atualizado' && typeof msg.codigo === 'string') {
           textareaCodigo.value = msg.codigo;
+          rascunhosCodigo.set(atividade.id, msg.codigo);
           atualizarNumeracaoLinhas();
         } else if (msg.tipoEvento === 'marcar-linha') {
           linhaMarcadaNavegador = msg.linha;
@@ -231,11 +248,12 @@ export function jogadorPython3d(atividade, { aoConcluir, reduzirMovimento = fals
         emitirSincronizacaoDupla('trocar-papel', {
           novoPapelRemoto: proximoPapel === 'piloto' ? 'navegador' : 'piloto',
         });
-        anunciar(`Papel alterado para ${proximoPapel}.`);
+        const papelRotulo = t(proximoPapel === 'piloto' ? 'py3d.papelPilotoNome' : 'py3d.papelNavegadorNome');
+        anunciar(t('py3d.anuncioPapelAlterado', { papel: papelRotulo }));
       },
     },
     h('span', { class: 'material-symbols-outlined icon-xs', 'aria-hidden': 'true' }, 'swap_horiz'),
-    'Trocar Papéis (Piloto ↔ Navegador)',
+    t('py3d.btnTrocarPapeis'),
   );
 
   const painelConfigDupla = h(
@@ -275,19 +293,19 @@ export function jogadorPython3d(atividade, { aoConcluir, reduzirMovimento = fals
       },
     },
     h('span', { class: 'material-symbols-outlined icon-xs', 'aria-hidden': 'true' }, 'group'),
-    'Modo Dupla (Pair Programming)',
+    t('py3d.btnModoDupla'),
   );
 
   // 4. Log textual acessível de passos (alternativa textual da animação 3D)
   const listaLogPassos = h('ol', {
     class: 'py3d-log-lista',
     'aria-live': 'polite',
-    'aria-label': 'Registro textual passo a passo da animação 3D',
-  }, h('li', { class: 'py3d-log-vazio' }, 'Clique em "Executar Python" ou "Passo a Passo" para ver o registro de ações do robô.'));
+    'aria-label': t('py3d.logAria'),
+  }, h('li', { class: 'py3d-log-vazio' }, t('py3d.logVazio')));
 
   function adicionarItemLog(evento, limparAntes = false) {
     if (limparAntes) listaLogPassos.replaceChildren();
-    const item = h('li', { class: 'py3d-log-item' }, evento.descricao || `Linha ${evento.linha}: ${evento.tipo}`);
+    const item = h('li', { class: 'py3d-log-item' }, traduzirEventoPython(evento));
     listaLogPassos.appendChild(item);
     listaLogPassos.scrollTop = listaLogPassos.scrollHeight;
   }
@@ -295,15 +313,15 @@ export function jogadorPython3d(atividade, { aoConcluir, reduzirMovimento = fals
   function validarCriteriosExtras(codigo, resumo) {
     const crit = atividade.criteriosVerificacao || {};
     if (crit.exigirCondicional && !/\bif\b/.test(codigo)) {
-      return { ok: false, msg: 'Quase lá! Para concluir este desafio, utilize uma estrutura condicional "if" no seu código Python.' };
+      return { ok: false, msg: t('py3d.crit.condicional') };
     }
     if (crit.exigirLaco && !/\b(for|while)\b/.test(codigo)) {
-      return { ok: false, msg: 'Use um laço de repetição ("for" ou "while") para automatizar o percurso sem repetir linhas!' };
+      return { ok: false, msg: t('py3d.crit.laco') };
     }
     if (crit.exigirFuncao && !/\bdef\b/.test(codigo)) {
-      return { ok: false, msg: 'Mantenha a definição de função com "def" para decompor o problema!' };
+      return { ok: false, msg: t('py3d.crit.funcao') };
     }
-    return { ok: resumo.sucesso, msg: resumo.motivo };
+    return { ok: resumo.sucesso, msg: traduzirResumoPython(resumo) };
   }
 
   // 5. Ações dos botões de controle pedagógico
@@ -313,23 +331,24 @@ export function jogadorPython3d(atividade, { aoConcluir, reduzirMovimento = fals
     if (!remoto) emitirSincronizacaoDupla('executar-remoto');
 
     caixaFeedback.className = 'atv-feedback info';
-    caixaFeedback.textContent = 'Interpretando código Python e preparando simulação 3D...';
+    caixaFeedback.textContent = t('py3d.interpretando');
 
     const codigo = textareaCodigo.value;
     const resposta = await executarNoWorkerOuFallback(codigo, atividade.cena3d);
     cacheUltimaExecucao = resposta;
 
     if (!resposta.ok) {
+      const msgErro = traduzirErroWorkerPython(resposta);
       caixaFeedback.className = 'atv-feedback erro';
-      caixaFeedback.textContent = resposta.erro;
-      anunciar(resposta.erro);
+      caixaFeedback.textContent = msgErro;
+      anunciar(msgErro);
       return;
     }
 
     listaLogPassos.replaceChildren();
     if (resposta.eventos.length === 0) {
       caixaFeedback.className = 'atv-feedback erro';
-      caixaFeedback.textContent = 'Seu código executou sem erros, mas nenhuma ação 3D foi chamada. Use os comandos da API!';
+      caixaFeedback.textContent = t('py3d.nenhumaAcao');
       return;
     }
 
@@ -344,16 +363,18 @@ export function jogadorPython3d(atividade, { aoConcluir, reduzirMovimento = fals
         const validacao = validarCriteriosExtras(codigo, resposta.resumo);
         if (validacao.ok) {
           const estrelas = tentativas === 1 ? 3 : 2;
+          const papelRotulo = t(papelDupla === 'piloto' ? 'py3d.papelPilotoNome' : 'py3d.papelNavegadorNome');
           const sufixoDupla = modoDuplaAtivo && parceiroDupla
-            ? ` (Dupla colaborativa: ${papelDupla.toUpperCase()} com ${parceiroDupla})`
+            ? ` ${t('py3d.sufixoDupla', { papel: papelRotulo.toUpperCase(), parceiro: parceiroDupla })}`
             : '';
+          const conclusaoTexto = atvConclusao(atividade);
           caixaFeedback.className = 'atv-feedback sucesso';
           caixaFeedback.replaceChildren(
-            h('strong', {}, `${atividade.conclusao}${sufixoDupla}`),
+            h('strong', {}, `${conclusaoTexto}${sufixoDupla}`),
             ' ',
             validacao.msg,
           );
-          anunciar(atividade.conclusao);
+          anunciar(conclusaoTexto);
           if (aoConcluir) {
             aoConcluir({
               tentativas,
@@ -376,7 +397,7 @@ export function jogadorPython3d(atividade, { aoConcluir, reduzirMovimento = fals
     if (timelineAtiva && typeof timelineAtiva.pause === 'function') {
       timelineAtiva.pause();
       caixaFeedback.className = 'atv-feedback info';
-      caixaFeedback.textContent = 'Animação pausada. Clique em "Passo a Passo" ou "Executar Python" para continuar.';
+      caixaFeedback.textContent = t('py3d.animacaoPausada');
     }
   }
 
@@ -387,9 +408,10 @@ export function jogadorPython3d(atividade, { aoConcluir, reduzirMovimento = fals
       indicePassoManual = -1;
       listaLogPassos.replaceChildren();
       if (!resposta.ok) {
+        const msgErro = traduzirErroWorkerPython(resposta);
         caixaFeedback.className = 'atv-feedback erro';
-        caixaFeedback.textContent = resposta.erro;
-        anunciar(resposta.erro);
+        caixaFeedback.textContent = msgErro;
+        anunciar(msgErro);
         return;
       }
     }
@@ -406,15 +428,16 @@ export function jogadorPython3d(atividade, { aoConcluir, reduzirMovimento = fals
 
     const fatia = eventos.slice(0, indicePassoManual + 1);
     const eventoAtual = eventos[indicePassoManual];
+    const descAtual = traduzirEventoPython(eventoAtual);
     atualizarNumeracaoLinhas(eventoAtual.linha);
     adicionarItemLog(eventoAtual, false);
-    anunciar(eventoAtual.descricao);
+    anunciar(descAtual);
 
     controladorCena.reproduzirEventos(fatia, {
       velocidade: 4,
       aoFinalizar: () => {
         caixaFeedback.className = 'atv-feedback info';
-        caixaFeedback.textContent = `Passo ${indicePassoManual + 1} de ${eventos.length} — ${eventoAtual.descricao}`;
+        caixaFeedback.textContent = t('py3d.passoDeStatus', { atual: indicePassoManual + 1, total: eventos.length, desc: descAtual });
       },
     });
   }
@@ -425,51 +448,51 @@ export function jogadorPython3d(atividade, { aoConcluir, reduzirMovimento = fals
     controladorCena.reiniciarCena();
     atualizarNumeracaoLinhas(null);
     listaLogPassos.replaceChildren(
-      h('li', { class: 'py3d-log-vazio' }, 'Cena reiniciada. Pronto para nova execução.'),
+      h('li', { class: 'py3d-log-vazio' }, t('py3d.cenaReiniciadaLog')),
     );
     caixaFeedback.className = 'atv-feedback';
     caixaFeedback.textContent = '';
-    anunciar('Cena 3D reiniciada.');
+    anunciar(t('py3d.cenaReiniciadaAria'));
   }
 
   const btnExecutar = h(
     'button',
     { type: 'button', class: 'btn btn-primario flex-inline-icon', onclick: () => executarCodigoCompleto(false) },
     h('span', { class: 'material-symbols-outlined icon-sm', 'aria-hidden': 'true' }, 'play_arrow'),
-    'Executar Python',
+    t('py3d.btnExecutar'),
   );
 
   const btnPausar = h(
     'button',
     { type: 'button', class: 'btn btn-neutro flex-inline-icon', onclick: pausarExecucao },
     h('span', { class: 'material-symbols-outlined icon-sm', 'aria-hidden': 'true' }, 'pause'),
-    'Pausar',
+    t('py3d.btnPausar'),
   );
 
   const btnPasso = h(
     'button',
     { type: 'button', class: 'btn btn-neutro flex-inline-icon', onclick: executarPassoAPasso },
     h('span', { class: 'material-symbols-outlined icon-sm', 'aria-hidden': 'true' }, 'step_over'),
-    'Passo a Passo',
+    t('py3d.btnPasso'),
   );
 
   const btnReiniciar = h(
     'button',
     { type: 'button', class: 'btn btn-neutro flex-inline-icon', onclick: reiniciarTudo },
     h('span', { class: 'material-symbols-outlined icon-sm', 'aria-hidden': 'true' }, 'restart_alt'),
-    'Reiniciar',
+    t('robo.btnReiniciar'),
   );
 
   const selectVelocidade = h(
     'select',
     {
       class: 'py3d-select-velocidade',
-      'aria-label': 'Velocidade da animação 3D',
+      'aria-label': t('py3d.velAria'),
       onchange: (e) => { velocidade = Number(e.target.value) || 1; },
     },
-    h('option', { value: '0.5' }, 'Velocidade: 0.5x (Lento)'),
-    h('option', { value: '1', selected: 'selected' }, 'Velocidade: 1x (Normal)'),
-    h('option', { value: '2' }, 'Velocidade: 2x (Rápido)'),
+    h('option', { value: '0.5' }, t('py3d.velLento')),
+    h('option', { value: '1', selected: 'selected' }, t('py3d.velNormal')),
+    h('option', { value: '2' }, t('py3d.velRapido')),
   );
 
   const btnAlternar2D = h(
@@ -480,10 +503,10 @@ export function jogadorPython3d(atividade, { aoConcluir, reduzirMovimento = fals
       onclick: () => {
         const novoModo = !controladorCena.estaEmModo2D();
         controladorCena.alternarModo2D(novoModo);
-        btnAlternar2D.textContent = novoModo ? 'Ativar Visão 3D (WebGL)' : 'Modo 2D Leve';
+        btnAlternar2D.textContent = novoModo ? t('py3d.btnVisao3D') : t('py3d.btnModo2D');
       },
     },
-    'Modo 2D Leve',
+    t('py3d.btnModo2D'),
   );
 
   const btnDica = h(
@@ -492,13 +515,14 @@ export function jogadorPython3d(atividade, { aoConcluir, reduzirMovimento = fals
       type: 'button',
       class: 'btn btn-neutro btn-sm flex-inline-icon',
       onclick: () => {
+        const dicaTxt = atvDica(atividade);
         caixaFeedback.className = 'atv-feedback info';
-        caixaFeedback.replaceChildren(h('strong', {}, 'Dica pedagógica:'), ' ', atividade.dica);
-        anunciar(`Dica: ${atividade.dica}`);
+        caixaFeedback.replaceChildren(h('strong', {}, `${t('py3d.dicaPrefixo')} `), dicaTxt);
+        anunciar(t('jog.dicaPrefixo', { dica: dicaTxt }));
       },
     },
     h('span', { class: 'material-symbols-outlined icon-xs', 'aria-hidden': 'true' }, 'lightbulb'),
-    'Ver Dica',
+    t('py3d.btnVerDica'),
   );
 
   const btnRestaurarModelo = h(
@@ -508,19 +532,20 @@ export function jogadorPython3d(atividade, { aoConcluir, reduzirMovimento = fals
       class: 'btn btn-neutro btn-sm flex-inline-icon',
       onclick: () => {
         textareaCodigo.value = atividade.solucaoReferencia;
+        rascunhosCodigo.set(atividade.id, textareaCodigo.value);
         atualizarNumeracaoLinhas();
         emitirSincronizacaoDupla('codigo-atualizado', { codigo: textareaCodigo.value });
         caixaFeedback.className = 'atv-feedback info';
-        caixaFeedback.textContent = 'Exemplo de solução carregado no editor. Analise cada linha e clique em Executar Python!';
+        caixaFeedback.textContent = t('py3d.solucaoCarregada');
       },
     },
     h('span', { class: 'material-symbols-outlined icon-xs', 'aria-hidden': 'true' }, 'code'),
-    'Ver Solução Exemplo',
+    t('py3d.btnVerSolucao'),
   );
 
   return h(
     'section',
-    { class: 'py3d-shell', 'aria-label': 'Laboratório 3D de Lógica de Programação em Python' },
+    { class: 'py3d-shell', 'aria-label': t('py3d.shellAria') },
     h(
       'div',
       { class: 'py3d-barra-controles' },
@@ -538,7 +563,7 @@ export function jogadorPython3d(atividade, { aoConcluir, reduzirMovimento = fals
         h(
           'div',
           { class: 'py3d-log-painel' },
-          h('h3', { class: 'py3d-subtitulo' }, 'Log de Execução (Alternativa Textual Acessível)'),
+          h('h3', { class: 'py3d-subtitulo' }, t('py3d.logSubtitulo')),
           listaLogPassos,
         ),
       ),

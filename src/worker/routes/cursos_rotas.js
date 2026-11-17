@@ -184,6 +184,56 @@ export async function obterCurso(request, env, db, cursoId) {
   return jsonResponse(curso);
 }
 
+const REGRAS_ATUALIZACAO_CURSO = [
+  {
+    chave: 'titulo',
+    converter: (v) => {
+      const limpo = String(v).trim();
+      return limpo ? { ok: true, valor: limpo } : { ok: false, erro: 'Título do curso não pode ser vazio.' };
+    },
+  },
+  { chave: 'descricao', converter: (v) => ({ ok: true, valor: String(v) }) },
+  {
+    chave: 'eixo_bncc',
+    converter: (v) => {
+      const limpo = String(v).trim();
+      return EIXOS_BNCC_VALIDOS.includes(limpo)
+        ? { ok: true, valor: limpo }
+        : { ok: false, erro: 'Eixo BNCC inválido. Use "Pensamento Computacional", "Mundo Digital" ou "Cultura Digital".' };
+    },
+  },
+  {
+    chave: 'ano_escolar',
+    converter: (v) => {
+      const limpo = String(v).trim();
+      return limpo ? { ok: true, valor: limpo } : { ok: false, erro: 'Ano escolar não pode ser vazio.' };
+    },
+  },
+  {
+    chave: 'carga_horaria',
+    converter: (v) => {
+      const carga = Number(v);
+      return Number.isFinite(carga) && carga >= 0
+        ? { ok: true, valor: Math.round(carga) }
+        : { ok: false, erro: 'Carga horária inválida.' };
+    },
+  },
+  { chave: 'capa_url', converter: (v) => ({ ok: true, valor: v ? String(v) : null }) },
+];
+
+function extrairAtualizacaoCurso(body) {
+  const campos = [];
+  const params = [];
+  for (const regra of REGRAS_ATUALIZACAO_CURSO) {
+    if (body[regra.chave] === undefined) continue;
+    const conv = regra.converter(body[regra.chave]);
+    if (!conv.ok) return { erro: conv.erro };
+    campos.push(`${regra.chave} = ?`);
+    params.push(conv.valor);
+  }
+  return { campos, params };
+}
+
 /**
  * Atualiza os dados cadastrais de um curso.
  */
@@ -202,38 +252,10 @@ export async function atualizarCurso(request, env, db, cursoId) {
   }
 
   const body = await readJsonBody(request);
-  const campos = [];
-  const params = [];
-
-  if (body.titulo !== undefined) {
-    const tituloLimpo = String(body.titulo).trim();
-    if (!tituloLimpo) return jsonErro('Título do curso não pode ser vazio.', 400);
-    campos.push('titulo = ?');
-    params.push(tituloLimpo);
+  const { erro, campos, params } = extrairAtualizacaoCurso(body);
+  if (erro) {
+    return jsonErro(erro, 400);
   }
-  if (body.descricao !== undefined) { campos.push('descricao = ?'); params.push(String(body.descricao)); }
-  if (body.eixo_bncc !== undefined) {
-    const eixoLimpo = String(body.eixo_bncc).trim();
-    if (!EIXOS_BNCC_VALIDOS.includes(eixoLimpo)) {
-      return jsonErro('Eixo BNCC inválido. Use "Pensamento Computacional", "Mundo Digital" ou "Cultura Digital".', 400);
-    }
-    campos.push('eixo_bncc = ?');
-    params.push(eixoLimpo);
-  }
-  if (body.ano_escolar !== undefined) {
-    const anoLimpo = String(body.ano_escolar).trim();
-    if (!anoLimpo) return jsonErro('Ano escolar não pode ser vazio.', 400);
-    campos.push('ano_escolar = ?');
-    params.push(anoLimpo);
-  }
-  if (body.carga_horaria !== undefined) {
-    const carga = Number(body.carga_horaria);
-    if (!Number.isFinite(carga) || carga < 0) return jsonErro('Carga horária inválida.', 400);
-    campos.push('carga_horaria = ?');
-    params.push(Math.round(carga));
-  }
-  if (body.capa_url !== undefined) { campos.push('capa_url = ?'); params.push(body.capa_url ? String(body.capa_url) : null); }
-
   if (campos.length === 0) {
     return jsonErro('Nenhum campo para atualizar.', 400);
   }

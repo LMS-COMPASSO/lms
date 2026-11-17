@@ -19,35 +19,76 @@ let pyodideInstancia = null;
 let carregandoPyodide = null;
 
 /**
- * Traduz erros técnicos do Python para mensagens didáticas em português claro.
+ * Traduz erros técnicos do Python para mensagens didáticas e metadados i18n.
  */
-export function traduzirErroPython(mensagemBruta, linha = null) {
+export function detalharErroPython(mensagemBruta, linha = null) {
   const prefixo = linha ? `Erro na linha ${linha}: ` : 'Atenção no código: ';
   const msg = String(mensagemBruta || '');
 
   if (msg.includes('IndentationError')) {
-    return `${prefixo}Problema de recuo (indentação). Verifique se as linhas dentro do "if", "for", "while" ou "def" têm 4 espaços à esquerda.`;
+    return {
+      texto: `${prefixo}Problema de recuo (indentação). Verifique se as linhas dentro do "if", "for", "while" ou "def" têm 4 espaços à esquerda.`,
+      chave: 'py3d.err.indent',
+      linha,
+      params: {},
+    };
   }
   if (msg.includes('SyntaxError')) {
-    return `${prefixo}Erro de escrita (sintaxe). Confira se você fechou todos os parênteses "()" e colocou dois-pontos ":" no final de comandos como if, for, while ou def.`;
+    return {
+      texto: `${prefixo}Erro de escrita (sintaxe). Confira se você fechou todos os parênteses "()" e colocou dois-pontos ":" no final de comandos como if, for, while ou def.`,
+      chave: 'py3d.err.syntax',
+      linha,
+      params: {},
+    };
   }
   if (msg.includes('NameError')) {
     const match = msg.match(/name '([^']+)' is not defined/);
     const nome = match ? match[1] : 'comando';
-    return `${prefixo}O nome "${nome}" não foi reconhecido. Use comandos válidos como robo.mover(), robo.girar_direita(), robo.coletar(), lista.trocar() ou hanoi.mover_disco().`;
+    return {
+      texto: `${prefixo}O nome "${nome}" não foi reconhecido. Use comandos válidos como robo.mover(), robo.girar_direita(), robo.coletar(), lista.trocar() ou hanoi.mover_disco().`,
+      chave: 'py3d.err.name',
+      linha,
+      params: { nome },
+    };
   }
   if (msg.includes('LIMITE_PASSOS')) {
-    return `${prefixo}O programa ultrapassou o limite máximo de passos! Verifique se há um laço infinito (while) sem condição de parada.`;
+    return {
+      texto: `${prefixo}O programa ultrapassou o limite máximo de passos! Verifique se há um laço infinito (while) sem condição de parada.`,
+      chave: 'py3d.err.limite',
+      linha,
+      params: {},
+    };
   }
   if (msg.includes('MOVIMENTO_INVALIDO_HANOI')) {
-    return `${prefixo}Regra da Torre de Hanói violada: um disco maior não pode ser colocado sobre um disco menor!`;
+    return {
+      texto: `${prefixo}Regra da Torre de Hanói violada: um disco maior não pode ser colocado sobre um disco menor!`,
+      chave: 'py3d.err.hanoi',
+      linha,
+      params: {},
+    };
   }
   if (msg.startsWith('Traceback')) {
     const linhasErro = msg.split('\n');
     const linhaFinal = linhasErro.find((l) => l.includes('Error:') && /^[a-z]/i.test(l.trimStart()));
-    if (linhaFinal) return `${prefixo}${linhaFinal.trim()}`;
+    if (linhaFinal) {
+      return {
+        texto: `${prefixo}${linhaFinal.trim()}`,
+        chave: 'py3d.err.detalhe',
+        linha,
+        params: { detalhe: linhaFinal.trim() },
+      };
+    }
   }
-  return `${prefixo}${msg}`;
+  return {
+    texto: `${prefixo}${msg}`,
+    chave: 'py3d.err.detalhe',
+    linha,
+    params: { detalhe: msg },
+  };
+}
+
+export function traduzirErroPython(mensagemBruta, linha = null) {
+  return detalharErroPython(mensagemBruta, linha).texto;
 }
 
 /**
@@ -138,28 +179,76 @@ export function criarAmbienteSimulacao(cena3d = {}) {
       const chave = `${nx},${ny}`;
 
       if (nx < 0 || ny < 0 || nx >= largura || ny >= altura) {
-        registrarEvento({ tipo: 'colisao-borda', x: roboX, y: roboY, direcao, linha, descricao: `Linha ${linha}: O robô tentou sair dos limites da plataforma 3D.` });
+        registrarEvento({
+          tipo: 'colisao-borda',
+          x: roboX,
+          y: roboY,
+          direcao,
+          linha,
+          descricao: `Linha ${linha}: O robô tentou sair dos limites da plataforma 3D.`,
+          descChave: 'py3d.ev.colisaoBorda',
+          descParams: { linha },
+        });
         return false;
       }
       if (obstaculos.has(chave) || portasFechadas.has(chave)) {
-        const motivo = portasFechadas.has(chave) ? 'porta fechada' : 'obstáculo';
-        registrarEvento({ tipo: 'colisao-obstaculo', x: roboX, y: roboY, direcao, linha, descricao: `Linha ${linha}: O robô colidiu com ${motivo} em (${nx}, ${ny}).` });
+        const ehPorta = portasFechadas.has(chave);
+        const motivo = ehPorta ? 'porta fechada' : 'obstáculo';
+        registrarEvento({
+          tipo: 'colisao-obstaculo',
+          x: roboX,
+          y: roboY,
+          direcao,
+          linha,
+          descricao: `Linha ${linha}: O robô colidiu com ${motivo} em (${nx}, ${ny}).`,
+          descChave: 'py3d.ev.colisaoObstaculo',
+          descParams: { linha, x: nx, y: ny, motivoKey: ehPorta ? 'py3d.ev.motivoPorta' : 'py3d.ev.motivoObstaculo', motivo },
+        });
         return false;
       }
       roboX = nx;
       roboY = ny;
-      registrarEvento({ tipo: 'mover', x: roboX, y: roboY, direcao, linha, descricao: `Linha ${linha}: Robô moveu para (${roboX}, ${roboY}) direção ${direcao}.` });
+      registrarEvento({
+        tipo: 'mover',
+        x: roboX,
+        y: roboY,
+        direcao,
+        linha,
+        descricao: `Linha ${linha}: Robô moveu para (${roboX}, ${roboY}) direção ${direcao}.`,
+        descChave: 'py3d.ev.mover',
+        descParams: { linha, x: roboX, y: roboY, direcao, dirKey: `py3d.dir.${direcao}` },
+      });
       return true;
     },
     girar_direita(linha = 1) {
       const idx = direcoesOrdem.indexOf(direcao);
       direcao = direcoesOrdem[(idx + 1) % 4];
-      registrarEvento({ tipo: 'girar', x: roboX, y: roboY, direcao, sentido: 'direita', linha, descricao: `Linha ${linha}: Robô girou à direita (olhando para ${direcao}).` });
+      registrarEvento({
+        tipo: 'girar',
+        x: roboX,
+        y: roboY,
+        direcao,
+        sentido: 'direita',
+        linha,
+        descricao: `Linha ${linha}: Robô girou à direita (olhando para ${direcao}).`,
+        descChave: 'py3d.ev.girarDireita',
+        descParams: { linha, direcao, dirKey: `py3d.dir.${direcao}` },
+      });
     },
     girar_esquerda(linha = 1) {
       const idx = direcoesOrdem.indexOf(direcao);
       direcao = direcoesOrdem[(idx + 3) % 4];
-      registrarEvento({ tipo: 'girar', x: roboX, y: roboY, direcao, sentido: 'esquerda', linha, descricao: `Linha ${linha}: Robô girou à esquerda (olhando para ${direcao}).` });
+      registrarEvento({
+        tipo: 'girar',
+        x: roboX,
+        y: roboY,
+        direcao,
+        sentido: 'esquerda',
+        linha,
+        descricao: `Linha ${linha}: Robô girou à esquerda (olhando para ${direcao}).`,
+        descChave: 'py3d.ev.girarEsquerda',
+        descParams: { linha, direcao, dirKey: `py3d.dir.${direcao}` },
+      });
     },
     coletar(linha = 1) {
       const chave = `${roboX},${roboY}`;
@@ -173,6 +262,8 @@ export function criarAmbienteSimulacao(cena3d = {}) {
         descricao: coletou
           ? `Linha ${linha}: Cristal coletado na posição (${roboX}, ${roboY})!`
           : `Linha ${linha}: Tentativa de coleta sem cristal em (${roboX}, ${roboY}).`,
+        descChave: coletou ? 'py3d.ev.coletarOk' : 'py3d.ev.coletarVazio',
+        descParams: { linha, x: roboX, y: roboY },
       });
       return coletou;
     },
@@ -189,6 +280,8 @@ export function criarAmbienteSimulacao(cena3d = {}) {
         descricao: abriu
           ? `Linha ${linha}: Porta energética aberta em (${roboX + v.dx}, ${roboY + v.dy})!`
           : `Linha ${linha}: Nenhuma porta fechada à frente para abrir.`,
+        descChave: abriu ? 'py3d.ev.portaOk' : 'py3d.ev.portaVazio',
+        descParams: { linha, x: roboX + v.dx, y: roboY + v.dy },
       });
       return abriu;
     },
@@ -205,6 +298,8 @@ export function criarAmbienteSimulacao(cena3d = {}) {
         valores: [...valoresLista],
         linha,
         descricao: `Linha ${linha}: Comparando torre [${i}] (altura ${a}) com torre [${j}] (altura ${b}).`,
+        descChave: 'py3d.ev.compararLista',
+        descParams: { linha, i, j, a, b },
       });
       return a - b;
     },
@@ -219,6 +314,8 @@ export function criarAmbienteSimulacao(cena3d = {}) {
         valores: [...valoresLista],
         linha,
         descricao: `Linha ${linha}: Trocando torres nas posições [${i}] e [${j}] → [${valoresLista.join(', ')}].`,
+        descChave: 'py3d.ev.trocarLista',
+        descParams: { linha, i, j, lista: valoresLista.join(', ') },
       });
     },
   };
@@ -245,6 +342,8 @@ export function criarAmbienteSimulacao(cena3d = {}) {
         estadoPinos: { A: [...pinosHanoi.A], B: [...pinosHanoi.B], C: [...pinosHanoi.C] },
         linha,
         descricao: `Linha ${linha}: Disco ${disco} movido do pino ${origem} para o pino ${destino}.`,
+        descChave: 'py3d.ev.moverDisco',
+        descParams: { linha, disco, origem, destino },
       });
     },
   };
@@ -259,6 +358,8 @@ export function criarAmbienteSimulacao(cena3d = {}) {
         motivo: ordenada
           ? 'Todas as torres 3D estão ordenadas em ordem crescente!'
           : `As torres terminaram na ordem [${valoresLista.join(', ')}], ainda fora da ordem crescente.`,
+        motivoChave: ordenada ? 'py3d.res.ordOk' : 'py3d.res.ordErro',
+        motivoParams: { lista: valoresLista.join(', ') },
       };
     }
     if (modo === 'hanoi') {
@@ -270,6 +371,8 @@ export function criarAmbienteSimulacao(cena3d = {}) {
         motivo: completo
           ? `Todos os ${numDiscos} discos foram transferidos para o pino ${destino}!`
           : `O pino ${destino} ainda não contém todos os ${numDiscos} discos.`,
+        motivoChave: completo ? 'py3d.res.hanoiOk' : 'py3d.res.hanoiErro',
+        motivoParams: { total: numDiscos, destino },
       };
     }
 
@@ -279,9 +382,20 @@ export function criarAmbienteSimulacao(cena3d = {}) {
     const sucesso = !colidiu && chegouMeta && coletouTodos;
 
     let motivo = 'Missão 3D cumprida com sucesso!';
-    if (colidiu) motivo = 'O robô colidiu durante o percurso. Revise os comandos e tente novamente!';
-    else if (!coletouTodos) motivo = `Faltou coletar ${itensRestantes.size} cristal(is) antes de finalizar!`;
-    else if (!chegouMeta) motivo = `O robô parou em (${roboX}, ${roboY}), mas o portal fica em (${metaX}, ${metaY}).`;
+    let motivoChave = 'py3d.res.gradeOk';
+    let motivoParams = {};
+    if (colidiu) {
+      motivo = 'O robô colidiu durante o percurso. Revise os comandos e tente novamente!';
+      motivoChave = 'py3d.res.gradeColidiu';
+    } else if (!coletouTodos) {
+      motivo = `Faltou coletar ${itensRestantes.size} cristal(is) antes de finalizar!`;
+      motivoChave = itensRestantes.size === 1 ? 'py3d.res.gradeFaltouItemSing' : 'py3d.res.gradeFaltouItemPlur';
+      motivoParams = { faltam: itensRestantes.size };
+    } else if (!chegouMeta) {
+      motivo = `O robô parou em (${roboX}, ${roboY}), mas o portal fica em (${metaX}, ${metaY}).`;
+      motivoChave = 'py3d.res.gradeForaMeta';
+      motivoParams = { x: roboX, y: roboY, mx: metaX, my: metaY };
+    }
 
     return {
       sucesso,
@@ -289,6 +403,8 @@ export function criarAmbienteSimulacao(cena3d = {}) {
       itensColetados: totalItensIniciais - itensRestantes.size,
       totalItens: totalItensIniciais,
       motivo,
+      motivoChave,
+      motivoParams,
     };
   }
 
@@ -901,9 +1017,13 @@ export function executarPythonPedagogicoFallback(codigoPython, cena3d = {}) {
     };
   } catch (err) {
     const mLinha = String(err.message || '').match(/linha (\d+)/);
+    const detalhe = detalharErroPython(err.message, mLinha ? Number(mLinha[1]) : null);
     return {
       ok: false,
-      erro: traduzirErroPython(err.message, mLinha ? Number(mLinha[1]) : null),
+      erro: detalhe.texto,
+      erroChave: detalhe.chave,
+      erroLinha: detalhe.linha,
+      erroParams: detalhe.params,
       eventos: sim.eventos,
       resumo: sim.obterResumoFinal(),
     };
@@ -993,11 +1113,15 @@ hanoi = _HanoiProxy()
         self.postMessage({ idRequisicao, motor: 'fallback-local', ...resultadoLocal });
         return;
       }
+      const detalhe = detalharErroPython(err.message);
       self.postMessage({
         idRequisicao,
         ok: false,
         motor: 'pyodide',
-        erro: traduzirErroPython(err.message),
+        erro: detalhe.texto,
+        erroChave: detalhe.chave,
+        erroLinha: detalhe.linha,
+        erroParams: detalhe.params,
         eventos: [],
         resumo: null,
       });

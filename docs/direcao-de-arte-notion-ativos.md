@@ -25,6 +25,10 @@ Este guia consolida a extração exata de tokens visuais de `DESIGN.md` e `publi
 ### 2.1. Covers / Banners do Notion (`1500x600px`, Proporção `5:2`, Zona Segura `900x350px`)
 - `public/img/notion/cover-lms-compasso-1500x600.svg` — Capa principal do workspace Notion com emblema isométrico do compasso e selo dos 3 Eixos dentro da zona segura central (`x=300..1200`, `y=125..475`).
 - `public/img/notion/cover-eixos-bncc-1500x600.svg` — Capa de trilhas pedagógicas com os três cards estruturantes da BNCC Computação rigorosamente centralizados nos `900x350px`.
+- `public/img/notion/cover-algoritmos-1500x600.svg` — Capa temática de Algoritmos & Lógica (Eixo 1).
+- `public/img/notion/cover-redes-hardware-1500x600.svg` — Capa temática de Redes & Hardware TCP/IP (Eixo 2).
+- `public/img/notion/cover-etica-ciberseguranca-1500x600.svg` — Capa temática de Ética, Privacidade & Cibersegurança (Eixo 3).
+- `public/img/notion/cover-ciencia-dados-1500x600.svg` — Capa temática de Ciência de Dados & Reconhecimento de Padrões.
 
 ### 2.2. Ícones de Página do Notion (`280x280px`, Proporção `1:1`, Transparente, `stroke-width="2"`)
 Projetados com `viewBox="0 0 28 28"` e `stroke-width="2"` para manter legibilidade perfeita tanto em `24x24px` (sidebar do Notion) quanto em `280x280px`, adaptando-se automaticamente ao tema claro e escuro via `@media (prefers-color-scheme: dark)`:
@@ -36,6 +40,10 @@ Projetados com `viewBox="0 0 28 28"` e `stroke-width="2"` para manter legibilida
 ### 2.3. Ilustrações Web Vetoriais (`currentColor` + Variáveis CSS)
 - `public/img/ilustracoes/empty-state-trilha.svg` — Empty state para buscas e trilhas sem resultados.
 - `public/img/ilustracoes/hero-onboarding-bncc.svg` — Ilustração modular de onboarding dos três eixos conectados ao compasso.
+- `public/img/ilustracoes/brainstorming-grupo.svg` — Brainstorming colaborativo e quadro Kanban de ideias.
+- `public/img/ilustracoes/prototipagem-codigo.svg` — Prototipagem de código Python conectado a robô geométrico.
+- `public/img/ilustracoes/seguranca-digital.svg` — Escudo de privacidade e cidadania digital.
+- `public/img/ilustracoes/conquista-certificacao.svg` — Certificado A4 escolar e medalha de conclusão BNCC.
 
 ---
 

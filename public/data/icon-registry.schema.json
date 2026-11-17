@@ -3,7 +3,7 @@
   "title": "IconRegistrySchema",
   "description": "Schema de validação para o Registro Oficial de Ícones do LMS COMPASSO",
   "type": "object",
-  "required": ["meta", "navegacaoEWayfinding", "estadosEFluxo", "conceitosComputacaoBNCC"],
+  "required": ["meta", "navegacaoEWayfinding", "estadosEFluxo", "conceitosComputacaoBNCC", "workspaceEBloqueio"],
   "properties": {
     "$schema": { "type": "string" },
     "meta": {
@@ -64,6 +64,22 @@
           "id": { "type": "string" },
           "rotuloPadrao": { "type": "string" },
           "habilidadeBNCCExemplo": { "type": "string" }
+        }
+      }
+    },
+    "workspaceEBloqueio": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["id", "simboloUniversal", "rotuloPadrao"],
+        "properties": {
+          "id": { "type": "string" },
+          "simboloUniversal": { "type": "string" },
+          "rotuloPadrao": { "type": "string" },
+          "aliasesLegados": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
         }
       }
     }

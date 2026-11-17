@@ -64,6 +64,29 @@ export async function listarMatriculas(request, env, db, url) {
   return jsonResponse(matriculas);
 }
 
+async function validarPermissaoEDestinoMatricula(db, payload, cursoId, alunoId) {
+  const curso = await queryOne(db, 'SELECT id, status, instrutor_id FROM cursos WHERE id = ?', [cursoId]);
+  if (!curso) {
+    return jsonErro('Curso não encontrado.', 404);
+  }
+  if (payload.perfil === 'aluno' && curso.status !== 'publicado') {
+    return jsonErro('Este curso ainda não está disponível para matrícula.', 403);
+  }
+  if (payload.perfil === 'instrutor' && curso.instrutor_id !== payload.id) {
+    return jsonErro('Acesso negado. Você só pode matricular alunos em seus próprios cursos.', 403);
+  }
+  if (alunoId === payload.id) return null;
+
+  const alunoExiste = await queryOne(db, 'SELECT id, ativo FROM usuarios WHERE id = ?', [alunoId]);
+  if (!alunoExiste) {
+    return jsonErro('Usuário informado para matrícula não encontrado.', 404);
+  }
+  if (!alunoExiste.ativo) {
+    return jsonErro('Não é possível matricular um usuário desativado.', 400);
+  }
+  return null;
+}
+
 /**
  * Inscreve o aluno em um curso publicado.
  * Se já existir uma matrícula anterior com status cancelada, reativa-a com progresso zerado.
@@ -75,33 +98,12 @@ export async function matricularAluno(request, env, db) {
     return jsonErro('curso_id é obrigatório.', 400);
   }
   const cursoId = parseIdPositivo(body.curso_id, 'curso_id');
+  const alunoId = payload.perfil !== 'aluno' && body.usuario_id !== undefined
+    ? parseIdPositivo(body.usuario_id, 'usuario_id')
+    : payload.id;
 
-  let alunoId = payload.id;
-  if (payload.perfil !== 'aluno' && body.usuario_id !== undefined) {
-    alunoId = parseIdPositivo(body.usuario_id, 'usuario_id');
-  }
-
-  const curso = await queryOne(db, 'SELECT id, status, instrutor_id FROM cursos WHERE id = ?', [cursoId]);
-  if (!curso) {
-    return jsonErro('Curso não encontrado.', 404);
-  }
-
-  if (payload.perfil === 'aluno' && curso.status !== 'publicado') {
-    return jsonErro('Este curso ainda não está disponível para matrícula.', 403);
-  }
-  if (payload.perfil === 'instrutor' && curso.instrutor_id !== payload.id) {
-    return jsonErro('Acesso negado. Você só pode matricular alunos em seus próprios cursos.', 403);
-  }
-
-  if (alunoId !== payload.id) {
-    const alunoExiste = await queryOne(db, 'SELECT id, ativo FROM usuarios WHERE id = ?', [alunoId]);
-    if (!alunoExiste) {
-      return jsonErro('Usuário informado para matrícula não encontrado.', 404);
-    }
-    if (!alunoExiste.ativo) {
-      return jsonErro('Não é possível matricular um usuário desativado.', 400);
-    }
-  }
+  const erroValidacao = await validarPermissaoEDestinoMatricula(db, payload, cursoId, alunoId);
+  if (erroValidacao) return erroValidacao;
 
   const matriculaExistente = await queryOne(
     db,
@@ -110,19 +112,19 @@ export async function matricularAluno(request, env, db) {
   );
 
   if (matriculaExistente) {
-    if (matriculaExistente.status === 'cancelada') {
-      await db.prepare(
-        'UPDATE matriculas SET status = "ativa", progresso_percentual = 0 WHERE id = ?',
-      ).bind(matriculaExistente.id).run();
-
-      return jsonResponse({
-        id: matriculaExistente.id,
-        curso_id: cursoId,
-        status: 'ativa',
-        mensagem: 'Matrícula reativada com sucesso.',
-      });
+    if (matriculaExistente.status !== 'cancelada') {
+      return jsonErro('Você já está matriculado neste curso.', 409);
     }
-    return jsonErro('Você já está matriculado neste curso.', 409);
+    await db.prepare(
+      'UPDATE matriculas SET status = "ativa", progresso_percentual = 0 WHERE id = ?',
+    ).bind(matriculaExistente.id).run();
+
+    return jsonResponse({
+      id: matriculaExistente.id,
+      curso_id: cursoId,
+      status: 'ativa',
+      mensagem: 'Matrícula reativada com sucesso.',
+    });
   }
 
   const resultado = await db.prepare(`

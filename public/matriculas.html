@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Matrículas — LMS COMPASSO</title>
+<meta name="i18n-title" content="matPage.metaTitulo">
 <link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,11 +16,11 @@
     <div id="sidebar-container"></div>
     <main class="conteudo">
       <div id="topbar-container"></div>
-      <div class="cartao tabela-scroll" role="region" aria-label="Tabela de matrículas de estudantes">
-        <table aria-label="Lista de matrículas de estudantes">
+      <div class="cartao tabela-scroll" role="region" aria-label="Tabela de matrículas de estudantes" data-i18n-aria-label="matPage.tabelaRegionAria">
+        <table aria-label="Lista de matrículas de estudantes" data-i18n-aria-label="matPage.tabelaAria">
           <thead>
             <tr>
-              <th scope="col">Aluno</th><th scope="col">Curso</th><th scope="col">Status</th><th scope="col">Progresso</th><th scope="col">Data</th><th scope="col" class="texto-direita">Ações</th>
+              <th scope="col" data-i18n="matPage.colAluno">Aluno</th><th scope="col" data-i18n="matPage.colCurso">Curso</th><th scope="col" data-i18n="matPage.colStatus">Status</th><th scope="col" data-i18n="matPage.colProgresso">Progresso</th><th scope="col" data-i18n="matPage.colData">Data</th><th scope="col" class="texto-direita" data-i18n="matPage.colAcoes">Ações</th>
             </tr>
           </thead>
           <tbody id="corpo-tabela"></tbody>
@@ -32,51 +33,67 @@
   <script src="/js/api.js"></script>
   <script src="/js/layout.js"></script>
   <script type="module">
+    import { t, traduzirDocumento, formatarData, formatarNumero } from '/js/i18n.js';
+
     const usuario = exigirAutenticacao();
     montarLayout('matriculas');
-    document.getElementById('titulo-pagina').textContent = 'Matrículas';
+
+    function atualizarTituloTopbar() {
+      const el = document.getElementById('titulo-pagina');
+      if (el) el.textContent = t('matPage.topbarTitulo');
+    }
+    atualizarTituloTopbar();
+    traduzirDocumento();
+
+    let ultimasMatriculas = [];
+
+    function renderizarTabela() {
+      const corpo = document.getElementById('corpo-tabela');
+      if (!corpo) return;
+
+      if (ultimasMatriculas.length === 0) {
+        corpo.innerHTML = `<tr><td colspan="6" class="texto-suave">${escaparHtml(t('matPage.vazio'))}</td></tr>`;
+        return;
+      }
+
+      corpo.innerHTML = ultimasMatriculas.map((m) => {
+        const id = Number(m.id);
+        const status = ['ativa', 'concluida', 'cancelada'].includes(m.status) ? m.status : 'ativa';
+        const progresso = Math.min(100, Math.max(0, Number(m.progresso_percentual) || 0));
+        const statusLabel = t(`status.${status}`, {}, status);
+        return `
+        <tr>
+          <td>${escaparHtml(m.aluno_nome)}<br><small class="texto-suave">${escaparHtml(m.aluno_email)}</small></td>
+          <td>${escaparHtml(m.curso_titulo)}</td>
+          <td><span class="badge badge-${status}">${escaparHtml(statusLabel)}</span></td>
+          <td class="min-w-160">
+            <div class="progress-bar"><div class="progress-bar-fill" style="width:${progresso}%;"></div></div>
+            <small>${escaparHtml(formatarNumero(progresso))}%</small>
+          </td>
+          <td>${escaparHtml(formatarData(m.data_matricula))}</td>
+          <td class="texto-direita">
+            ${status !== 'cancelada' ? `<button type="button" class="btn btn-perigo btn-xs" aria-label="${escaparHtml(t('matPage.cancelarAria', { nome: m.aluno_nome }))}" data-cancelar-id="${id}">${escaparHtml(t('matPage.cancelar'))}</button>` : ''}
+            ${status === 'concluida' ? `<button type="button" class="btn btn-secundario btn-xs" aria-label="${escaparHtml(t('matPage.certificadoAria', { nome: m.aluno_nome }))}" data-certificado-id="${id}">${escaparHtml(t('matPage.certificado'))}</button>` : ''}
+          </td>
+        </tr>
+      `;
+      }).join('');
+    }
 
     async function carregar() {
       try {
-        const matriculas = await api('/matriculas');
-        const corpo = document.getElementById('corpo-tabela');
-
-        if (matriculas.length === 0) {
-          corpo.innerHTML = '<tr><td colspan="6" class="texto-suave">Nenhuma matrícula encontrada.</td></tr>';
-          return;
-        }
-
-        corpo.innerHTML = matriculas.map((m) => {
-          const id = Number(m.id);
-          const status = ['ativa', 'concluida', 'cancelada'].includes(m.status) ? m.status : 'ativa';
-          const progresso = Math.min(100, Math.max(0, Number(m.progresso_percentual) || 0));
-          return `
-          <tr>
-            <td>${escaparHtml(m.aluno_nome)}<br><small class="texto-suave">${escaparHtml(m.aluno_email)}</small></td>
-            <td>${escaparHtml(m.curso_titulo)}</td>
-            <td><span class="badge badge-${status}">${escaparHtml(status)}</span></td>
-            <td class="min-w-160">
-              <div class="progress-bar"><div class="progress-bar-fill" style="width:${progresso}%;"></div></div>
-              <small>${progresso}%</small>
-            </td>
-            <td>${formatarData(m.data_matricula)}</td>
-            <td class="texto-direita">
-              ${status !== 'cancelada' ? `<button type="button" class="btn btn-perigo btn-xs" aria-label="Cancelar matrícula de ${escaparHtml(m.aluno_nome)}" data-cancelar-id="${id}">Cancelar</button>` : ''}
-              ${status === 'concluida' ? `<button type="button" class="btn btn-secundario btn-xs" aria-label="Emitir certificado para ${escaparHtml(m.aluno_nome)}" data-certificado-id="${id}">Certificado</button>` : ''}
-            </td>
-          </tr>
-        `;
-        }).join('');
+        ultimasMatriculas = await api('/matriculas');
+        renderizarTabela();
       } catch (err) {
         mostrarNotificacao(err.message, 'erro');
       }
     }
 
     async function cancelar(id) {
-      if (!confirm('Cancelar esta matrícula?')) return;
+      if (!confirm(t('matPage.confirmarCancelar'))) return;
       try {
         await api(`/matriculas/${id}/cancelar`, { method: 'PATCH' });
-        mostrarNotificacao('Matrícula cancelada.', 'info');
+        mostrarNotificacao(t('matPage.canceladaSucesso'), 'info');
         carregar();
       } catch (err) { mostrarNotificacao(err.message, 'erro'); }
     }
@@ -84,7 +101,7 @@
     async function emitirCertificado(matriculaId) {
       try {
         const cert = await api('/certificados/emitir', { method: 'POST', body: JSON.stringify({ matricula_id: matriculaId }) });
-        mostrarNotificacao('Certificado emitido com sucesso!', 'sucesso');
+        mostrarNotificacao(t('matPage.certificadoSucesso'), 'sucesso');
         if (typeof cert.url_arquivo === 'string' && cert.url_arquivo.startsWith('/api/certificados/')) {
           window.open(cert.url_arquivo, '_blank', 'noopener,noreferrer');
         }
@@ -102,6 +119,13 @@
         emitirCertificado(Number(btnCertificado.dataset.certificadoId));
       }
     });
+
+    window.addEventListener('lms:idioma-alterado', () => {
+      atualizarTituloTopbar();
+      traduzirDocumento();
+      renderizarTabela();
+    });
+    window.addEventListener('lms:layout-atualizado', atualizarTituloTopbar);
 
     Object.assign(window, {
       cancelar,

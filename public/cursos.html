@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cursos — LMS COMPASSO</title>
+<meta name="i18n-title" content="cursosPage.metaTitulo">
 <link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,23 +20,23 @@
       <div class="cartao">
         <div class="flex-entre flex-wrap">
           <div class="flex-linha flex-wrap">
-            <select id="filtro-eixo" title="Filtrar por eixo BNCC" aria-label="Filtrar por eixo BNCC">
-              <option value="">Todos os eixos BNCC</option>
-              <option>Pensamento Computacional</option>
-              <option>Mundo Digital</option>
-              <option>Cultura Digital</option>
+            <select id="filtro-eixo" title="Filtrar por eixo BNCC" aria-label="Filtrar por eixo BNCC" data-i18n-title="cursosPage.filtrarEixoAria" data-i18n-aria-label="cursosPage.filtrarEixoAria">
+              <option value="" data-i18n="cursosPage.todosEixos">Todos os eixos BNCC</option>
+              <option value="Pensamento Computacional" data-i18n="eixo.pensamento-computacional">Pensamento Computacional</option>
+              <option value="Mundo Digital" data-i18n="eixo.mundo-digital">Mundo Digital</option>
+              <option value="Cultura Digital" data-i18n="eixo.cultura-digital">Cultura Digital</option>
             </select>
-            <select id="filtro-status" class="oculto-aluno" title="Filtrar por status do curso" aria-label="Filtrar por status do curso">
-              <option value="">Todos os status</option>
-              <option value="publicado">Publicado</option>
-              <option value="rascunho">Rascunho</option>
+            <select id="filtro-status" class="oculto-aluno" title="Filtrar por status do curso" aria-label="Filtrar por status do curso" data-i18n-title="cursosPage.filtrarStatusAria" data-i18n-aria-label="cursosPage.filtrarStatusAria">
+              <option value="" data-i18n="cursosPage.todosStatus">Todos os status</option>
+              <option value="publicado" data-i18n="cursosPage.status.publicado">Publicado</option>
+              <option value="rascunho" data-i18n="cursosPage.status.rascunho">Rascunho</option>
             </select>
             <div class="flex-inline-icon">
               <span class="material-symbols-outlined icon-xs texto-suave" aria-hidden="true">search</span>
-              <input type="search" id="busca" class="max-w-220" title="Buscar curso por título ou palavra-chave" aria-label="Buscar curso" placeholder="Buscar curso...">
+              <input type="search" id="busca" class="max-w-220" title="Buscar curso por título ou palavra-chave" aria-label="Buscar curso" placeholder="Buscar curso..." data-i18n-title="cursosPage.buscarTitle" data-i18n-aria-label="cursosPage.buscarAria" data-i18n-placeholder="cursosPage.buscarPlaceholder">
             </div>
           </div>
-          <button type="button" class="btn btn-primario flex-inline-icon oculto-aluno" onclick="abrirModalCurso()"><span class="material-symbols-outlined icon-xs" aria-hidden="true">add</span> Novo Curso</button>
+          <button type="button" class="btn btn-primario flex-inline-icon oculto-aluno" onclick="abrirModalCurso()"><span class="material-symbols-outlined icon-xs" aria-hidden="true">add</span> <span data-i18n="cursosPage.novoCurso">Novo Curso</span></button>
         </div>
       </div>
 
@@ -46,38 +47,38 @@
   <!-- Modal de curso -->
   <div id="modal-curso" class="modal-overlay oculto">
     <div class="modal-conteudo">
-      <h2 id="titulo-modal">Novo Curso</h2>
+      <h2 id="titulo-modal" data-i18n="cursosPage.novoCurso">Novo Curso</h2>
       <form id="form-curso">
         <input type="hidden" id="curso-id">
         <div class="form-grupo">
-          <label for="curso-titulo">Título</label>
-          <input type="text" id="curso-titulo" placeholder="Ex.: Pensamento Computacional no EF" required>
+          <label for="curso-titulo" data-i18n="cursosPage.campoTitulo">Título</label>
+          <input type="text" id="curso-titulo" placeholder="Ex.: Pensamento Computacional no EF" data-i18n-placeholder="cursosPage.placeholderTitulo" required>
         </div>
         <div class="form-grupo">
-          <label for="curso-descricao">Descrição</label>
-          <textarea id="curso-descricao" rows="3" placeholder="Descrição dos objetivos do curso"></textarea>
+          <label for="curso-descricao" data-i18n="cursosPage.campoDescricao">Descrição</label>
+          <textarea id="curso-descricao" rows="3" placeholder="Descrição dos objetivos do curso" data-i18n-placeholder="cursosPage.placeholderDescricao"></textarea>
         </div>
         <div class="grid-2col">
           <div class="form-grupo">
-            <label for="curso-eixo">Eixo BNCC</label>
-            <select id="curso-eixo" title="Eixo BNCC" required>
-              <option value="Pensamento Computacional">Pensamento Computacional</option>
-              <option value="Mundo Digital">Mundo Digital</option>
-              <option value="Cultura Digital">Cultura Digital</option>
+            <label for="curso-eixo" data-i18n="cursosPage.campoEixo">Eixo BNCC</label>
+            <select id="curso-eixo" title="Eixo BNCC" data-i18n-title="cursosPage.campoEixo" required>
+              <option value="Pensamento Computacional" data-i18n="eixo.pensamento-computacional">Pensamento Computacional</option>
+              <option value="Mundo Digital" data-i18n="eixo.mundo-digital">Mundo Digital</option>
+              <option value="Cultura Digital" data-i18n="eixo.cultura-digital">Cultura Digital</option>
             </select>
           </div>
           <div class="form-grupo">
-            <label for="curso-ano">Ano Escolar</label>
-            <input type="text" id="curso-ano" placeholder="Ex.: 6º ano EF" required>
+            <label for="curso-ano" data-i18n="cursosPage.campoAno">Ano Escolar</label>
+            <input type="text" id="curso-ano" placeholder="Ex.: 6º ano EF" data-i18n-placeholder="cursosPage.placeholderAno" required>
           </div>
         </div>
         <div class="form-grupo">
-          <label for="curso-carga">Carga Horária (horas)</label>
+          <label for="curso-carga" data-i18n="cursosPage.campoCarga">Carga Horária (horas)</label>
           <input type="number" id="curso-carga" min="0" value="0" placeholder="0">
         </div>
         <div class="flex-linha mt-16">
-          <button type="submit" class="btn btn-primario">Salvar</button>
-          <button type="button" class="btn btn-neutro" onclick="fecharModalCurso()">Cancelar</button>
+          <button type="submit" class="btn btn-primario" data-i18n="comum.salvar">Salvar</button>
+          <button type="button" class="btn btn-neutro" onclick="fecharModalCurso()" data-i18n="comum.cancelar">Cancelar</button>
         </div>
       </form>
     </div>
@@ -87,93 +88,124 @@
   <script src="/js/api.js"></script>
   <script src="/js/layout.js"></script>
   <script type="module">
+    import { t, traduzirDocumento, formatarNumero } from '/js/i18n.js';
+
     const usuario = exigirAutenticacao();
     montarLayout('cursos');
-    document.getElementById('titulo-pagina').textContent = 'Cursos';
+    traduzirDocumento();
+
+    let ultimoCursos = [];
+
+    function atualizarTituloPaginaCursos() {
+      const el = document.getElementById('titulo-pagina');
+      if (el) el.textContent = t('layout.wf.cursos.titulo', {}, 'Cursos');
+    }
+    atualizarTituloPaginaCursos();
 
     if (usuario.perfil === 'aluno') {
       document.querySelectorAll('.oculto-aluno').forEach((el) => { el.classList.add('oculto'); });
     }
 
+    function traduzirEixoCurso(nomeEixo) {
+      const mapa = {
+        'Pensamento Computacional': 'eixo.pensamento-computacional',
+        'Mundo Digital': 'eixo.mundo-digital',
+        'Cultura Digital': 'eixo.cultura-digital',
+      };
+      return mapa[nomeEixo] ? t(mapa[nomeEixo], {}, nomeEixo) : nomeEixo;
+    }
+
     function montarQuery() {
       const params = new URLSearchParams();
-      const eixo = document.getElementById('filtro-eixo').value;
-      const status = document.getElementById('filtro-status').value;
-      const busca = document.getElementById('busca').value;
+      const eixo = document.getElementById('filtro-eixo')?.value || '';
+      const status = document.getElementById('filtro-status')?.value || '';
+      const busca = document.getElementById('busca')?.value || '';
       if (eixo) params.set('eixo_bncc', eixo);
       if (status) params.set('status', status);
       if (busca) params.set('busca', busca);
       return params.toString();
     }
 
+    function renderizarListaCursos(cursos) {
+      const container = document.getElementById('lista-cursos');
+      if (!container) return;
+
+      if (!cursos || cursos.length === 0) {
+        container.innerHTML = `<p class="texto-suave">${escaparHtml(t('cursosPage.vazio', {}, 'Nenhum curso encontrado.'))}</p>`;
+        return;
+      }
+
+      const iconesPorEixo = {
+        'Pensamento Computacional': 'format_list_numbered',
+        'Mundo Digital': 'memory',
+        'Cultura Digital': 'verified_user',
+      };
+
+      window.cacheCursos = Object.fromEntries(cursos.map((c) => [c.id, c]));
+      container.innerHTML = cursos.map((c) => {
+        const textoBotaoStatus = c.status === 'publicado'
+          ? t('cursosPage.voltarRascunho', {}, 'Voltar p/ rascunho')
+          : t('cursosPage.publicar', {}, 'Publicar');
+        const iconeStatus = c.status === 'publicado' ? 'schedule' : 'check_circle';
+        const iconeEixo = iconesPorEixo[c.eixo_bncc] || 'menu_book';
+        const statusRotulo = t(`cursosPage.status.${c.status}`, {}, c.status);
+        const totalMatriculados = formatarNumero(Number(c.total_matriculados) || 0);
+        const textoMatriculados = t('cursosPage.matriculados', { n: totalMatriculados }, `${totalMatriculados} matriculado(s)`);
+        const cargaHoras = formatarNumero(Number(c.carga_horaria) || 0);
+
+        return `
+          <div class="cartao">
+            <div class="flex-topo">
+              <span class="badge badge-${escaparHtml(c.status)} flex-inline-icon">
+                <span class="material-symbols-outlined icon-xs" aria-hidden="true">${c.status === 'publicado' ? 'check_circle' : 'schedule'}</span>
+                ${escaparHtml(statusRotulo)}
+              </span>
+              <span class="texto-suave flex-inline-icon"><span class="material-symbols-outlined icon-xs" aria-hidden="true">schedule</span> ${escaparHtml(cargaHoras)}h</span>
+            </div>
+            <h2 class="mt-8 mb-10 cursos-card-titulo">${escaparHtml(c.titulo)}</h2>
+            <p class="texto-suave">${escaparHtml(c.descricao || t('cursosPage.semDescricao', {}, 'Sem descrição.'))}</p>
+            <div class="curso-meta-info texto-suave">
+              <div><span class="material-symbols-outlined icon-xs" aria-hidden="true">${iconeEixo}</span> <span>${escaparHtml(traduzirEixoCurso(c.eixo_bncc))}</span></div>
+              <div><span class="material-symbols-outlined icon-xs" aria-hidden="true">school</span> <span>${escaparHtml(c.ano_escolar)}</span> · <span class="material-symbols-outlined icon-xs" aria-hidden="true">person</span> <span>${escaparHtml(c.instrutor_nome)}</span></div>
+              <div><span class="material-symbols-outlined icon-xs" aria-hidden="true">group</span> <span>${escaparHtml(textoMatriculados)}</span></div>
+            </div>
+            <div class="flex-linha flex-wrap mt-10">
+              <a href="/curso-detalhe.html?id=${c.id}" class="btn btn-neutro btn-sm flex-inline-icon">
+                <span>${escaparHtml(t('cursosPage.abrir', {}, 'Abrir'))}</span>
+                <span class="material-symbols-outlined icon-xs" aria-hidden="true">arrow_forward</span>
+              </a>
+              ${usuario.perfil !== 'aluno' ? `
+                <button type="button" class="btn btn-neutro btn-sm flex-inline-icon" onclick="editarCursoPorId(${c.id})">
+                  <span class="material-symbols-outlined icon-xs" aria-hidden="true">edit</span> ${escaparHtml(t('comum.editar', {}, 'Editar'))}
+                </button>
+                <button type="button" class="btn btn-secundario btn-sm flex-inline-icon" onclick="alternarStatus(${c.id}, '${escaparHtml(c.status)}')">
+                  <span class="material-symbols-outlined icon-xs" aria-hidden="true">${iconeStatus}</span> ${escaparHtml(textoBotaoStatus)}
+                </button>
+                <button type="button" class="btn btn-perigo btn-sm flex-inline-icon" onclick="excluirCurso(${c.id})">
+                  <span class="material-symbols-outlined icon-xs" aria-hidden="true">delete</span> ${escaparHtml(t('comum.excluir', {}, 'Excluir'))}
+                </button>
+              ` : `
+                <button type="button" class="btn btn-primario btn-sm flex-inline-icon" onclick="matricular(${c.id})">
+                  <span class="material-symbols-outlined icon-xs" aria-hidden="true">how_to_reg</span> ${escaparHtml(t('cursosPage.matricular', {}, 'Matricular-se'))}
+                </button>
+              `}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
     async function carregarCursos() {
       try {
-        const cursos = await api(`/cursos?${montarQuery()}`);
-        const container = document.getElementById('lista-cursos');
-
-        if (cursos.length === 0) {
-          container.innerHTML = '<p class="texto-suave">Nenhum curso encontrado.</p>';
-          return;
-        }
-
-        const iconesPorEixo = {
-          'Pensamento Computacional': 'format_list_numbered',
-          'Mundo Digital': 'memory',
-          'Cultura Digital': 'verified_user',
-        };
-
-        window.cacheCursos = Object.fromEntries(cursos.map((c) => [c.id, c]));
-        container.innerHTML = cursos.map((c) => {
-          const textoBotaoStatus = c.status === 'publicado' ? 'Voltar p/ rascunho' : 'Publicar';
-          const iconeStatus = c.status === 'publicado' ? 'schedule' : 'check_circle';
-          const iconeEixo = iconesPorEixo[c.eixo_bncc] || 'menu_book';
-          return `
-            <div class="cartao">
-              <div class="flex-topo">
-                <span class="badge badge-${escaparHtml(c.status)} flex-inline-icon">
-                  <span class="material-symbols-outlined icon-xs" aria-hidden="true">${c.status === 'publicado' ? 'check_circle' : 'schedule'}</span>
-                  ${escaparHtml(c.status)}
-                </span>
-                <span class="texto-suave flex-inline-icon"><span class="material-symbols-outlined icon-xs" aria-hidden="true">schedule</span> ${Number(c.carga_horaria) || 0}h</span>
-              </div>
-              <h2 class="mt-8 mb-10 cursos-card-titulo">${escaparHtml(c.titulo)}</h2>
-              <p class="texto-suave">${escaparHtml(c.descricao || 'Sem descrição.')}</p>
-              <div class="curso-meta-info texto-suave">
-                <div><span class="material-symbols-outlined icon-xs" aria-hidden="true">${iconeEixo}</span> <span>${escaparHtml(c.eixo_bncc)}</span></div>
-                <div><span class="material-symbols-outlined icon-xs" aria-hidden="true">school</span> <span>${escaparHtml(c.ano_escolar)}</span> · <span class="material-symbols-outlined icon-xs" aria-hidden="true">person</span> <span>${escaparHtml(c.instrutor_nome)}</span></div>
-                <div><span class="material-symbols-outlined icon-xs" aria-hidden="true">group</span> <span>${Number(c.total_matriculados) || 0} matriculado(s)</span></div>
-              </div>
-              <div class="flex-linha flex-wrap mt-10">
-                <a href="/curso-detalhe.html?id=${c.id}" class="btn btn-neutro btn-sm flex-inline-icon">
-                  <span>Abrir</span>
-                  <span class="material-symbols-outlined icon-xs" aria-hidden="true">arrow_forward</span>
-                </a>
-                ${usuario.perfil !== 'aluno' ? `
-                  <button type="button" class="btn btn-neutro btn-sm flex-inline-icon" onclick="editarCursoPorId(${c.id})">
-                    <span class="material-symbols-outlined icon-xs" aria-hidden="true">edit</span> Editar
-                  </button>
-                  <button type="button" class="btn btn-secundario btn-sm flex-inline-icon" onclick="alternarStatus(${c.id}, '${escaparHtml(c.status)}')">
-                    <span class="material-symbols-outlined icon-xs" aria-hidden="true">${iconeStatus}</span> ${textoBotaoStatus}
-                  </button>
-                  <button type="button" class="btn btn-perigo btn-sm flex-inline-icon" onclick="excluirCurso(${c.id})">
-                    <span class="material-symbols-outlined icon-xs" aria-hidden="true">delete</span> Excluir
-                  </button>
-                ` : `
-                  <button type="button" class="btn btn-primario btn-sm flex-inline-icon" onclick="matricular(${c.id})">
-                    <span class="material-symbols-outlined icon-xs" aria-hidden="true">how_to_reg</span> Matricular-se
-                  </button>
-                `}
-              </div>
-            </div>
-          `;
-        }).join('');
+        ultimoCursos = await api(`/cursos?${montarQuery()}`);
+        renderizarListaCursos(ultimoCursos);
       } catch (err) {
         mostrarNotificacao(err.message, 'erro');
       }
     }
 
     function abrirModalCurso() {
-      document.getElementById('titulo-modal').textContent = 'Novo Curso';
+      document.getElementById('titulo-modal').textContent = t('cursosPage.novoCurso', {}, 'Novo Curso');
       document.getElementById('form-curso').reset();
       document.getElementById('curso-id').value = '';
       document.getElementById('modal-curso').classList.remove('oculto');
@@ -186,7 +218,7 @@
       if (c) editarCurso(c);
     }
     function editarCurso(c) {
-      document.getElementById('titulo-modal').textContent = 'Editar Curso';
+      document.getElementById('titulo-modal').textContent = t('cursosPage.editarCurso', {}, 'Editar Curso');
       document.getElementById('curso-id').value = c.id;
       document.getElementById('curso-titulo').value = c.titulo;
       document.getElementById('curso-descricao').value = c.descricao || '';
@@ -209,10 +241,10 @@
       try {
         if (id) {
           await api(`/cursos/${id}`, { method: 'PUT', body: JSON.stringify(corpo) });
-          mostrarNotificacao('Curso atualizado com sucesso!', 'sucesso');
+          mostrarNotificacao(t('cursosPage.notifAtualizado', {}, 'Curso atualizado com sucesso!'), 'sucesso');
         } else {
           await api('/cursos', { method: 'POST', body: JSON.stringify(corpo) });
-          mostrarNotificacao('Curso criado com sucesso!', 'sucesso');
+          mostrarNotificacao(t('cursosPage.notifCriado', {}, 'Curso criado com sucesso!'), 'sucesso');
         }
         fecharModalCurso();
         carregarCursos();
@@ -225,16 +257,17 @@
       const novo = statusAtual === 'publicado' ? 'rascunho' : 'publicado';
       try {
         await api(`/cursos/${id}/status`, { method: 'PATCH', body: JSON.stringify({ status: novo }) });
-        mostrarNotificacao(`Status alterado para ${novo}.`, 'info');
+        const statusRotulo = t(`cursosPage.status.${novo}`, {}, novo);
+        mostrarNotificacao(t('cursosPage.notifStatus', { status: statusRotulo }, `Status alterado para ${novo}.`), 'info');
         carregarCursos();
       } catch (err) { mostrarNotificacao(err.message, 'erro'); }
     }
 
     async function excluirCurso(id) {
-      if (!confirm('Tem certeza que deseja excluir este curso? Esta ação não pode ser desfeita.')) return;
+      if (!confirm(t('cursosPage.confirmarExcluir', {}, 'Tem certeza que deseja excluir este curso? Esta ação não pode ser desfeita.'))) return;
       try {
         await api(`/cursos/${id}`, { method: 'DELETE' });
-        mostrarNotificacao('Curso excluído.', 'info');
+        mostrarNotificacao(t('cursosPage.notifExcluido', {}, 'Curso excluído.'), 'info');
         carregarCursos();
       } catch (err) { mostrarNotificacao(err.message, 'erro'); }
     }
@@ -242,7 +275,7 @@
     async function matricular(cursoId) {
       try {
         await api('/matriculas', { method: 'POST', body: JSON.stringify({ curso_id: cursoId }) });
-        mostrarNotificacao('Matrícula realizada com sucesso!', 'sucesso');
+        mostrarNotificacao(t('cursosPage.notifMatriculado', {}, 'Matrícula realizada com sucesso!'), 'sucesso');
         setTimeout(() => {
           window.location.href = `/curso-detalhe.html?id=${cursoId}`;
         }, 600);
@@ -255,6 +288,22 @@
       clearTimeout(window._t);
       window._t = setTimeout(carregarCursos, 350);
     });
+
+    window.addEventListener('lms:idioma-alterado', () => {
+      atualizarTituloPaginaCursos();
+      renderizarListaCursos(ultimoCursos);
+      const modal = document.getElementById('modal-curso');
+      if (modal && !modal.classList.contains('oculto')) {
+        const editando = Boolean(document.getElementById('curso-id').value);
+        document.getElementById('titulo-modal').textContent = t(
+          editando ? 'cursosPage.editarCurso' : 'cursosPage.novoCurso',
+          {},
+          editando ? 'Editar Curso' : 'Novo Curso',
+        );
+      }
+    });
+
+    window.addEventListener('lms:layout-atualizado', atualizarTituloPaginaCursos);
 
     Object.assign(window, {
       abrirModalCurso,
