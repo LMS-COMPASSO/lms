@@ -141,7 +141,7 @@ export function sanitizarBlocosWorkspace(entrada) {
     return null;
   }
 
-  const blocosLimpos = lista.map(sanitizarBlocoIndividual);
+  const blocosLimpos = lista.map((bloco, indice) => sanitizarBlocoIndividual(bloco, indice));
   const json = JSON.stringify(blocosLimpos);
   if (json.length > MAX_BYTES_BLOCOS_JSON) {
     return null;

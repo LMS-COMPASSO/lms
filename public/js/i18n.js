@@ -99,15 +99,18 @@ export function t(chave, params = {}, padrao = null) {
   return texto;
 }
 
+const OPCOES_DATA_PADRAO = Object.freeze({ dateStyle: 'short', timeStyle: 'short' });
+
 /**
  * Formata datas conforme o idioma ativo usando Intl.DateTimeFormat
  */
-export function formatarData(valor, opcoes = { dateStyle: 'short', timeStyle: 'short' }) {
+export function formatarData(valor, opcoes) {
   if (!valor) return '-';
   const data = valor instanceof Date ? valor : new Date(valor);
   if (Number.isNaN(data.getTime())) return String(valor);
+  const opcoesResolvidas = opcoes ?? OPCOES_DATA_PADRAO;
   try {
-    return new Intl.DateTimeFormat(obterLocaleIntl(), opcoes).format(data);
+    return new Intl.DateTimeFormat(obterLocaleIntl(), opcoesResolvidas).format(data);
   } catch (erroFmtData) {
     console.warn('Fallback de formatação de data:', erroFmtData?.message || erroFmtData);
     return data.toLocaleString(obterLocaleIntl());
@@ -117,7 +120,7 @@ export function formatarData(valor, opcoes = { dateStyle: 'short', timeStyle: 's
 /**
  * Formata números conforme o idioma ativo usando Intl.NumberFormat
  */
-export function formatarNumero(numero, opcoes = {}) {
+export function formatarNumero(numero, opcoes) {
   const num = Number(numero);
   if (!Number.isFinite(num)) return String(numero ?? '');
   try {

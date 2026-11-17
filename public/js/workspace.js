@@ -904,7 +904,9 @@ async function iniciarWorkspace() {
     alvo.status = novoStatus;
     alvo.atualizado_em = new Date().toISOString();
     renderizarVisaoAtiva(true);
-    persistirOperacao('status', id, { status: novoStatus, ordem: alvo.ordem || 0 });
+    void persistirOperacao('status', id, { status: novoStatus, ordem: alvo.ordem || 0 }).catch((erroStatus) => {
+      console.warn('Falha ao persistir status do Workspace:', erroStatus?.message || erroStatus);
+    });
   }
 
   function renderizarEstruturaBase() {
@@ -1428,7 +1430,9 @@ async function iniciarWorkspace() {
     };
     itens.unshift(novo);
     renderizarVisaoAtiva(true);
-    persistirOperacao('criar', novo.id, novo);
+    void persistirOperacao('criar', novo.id, novo).catch((erroCriar) => {
+      console.warn('Falha ao criar item do Workspace:', erroCriar?.message || erroCriar);
+    });
     abrirEditorItem(novo.id);
   }
 
@@ -1437,7 +1441,7 @@ async function iniciarWorkspace() {
     if (!item) return;
     item.atualizado_em = new Date().toISOString();
     renderizarVisaoAtiva(false);
-    persistirOperacao('atualizar', item.id, {
+    void persistirOperacao('atualizar', item.id, {
       titulo: item.titulo,
       status: item.status,
       eixo_bncc: item.eixo_bncc,
@@ -1450,6 +1454,8 @@ async function iniciarWorkspace() {
       template_origem: item.template_origem,
       blocos: item.blocos,
       ordem: item.ordem,
+    }).catch((erroAtualizar) => {
+      console.warn('Falha ao atualizar item do Workspace:', erroAtualizar?.message || erroAtualizar);
     });
   }
 
@@ -1489,10 +1495,16 @@ async function iniciarWorkspace() {
       if (acao === 'novo-item') criarItemComTemplate(null);
       else if (acao === 'criar-template') criarItemComTemplate(acaoBtn.dataset.templateId);
       else if (acao === 'abrir') abrirEditorItem(id, acaoBtn);
-      else if (acao === 'excluir') excluirItemPorId(id);
-      else if (acao === 'mover-status') moverItemStatus(id, acaoBtn.dataset.status);
-      else if (acao === 'apagar-todos-lgpd') apagarTodosItensLgpd();
-      else if (acao === 'trocar-visao') {
+      else if (acao === 'excluir') {
+        void excluirItemPorId(id).catch((erroExcluir) => {
+          console.warn('Falha ao excluir item do Workspace:', erroExcluir?.message || erroExcluir);
+        });
+      } else if (acao === 'mover-status') moverItemStatus(id, acaoBtn.dataset.status);
+      else if (acao === 'apagar-todos-lgpd') {
+        void apagarTodosItensLgpd().catch((erroLgpd) => {
+          console.warn('Falha na eliminação LGPD do Workspace:', erroLgpd?.message || erroLgpd);
+        });
+      } else if (acao === 'trocar-visao') {
         visaoAtual = acaoBtn.dataset.visao || 'kanban';
         raiz.querySelectorAll('[data-acao="trocar-visao"]').forEach((b) => {
           b.setAttribute('aria-pressed', String(b === acaoBtn));
@@ -1521,7 +1533,9 @@ async function iniciarWorkspace() {
       salvarEdicaoItemAtual();
       fecharEditorItem();
     } else if (acao === 'excluir-atual') {
-      excluirItemPorId(item.id);
+      void excluirItemPorId(item.id).catch((erroExcluirAtual) => {
+        console.warn('Falha ao excluir item atual do Workspace:', erroExcluirAtual?.message || erroExcluirAtual);
+      });
     } else if (acao === 'toggle-picker-capa') {
       pickerAberto = pickerAberto === 'capa' ? null : 'capa';
       renderizarEditorConteudo();
