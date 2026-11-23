@@ -34,9 +34,9 @@
   "license": "MIT",
   "devDependencies": {
     "@axe-core/playwright": "^4.10.1",
-    "@playwright/test": "^1.65.0",
-    "puppeteer": "^25.17.0",
-    "wrangler": "^4.161.0"
+    "@playwright/test": "^1.65.1",
+    "puppeteer": "^25.18.1",
+    "wrangler": "^4.165.0"
   },
   "dependencies": {
     "gsap": "^3.15.1"
